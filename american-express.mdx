@@ -1,0 +1,63 @@
+---
+title: "American Express"
+description: "This guide outlines the basics of using American Express card via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+## Overview
+
+Checkout has an integration to American Express.
+
+## Functionalities
+
+### Functionality Table American Express
+|  |  |
+| --- | --- |
+| Payment type | Card |
+| Subscriptions | ✅ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ✅ |
+| Cancel payment | ✅ |
+| Reservation & charge | ✅ |
+| Direct charge | ✅ |
+| IPSP | ✅ |
+| Currencies | All |
+| Countries | All |
+| Surcharge NO and DK only | ✅ |
+
+<Info>
+You can learn more about the payment operations from [here](/order-management/#build-payment-operations).
+</Info>
+
+## Activation
+
+To activate American Express as a payment method and to add it to your Checkout portal, you need to complete the onboarding journey.
+
+<Info>
+If you already have an existing Checkout portal account, you need to [contact Support](https://www.nets.eu/payments/contact-us) for this.
+</Info>
+
+## User Journey
+
+This following section will describe the user journey for a consumer:
+
+<Info>
+Depending on what country the consumer is based from, it will need to be verified with their corresponding authentication eg. bank ID, NemID etc.
+</Info>
+
+1. When your consumer chooses American Express as a payment method in the checkout, they will be prompted to enter their:
+   -  Card number (15 digits)
+   -  Expiry date (mm/yy)
+   -  Card Identification Number (CID) (4 digits)
+2. From here, they will be directed to the 3DS. 
+3. After the verification and validation of the true identity with the strong authentication page, the consumer will be able to either approve or reject the payment.
+4. When the payment has been approved, the amount will be reserved on the card.
+5. When you dispatch the goods then the charge amount will be deducted as a charge request will notify Checkout about this.
+
+
+
+## Testing
+
+Checkout provides the possibility to test for American Express. You can test American Express payments in the Nexi Group testing environment.
+
+

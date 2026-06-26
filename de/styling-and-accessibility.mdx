@@ -1,0 +1,53 @@
+---
+title: "Styling und Barrierefreiheit"
+description: "Diese Anleitung richtet sich an Entwickler, die das Design und Verhalten ihrer Checkout-Seite anpassen möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Komplexität: Niedrig</Badge>
+  <Badge color="yellow">Programmierung: Etwas</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Diese Anleitung setzt voraus, dass Sie bereits ein [Checkout-Portal-Konto](https://portal.dibspayment.eu) besitzen und [Checkout auf Ihrer Website integriert](/web-integration/integrate-checkout-on-your-website-embedded) haben.
+</Warning>
+
+## Übersicht
+
+Das Design der Checkout-Seite kann angepasst werden, sodass die Checkout-Seite zum Stil Ihrer Website passt. Beim Styling stehen Ihnen zwei Optionen zur Verfügung:
+- Verwenden Sie den [Checkout Styler](https://portal.dibspayment.eu/account/checkout-styler) im Checkout Portal. Diese Option ist die empfohlene Methode, um die Checkout-Seite zu gestalten, und erfordert keine Programmierung.
+- Verwenden Sie das [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk), um Ihren Checkout programmatisch zu gestalten. Damit ist es möglich, mehrere Checkout-Seiten auf Ihrer Website individuell zu gestalten. Diese Option ist nur verfügbar, wenn Sie eine eingebettete Checkout-Seite verwenden, da sie auf dem Checkout JS SDK basiert.
+
+## Checkout Styler
+
+Um den Checkout Styler zu verwenden, navigieren Sie im Checkout Portal zum Customer Checkout Styler. Sie können benutzerdefinierte Themes auf Basis vorgefertigter, von der Nexi Group bereitgestellter Themes erstellen und veröffentlichen oder ein eigenes Theme definieren.
+
+![Checkout Styler](https://images.ctfassets.net/di680may5c0k/5FLKZbTVEw9HXKdzi0Vecx/beece92e2618673d9a2168ba2da9cbbb/MicrosoftTeams-image__25_.png?w=1886&h=713&q=50&fm=png)
+
+![Checkout Styler Themes](https://images.ctfassets.net/di680may5c0k/6VMZIgZRtBP8TRAQHxbsDS/7b8b00046212f5aacb7907cabfe2ef20/MicrosoftTeams-image__24_.png?w=1890&h=830&q=50&fm=png)
+
+Die im obigen Bild gezeigte **Barrierefreiheitsprüfung** kann Ihnen helfen, Farbkombinationen zu finden, die ein bestimmtes Kontrastverhältnis erfüllen, das erforderlich ist, um Ihre Checkout-Seite barrierefrei zu gestalten.
+
+## Theme über JavaScript festlegen
+
+Wenn Sie eine eingebettete Checkout-Seite verwenden, können Sie die Checkout-Seite über JavaScript und das [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk) gestalten. Übergeben Sie ein `theme `-Objekt an den [`Checkout `-Konstruktor](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#constructor) oder verwenden Sie die Methode [`setTheme() `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#settheme) auf Ihrem `Checkout `-Objekt. Das folgende Beispiel definiert einen grauen Hintergrund, behält die Panel-Elemente jedoch weiß bei:
+
+```javascript Set theme using JavaScript
+// ...
+var checkout = new Dibs.Checkout(checkoutOptions);
+var theme = {
+  "backgroundColor": "#F2F2F2",
+  "panelColor": "white",
+};
+checkout.setTheme(theme);
+```
+
+Der Code erzeugt eine Checkout-Seite wie folgt. Beachten Sie den grauen Hintergrund und die weißen Panels:
+
+![Benutzerdefinierte Stile mit JavaScript](https://images.ctfassets.net/di680may5c0k/5dzceEzox4eXYINzLXINiZ/a257e96d894064213c22a5c3f2f01ee5/Screenshot_2021-03-29_at_09.07.14.png?w=1746&h=842&q=50&fm=png)
+
+Es ist nicht möglich, Stileinstellungen aus dem Checkout Styler und der Checkout JS API zu kombinieren. Wenn Sie im Checkout Styler einen Stil definiert haben, können Sie den Stil nicht über [`setTheme() `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#settheme) überschreiben. Um die [`setTheme() `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#settheme)-API zu verwenden, müssen Sie alle benutzerdefinierten Themes aus dem Checkout Styler im Checkout Portal löschen:
+
+![Benutzerdefinierte Themes löschen](https://images.ctfassets.net/di680may5c0k/2Zdop2qOzJvRTmf2kTcjTI/21d2c23ecab8460465b7b33c7e1209e3/styling.png?w=2296&h=1436&q=50&fm=png)

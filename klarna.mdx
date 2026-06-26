@@ -1,0 +1,115 @@
+---
+title: "Klarna"
+description: "This guide outlines the basics of using Klarna via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+## Overview
+
+Klarna is a wallet typed payment method which allow your consumers to choose from a variety of payment methods during checkout. These makes it convenient for consumers to purchase goods in all price ranges.
+
+After choosing Klarna in the Checkout, the consumer gets redirected to Klarna dedicated environment where they select which specific payment method to use. The presented payment methods is determined by Klarna and is based on the transaction amount and consumers' billing address. When the purchase is done, they return to your website and the order is completed.
+
+## Payment options
+
+### Payment options
+| Payment method | Sweden SEK | Norway NOK | Denmark DKK | Finland EUR | Switzerland CHF |
+| --- | --- | --- | --- | --- | --- |
+| Pay Later - 30 days invoice | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Pay Later - Pay in 3 | ❌ | ❌ | ✅ | ❌ | ❌ |
+| Financing - Financing | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Pay Now - Pay by Card | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Pay Now - Direct Debit | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Pay Now - Direct Bank Transfer | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Pay Now - Swish | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+- __Pay in 3 or 4 (also known as Installments):__ Consumers pay for the purchase in three or four interest-free payments.
+- __Monthly installments (also known as Financing):__ Consumers pay for the purchase over a longer term of up to 36 months, which might include interest.
+- __Pay later:__ Consumers pay for the purchase in a single payment in 30 days.
+- __Pay now:__ Consumers pay for the purchase immediately using a linked card, bank debit, or bank transfer.
+
+## Functionality table
+
+### Klarna functions
+| Name | Description |
+| --- | --- |
+| Payment type | Wallet |
+| Recurring/Subscriptions | ❌ |
+| Reservation/Auth | ✅ up to 28 days |
+| Charge/Capture | ✅ |
+| Partial Capture | ✅ |
+| Refund | ✅ |
+| Partial refund | ✅ |
+| Cancel order | ✅ |
+| Get Payment information | ✅ |
+| CPSP | ✅ |
+| Currencies | SEK, NOK, DKK, EUR, CHF |
+| Countries | SE, NO, DK, DE, AT |
+
+## Activation
+
+To activate Klarna as a payment method, you need to complete the onboarding journey.
+
+<Info>
+If you already have an existing Checkout portal account, you need to [contact Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) for the activation.
+</Info>
+
+## User Journey
+
+1.	Consumer chooses Klarna as a payment method in Easy and press “pay”.
+2.	Gets redirected to Klarna’s hosted environment.
+3.	Authenticates to Klarna and gets presented the available payment methods for the specific purchase. (Depends on order amount, currency, country etc.) 
+4.	Choose the preferred payment method and completes the purchase.
+5.	Consumer gets redirected back to the merchant's website (confirmation page).
+
+## Integration
+
+In order for consumers to be able to use Klarna payments in the checkout, we need to receive the consumer's information and address. 
+
+This can be allowed by you if you either:
+
+- Enable the address fields in the checkout, e.g. setting the *checkout.merchantHandlesConsumerData* to false or left out from the create payment request which will let the consumer enter their information in the checkout
+- Or by including the consumer's data in the create payment request directly.
+
+If you include the information in the create payment request, you will need to make sure that the following information is included in the checkout object:
+
+```text Including the consumer's data in the create payment request for the checkout object
+{
+    ...
+    "checkout": {
+        ...
+        "merchantHandlesConsumerData": true,
+        ...
+        "consumer": {
+            "email": "email@domain.com",
+            "shippingAddress": {
+                "addressLine1": "Address 1",
+                "addressLine2": "",
+                "postalCode": "12345",
+                "city": "City",
+                "Country": "ABC"
+            },
+            "phoneNumber": {
+                "number": "701234567",
+                "prefix": "+46"
+            },
+            "privatePerson": {
+                "firstName": "Firstname",
+                "lastName": "Lastname"
+            }
+        }
+    }
+    ...
+}
+```
+
+<Warning>
+If you have your setup using a shop platform and using one of our plugins then please note that the phone number field must be made mandatory for Klarna.
+
+You can find more info in the [individual webshop plugins' guide here](/use-a-webshop-plugin).
+</Warning>
+
+## Testing
+
+Checkout provides the possibility to test for Klarna as seen in [this overview table](/test-and-deploy).
+
+For more information, please visit Test wallet processing for Klarna

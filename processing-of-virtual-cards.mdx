@@ -1,0 +1,32 @@
+---
+title: "Processing of Virtual Cards"
+description: "Learn about Processing of Virtual Cards for Nexi Checkout."
+---
+
+## Virtual card
+
+__Virtual Card Handling__
+&nbsp; 
+
+If you receive bookings through external platforms like Booking.com or Expedia, you can automatically import and process those booking payments within the Easy portal by using the Virtual Card API. The API transfers the virtual card details directly from the booking platform to Easy, removing the need for manual copy-and-paste of card data.
+
+__How It Works__
+&nbsp; 
+
+The Virtual Card API will enable you send the order to the Easy portal. The booking appears in the Easy portal where it can be handled like any other order.
+
+1. The feature implementation is exposing a new endpoint on the Merchant API, where the merchant can invoke to reserve or directly charge a payment in a single synchronous call. The call will get a response back whose body either contains a JSON  payload that carries the payment ID of a successfully executed transaction, or a message indicating a failure.
+2. API reference documentation for the endpoint can be easily reached via this link. 
+3. The merchant may specify webhooks as part of the request payload to subscribe for events when they take place
+4. The returned payment ID(s) for the successfully executed transaction(s) can be treated as conventional/traditional/normal payments, meaning they can be charged/cancelled - assuming they're only reserved - or refunded.
+5. Payments executed through this new endpoint don't have checkout information, as they're merchant initiated payments, so order information and other payment information like billing address and such are to be specified on the request body by the caller.
+
+__Requirements__
+
+The feature is only available only to merchants that are PCI-DSS compliant. Merchants must provide documentation proving they can securely store, process, and transmit card information.
+
+Please contact our sales department in order to know more. 
+
+__API Reference__
+
+The API endpoints are available in the standard Nets/Easy API documentation [here](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-cardpayments-post)

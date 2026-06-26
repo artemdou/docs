@@ -1,0 +1,88 @@
+---
+title: "Vipps"
+description: "This guide outlines the basics of using Vipps via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+## Before you start
+
+<Info>
+An additional agreement is required for accepting VIPPS. Please contact our Customer Service Team to get that process started.
+</Info>
+
+## Overview
+
+Checkout has an integration to Vipps which enables your consumers to pay via their Vipps payment app. This is done by entering their telephone number in the checkout. 
+
+Once the consumer has entered in their phone number, the consumer will be able to pay with only one-click in the checkout at a swipe in the Vipps payment app.
+
+Vipps is a mobile payment app (digital wallet) that lets users pay for products and services by using the payee’s mobile phone number. It also allows them to send money to each other.
+
+<Info>
+Vipps supports only Norwegian Krone as a currency. Users must have a Norwegian social security number, a Norwegian bank account, and a Norwegian mobile phone number to use Vipps.
+</Info>
+
+Payments with Vipps will be processed with the chosen card connected to what the consumer has registered with their Vipps account. You can check the authorization timeframes from this table [here](/payment-methods/#build-authorization-times-for-charge-cancel-and-refund).
+
+## Functionalities
+
+### Vipps Functionality Table
+|  |  |
+| --- | --- |
+| Payment type | Wallet |
+| Subscriptions | ❌ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ✅ |
+| Cancel payment | ✅ |
+| Reservation & charge | ✅ |
+| CPSP | ✅ |
+| Currencies | NOK |
+| Countries | NO,SE,DK, DEU |
+
+<Info>
+You can learn more about the payment operations from [here](/order-management/#build-payment-operations).
+</Info>
+
+## Activation
+
+To activate VIPPS as a payment method and to add it to your Checkout portal, you need to complete the onboarding journey.
+
+You can activate Vipps if you have a VAT number outside of Norway. In order to do so you must have NOK as a multicurrency under your main currency. 
+
+<Info>
+If you already have an existing Checkout portal account, you need to contact [Sales Support](https://www.nets.eu/payments/contact-us) for this.
+</Info>
+
+
+
+## User Journey
+
+This following section will describe the user journey and payment flow for a consumer:
+
+1. When your consumer chooses Vipps as a payment method in the checkout, they will be prompted to enter their:
+   -  Phone number that is connected to their Vipps account
+2. Click on Pay.
+3. From here, they will be redirected to the Vipps App page.
+4. See the amount of the payment and approve the payment.
+5. They will be redirected back to the app and be prompted to enter their password again to confirm the payment.
+6. The amount is charged immediately.
+
+
+
+When your buyers select Vipps as a payment method on the Checkout payment selection page, they need to enter their phone number. They are then redirected to a Vipps hosted confirmation page, where they confirm their purchase and get a notification on their mobile phone’s Vipps app. Finally, they confirm their payment from within the app.
+
+The amount is now authorized, and you can charge the funds anytime within a certain time frame – usually 30 days – after you ship the order. That helps to avoid refunds and chargebacks.
+
+## Payment Flow
+
+To ensure the correct update of the payment status from Checkout, you need to use the [*payment.checkout.completed* webhook](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#payment-events) (see the [webhooks section](/track-events-using-webhooks)). By using this webhook, you will receive a notification from Checkout after the checkout process is completed.
+
+As seen from the functionality table, recurring payments (subscriptions) are not supported by Checkout Vipps payments. Checkout Vipps payments allow you to do partial refunds, separate captures and partial charges. If you haven’t yet captured the funds, you can also cancel payments.
+
+Please find the exact events and descriptions in our [API reference](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/).
+
+## Testing
+
+Checkout provides the possibility to test for Vipps, as seen in this [overview table](/test-data/#build-testability).
+
+For more information, please visit [Test wallet processing for Vipps](/test-wallet-processing/#build-vipps).

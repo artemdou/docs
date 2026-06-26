@@ -1,0 +1,226 @@
+---
+title: "Go-Live Checklist"
+description: "This guide is for you who have integrated and tested Checkout on your website and are planning to go live."
+---
+
+## Before you start
+
+<Warning>
+Before you start, you need:
+
+1. A fully functional Checkout integration using some of the following alternatives:
+   -  [Direct web integration](/web-integration)
+   -  [Webshop plugin](/use-a-webshop-plugin)
+   -  [Mobile SDK](/integrate-mobile-sdks)
+2. A Checkout live account. You can apply for a live account in [Checkout Portal](https://portal.dibspayment.eu) by clicking the TEST/LIVE switch at the top-right corner.
+</Warning>
+
+## Test your checkout page
+
+Make sure you have tested your checkout page thoroughly before going live. See the guides:
+- [Test enviroment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice processing](/test-invoice-installment-processing)
+
+## Verify webhook events
+
+Webhooks are the most robust and efficient way of keeping your backend in sync with Checkout. It is robust against various runtime failures (network failures and other temporary processing failures) and efficient since it avoids polling Checkout for state changes.
+
+Make sure that you receive the payment events that are relevant for your webshop. More information about webhooks can be found at the following pages:
+
+- [Track events using webhooks](/track-events-using-webhooks) (guide)
+- [Webhooks](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/) (reference)
+
+## Secure your site (HTTPS)
+
+Your webshop must use a secure connection over [HTTPS](https://en.wikipedia.org/wiki/HTTPS) in order to offer your customers a private and secure shopping experience.
+
+## Use the live APIs and JavaScript SDK
+
+Make sure that the production environment of your webshop uses the live URLs to the following Checkout resources:
+- The REST APIs (Payment API, Boarding API, and Reporting API). See the section [Environment and base addresses](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#environments-and-base-addresses) in the API reference.
+- The [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk/) (if you are using an embedded checkout page).
+
+## Use the integration keys for the live environment
+
+Make sure that the production environment of your webshop uses the integration keys intended for the Checkout live environment. You can find the integration keys in the [Portal](https://portal.dibspayment.eu/integration). See also the guide [Access your integration keys](/access-your-integration-keys).
+
+## Include contact details
+
+The contact details of your webshop should be clearly visible on your site and include the following:
+- Name
+- Address (including country)
+- Email and/or telephone number to your support or service desk
+- The shop’s Company registration number (CVR, Organisation number)
+
+## Include terms & conditions
+
+Your webshop should provide a page that clearly states the terms and conditions when making purchases on your site. The page should include:
+- Terms of sale and delivery, including the right to terminate the purchase agreement.
+- Terms of consumers' right to cancel a purchase according to the distance and off premises act. This includes a cancellation period and terms for withdrawal. 
+- Description of the goods and services that your webshop is selling (including prices, taxes and fees)
+- Clear shipping policies (by courier, post, traceable etc.) and expected delivery time.
+- International shipping restrictions, if applicable.
+- State which currencies you are using by currency code (SEK). E.g. "All prices are in SEK incl VAT"
+- Information about how personal information is processed.
+- Information about how card information is processed.
+
+<Info>
+You can provide the URL to the terms and conditions page when creating the payment object using the [`termsUrl `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-termsurl) property. This will create a link from the checkout page to the terms and conditions page on your website.
+</Info>
+
+## Include the Group logo on your website
+
+As per our terms and conditions, the Nexi Group logo must be displayed to indicate that the payment solution is provided by Nexi Group. The logo has to be added either:
+- To the checkout at the payment method selection stage. 
+- To the footer if you display available payment options in the footer.
+
+You can find the Nexi Group logo’s specifications here [Logo (nexigroup.com)](https://www.nexigroup.com/en/brand-guidelines/). 
+
+You can find the terms and conditions here [Terms and conditions for Checkout (nets.eu)](https://www.nets.eu/en/payments/customerservice/legal-compliance/easy/)
+
+## Include payment method logos on your website
+
+The following payment method logos have to be added to your website either:
+- To the checkout at the payment method selection stage. 
+- To the footer if you display available payment options in the footer.
+
+Below is an example of what the logos could look and be displayed as:
+
+![paymentOptionLogos2](https://images.ctfassets.net/di680may5c0k/6rl7e04tf3gImzGsCA0nDU/537c9449a9543c421004877ea5240875/paymentOptionLogos.png?w=804&h=59&q=50&fm=png)
+
+There are three different options on how you can easily compile the payment method logos applicable for your website:
+
+## Download the logos separately
+
+You can check the links below from the list and download the logos separately here:
+
+- [Visa](https://www.merchantsignage.visa.com/brand_guidelines)
+- [Mastercard](https://brand.mastercard.com/brandcenter/artwork.html)
+- [Maestro](https://brand.mastercard.com/brandcenter/artwork/other-marks.html)
+- [Vipps](https://vipps.no/om-oss/vipps-logo-og-retningslinjer-bruk/)
+- [Ratepay](https://ratepay.gitbook.io/logos/brand/ratepay)
+- [PayPal](https://www.paypal.com/webapps/mpp/logo-center)
+- [Dankort](https://www.dankort.dk/dk/logo-og-billeder/)
+- [MobilePay](https://www.mobilepay.dk/materialebank/marketingmateriale/logoer)
+- [Swish](https://www.swish.nu/company/marketing-materials)
+- [Apple Pay](https://developer.apple.com/apple-pay/marketing/)
+- [Google Pay](https://developers.google.com/pay/api/web/guides/brand-guidelines)
+- [Klarna](https://docs.klarna.com/resources/marketing-tools/global-marketing-assets/brand-guidelines/?q=logo)
+
+## HTML table
+
+Alternatively, you can also check the specific logos of the payment methods that you provide by copying and pasting from the table in HTML from below. 
+All logos are in *.svg* format and you can easily modify the sizes as well.
+
+```markdown Table
+<table>
+<tr>
+
+ <td><img src="https://portal.dibspayment.eu/assets/images/main/easy-logo-blue_150px.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/3cd859387e29670974fe.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/visa-blue.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/mastercard_wtext.svg" width="35"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/maestro_wtext.svg" width="35"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/vipps.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/swish_secondary.svg" width="60"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/mobilepay.svg" width="60"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/applepay.svg" width="60"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/dankort.svg" width="40"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/paypal-text.svg" width="70"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/ratepay.svg" width="70"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/klarna.svg"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/googlepay.svg"></td>
+
+</tr>
+</table>
+```
+
+## Make sure your VAT values are correct
+
+When [creating the payment object](/web-integration/integrate-checkout-on-your-website-embedded/#build-step-2-create-a-payment-object-backend), please make sure, that the item's `taxRate ` and `taxAmount ` properties of your payment's `order object ` are correct: 
+
+<Warning>
+A `taxRate ` of 1600 equals 16%, 2400 equals 24% and so on.
+</Warning>
+
+Also, the `taxAmount ` must be correct, according to `unitPrice ` and `taxRate `. 
+
+Neither the `unitPrice ` nor the `netTotalAmount ` should include the `taxRate `. 
+
+The `grossTotalAmount ` must equal the sum of `taxAmount ` and `netTotalAmount ` per item.
+
+<Info>
+If you test your integration, you can check your taxRate settings in your Checkout test portal, once you’ve created your test payment.
+</Info>
+
+## Use decimal spaces in the correct way
+
+Checkout will never round up or round down amounts by recalculating your data. We only send your requests to the required components with the data received from you. That is why it is very important for you to follow the instructions below.
+
+Have in mind the following:
+
+- __Decimals are always specified as the lowest monetary unit for the given currency.__ It means that 1 EUR, for example, will have the lowest monetary unit of 1 cent, as there is no lower monetary unit than the cent.
+- __Checkout requires exactly two decimal spaces__ and rounding up or rounding down is not encouraged. With Checkout, it is possible to round up or round down, but it is not advisable as there are some payment methods that do not allow it, and in those cases, the payment will be disabled.
+- If the amount specified does not contain any lowest monetary unit, then you need to add two zeros at the end to specify that no decimals are included. For example, entering the amount of 100 corresponds to 1 unit of the currency entered, such as e.g. 1 NOK.
+- __Amounts (even those with decimal spaces) are specified without punctuation marks.__ For example, 9.99 USD is specified as 999.
+- When you send transaction details to Checkout, the details are processed without any recalculation, so there is __no automatic rounding up or rounding down__ happening in that process.
+
+### Issues
+
+- Sometimes it might happen that some plugins might round up or round down amounts and send them as such to Checkout. In this kind of scenario, some parameters might not match, so the payment process receives an error. That is why it is important to include 2 (two) decimal spaces for each amount, even if there is no lowest monetary unit present. For example:
+  - __in case of an amount without the lowest monetary unit:__ 19 EUR should be entered as 1900 (two zeros at the end represent that there are zero cents in the amount)
+  - __in case of an amount with the lowest monetary unit:__ 19,99 EUR should be entered as 1999 (the amount is entered with the decimals, but without the separator)
+- Sometimes it might happen that a transition request is not accepted. That is due to different payment methods not accepting any rounding up or rounding down, so different parameters will not match as the round-up or the round-down amount will not be the same as the actual one, with decimals. To solve this, always use 2 (two) decimal spaces, without punctuation marks/decimal separators (comma or point).
+
+### Formulas for calculating tax, price, and the total amount
+
+- netTotalAmount = unitPrice * quantity
+- taxAmount = netTotalAmount * taxRate / 10000
+- grossTotalAmount = netTotalAmount + taxAmount
+
+### Links and additional information
+
+- For more information on each parameter, visit our [API reference page](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-quantity). 
+- Here you can also read more on how to [make sure your VAT values are correct](/go-live-checklist/#build-make-sure-your-vat-values-are-correct).
+
+## Show order summary
+
+Before the customer proceeds to the checkout page there should be a summary including the following:
+- A complete description of the services/products included in the order. In other words, the customer must never doubt what he/she is paying for.
+- A clear itemization of the total amount being charged including shipping, value added tax, etc.
+- It must be clear to the consumer what currency is applied for the transaction. If you offer international shipping, please state the currency code in the order summary also. (SEK)
+- Clarification that the consumer can pay by card.
+- Inform your customer that the invoice will be sent via email.
+
+<Info>
+You can use the property [`showOrderSummary `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-appearance-displayoptions-showordersummary) to include the order items on the checkout page. See the guide [Customize text and language](/customize-content/customize-text-and-language-embedded) for more information.
+</Info>
+
+## Send order confirmation
+
+Once a purchase is completed, the customer must receive a confirmation of the order and a receipt in the form of an  email.
+
+See the guide [Confirm order](/confirm-order) for information about the requirements of the order confirmation.
+
+## See also
+
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Access your integration keys](/access-your-integration-keys)
+- [Track events using webhooks](/track-events-using-webhooks)
+- [Customize text and language](/customize-text-and-language-embedded)

@@ -1,0 +1,335 @@
+---
+title: "Versandkosten hinzufügen"
+description: "Diese Anleitung zeigt Ihnen, wie Sie Versandkosten basierend auf der vom Kunden im Checkout angegebenen Lieferadresse hinzufügen und aktualisieren."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="blue">Programmierung: Ja</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Diese Anleitung setzt voraus, dass Sie bereits ein [Checkout-Portal-Konto](https://portal.dibspayment.eu) besitzen und einen eingebetteten Checkout direkt auf Ihrer Website integriert haben. Weitere Informationen finden Sie im [Leitfaden zur Web-Integration](/web-integration/integrate-checkout-on-your-website-embedded).
+</Warning>
+
+## Checkout-Übersicht – Versandkosten
+
+Wenn Sie Waren an Ihre Kunden versenden, möchten Sie wahrscheinlich Versandkosten zu deren Bestellung hinzufügen. Sind die Versandkosten ein fester Betrag unabhängig von der Anzahl der Warenkorbartikel oder der Lieferadresse, können Sie einfach einen Artikel zur Bestellung hinzufügen, der die Versandkosten repräsentiert, wenn Sie das Zahlungsobjekt erstmals erstellen.
+
+Allerdings variieren die Versandkosten häufig je nach Anzahl der Artikel im Warenkorb und der Lieferadresse. In diesem Fall können die Versandkosten erst berechnet werden, wenn Ihr Kunde eine Lieferadresse für die Bestellung angegeben hat.
+
+Checkout ermöglicht Ihnen die Verwaltung der Versandkosten auf der Checkout-Seite. Dies erfordert, dass sowohl das Frontend als auch das Backend mit Checkout interagieren. Das folgende Flussdiagramm zeigt den Prozess zur Aktualisierung der Versandkosten basierend auf dem von Ihrem Kunden angegebenen Bestimmungsort.
+
+![Versandkosten](https://images.ctfassets.net/di680may5c0k/5TKYQ9UJOpfU5vaTIsgVme/2ca2ac4e38279dc3802b27faa3506131/Shipping_cost.png?w=2704&h=1726&q=50&fm=png)
+
+Diese Anleitung zeigt, wie Sie diese Funktionalität bei einer eingebetteten Web-Integration implementieren. Die eigentliche Berechnung der Versandkosten müssen Sie auf Ihrer Seite implementieren; sie wird in dieser Anleitung nicht bereitgestellt.
+
+<Steps>
+  <Step title="Zahlungsobjekt erstellen (Backend)">
+    Checkout bietet Ihnen die Möglichkeit, den Checkout-Ablauf anzuhalten, falls keine Versandkosten angegeben sind. Um diese Funktion zu aktivieren, setzen Sie die Eigenschaft [`merchantHandlesShippingCost `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-shipping-merchanthandlesshippingcost) beim [Erstellen des Zahlungsobjekts](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) auf `true `.
+
+    Das folgende Snippet zeigt, wie Sie die Eigenschaft `merchantHandlesShippingCost ` beim Erstellen des Zahlungsobjekts angeben:
+
+    ```json Create payment payload
+    {
+      "order": {
+          "items": [
+          {
+            "reference": "Sneaky NE2816-82",
+            "name": "Sneaky",
+            "quantity": 2,
+            "unit": "pcs",
+            "unitPrice": 25000,
+            "taxRate": 0,
+            "taxAmount": 0,
+            "netTotalAmount": 50000,
+            "grossTotalAmount": 50000
+          }
+        ],
+        "amount": 50000,
+        "currency": "SEK",
+        "reference": "Order No 42369"
+      },
+      "checkout": {
+        "integrationType": "EmbeddedCheckout",
+        "url": "<WEBSHOP_URL>",
+        "termsUrl": "<TERMS_URL>",
+        "shipping": {
+          "countries": [],
+          "merchantHandlesShippingCost": true
+        }
+      }
+    }
+    ```
+
+    Wenn die Eigenschaft `merchantHandlesShippingCost ` auf `true ` gesetzt ist, fährt Checkout erst dann mit dem Checkout fort, wenn Sie der Zahlung Versandkosten hinzufügen (siehe [Schritt 3](#build-step-3-calculate-and-update-shipping-cost-backend)). Doch zuerst müssen Sie Adressänderungen im Frontend verfolgen, um die neuen Versandkosten zu berechnen.
+
+    <Warning>
+    Diese Anleitung setzt voraus, dass Sie bereits wissen, wie Sie die Payment-API verwenden, um das Zahlungsobjekt für eine eingebettete Web-Integration zu erstellen. Falls nicht, lesen Sie zuerst den Leitfaden zur [Web-Integration](/web-integration/integrate-checkout-on-your-website-embedded).
+    </Warning>
+  </Step>
+  <Step title="Auf das &quot;address-changed&quot;-Ereignis hören (Frontend)">
+    Als Nächstes müssen Sie zusätzliche Funktionalität im Frontend-JavaScript implementieren, um eine Berechnung der Versandkosten auszulösen, wann immer sich die Adresse auf der Checkout-Seite ändert. Das Frontend sollte:
+
+    1. **Auf das Ereignis** namens [`address-changed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk/#address-changed) **hören**.
+    2. **Den Checkout einfrieren** mithilfe von Checkout JS, sobald ein Adressänderungsereignis ausgelöst wird. Dadurch wird das Checkout-Formular vorübergehend deaktiviert.
+    3. Eine Anfrage an Ihr Backend senden, das neue Versandkosten berechnet und das **Zahlungsobjekt** bei der Nexi Group **aktualisiert**.
+    4. **Den Checkout auftauen** mithilfe von Checkout JS. Dadurch wird das Checkout-Formular wieder aktiviert, sodass Ihr Kunde mit dem Checkout interagieren kann.
+
+    Der folgende JavaScript-Code sendet eine Anfrage an Ihr Backend, damit neue Versandkosten berechnet und der Bestellung im Zahlungsobjekt hinzugefügt werden können:
+
+    ### Auf das address-changed-Ereignis abonnieren
+
+    <CodeGroup>
+
+    ```javascript script.js
+    // Frontend JavaScript
+    // See Web integration guide for the complete JavaScript code
+
+    // 1. Listen to the address-changed event
+    checkout.on('address-changed', function (address) {
+      if (address) {
+
+        // 2. Disable checkout temporarily 
+        checkout.freezeCheckout();
+
+        // 3. Invoke backend to update shipping cost
+        var request = new XMLHttpRequest();
+        request.open("POST", 'update-shipping-cost.php');
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        const body = {
+            paymentId: paymentId,
+            postalCode: address.postalCode,
+            countryCode: address.countryCode
+          };
+          request.onload = function () {
+            // 4. Don't forget to re-enable the checkout
+            checkout.thawCheckout();
+          }
+          request.onerror = function () { 
+            console.error('connection error'); 
+          }
+          request.send(JSON.stringify(body));
+        }
+    });
+    ```
+
+    ```javascript script.js
+    // Frontend JavaScript
+    // See Web integration guide for the complete JavaScript code
+
+    // 1. Listen to the address-changed event
+    checkout.on('address-changed', function (address) {
+      if (address) {
+
+        // 2. Disable checkout temporarily 
+        checkout.freezeCheckout();
+
+        // 3. Invoke backend to update shipping cost
+        var request = new XMLHttpRequest();
+        request.open("POST", 'update-shipping-cost');
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        const body = {
+            paymentId: paymentId,
+            postalCode: address.postalCode,
+            countryCode: address.countryCode
+          };
+          request.onload = function () {
+            // 4. Don't forget to re-enable the checkout
+            checkout.thawCheckout();
+          }
+          request.onerror = function () { 
+            console.error('connection error'); 
+          }
+          request.send(JSON.stringify(body));
+        }
+    });
+    ```
+
+    </CodeGroup>
+
+    Während der Checkout eingefroren (deaktiviert) ist, signalisiert er, dass die Versandkosten aktualisiert werden. Hier ein Beispiel:
+
+    ![Versandkosten werden berechnet](https://images.ctfassets.net/di680may5c0k/1P1XCQcDMJfDITCiGorecl/d4038cebb692a8164d1a9fc58a5b7848/freeze.png?w=1800&h=956&q=50&fm=png)
+
+    Die Meldung "Versandkosten werden berechnet" zeigt an, dass der Checkout gerade die Bestellung aktualisiert, was Sie im nächsten Schritt umsetzen.
+  </Step>
+  <Step title="Versandkosten berechnen und aktualisieren (Backend)">
+    Es ist an der Zeit, einen neuen HTTP-Endpunkt zur Aktualisierung der Versandkosten zu implementieren. Dieser sollte:
+
+    1. Die Lieferadresse aus der HTTP-POST-Anfrage lesen, die im vorherigen Schritt vom JavaScript gesendet wurde.
+    2. Neue Versandkosten basierend auf der Adresse berechnen.
+    3. Die Versandkosten am Zahlungsobjekt mithilfe der Methode „update order“ der Payment-API hinzufügen oder ändern.
+
+    <Warning>
+    **Wichtig!**
+
+    Wir benötigen für diese Aufgabe ein Backend-Skript, da wir die Payment-API aufrufen, die eine Server-zu-Server-Kommunikation erfordert. Sie dürfen den geheimen API-Schlüssel niemals vom Frontend-JavaScript an Checkout übergeben.
+    </Warning>
+
+    Nachfolgend ein Beispielskript zur Aktualisierung der Versandkosten. Die eigentliche Berechnung der neuen Versandkosten ist hier nicht korrekt implementiert. Stattdessen werden zufällige Kosten erzeugt. Auch die Bestellpositionen sind in diesem Beispiel nur als Mock dargestellt:
+
+    ### Versandkosten aktualisieren
+
+    <CodeGroup>
+
+    ```php update-shipping-cost.php
+    <?php
+
+    // 1. Read and parse payload sent by frontend.
+    // The JSON object contains the paymentId and address information.
+
+    $inputJSON = file_get_contents('php://input');
+    $body = json_decode($inputJSON, TRUE);
+
+    $paymentId = $body['paymentId'];
+    $postalCode = $body['postalCode'];
+    $countryCode = $body['countryCode'];
+
+    // 2. Compute new shipping cost and generate new complete order 
+    $shippingCost = computeShippingCost($postalCode, $countryCode); // TODO: Implement
+    $payload = updateOrder($shippingCost); // TODO: Implement
+
+    // 3. Update order using Payment API
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId . '/orderitems');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                   
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: <YOUR_SECRET_API_KEY>'));                                               
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    echo($result);
+    ```
+
+    ```javascript index.js
+    const http = require("https");
+    const express = require('express')
+    const app = express()
+    const port = 3000
+
+    app.use(express.static('public'));
+    app.use(express.json());
+
+    app.get('/create-payment', (req, res) => {
+    	// See the web integration guide for a full implementation of this route.
+    })
+
+    app.post('/update-shipping-cost', (req, res) => {
+
+    	// 1. Read and parse payload sent by frontend.
+    	// The JSON object contains the paymentId and address information.
+    	const paymentId = req.body.paymentId;
+    	const postalCode = req.body.postalCode;
+    	const countryCode = req.body.countryCode;
+
+    	// 2. Compute new shipping cost and generate new complete order 
+    	const shippingCost = computeShippingCost(postalCode, countryCode);  // TODO: Implement
+    	const payload = updateOrder(shippingCost);                          // TODO: Implement
+
+    	// 3. Update order using Payment API
+    	const options = {
+    		"method": "PUT",
+    		"hostname": "test.api.dibspayment.eu",
+    		"port": null,
+    		"path": "/v1/payments/" + paymentId + "/orderitems",
+    		"headers": {
+    			"content-type": "application/json",
+    			"Authorization": "<YOUR_SECRET_API_KEY>"
+    		}
+    	};
+    	const restreq = http.request(options, function (resp) {
+    		const chunks = [];
+    		resp.on("data", function (chunk) {
+    			console.log("on data");
+    			chunks.push(chunk);
+    		});
+    		resp.on("end", function () {
+    			const body = Buffer.concat(chunks);
+    			res.send(body.toString());
+    		});
+    	});
+    	restreq.on('error', function (e) {
+    		console.error('error');
+    		console.error(e);
+
+    	});
+    	restreq.write(JSON.stringify(payload));
+    	restreq.end();
+    });
+
+    app.listen(port, () => {
+    	console.log(`Server listening on port ${port}`)
+    })
+    ```
+
+    </CodeGroup>
+
+    Lassen Sie uns den obigen Code durchgehen:
+
+    1. Lesen Sie die Lieferadresse aus der HTTP-POST-Anfrage, die im vorherigen Schritt vom JavaScript gesendet wurde.
+    2. Berechnen Sie neue Versandkosten basierend auf der Adresse und erzeugen Sie eine neue JSON-Payload mit den aktualisierten Versandkosten. Sie müssen die Methoden `computeShippingCost() ` und `updateOrder() ` definieren. Die von `updateOrder() ` zurückgegebene Payload sollte die vollständige Bestellung mit den aktualisierten oder neuen Versandkosten enthalten. Ein Beispiel-Payload mit Versandkosten ist unten dargestellt. Die API-Referenz enthält außerdem ein Beispiel für eine [Payload für die Update-Order-Anfrage](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-orderitems-put-body).
+    3. Fügen Sie die Versandkosten zum Zahlungsobjekt hinzu oder ändern Sie sie mithilfe der Methode „update order“ der Payment-API.
+
+    Die folgende JSON-Payload zeigt ein Beispiel für einen Anfrage-Body, der an die Payment-API gesendet wird, um Versandkosten zu einer bestehenden Bestellung hinzuzufügen:
+
+    ```json Update shipping cost payload
+    {
+      "amount": 57500,
+      "items": [
+        {
+          "reference": "Sneaky NE2816-82",
+          "name": "Sneaky",
+          "quantity": 2,
+          "unit": "pcs",
+          "unitPrice": 25000,
+          "taxRate": 0,
+          "taxAmount": 0,
+          "netTotalAmount": 50000,
+          "grossTotalAmount": 50000
+        },
+        {
+          "reference": "Shipping A32",
+          "name": "Delivery service",
+          "quantity": 1,
+          "unit": "NA",
+          "unitPrice": 0,
+          "taxRate": 0,
+          "taxAmount": 0,
+          "grossTotalAmount": 7500,
+          "netTotalAmount": 7500
+        }
+      ],
+      "shipping": {
+        "costSpecified": true
+      }
+    }
+    ```
+
+    > info
+    > **Beachten Sie!**
+    > 
+    > Vergessen Sie nicht, das Flag [`shipping.costSpecified `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-orderitems-put-body-shipping-costspecified) beim Aktualisieren der Bestellung zu setzen.
+  </Step>
+  <Step title="Den Checkout-Ablauf testen">
+    Es ist an der Zeit, die Funktionalität für die Verarbeitung der Versandkosten zu testen.
+
+    1. Laden Sie die Checkout-Seite.
+    2. Geben Sie Adressinformationen im Checkout-Formular ein.
+    3. Wann immer die Adresse aktualisiert wird, sollte der JavaScript-Event-Handler ausgelöst werden und eine Anfrage an das Backend senden.
+    4. Überprüfen Sie, ob die Checkout-Seite die Meldung "Versandkosten werden berechnet" anzeigt (wie im Screenshot in [Schritt 2](/add-shipping-cost/#build-step-2-listen-to-the-address-changed-event-frontend) gezeigt).
+    5. Klicken Sie auf den "Bezahlen"-Button, sobald der Checkout reaktiviert wurde, und stellen Sie sicher, dass der Checkout-Ablauf keine Fehler enthält.
+
+    <Info>
+    Checkout stellt sicher, dass Sie Ihrer Bestellung Versandkosten hinzugefügt haben. Wenn Sie vergessen haben, die Eigenschaft [`costSpecified `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-orderitems-put-body-shipping-costspecified) beim Aktualisieren der Bestellung auf `true ` zu setzen, wird nach dem Klick auf den "Bezahlen"-Button ein Fehler auf der Checkout-Seite angezeigt.
+    </Info>
+
+    > tada
+    > Sie haben nun gelernt, wie Sie Versandkosten dynamisch basierend auf einem vom Kunden auf der Checkout-Seite angegebenen Bestimmungsort hinzufügen. Außerdem haben Sie gelernt, wie Sie ein bestehendes Zahlungsobjekt mit der Payment-API aktualisieren.
+  </Step>
+</Steps>

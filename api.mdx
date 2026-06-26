@@ -1,0 +1,100 @@
+---
+title: "API"
+description: "Only when you automise certain processes related to your Checkout Paylink or One-Page-Shop, you will need to create an API signature to use the API."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Coding: Some (Backend)</Badge>
+</div>
+
+## Find the API Secret Key of your Instance
+
+<Warning>
+This and the following steps are only relevant for you, if you want to automate your Paylink or One-Page-Shop payment processes by using the API. For most cases, the functionality provided through your __Checkout Paylink account__ is sufficient.
+</Warning>
+
+You can find your API Key in your __Checkout Paylink account__ after clicking "API & Plugins" on the left hand navigation column.
+
+## Create your API Signature
+
+### Get your API Signature
+
+<CodeGroup>
+
+```bash Shell
+echo -n "HTTP-QUERY-STRING" | openssl dgst -sha256 -hmac "API-SECRET" -binary | openssl enc -base64
+```
+
+```php PHP
+base64_encode(hash_hmac('sha256', http_build_query($params, null, '&'), $apiSecret, true));
+```
+
+```javascript NodeJS
+function buildSignature (query = '') {
+  return Base64.stringify(hmacSHA256(query, secret))
+}
+
+let queryParams = Object.assign({}, params)
+const queryStr = qs.stringify(queryParams)
+queryParams.ApiSignature = buildSignature(queryStr)
+```
+
+</CodeGroup>
+
+<Warning>
+The query string has to be [RFC1738](https://www.ietf.org/rfc/rfc1738.txt) encoded. This means that you will have to replace spaces by "+".
+</Warning>
+
+For security reasons, when using the API, we want you to pass an __API signature__ calculated with the __API Secret__ of your instance.
+
+<Warning>
+The API signature is HMAC encoded [RFC 2104](https://www.ietf.org/rfc/rfc2104.txt): spaces need to be represented as "+".
+</Warning>
+
+The parameter name of this API signature should be `ApiSignature `. You can calculate the signature using all parameters except the `instance ` parameter.
+
+- Build query string (e.g. model=Page&id=17)
+- Calculate binary hmac hash using your Checkout Paylink account's API Secret as key
+- Encode it with base64
+
+## API Base Address
+
+The __Checkout Paylink REST APIs__ are collected under the following base address:  
+<Warning>
+https://api.nets-pay.link/v1.0/:object/:id?instance=:instance
+</Warning>
+
+### Requests
+
+The __payload data__ has to be [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) URL encoded and spaces will be percent encoded "%20".
+
+<Warning>
+Please note that the __payload data__ and __API signature__ must be encoded differently: The __API signature__ is HMAC encoded [RFC2104](https://www.ietf.org/rfc/rfc2104.txt): spaces must be represented as "+".
+</Warning>
+
+| Parameter     | Value     |
+| ---------- | ---------- |
+| object       | Paylink, Transaction       |
+| id       | Only used for request types GET, PUT and DELETE where only one entity gets modified.       |
+| instance       | The Paylink instance name. |
+
+For POST requests, all query parameters except the instance have to be in the body.
+
+Please find a comprehensive list of endpoints and functionality in our [API reference](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/paylink-v1/).
+
+## Paylink API - Error Messages
+
+| HTTP Code    | Status     | Message     |
+| ---------- | ---------- | ---------- |
+| `200`       | OK       | Everything worked successfully!       |
+| `403`       | Forbidden       | The API Signature is wrong       |
+| `404`       | Not Found       | The requested endpoint does not exist       |
+
+All errors will return a JSON in the following format:
+
+```json JSON
+{
+  status: "error",
+  message: "An error occurred: Human readable message goes here"
+}
+```

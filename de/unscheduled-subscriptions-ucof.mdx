@@ -1,0 +1,287 @@
+---
+title: "Ungeplante Abonnements (uCoF)"
+description: "Dieser Leitfaden richtet sich an Entwickler, die ungeplante Abonnements zu ihrer Checkout-Seite hinzufügen möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="blue">Programmierung: Ja (Backend)</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie den Leitfaden [Checkout auf Ihrer Website integrieren](/web-integration) befolgt und implementiert haben.
+Bevor Sie diesen Leitfaden lesen, sollten Sie also bereits eine funktionierende Checkout-Seite haben, die Einzelzahlungen verarbeitet.
+</Warning>
+
+## Überblick
+
+**Ungeplante Abonnements** (Unscheduled Card on File, UCoF) ermöglichen vom Händler initiierte Transaktionen mit unregelmäßigem Zeitplan und flexiblen Beträgen (im Gegensatz zu regulären Abonnements, bei denen derselbe Betrag in einem festgelegten Zeitplan als wiederkehrende Zahlung belastet wird). Häufige Szenarien für die Verwendung ungeplanter Abonnements sind nutzungsbasierte Dienste wie Carsharing, E-Scooter, Aufladen von intern verwendeten Zahlungskarten (Kantine), Zahlungen für Essenslieferungen und so weiter.
+
+Die Zahlungsdetails (Karten) für ungeplante Abonnements werden bei Checkout gespeichert, sodass die PCI-Compliance (Datensicherheitsstandard) gewährleistet ist. Ihre Allgemeinen Geschäftsbedingungen müssen jedoch die Zustimmung des Nutzers zur Speicherung seiner Zahlungsdetails für ungeplante Abonnements abdecken.
+
+Ähnlich wie bei regulären Abonnements ist ein ungeplantes Abonnement immer mit mindestens einem Zahlungsobjekt verknüpft. Ein neues ungeplantes Abonnement wird durch die [Methode "Zahlung erstellen"](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) mit einigen spezifischen Parametern erstellt.
+
+Nachdem ein ungeplantes Abonnement erstellt wurde, können Sie neue Zahlungen ohne weitere Interaktion mit dem Kunden belasten. Bei jeder Belastung wird ein neues Zahlungsobjekt erstellt und dann automatisch belastet.
+
+<Info>
+Da bei jeder [Belastung eines ungeplanten Abonnements](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-unscheduledsubscriptionid-charges-post) ein neues Zahlungsobjekt mit einer individuellen `chargeID ` und `paymentID ` erstellt wird, können Sie einzelne Belastungen aus einem ungeplanten Abonnement zurückerstatten, wie Sie es bei regulären Zahlungen tun würden.
+</Info>
+
+## Ein neues ungeplantes Abonnement erstellen
+
+Um den Checkout für ungeplante Abonnements zu konfigurieren, muss das Objekt `unscheduledSubscription ` zum Anfragetext der [Methode "Zahlung erstellen"](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) hinzugefügt werden. Hier ist ein Beispiel einer aktualisierten Version von payload.json, die die erforderlichen `unscheduledSubscription `-Eigenschaften enthält:
+
+```json Create unscheduled subscription
+{
+    "order": {
+        "items": [
+            {
+            "reference": "ST Top up mobile",
+            "name": "ST Top up mobile",
+            "quantity": 1,
+            "unit": "pcs",
+            "unitPrice": 0,
+            "taxRate": 1000,
+            "taxAmount": 0,
+            "netTotalAmount": 0,
+            "grossTotalAmount": 0
+            }
+        ],
+        "amount": 1,
+        "currency": "SEK",
+        "reference": "Nets Easyshop"
+    },
+    "checkout": {
+        "termsUrl": "https://st-easyshop.nets.eu/terms",
+        "publicDevice": false,
+        "charge": false,
+        "integrationType": "HostedPaymentPage",
+        "merchantHandlesConsumerData": false,
+        "consumerType": {
+            "supportedTypes": [
+                "B2B",
+                "B2C"
+            ],
+        "default": "B2C"
+        },
+        "returnUrl": "https://pp-easyshop.nets.eu/confirmation"
+        },
+        "notifications": {
+            "webhooks": [
+                {
+                    "eventName": "payment.created",
+                    "url": "https://pp-easyshop.nets.eu/api/WebhookState",
+                    "authorization": "myAuthorizationKey"
+                }
+            ]
+        },
+        "unscheduledSubscription": {
+            "create": true
+        }
+}
+```
+
+.
+
+Es ist möglich, einen Betrag größer als null anzugeben und beim Erstellen des ungeplanten Abonnements eine erste Belastung vorzunehmen.
+
+<Info>
+Wenn Sie in der Anfrage zum Erstellen einer Zahlung den Betrag null senden und Karten bei der Verifizierung abgelehnt werden, liegt dies wahrscheinlich daran, dass die ausstellende Bank keine Verifizierungen mit Nullbetrag zulässt. Um dieses Problem zu umgehen, senden Sie bitte stattdessen einen Wert von 1 anstelle von 0 (unabhängig von der Währung).
+</Info>
+
+<Warning>
+Es ist nicht erlaubt, Abonnements mit einem geringen Betrag (wie 1,00 EUR) zu erstellen, nur um eine Karte bei Checkout zu registrieren. Erstellen Sie stattdessen eine [Zahlung mit ungeplantem Abonnement-Objekt mit Betrag=0, um die Karte zu verifizieren](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-unscheduledsubscription).
+
+Wenn die Karte gültig ist, können Sie das [Token (ID des ungeplanten Abonnements) abfragen und für zukünftige Belastungen verwenden](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get).
+
+Dies ist die konforme Art, eine Karte ohne Belastung des Kunden zu registrieren und ein Token zurückzubekommen.
+Transaktionen mit niedrigem Betrag (1,00 EUR / SEK / DKK / etc.), die nicht erfasst oder storniert werden, können abgelehnt werden oder Geldstrafen von Visa oder MasterCard nach sich ziehen.
+</Warning>
+
+Der Schlüssel `unscheduledSubscription ` des payload.json-Anfragetexts enthält `create `. Wenn auf `true ` gesetzt, wird eine neue ungeplante Card-on-File-Vereinbarung erstellt. Dies kann weggelassen werden, wenn eine bestehende ungeplante Card-on-File-Vereinbarung aktualisiert werden soll.
+
+<Info>
+Mit `create:true ` wird eine neue `unscheduledSubscriptionId ` erstellt. Der Aufruf gibt jedoch nur eine `paymentID ` zurück. Um die neu erstellte `unscheduledSubscriptionId ` zu erhalten, müssen Sie den [Aufruf "Zahlung abrufen"](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) verwenden und die `unscheduledSubscriptionId ` in der Antwort dieses Aufrufs finden.
+</Info>
+
+## Neues ungeplantes Abonnement mit Erstbelastung
+
+Durch das Setzen der booleschen Eigenschaft `checkout.charge ` auf `true ` wird der Kunde belastet, wenn das ungeplante Abonnement erstellt wird. Die folgende JSON-Payload erstellt ein neues ungeplantes Abonnement und belastet den Kunden auch automatisch für die angegebene Bestellung.
+
+```json payload.json
+{
+    "order": {
+        "items": [
+            {
+                "reference": "10",
+                "name": "Subscription product",
+                "quantity": 1,
+                "unit": "month",
+                "unitPrice": 10000,
+                "grossTotalAmount": 10000,
+                "netTotalAmount": 10000
+            }
+        ],
+        "amount": 10000,
+        "currency": "SEK",
+        "reference": "Subscription Test"
+    },
+    "checkout": {
+        "integrationType": "EmbeddedCheckout",
+        "url": "https://<YOUR_WEBSITE>/cart.html",
+        "termsUrl": "https://<YOUR_WEBSITE>/terms.html",
+        "charge": true
+    },
+    "unscheduledSubscription": {
+      "create": true
+   }
+}
+```
+
+## ID des ungeplanten Abonnements über die Payment API abrufen
+
+Die __ID des ungeplanten Abonnements__ kann programmatisch abgerufen werden. Hierzu müssen Sie das Zahlungsobjekt des ungeplanten Abonnements abrufen, indem Sie den Aufruf [retrieve-payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) senden:
+
+### Zahlung abrufen
+
+<CodeGroup>
+
+```php retrieve-payment.php
+<?php
+
+$paymentId = "<YOUR_PAYMENT_ID>";
+$ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+echo "Response code: " . $http_code . PHP_EOL;
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty . PHP_EOL;
+```
+
+```javascript retrieve-payment.js
+const http = require("https");
+
+const paymentId = "<PAYMENT_ID>";
+const secretKey = "<YOUR_SECRET_KEY>";
+
+const options = {
+  "method": "GET",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId,
+  "headers": {
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(JSON.stringify(JSON.parse(body), null, 2));
+  });
+});
+
+req.end();
+```
+
+</CodeGroup>
+
+Denken Sie daran, `<PAYMENT_ID>` durch die Zahlungskennung zu ersetzen, die Sie beim Erstellen der Abonnementzahlung von der API erhalten haben. Der Platzhalter `<YOUR_SECRET_KEY>` sollte durch Ihren geheimen Schlüssel ersetzt werden.
+
+Ein erfolgreicher API-Aufruf gibt etwas Ähnliches wie dieses zurück:
+
+```json Retrieve payment response (uCoF)
+{
+  "payment": {
+      "paymentId": "0260000060003b7b47f0833960dc60d6",
+      "summary": {
+          "reservedAmount": 10000
+      },
+      "consumer": {
+        ...
+      },
+      "paymentDetails": {
+          "paymentType": "CARD",
+          "paymentMethod": "Visa",
+          "invoiceDetails": {},
+          "cardDetails": {
+              "maskedPan": "492500******0004",
+              "expiryDate": "1222"
+          }
+      },
+      "orderDetails": {
+          "amount": 10000,
+          "currency": "SEK",
+          "reference": "Subscription Demo Order with charge"
+      },
+      "checkout": {
+          "url": "http:\/\/example.com\/cart.html"
+      },
+      "created": "2021-04-26T08:28:25.0946+00:00",
+      "unscheduledSubscription": {
+          "id": "4feb3b28d260458a88857b00f46261ba"
+      }
+  }
+```
+
+Der Wert des Schlüssels `payment.unscheduledSubscription.id ` ist die `unscheduledSubscriptionId `, die Sie suchen. Verwenden Sie diese Kennung, um mit dem Aufruf [Ungeplantes Abonnement abrufen](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-unscheduledsubscriptionid-get) weitere Informationen über das ungeplante Abonnement zu erhalten:
+
+### uCoF-Details abrufen
+
+```php retrieve-unscheduledsubscription.php
+<?php
+
+$unscheduledSubscriptionId = "<UNSCHEDULEDSUBSCIRPTION_ID>";
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/unscheduledsubscriptions/' . $unscheduledSubscriptionId);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+echo "Response code: " . $http_code . PHP_EOL;
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty . PHP_EOL;
+```
+
+Stellen Sie erneut sicher, dass Sie alle mit `<...>` markierten Platzhalterzeichenfolgen ersetzen.
+
+Die JSON-Antwort der Anfrage zum Abrufen von Abonnements kann etwa so aussehen:
+
+```json uCoF subscription details response
+{
+    "unscheduledSubscriptionId": "205e808f6fba40828b0389c8b943aefe",
+    "paymentDetails": {
+        "paymentType": "CARD",
+        "paymentMethod": "Visa",
+        "cardDetails": {
+            "expiryDate": "1222",
+            "maskedPan": "492500******0004"
+        }
+    }
+}
+```
+
+Jetzt wissen Sie, wie Sie die unscheduledSubscription-Kennung und andere Details zu einer uCoF-Einrichtung abrufen. Die unscheduledSubscription-Kennung ist erforderlich, wenn Sie ein ungeplantes Abonnement zu einem späteren Zeitpunkt belasten möchten.
+
+Sie können mehrere Abonnements gleichzeitig mit der API-Methode [Massenbelastung ungeplanter Abonnements](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-charges-post) belasten.
+
+<Check>
+Jetzt wissen Sie, wie Sie Ihre Checkout-Seite einrichten, um ungeplante Transaktionen zu unterstützen. Sie wissen auch, wie Sie die `unscheduledSubscriptionId ` erhalten, die für zukünftige Belastungen erforderlich ist.
+</Check>

@@ -1,0 +1,62 @@
+---
+title: "PayPal"
+description: "This guide outlines the basics of using PayPal via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+## Before you start
+
+<Info>
+An additional agreement is required for accepting PayPal. Please contact our Customer Service to get that process started.
+</Info>
+
+## Overview
+
+Checkout has an integration to PayPal which enables your consumers to pay via their PayPal account.
+
+Payments with PayPal will be processed with the chosen card connected to what the consumer has registered with their PayPal account. You can check the authorization timeframes from this table [here](/payment-methods/#build-authorization-times-for-charge-cancel-and-refund).
+
+## Functionalities
+
+### PayPal Functionality Table
+|  |  |
+| --- | --- |
+| Payment type | Wallet |
+| Subscriptions | ❌ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ✅ |
+| Cancel payment | ✅ |
+| Reservation & charge | ✅ |
+| IPSP | ✅ |
+| Currencies | All |
+| Countries | All |
+
+<Info>
+You can learn more about the payment operations from [here](/order-management/#build-payment-operations).
+</Info>
+
+## Activation
+
+To activate PayPal as a payment method and to add it to your Checkout portal, you need to complete the onboarding journey.
+
+<Info>
+If you already have an existing Checkout portal account, you need to [contact Support](https://www.nets.eu/payments/contact-us) for this.
+</Info>
+
+
+
+## User Journey & Payment Flow
+
+This following section will describe the user journey and payment flow for a consumer:
+
+1. When your consumer chooses PayPal as a payment method in the checkout, they will be prompted to:
+   -  Accept terms and conditions
+2. Click on Pay.
+3. From here, they will be redirected to the PayPal page in a pop-up window.
+4. Log in with their credentials.
+6. Approve the payment in the pop-up window.
+7. From here, they will be redirected back to the checkout.
+
+## Testing
+
+You can find Paypal test information here: [Test wallet processing](https://draft.developers.netsdev.eu/test-wallet-processing "Test wallet processing")

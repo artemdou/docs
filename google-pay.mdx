@@ -1,0 +1,56 @@
+---
+title: "Google Pay™"
+description: "This guide outlines the basics of using Google Pay™ via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+IntegrationType: HostedPaymentPage
+
+embeddedPaymentPage: EmbeddedPaymentPage
+
+## Overview
+
+Google Pay is a mobile payment and digital wallet service provided by Google Inc. 
+
+- It allows users to make payments using their compatible devices in physical stores, within apps, and on the web. 
+
+- It provides a convenient and secure way for users to store their credit and debit card information and make payments with a single touch or tap.
+
+## Functionality table
+
+### Google Pay functions
+|  |  |
+| --- | --- |
+| Payment type | Wallet |
+| Subscriptions | ❌ |
+| Partial refunds | ✅ |
+| Refunds | ✅ |
+| Update order | ✅ |
+| Cancel payment | ✅ |
+| Reservation & charge | ✅ |
+| CPSP | ✅ |
+| Supported cards | Mastercard and Visa |
+| Currencies | All currencies for Visa and Mastercard . |
+| Countries | All |
+
+## Activation
+
+To activate Google Pay, please contact our Sales and Activation team at ecom-salessupport@nets.eu who will manually enable for you. No additional steps are required for merchant to enable Google Pay.
+
+## Payment flow
+
+If you use paymentMethodsConfiguration parameter to only show the payment method(s) that are preferred for the specific payment, Google Pay can also be selected. 
+Google Pay is available only on supported platforms. 
+
+Google Pay is defined as a Wallet and can be displayed alone and together with other payment methods. It is not recommended to show Google Pay alone if you do not detect the device used in the webshop before you are going to show the payment options. 
+
+If Google Pay is used alone on unsupported browser/platform, there will be no visible payment methods and it is naturally a poor user experience. Google Pay can be combined with other Wallet payment methods or together with cards. 
+
+Recommended usage of the  paymentMethodsConfiguration parameter for Google Pay. 
+
+If you have more than one wallet configured, you can use: 
+
+`paymentMethodsConfiguration:[{"name":"Card"},{"name":"GooglePay"}]`
+
+## Testing
+
+You can test GooglePay with our test documentation here, __[Test wallet processing](/test-wallet-processing "Test wallet processing")__

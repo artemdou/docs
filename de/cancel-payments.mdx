@@ -1,0 +1,92 @@
+---
+title: "Zahlungen stornieren"
+description: "Erfahren Sie mehr über das Stornieren von Zahlungen für Nexi Checkout."
+---
+
+## Zahlung stornieren
+
+Wenn ein Kunde den Checkout-Flow abgeschlossen und die Zahlung akzeptiert hat, wurde der angegebene Betrag auf der Zahlungskarte Ihres Kunden reserviert (aber nicht eingezogen).
+
+Wenn ein Kunde eine Bestellung storniert, bevor die Ware versandt wurde, haben Sie die Möglichkeit, die Zahlung zu stornieren. Durch das Stornieren einer Zahlung wird das reservierte Geld auf der Zahlungskarte des Kunden freigegeben.
+Um eine Zahlung zu stornieren, rufen Sie die Methode [Cancel payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-paymentid-cancels-post) auf, wie im folgenden Beispiel gezeigt:
+
+<Info>
+Es ist nicht möglich, eine Zahlung zu stornieren, die bereits belastet wurde. Falls Sie eine Zahlung bereits belastet haben, müssen Sie eine Rückerstattung durchführen. Weitere Informationen zu Rückerstattungen finden Sie unten.
+</Info>
+
+### Zahlung stornieren
+
+<CodeGroup>
+
+```php Cancel payment (PHP)
+<?php
+
+$paymentId = "<PAYMENT_ID>";
+$payload = '{
+  "amount": 180000
+}';
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId . '/cancels');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo("Status code: " . $http_code . "\n");
+echo $json_pretty;
+```
+
+```javascript Cancel payment (Node)
+const http = require("https");
+const fs = require("fs");
+
+const paymentId = "<PAYMENT_ID>";                // Replace payment ID
+const payload = fs.readFileSync('payload.json'); // Replace body
+const secretKey = "<YOUR_SECRET_KEY>";           // Replace key
+
+const options = {
+  "method": "POST",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId + "/cancels",
+  "headers": {
+    "content-type": "application/json",
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write(payload);
+req.end();
+```
+
+</CodeGroup>
+
+<Info>
+Denken Sie daran, den `amount ` im Payload so zu ersetzen, dass er Ihrer Zahlung entspricht.
+</Info>
+
+Sie können die folgenden Webhook-Ereignisse abonnieren, um Stornierungsanfragen zu einer Zahlung zu verfolgen:
+
+- [`payment.cancel.created `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#cancel-created)
+- [`payment.cancel.failed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#cancel-failed)
+
+Es ist nicht möglich, eine Zahlung zu stornieren, die bereits belastet wurde. Falls Sie eine Zahlung bereits belastet haben, müssen Sie eine Rückerstattung durchführen. Weitere Informationen zu Belastungen und Rückerstattungen finden Sie in den folgenden Abschnitten.

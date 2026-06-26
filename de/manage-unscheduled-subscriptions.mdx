@@ -1,0 +1,343 @@
+---
+title: "Ungeplante Abonnements verwalten"
+description: "Dieser Leitfaden richtet sich an Entwickler, die ungeplante Abonnementzahlungen programmatisch über die Payment API belasten möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="blue">Coding: Ja (Backend)</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie die folgenden Anleitungen befolgt und implementiert haben:
+- [Checkout in Ihre Website integrieren](/web-integration)
+- [Ungeplante Abonnements unterstützen](/unscheduled-subscriptions-ucof) (auf der Checkout-Seite)
+</Warning>
+
+## Überblick
+
+Sobald Sie eine [Checkout-Seite haben, die ungeplante Abonnements verarbeiten kann](/unscheduled-subscriptions-ucof/#build-create-a-new-unscheduled-subscription), ist es an der Zeit, die Funktionalität in Ihrem Backend zu implementieren, um diese ungeplanten Abonnements zu verwalten:
+
+- **Ungeplante Abonnements belasten**: Sie können ein oder mehrere ungeplante Abonnements gleichzeitig belasten. Das Belasten eines ungeplanten Abonnements ist eine asynchrone Operation. Sie erstellen einen neuen Bulk-Charge-Vorgang und rufen den Status des Vorgangs zu einem späteren Zeitpunkt ab.
+
+<Warning>
+Es ist nicht erlaubt, Abonnements mit niedrigem Betrag (z. B. 1,00 EUR) anzulegen, nur um eine Karte bei Checkout zu registrieren. Erstellen Sie stattdessen [eine Zahlung mit dem ungeplanten Abonnement-Objekt mit amount=0, um die Karte zu verifizieren](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-unscheduledsubscription).
+
+Wenn die Karte gültig ist, können Sie das [Token (ungeplante Abonnement-ID) abfragen und es für zukünftige Belastungen verwenden](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get).
+
+Dies ist die konforme Art, eine Karte zu registrieren, ohne den Kunden zu belasten, und ein Token zurückzuerhalten.
+Transaktionen mit niedrigem Wert (1,00 EUR / SEK / DKK / usw.), die nicht erfasst oder storniert werden, können abgelehnt werden oder Strafgebühren von Visa oder MasterCard verursachen.
+</Warning>
+
+## Details eines ungeplanten Abonnements abrufen
+
+Bevor Sie ein ungeplantes Abonnement belasten können, müssen Sie die Kennung des ungeplanten Abonnements ermitteln. Sie können die Kennung des ungeplanten Abonnements aus dem Checkout-Portal oder der Payment API abrufen. Der Leitfaden [Ungeplante Abonnements (uCoF)](/unscheduled-subscriptions-ucof) beschreibt, wie Details eines ungeplanten Abonnements einschließlich der `unscheduledSubscriptionId ` abgerufen werden. Weitere Details finden Sie unter [Ungeplante Abonnement-ID über die Payment API abrufen](/unscheduled-subscriptions-ucof/#build-retrieve-unscheduled-subscription-id-using-the-payment-api).
+
+## Ein ungeplantes Abonnement belasten
+
+Wenn eine neue ungeplante Abonnementzahlung erstellt und Sie die `unscheduledSubscriptionId ` abgerufen haben, können Sie neue Zahlungen initiieren, die mit dem ungeplanten Abonnement verknüpft sind. Sie können beliebige Zahlungen mit völlig unterschiedlichen Bestellartikeln und Beträgen erstellen.
+
+Beim Belasten eines ungeplanten Abonnements müssen Sie eine vollständige Bestellung angeben, die festlegt, wofür Sie Ihren Kunden belasten. Verwenden Sie die Methode [Charge unscheduled subscription](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-unscheduledsubscriptionid-charges-post), um ein ungeplantes Abonnement zu belasten.
+
+<Info>
+Wenn Sie über erfolgreiche ungeplante Abonnementbelastungen benachrichtigt werden möchten, sollten Sie [*payment.charge.created.v2*](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#charge-created) abonnieren. Wenn Sie über fehlgeschlagene Belastungsversuche bei ungeplanten Abonnements informiert werden möchten, sollten Sie [*payment.reservation.failed*](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#reservation-failed) abonnieren.
+</Info>
+
+Hier ein Beispiel:
+
+### Ungeplantes Abonnement belasten
+
+<CodeGroup>
+
+```php charge-unscheduledsubscriptions.php
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "https://dev-api.dibspayment.eu/v1/unscheduledsubscriptions/{unscheduledSubscriptionId}/charges",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_POSTFIELDS => "{&quot;REPLACE_REQUEST_BODY&quot;:&quot;REPLACE_REQUEST_BODY&quot;}",
+  CURLOPT_HTTPHEADER => [
+    "Authorization: <YOUR_SECRET_API_KEY>",
+    "content-type: application/*+json"
+  ],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  echo $response;
+}
+```
+
+```javascript charge-unscheduledsubscriptions.js
+const http = require("https");
+
+const options = {
+  "method": "POST",
+  "hostname": "dev-api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/unscheduledsubscriptions/{unscheduledSubscriptionId}/charges",
+  "headers": {
+    "content-type": "application/*+json",
+    "Authorization": "REPLACE_KEY_VALUE"
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write(JSON.stringify({REPLACE_REQUEST_BODY: 'REPLACE_REQUEST_BODY'}));
+req.end();
+```
+
+</CodeGroup>
+
+<Info>
+Denken Sie daran, `&lt;YOUR_SECRET_API_KEY&gt;` durch Ihren [Secret Key](/access-your-integration-keys/#build-integration-keys) zu ersetzen.
+</Info>
+
+Der Payload wird in der Regel dynamisch von Ihrem Backend erstellt. Wenn Sie es jedoch nur ausprobieren möchten, können Sie den folgenden fest codierten Request-Body verwenden, der einen einzelnen Artikel belastet. Denken Sie daran, `&lt;UNSCHEDULEDSUBSCRIPTION_ID&gt;` durch eine gültige ungeplante Abonnement-ID zu ersetzen.
+
+```text Charge an unscheduled subscription (request)
+{
+    "unscheduledSubscriptions": [
+        {
+            "unscheduledSubscriptionId": "<UNSCHEDULEDSUBSCRIPTION_ID>",
+            "order": {
+                "items": [
+                    {
+                        "reference": "230-1",
+                        "name": "Silver plan",
+                        "quantity": 1,
+                        "unit": "quantity",
+                        "unitPrice": 30000,
+                        "taxRate": 2500,
+                        "taxAmount": 7500,
+                        "netTotalAmount": 30000,
+                        "grossTotalAmount": 37500
+                    }
+                ],
+                "amount": 37500,
+                "currency": "SEK",
+                "reference": "Unscheduled subscription"
+            }
+        }
+    ]
+}
+```
+
+## Mehrere ungeplante Abonnements belasten
+
+Es ist möglich, mehrere ungeplante Abonnements im Bulk zu belasten. In einem einzigen API-Aufruf können Sie eine beliebige Anzahl ungeplanter Abonnements belasten. Die Kennungen der ungeplanten Abonnements werden in der Regel auf Ihrer Seite gespeichert, sodass Sie Belastungsanfragen für alle Ihre ungeplanten Abonnements zusammenstellen können.
+
+Hier ist ein Beispiel-Payload, der zwei aktive ungeplante Abonnements belastet. Denken Sie daran, `&lt;UNSCHEDULEDSUBSCRIPTION_ID_1&gt;` und `&lt;UNSCHEDULEDSUBSCIRIPTION_ID_2&gt;` durch tatsächliche Kennungen ungeplanter Abonnements zu ersetzen, bevor Sie die Anfrage senden.
+
+```json payload.json
+{
+    "externalBulkChargeId": "1002",
+     "notifications": {
+        "webhooks": [ ]
+     }
+    "unscheduledSubscriptions": [
+        {
+            "unscheduledSubscriptionId": "<SUBSCRIPTION_ID_1>",
+            "order": {
+                "items": [
+                    {
+                        "reference": "230-1",
+                        "name": "Silver plan",
+                        "quantity": 1,
+                        "unit": "quantity",
+                        "unitPrice": 30000,
+                        "taxRate": 2500,
+                        "taxAmount": 7500,
+                        "netTotalAmount": 30000,
+                        "grossTotalAmount": 37500
+                    }
+                ],
+                "amount": 37500,
+                "currency": "SEK",
+                "reference": "Unscheduled subscription 1"
+            }
+        },
+        {
+            "unscheduledSubscriptionId": "<SUBSCRIPTION_ID_2>",
+            "order": {
+                "items": [
+                    {
+                        "reference": "230-1",
+                        "name": "Silver plan",
+                        "quantity": 1,
+                        "unit": "quantity",
+                        "unitPrice": 30000,
+                        "taxRate": 2500,
+                        "taxAmount": 7500,
+                        "netTotalAmount": 30000,
+                        "grossTotalAmount": 37500
+                    }
+                ],
+                "amount": 37500,
+                "currency": "SEK",
+                "reference": "Unscheduled subscription 2"
+            }
+        }
+    ]
+}
+```
+
+Das Beispiel zeigt außerdem, dass es möglich ist, ein Array von `webhooks ` zur Anfrage hinzuzufügen, sodass Sie die durch den Bulk-Charge-Vorgang ausgelösten Ereignisse verfolgen können. Weitere Informationen zur Eigenschaft [`notifications `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-post-body-notifications) finden Sie in der API-Referenz.
+
+<Info>
+Jedes ungeplante Abonnement, das Sie zu belasten versuchen, generiert ein neues Zahlungsobjekt und löst daher auch eine neue Sequenz von Webhook-Ereignissen aus. Wenn Sie beispielsweise 10 ungeplante Abonnements in einer Bulk-Anfrage belasten, werden auch 10 [`payment.charge.created.v2`](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#charge-created)-Ereignisse ausgelöst.
+</Info>
+
+Wenn die Belastungsanfrage erfolgreich war, wird ein HTTP-Statuscode 202 mit einer neuen Bulk-Kennung zurückgegeben:
+
+```json Bulk charge unscheduled subscriptions (response)
+{
+    "bulkId": "d6c11ab596184414bef9adf20936e583"
+}
+```
+
+Eine erfolgreiche Antwort impliziert nicht, dass alle ungeplanten Abonnements erfolgreich belastet wurden. Sie können jedoch die im Antwort-Body zurückgegebene `bulkId ` verwenden, um Details zu einem Bulk-Charge-Vorgang abzurufen, wie im folgenden Schritt gezeigt.
+
+## Bulk-Charge-Details abrufen
+
+Wenn Sie einen Bulk-Charge-Vorgang ausführen, können ungeplante Abonnements aus verschiedenen Gründen fehlschlagen, z. B.:
+
+- Nicht genügend Guthaben auf der Karte, was dazu führt, dass die Bank die Reservierung ablehnt. In diesem Fall können Sie Ihren Kunden über die Situation informieren und versuchen, eine neue Belastung durchzuführen.
+
+- Die Karte ist ungültig geworden, weil sie abgelaufen ist, als gestohlen gemeldet wurde usw. In diesem Fall müssen Sie das ungeplante Abonnement aktualisieren.
+
+Um den Status eines Bulk-Charge-Vorgangs abzurufen, können Sie die Methode [Retrieve bulk unscheduled charges](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-charges-bulkid-get) verwenden.
+
+Die Antwort wird paginiert, da potenziell viele ungeplante Abonnements verarbeitet werden. Sie haben zwei Optionen, um den Bereich der abzurufenden Belastungen anzugeben:
+
+1. Verwenden Sie `skip ` und `take `.
+2. Verwenden Sie `pageNumber ` und `pageSize `.
+
+Im untenstehenden Beispielcode wird `skip ` und `take ` verwendet, um anzugeben, dass die ersten 10 ungeplanten Abonnements abgerufen werden sollen:
+
+### Bulk-Belastungen abrufen (uCoF)
+
+<CodeGroup>
+
+```php get-bulk-charges.php
+<?php
+
+$secretKey = "<YOUR_SECRET_API_KEY>";
+$bulkId = "<BULK_ID>";
+
+$skip = 0;
+$take = 10;
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/unscheduledsubscriptions/charges/' . $bulkId . '?skip=' . $skip . '&take=' . $take);
+
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  'Content-Type: application/json',
+  'Accept: application/json',
+  'Authorization: ' . $secretKey
+));
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+echo ("HTTP code: " . $http_code . PHP_EOL);
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty . PHP_EOL;
+```
+
+```javascript get-bulk-charges.js
+const http = require("https");
+
+const bulkId = "<BULK_ID>";            // Replace bulk id
+const secretKey = "<YOUR_SECRET_KEY>"; // Replace key
+const skip = 0;
+const take = 10;
+
+const options = {
+  "method": "GET",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/unscheduledsubscriptions/charges/" + bulkId + "?skip=" + skip + "&take=" + take,
+  "headers": {
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+  console.log('HTTP code:', res.statusCode);
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    try {
+      console.log(JSON.stringify(JSON.parse(body), null, 2));
+    } catch (e) {
+      console.error("Failed to parse body: " + e);
+      console.error(body.toString());
+    }
+  });
+});
+
+req.end();
+```
+
+</CodeGroup>
+
+Die folgende Antwort vom Server zeigt an, dass alle ungeplanten Abonnements zurückgegeben wurden (`"more": false `) und dass alle Belastungen erfolgreich abgeschlossen wurden:
+
+```json Retrieve bulk charges (response)
+{
+    "page": [
+        {
+            "unscheduledSubscriptionId": "6946cde8d7a049dc89145224088b0df9",
+            "paymentId": "0040000060a76916859b391024b1f487",
+            "chargeId": "011f000060a76916859b391024b1f488",
+            "status": "Succeeded"
+        },
+        {
+            "unscheduledSubscriptionId": "a058888d2be048cfb4f1f8e77794ed6f",
+            "paymentId": "00ec000060a76916859b391024b1f485",
+            "chargeId": "0165000060a76916859b391024b1f486",
+            "status": "Succeeded"
+        }
+    ],
+    "more": false,
+    "status": "Done"
+}
+```
+
+<Check>
+Sie wissen jetzt, wie Sie:
+- ein einzelnes ungeplantes Abonnement oder mehrere ungeplante Abonnements im Bulk **belasten**
+</Check>

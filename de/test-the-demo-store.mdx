@@ -1,0 +1,86 @@
+---
+title: "Den Demo-Shop testen"
+description: "Dieser Leitfaden beschreibt den Checkout-Demo-Shop und erläutert, wie Sie den Shop nutzen, die für Ihren Anwendungsfall erforderlichen Einstellungen umschalten, den Checkout testen und allgemeine Best Practices anwenden."
+---
+
+## Überblick
+
+Der Nexi Group [Checkout-Demo-Shop](https://shop.easy.nets.eu/) ist ein Demo- und Test-Tool, das als kleiner Beispielshop fungiert und folgende Möglichkeiten bietet:
+
+- Ausprobieren, wie der Checkout-__Checkout__ beim Kauf von Produkten je nach Land- und Währungseinstellungen aussieht
+- Umschalten verschiedener anwendungsbezogener __Einstellungen__, um diese zu aktivieren oder zu deaktivieren
+- Verwalten und Kopieren des automatisch generierten __`JSON `__ aus den angepassten Einstellungen
+- Testen der verschiedenen Zahlungsmethoden im Checkout mit den __Testdaten__ und Durchlaufen des gesamten Zahlungsablaufs, auch bekannt als __Benutzerablauf__, wie [in den jeweiligen Leitfäden zu den Zahlungsmethoden beschrieben.](/payment-methods/#build-user-journeys)
+
+Jede der Umschaltfunktionen kann auf Ihren spezifischen Anwendungsfall und Ihre Anforderungen zugeschnitten werden.
+
+<Warning>
+Wenn Sie den Demo-Shop testen, sollten Sie ihn immer im Testmodus verwenden. Weitere Informationen zum Ändern der Einstellungen im Demo-Shop finden Sie [hier](https://draft.developers.netsdev.eu/homepage).
+</Warning>
+
+<Warning>
+[Hier](/test-data) finden Sie Informationen zu den Testdaten und welche Zahlungsmethoden derzeit für Tests unterstützt werden.
+</Warning>
+
+<Info>
+In Ihrem Checkout-Portal-Konto können Sie den Checkout so gestalten und stylen, dass er zu Ihrem Branding passt.
+Mehr dazu erfahren Sie hier.
+</Info>
+
+## Checkout
+
+Eine ausführlichere und detailliertere Beschreibung des Checkouts finden Sie in diesem Abschnitt [hier](/checkout).
+
+Es ist möglich, Produkt(e) in den Warenkorb zu legen, die dann im Checkout angezeigt werden.
+
+Im Warenkorb des Checkouts sehen Sie eine Übersicht der hinzugefügten Produkte mit Produktname, Preis, Menge und Gesamtbetrag. Von hier aus können Sie auf die Schaltfläche *Zur Kasse* klicken, um den Zahlungsablauf fortzusetzen.
+
+In dieser neuen Checkout-Ansicht können Sie alle erforderlichen Informationen ausfüllen. Nach Eingabe aller erforderlichen Informationen sowie der Zustimmung zu den Allgemeinen Geschäftsbedingungen, sofern dies erforderlich ist, können Sie durch Klicken auf die Schaltfläche *Zahlen* fortfahren.
+
+![Beispiel der Bezahlen-Schaltfläche im Demo-Shop-Checkout](https://images.ctfassets.net/di680may5c0k/3OC5dzocTeO287iGGAIqC5/d818d1b82d5c5f5f12453fe9f8d82ad9/dd30894b-6f8d-4e18-ab70-dd5340d7c8fb.png?w=1000&h=400&q=50&fm=png)
+
+## Datenschutz- und Cookie-Einstellungen
+
+Standardmäßig sind die Datenschutz- und Cookie-Einstellungen aktiviert, was bedeutet, dass alle vorherigen Eingaben in den Feldern wie Name, E-Mail, Land usw. gespeichert werden. Dies verbessert und beschleunigt die Zahlungsabwicklung. Wenn Sie diese Einstellungen jedoch deaktivieren möchten, können Sie sie ausschalten.
+
+Sie können auch die Datenschutzerklärung der Nexi Group [hier](https://cdn.dibspayment.com/terms/Privacy%20Notice%20DIBS.pdf) lesen.
+
+![Cookies und Datenschutz Demo-Shop](https://images.ctfassets.net/di680may5c0k/1egEEHEjM0jx1n6D2t72ez/eefddf974a3b90781d5f771a9c65beef/cookies_privacy.png?w=1000&h=400&q=50&fm=png)
+
+## Tabelle aller Benutzerabläufe für APMs
+
+Die folgende Tabelle zeigt die verschiedenen Benutzerabläufe für jede der Zahlungsmethoden:
+
+### Übersicht aller Benutzerabläufe für APMs
+| Benutzerablauf | Typ |
+| --- | --- |
+| SEPA Direct Debit | A2A |
+| Swish | A2A |
+| Trustly | A2A |
+| American Express | Karten |
+| Visa & MasterCard | Karten |
+| Maestro | Karten |
+| Dankort | Karten |
+| AfterPay-Riverty | Rechnung/Ratenzahlung |
+| Ratepay | Rechnung/Ratenzahlung |
+| MobilePay | Wallet |
+| PayPal | Wallet |
+| Vipps | Wallet |
+
+## Testen des Checkouts im Demo-Shop
+
+Um den Checkout-Demo-Shop zu nutzen, finden Sie die Testdaten [hier](/test-data).
+
+Sie können auch eine entsprechende Tabelle einsehen, welche Zahlungsmethoden zum Testen verfügbar sind, [hier](/test-and-deploy).
+
+<Columns cols={2}>
+  <Card title="Checkout Demo-Shop">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Testdaten](/test-data)
+- [Checkout](/checkout)
+- [Startseite](/homepage/)
+- [Einstellungen](/settings/)

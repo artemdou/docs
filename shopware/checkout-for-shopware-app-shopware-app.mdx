@@ -1,0 +1,329 @@
+---
+title: "Checkout for Shopware App"
+description: "This guide describes how to install, configure, and use Checkout webshop module for the Shopware app."
+---
+
+## Before you start
+
+<Warning>
+Before you start, you need a [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide
+- How to [create a test account for Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+Requirements:
+
+Shopware Version: Compatible with Shopware 6.5x and above.
+
+## New Features for Shopware App
+
+### __Shop Features__
+
+- Seamless checkout experience with multiple payment options
+- Payment method splitting
+- Nexi Nets Easy fast checkout with "remember me" functionality.
+- Embedded checkout for an optimized user experience. Users are not redirected outside Shopware store.
+- Compatibility with discounts, tax (VAT), and shipping options.
+- Compatible with multi-store setups.
+- Smart mix of payment methods to suit all preferences.
+- Multiple checkout languages and currencies for selling in your domestic market and abroad.
+- Our app also supports subscriptions through the Shopware commercial extention:
+
+[https://docs.shopware.com/en/shopware-6-en/extensions/shopware-commercial]
+
+### __Administration Features__
+
+- Quick setup and flexible configuration
+- Intuitive order management with synchronized payment status via webhooks
+- Refund and capture capabilities with item-level control
+- Flow Builder integration for automated payment processes
+
+## Installation
+
+1. Install the Nexi Checkout app via Shopware Extension Store.
+2. After successful installation:
+
+![Shopware App installation](https://images.ctfassets.net/di680may5c0k/23hP5sRFz9CRxGtIeEakve/019e5da2edfceb4ef354be5fb3df4e6d/app-installation.png)
+
+- Navigate to __My Extensions__ to see the app.
+- Use the toggle to __Activate/Deactivate__ the app.
+- Click the __Configuration__ button to set up the app.
+
+## Configuration
+
+Access the Configuration page to set up the Nexi Checkout integration:
+
+![app installation](https://images.ctfassets.net/di680may5c0k/2xAZU3FDaQyVAcPgztUWdA/19d7e4130677258246364ce32540d162/app_installation.png)
+
+__Key Settings:__
+
+- __Live/Test Keys:__ Enter your Nexi integration keys.
+- __Live Mode:__ Toggle ON to enable production environment.
+- __Checkout Flow:__
+  - __Hosted__: Opens payment in a separate page.
+  - __Embedded:__ Payment occurs within your checkout page.
+- __Auto-Charge:__ Automatically charge the customer upon successful payment (for compliant products/services only).
+- __Split Payment Method:__
+  - __ON__: Users select specific payment methods (e.g., Klarna, PayPal).
+  - __OFF__: Only "Nexi Checkout" is displayed.
+- __Terms & Conditions URL__: Provide a full link to your policy page
+  Click __Save__ to apply the settings to the selected sales channel.
+
+## Sales Channel settings
+
+Assign Nexi Checkout to your desired sales channel:
+
+![sales channel setting](https://images.ctfassets.net/di680may5c0k/6P9GqZfdv2eCS7xjkKHxPX/5285a85577f3e0c6df789f9512a532de/sales_channel_setting.png)
+
+- Go to __Sales Channel__ settings.
+- Scroll to __Payment and Shipping.__
+- Assign __Nexi Checkout__ to the __Payment Methods__ field.
+- Set it as the __default__ payment method.
+
+## Payment methods settings
+
+Access all Nexi-supported payment methods:
+
+1. Go to __Settings → Payment Methods__.
+2. Modify or toggle ON/OFF any supported methods:
+
+-  Sofort
+-  Klarna	
+-  Google Pay
+-  Applepay
+-  Vipps
+-  Paypal
+-  Mobilepay
+-  Trustly
+-  Swish
+-  SEPA Direct Debit
+-  Installment	
+-  Invoice	
+-  Nexi Checkout - Cards
+-  Nexi Checkout	Displayed if Split Payment is OFF
+
+__Availability Rule__
+
+Default availability rule of each payment method is following global rule at Nexi - Payment methods.
+
+Any additional rule must be setup at __Availability Rule__ section for each payment method.
+
+__Example__: To make PayPal available only for Swedish customers:
+
+1. Click __Edit Details__ under PayPal
+2. Scroll to __Availability Rule__
+3. Create/select a rule for Sweden-based billing addresses
+4. Save changes
+
+![paypal-availability-rule](https://images.ctfassets.net/di680may5c0k/6hMakcO6mVvpiAoRbqnwix/fc98d3eee55c068ce41fc66379786a3b/paypal-availability-rule.png)
+
+### Split Payment
+Split Payment affects how payment methods are shown to the user at checkout.
+
+__Setup__:
+
+Go to __Configuration__ → Toggle __Split Payment__ ON or OFF → Click__ Save.__
+
+__Split Payment OFF__
+
+- A single option, Nexi Checkout, is displayed
+- The customer proceeds to select their preferred method within the Nexi interface
+
+__Split Payment ON__
+- Users will see individual Nexi-supported payment methods (e.g., Klarna, PayPal, Swish)
+- Each method is selectable directly on the Shopware checkout page.
+
+![split payment](https://images.ctfassets.net/di680may5c0k/2psPZmYore8y7ZYwX1lR1U/6a9bcd089da0bc9f723ab74634d28790/split_payment.png)
+
+Split Payment Method affects how payment methods are shown to the user at checkout.
+
+__Setup:__
+
+Go to Configuration → Toggle Split Payment Method ON or OFF → Click Save.
+
+__Split Payment Method OFF__
+
+A single option, Nexi Checkout, is displayed.
+The customer proceeds to select their preferred method within the Nexi interface.
+
+![Single Payment](https://images.ctfassets.net/di680may5c0k/4hT8WIIcQPdKEWiQXdc7uz/3f4fe167b6bf18e78631bacc0f847dfc/single-payment.png)
+
+__Split Payment Method ON__
+
+Users will see individual Nexi-supported payment methods (e.g., Klarna, PayPal, Swish).
+Each method is selectable directly on the Shopware checkout page.
+
+![Split Payment](https://images.ctfassets.net/di680may5c0k/12cCEgThbRaOwg3l4qy4Nb/36db45403e10835ee8f705cea2a8afa1/split-payment.png)
+
+## Checkout Flow: Hosted & Embedded
+
+__Setup:__
+
+Go to Configuration → Select Hosted or Embedded under Checkout Flow → Click Save.
+
+![Nexi Checkout for Shopware 6 hosted](https://images.ctfassets.net/di680may5c0k/7bl2eslVqk21YlZ0y9z76l/5a10dcd27774f2c43cfa6ce16a0bb383/hosted.png)
+
+__Hosted checkout__
+
+Users are redirected to a separate Nexi page after clicking Submit order.
+
+![Hosted checkout](https://images.ctfassets.net/di680may5c0k/2hrSYcAu2X8zNYurskyV0N/48e649be576787b505a09bb82f54fb4b/hosted-page.png)
+
+After payment is completed, they are redirected to the Thank You Page with Nets ID.
+
+![thank-you-page](https://images.ctfassets.net/di680may5c0k/2rYDdxa59sw6aCChZ9BHQm/c1da8fd6291f2e6c127d57da32dd260a/thank-you-page.png)
+
+__Embedded checkout__
+
+Payment iframe appears directly on your checkout page after clicking Submit order
+
+![Embedded checkout Shopware app](https://images.ctfassets.net/di680may5c0k/2jBtE6Z9U33KDAWKX9pEuB/900244bec6ba6b40ff9f2e2b4a66cad1/embedded-checkout.png)
+
+After payment is completed, they are directed to the Thank You Page with Nets ID.
+
+![thank-you-page](https://images.ctfassets.net/di680may5c0k/2rYDdxa59sw6aCChZ9BHQm/c1da8fd6291f2e6c127d57da32dd260a/thank-you-page.png)
+
+## Order management
+
+__View Order Details__
+  1. Go to Orders → Select an Order.
+  2. Under the Details tab, scroll to the bottom to view Nexi-related information.
+
+![Order details](https://images.ctfassets.net/di680may5c0k/6YItJFWdXowTIU0SJCO8iy/7dd5c12a81fdf00c56c5a4840e9f7383/order-details__1_.png)
+
+__Cancel Payment__
+- Click __Cancel Payment__ (available if the payment hasn't been charged).
+- Confirm the action via the popup.
+
+![Payment cancellation popup](https://images.ctfassets.net/di680may5c0k/3CBDW2o7USqDKalHx3NbxR/7b8e2068d9f9393cd2041872ba681e6e/cancel-confirmation-popup.png)
+
+- Order status changes to Cancelled.
+
+![Cancelled payment status](https://images.ctfassets.net/di680may5c0k/63WqSRXrmZVCk7XPhOIHn4/ce6d89bb7d8cfdf184acc3c17a3798df/cancelled-status.png)
+
+- Charging is disabled once cancelled.
+
+![disable-button](https://images.ctfassets.net/di680may5c0k/2uObfnEPx5ubcgcQJuJrNT/cd581f85836e0971f739371fd06c06a8/disable-button.png)
+
+<Info>
+All transactions performed by Nexi Group are accessible in [Checkout Portal](https://portal.dibspayment.eu/).
+</Info>
+
+The following screenshot shows the list of orders in Shopware administration:
+
+![Order management shopware 6.7](https://images.ctfassets.net/di680may5c0k/3cKKBXwB2JfZbsGK9tdn8R/1955658b2dbdaa6dfc548e7c988f42c5/order_details.png?w=2880&h=1560&q=50&fm=png)
+
+## Manual & Auto Charging
+
+__Auto Charge__
+- Automatically charges customer after successful payment
+- Admin cannot cancel or manually charge
+
+![Disable button](https://images.ctfassets.net/di680may5c0k/1PLxT2Fk1fodzd0oZYkxQz/9c0625a73cdbb36572ee132cdcb63a67/disable_button.png)
+
+__Manual Charge (Auto-Charge OFF)__
+Admin can manually charge by themselves.
+- Charged button is activated and Admin have to charge order manual
+
+![Manual charge order](https://images.ctfassets.net/di680may5c0k/6E531VzBlVZtLPqEdr8Z4x/8eb2336242f66d587d0a23a558fb40f4/manual_charge_order.png)
+
+__Charge by amount__
+- Click Charge → Uncheck __Select items to charge__ checkbox → Enter full or partial amount → Click Charge.
+
+![charge by amount](https://images.ctfassets.net/di680may5c0k/3AJiPOMmzSjfgv8xjg5aVf/07f78000d816d74779998b40fb62623d/charge_by_amount.png)
+
+** Note: Amount must be greater than 0.
+
+__Charge by items__
+- Select number of items from the list
+- Click Charge to process selected items
+
+![charge by items](https://images.ctfassets.net/di680may5c0k/1FWx8e8Uc1Wc036PseucRV/08ccd03d67c11655ec159101cb5bb390/charge_by_items.png)
+
+__Transaction details__
+Transaction details is default expanded, hide the transaction logs by clicking __Hide transaction logs.__
+
+![transaction logs](https://images.ctfassets.net/di680may5c0k/3hEZJXrqPEtVroxCW9JKYQ/48b094971d4da834e8c7e5fb03059bb1/transaction_logs.png)
+
+## Refund
+
+- Click Refund in the charge log
+
+__Refund by amount__
+- Uncheck __Select items to refund__ checkbox → Enter full or partial amount → Click Refund
+
+![refund by amount](https://images.ctfassets.net/di680may5c0k/76HQeSiGEzIIWCkU7XezRr/940127f8d1a0578c3553276f655eb6f3/refund_by_amount.png)
+
+__Note: Amount must be greater than 0__
+
+__Refund by items__
+- Select number of items → Click Refund to submit
+
+![refund by items](https://images.ctfassets.net/di680may5c0k/38u5N3X85J7BMGydvHycP4/99c1fd5ba0c12126174f700d9bb54d68/refund_by_items.png)
+
+## Subscriptions
+
+__Subscription order__
+Merchants can follow Shopware’s guidelines to set up subscriptions: Shopware 6 - Settings - Subscriptions and install the extension provided by Shopware. 
+
+[https://docs.shopware.com/en/shopware-6-en/extensions/shopware-commercial]
+
+Only __Nexi Checkout - Cards__ (when Split Payment is ON) or __Nexi Checkout__ (when Split Payment is OFF) is available for Subscription orders.
+
+__Subscription order behavior__
+A subscription will always be created and shown in the __Subscriptions list__ with the status __Active__, whether the initial payment is successful or not.
+
+![subscription list](https://images.ctfassets.net/di680may5c0k/1ARLXJ0hZNYgpMZlq9987d/24c07048f29efd16e3930e9cbcbad59a/subscription_list.png)
+
+Here’s how the system handles payments:
+
+- ✅ If the payment is successful:
+A sub-order will be generated based on the subscription’s defined interval. The payment for this sub-order will be automatically charged.
+
+- ❌ If the payment fails:
+An order is still created, but its assets (e.g., downloads, content, etc.) will be inaccessible to the buyer. The subscription status will change depending on the next scheduled payment:
+
+- __First failed payment:__
+    The subscription remains Active, and the system will try again on the next scheduled payment date.
+
+- __Second (or subsequent) failed payment__:
+The subscription status changes to Payment failed, and no more sub-orders will be created
+
+![Subscription failed email](https://images.ctfassets.net/di680may5c0k/6GIgz1t9XsfiiBE93pwjaR/5586e1e1fa0f490ea38c27cb8f3e9624/subscription-failed-email.png)
+
+## Troubleshooting
+
+Below are some of the most common configuration errors, their cause and steps that you can follow to solve them.
+
+### Nexi Group payment app is not visible as a payment method
+
+- Ensure the Nexi Group app is available in the right **Sales Channel** in the app configuration.
+- Under the **Sales Channel** section, select your **Shop Name** under **General** settings. Add desired payment methods from the Nexi app.
+- Temporarily switch to the Shopware 6 standard template. Custom templates might need additional changes to ensure correct display. Consult with your web designer or developer.
+
+### Nexi Group payment window is blank
+
+- Ensure your integration keys in the Nexi Group app settings are correct and do not contain additional blank spaces.
+- Temporarily deactivate third party plugins that might affect the functionality of the app.
+- Check if there are any temporary technical inconsistencies: https://easy-status.developers.nets.eu/
+
+### Payments in live mode don't work
+- Ensure you have an approved Live Checkout account for production.
+- Ensure your Live Checkout account is approved for payments with the selected currency.
+- Ensure payment method data is correct and supported by your Checkout agreement.
+
+## Klarna
+
+The payment method Klarna requires a phone number to function properly. To ensure that Klarna will appear as a payment option in the Nexi Group payment window, it is essential to configure the phone number field correctly. For more information, please refer to the [Klarna guide](/klarna/#build-integration).
+
+To add the phone number field in Shopware 6, follow these steps: 
+- Navigate to Settings > Shop > Log-in & Sign-up.
+- Check the box for Show phone number. 
+- Check the box for Phone number field required. 
+
+To learn more, visit [Shopware 6's documentation](https://docs.shopware.com/en/shopware-en/settings/login-registration).
+
+![Shopware 6.7 phone configuration](https://images.ctfassets.net/di680may5c0k/6PisHjptg841oq05CYnbpJ/ebb1c78b152a328744306bb088bbc94b/image.png?w=1223&h=794&q=50&fm=png)
+
+<Info>
+We do not support third-party plugins that provide phone number functionality, and we cannot guarantee that their solution will be compatible with the Klarna payment method.
+</Info>

@@ -1,0 +1,56 @@
+---
+title: "Google Pay™"
+description: "Dieser Leitfaden beschreibt die Grundlagen der Nutzung von Google Pay™ über Checkout und enthält Anweisungen für eine reibungslose Implementierung."
+---
+
+IntegrationType: HostedPaymentPage
+
+embeddedPaymentPage: EmbeddedPaymentPage
+
+## Überblick
+
+Google Pay ist ein mobiler Zahlungs- und digitaler Wallet-Dienst von Google Inc.
+
+- Er ermöglicht Nutzern, mit ihren kompatiblen Geräten in stationären Geschäften, in Apps und im Web Zahlungen vorzunehmen.
+
+- Er bietet eine bequeme und sichere Möglichkeit für Nutzer, ihre Kredit- und Debitkarteninformationen zu speichern und Zahlungen mit einer einzigen Berührung oder einem Tippen vorzunehmen.
+
+## Funktionstabelle
+
+### Google Pay-Funktionen
+|  |  |
+| --- | --- |
+| Zahlungsart | Wallet |
+| Abonnements | ❌ |
+| Teilrückerstattungen | ✅ |
+| Rückerstattungen | ✅ |
+| Bestellung aktualisieren | ✅ |
+| Zahlung stornieren | ✅ |
+| Reservierung & Belastung | ✅ |
+| CPSP | ✅ |
+| Unterstützte Karten | Mastercard und Visa |
+| Währungen | Alle Währungen für Visa und Mastercard. |
+| Länder | Alle |
+
+## Aktivierung
+
+Um Google Pay zu aktivieren, kontaktieren Sie bitte unser Sales- und Aktivierungsteam unter ecom-salessupport@nets.eu, das die Aktivierung manuell für Sie vornimmt. Es sind keine zusätzlichen Schritte erforderlich, damit der Händler Google Pay aktivieren kann.
+
+## Zahlungsablauf
+
+Wenn Sie den Parameter paymentMethodsConfiguration verwenden, um nur die für die jeweilige Zahlung bevorzugte(n) Zahlungsmethode(n) anzuzeigen, kann auch Google Pay ausgewählt werden.
+Google Pay ist nur auf unterstützten Plattformen verfügbar.
+
+Google Pay wird als Wallet definiert und kann allein sowie zusammen mit anderen Zahlungsmethoden angezeigt werden. Es wird nicht empfohlen, Google Pay allein anzuzeigen, wenn Sie nicht das im Webshop verwendete Gerät erkennen, bevor Sie die Zahlungsoptionen anzeigen.
+
+Wenn Google Pay allein auf einem nicht unterstützten Browser/einer nicht unterstützten Plattform verwendet wird, sind keine Zahlungsmethoden sichtbar, was natürlich eine schlechte Benutzererfahrung darstellt. Google Pay kann mit anderen Wallet-Zahlungsmethoden oder zusammen mit Karten kombiniert werden.
+
+Empfohlene Verwendung des Parameters paymentMethodsConfiguration für Google Pay.
+
+Wenn Sie mehr als ein Wallet konfiguriert haben, können Sie Folgendes verwenden:
+
+`paymentMethodsConfiguration:[{"name":"Card"},{"name":"GooglePay"}]`
+
+## Testen
+
+Sie können Google Pay mit unserer Testdokumentation hier testen: __[Wallet-Verarbeitung testen](/test-wallet-processing "Wallet-Verarbeitung testen")__

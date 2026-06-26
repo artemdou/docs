@@ -1,0 +1,107 @@
+---
+title: "SEPA-Lastschrift"
+description: "Dieser Leitfaden beschreibt die Grundlagen zur Nutzung von SEPA-Lastschriftzahlungen über Checkout und enthält die für eine reibungslose Implementierung erforderlichen Anweisungen."
+---
+
+## Bevor Sie beginnen
+
+<Warning>
+Die SEPA-Lastschrift kann derzeit nur über Ratepay integriert werden.
+</Warning>
+
+<Info>
+Zur Verarbeitung von SEPA-Lastschriftzahlungen arbeitet Checkout mit SEPA zusammen. Daher ist eine zusätzliche Vereinbarung erforderlich, bevor Sie die SEPA-Lastschrift in Ihrem Checkout-Portal aktivieren können. Bitte kontaktieren Sie unser Kundendienst-Team, um diesen Prozess zu starten.
+</Info>
+
+## Überblick
+
+### Integration
+
+Checkout verfügt über eine Integration für die SEPA-Lastschrift.
+
+Damit Sie die SEPA-Lastschrift vollständig integrieren können, sollten Sie die folgenden Schritte ausführen:
+
+1. Vertrag mit dem Vertrieb unterzeichnen.
+2. Onboarding abschließen.
+3. __Die Zahlungsmethode Ratepay__ im Checkout-Portal aktivieren.
+
+Die Ratepay-Lösung bietet zwei Optionen:
+
+- __Die Option „SEPA DD (Garantiert)"__ – die Lösung bietet Ihnen eine Zahlungsgarantie.
+- __Die konventionelle Lastschrift-Option__ – diese Lösung bietet keine Zahlungsgarantie. Bitte beachten Sie, dass bei dieser Option die IBAN-Nummer des inländischen Girokontos/der Karte erforderlich ist. Dieser Prozess umfasst zudem eine Sicherheitsprüfung, die aus Ihren Adressdaten und Ihrem Geburtsdatum besteht (diese Daten können für künftige Sicherheitsprüfungen gespeichert werden).
+
+### Methoden
+
+SEPA-Lastschriftzahlungen sind Account-to-Account-Zahlungen. Das bedeutet, dass bestimmte kartenbezogene Operationen nicht anwendbar sind.
+
+**Anwendbare Methoden sind:**
+
+-	Create payment
+-	Retrieve payment
+-	Update reference information
+-	Update order
+-	Terminate payment
+
+Nach einer erfolgreichen Zahlung dauert es bis zu 5 Tage, bis der Betrag auf Ihrem Checkout-Zahlungskonto erscheint.
+
+## Funktionalitäten
+
+### Funktionstabelle SEPA
+|  |  |
+| --- | --- |
+| Zahlungsart | A2A |
+| Abonnements | ❌ |
+| Rückerstattungen | ✅ |
+| Teilrückerstattung | ✅ |
+| Bestellung aktualisieren | ✅ |
+| Zahlung stornieren | ❌ |
+| Direkte Belastung | ✅ |
+| Währungen | EUR |
+| Länder | DE, AT |
+
+<Info>
+Weitere Informationen zu den Zahlungsoperationen finden Sie [hier](/order-management/#build-payment-operations).
+</Info>
+
+## Aktivierung
+
+Um die SEPA-Lastschrift als Zahlungsmethode zu aktivieren und sie Ihrem Checkout-Portal hinzuzufügen, müssen Sie das Onboarding abschließen.
+
+<Info>
+Wenn Sie bereits über ein Checkout-Portal-Konto verfügen, müssen Sie hierzu den [Support kontaktieren](https://www.nets.eu/payments/contact-us).
+</Info>
+
+Sobald der Vertrag unterzeichnet ist, können Sie SEPA-Lastschriftzahlungen in Ihrem Checkout-Portal aktivieren.
+
+1.	Rufen Sie die Seite „Add-on" im Checkout-Adminportal auf.
+2.	Füllen Sie das Formular aus.
+3.	Klicken Sie auf „Onboard".
+
+## User Journey & Zahlungsablauf
+
+Der folgende Abschnitt beschreibt die User Journey und den Zahlungsablauf für einen Verbraucher:
+
+1. Wenn Ihr Verbraucher die SEPA-Lastschrift als Zahlungsmethode im Checkout wählt, wird er aufgefordert, Folgendes einzugeben:
+   -  IBAN-Nummer
+   -  Geburtsdatum (TT-MM-JJJJ)
+   -  CVC (4 Stellen)
+2. Mandatszustimmung erteilen.
+3. Allgemeinen Geschäftsbedingungen zustimmen.
+4. Nach Bestätigung der Zahlung durch Klick auf „Bezahlen" erhält der Verbraucher eine Sicherheitsabfrage von seiner Bank.
+5. Die Zahlung ist nach Bestätigung der Sicherheitsabfrage abgeschlossen.
+
+
+
+<Warning>
+Der maximale Betrag pro Warenkorb für SEPA-Lastschriftzahlungen beträgt 3000 EUR.
+</Warning>
+
+![SEPA-Lastschrift XO-Bildschirm](https://images.ctfassets.net/di680may5c0k/2DbJd4sl7lYJsFiFDscXEK/ebfdbdddb962f5265cabeeb07a00da1b/SEPA_Direct_Debit_XO_page.jpeg?w=499&h=960&fl=progressive&q=50&fm=jpg)
+
+## Testen
+
+Checkout bietet derzeit nicht die Möglichkeit, die SEPA-Lastschrift zu testen, wie in dieser [Übersichtstabelle](/test-data) ersichtlich.
+
+Sobald dies verfügbar ist, können Sie es in der [Nexi Group Testumgebung](/test-environment) sehen.
+
+

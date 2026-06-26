@@ -1,0 +1,52 @@
+---
+title: "Test Account to Account Processing"
+description: "This guide describes how to test account to account A2A processing on your checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="gray">Coding: None</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+Before you start, you need a checkout page that uses the [Checkout test environment](/test-environment).
+</Warning>
+
+## How to test and samples
+
+The Checkout page provides your customers with the option to pay by A2A. To test A2A processing on the checkout page and using the sample data in the test environment, follow the steps below:
+
+## Swish
+
+It is possible to input any arbitrary and random numbers for the personal identification number and phone number in order to process and test the payment. 
+
+Also, it is not required to approve the payment through the app when the approval window is prompted.
+
+1. Navigate to your checkout page
+2. Select SEK for the checkout currency
+3. Select "Swish"
+4. Enter any random phone number
+5. Enter any arbitrary email, postal code, phone number, and personal identification number in the address form
+6. Click on "Pay"
+
+## Trustly
+
+When testing Trustly payments, it will call the testing environment which will automatically target the [Sandbox of the payment method provider](https://help.trustpayments.com/hc/en-us/articles/4402897917201-Trustly-for-Webservices-API).
+
+From here, it will prompt a view displayed directly in the UI where it will be possible to select a bank and to input the test credentials.
+
+It is possible to input any arbitrary and random numbers for the test credentials.
+
+See the following example below:
+
+![Trustly test](https://images.ctfassets.net/di680may5c0k/yqqTCU4RGv7HITJaINMrM/e6be4cfd17652b8c6b82e2a9ebb179b0/trustly_testing.png)
+
+- Bank: Any bank, like Commerzbank vormais Dresdner IBLZ
+- Login: Any __8-digit number__, like 12345678
+- One-time code: provided on the screen, like 245564
+
+## See also
+
+- [Test environment](/test-environment)

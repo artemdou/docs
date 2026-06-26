@@ -1,0 +1,57 @@
+---
+title: "Visa & MasterCard"
+description: "Dieser Leitfaden beschreibt die Grundlagen der Verwendung von Visa und MasterCard über Checkout und enthält Anweisungen für eine reibungslose Implementierung."
+---
+
+## Überblick
+
+Checkout verfügt über eine Integration zu Visa, einschließlich Visa Electron & MasterCard.
+
+## Funktionen
+
+### Funktionstabelle
+|  |  |
+| --- | --- |
+| Zahlungstyp | Karte |
+| Abonnements | ✅ |
+| Rückerstattungen | ✅ |
+| Teilrückerstattung | ✅ |
+| Bestellung aktualisieren | ✅ |
+| Zahlung stornieren | ✅ |
+| Reservierung & Belastung | ✅ |
+| CPSP | ✅ |
+| Währungen | Alle |
+| Länder | Alle |
+
+<Info>
+Weitere Informationen zu den Zahlungsvorgängen finden Sie [hier](/order-management/#build-payment-operations).
+</Info>
+
+## Aktivierung
+
+Um VISA & MasterCard als Zahlungsmethoden zu aktivieren und sie zu Ihrem Checkout-Portal hinzuzufügen, müssen Sie den Onboarding-Prozess abschließen.
+
+<Info>
+Wenn Sie bereits über ein bestehendes Checkout-Portal-Konto verfügen, müssen Sie sich hierfür an den [Support](https://www.nets.eu/payments/contact-us) wenden.
+</Info>
+
+## Benutzerführung
+
+Der folgende Abschnitt beschreibt die Benutzerführung für einen Verbraucher:
+
+<Info>
+Je nachdem, in welchem Land sich der Verbraucher befindet, muss eine Verifizierung mit der entsprechenden Authentifizierung erfolgen, z. B. BankID, NemID usw.
+</Info>
+
+1. Wenn Ihr Verbraucher VISA oder MasterCard als Zahlungsmethode im Checkout auswählt, wird er aufgefordert, Folgendes einzugeben:
+   -  Kartennummer (16 Stellen)
+   -  Ablaufdatum (mm/jj)
+   -  CVC (3 Stellen)
+2. Von dort wird er zur 3DS weitergeleitet.
+3. Nach der Verifizierung und Validierung der Identität über die Seite zur starken Authentifizierung kann der Verbraucher die Zahlung entweder genehmigen oder ablehnen.
+4. Sobald die Zahlung genehmigt wurde, wird der Betrag auf der Karte reserviert.
+5. Wenn Sie die Ware versenden, wird der Belastungsbetrag abgezogen, da eine Belastungsanforderung Checkout darüber benachrichtigt.
+
+## Testen
+
+Checkout bietet die Möglichkeit, VISA und MasterCard zu testen. Sie können VISA- und MasterCard-Zahlungen in der [Testumgebung der Nexi Group](/test-environment) testen.

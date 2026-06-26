@@ -1,0 +1,329 @@
+---
+title: "Abonnements unterstützen"
+description: "Dieser Leitfaden richtet sich an Entwickler, die Unterstützung für Abonnementzahlungen auf ihrer Checkout-Seite hinzufügen möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="blue">Programmierung: Ja (Backend)</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie den Leitfaden [Checkout auf Ihrer Website integrieren](/web-integration) befolgt und umgesetzt haben.
+Bevor Sie diesen Leitfaden lesen, sollten Sie also bereits über eine funktionierende Checkout-Seite verfügen, die einzelne Zahlungen verarbeitet.
+</Warning>
+
+## Überblick
+
+**Abonnementzahlungen** (wiederkehrende Zahlungen) ermöglichen es Ihnen, Ihre Kunden regelmäßig zu belasten – zum Beispiel bei einem monatlichen Abonnement für ein Produkt, für das der Kunde jeden Monat zahlen muss.
+
+Ein Abonnement ist immer mit mindestens einem Zahlungsobjekt verknüpft. Ein neues Abonnement wird mit der Methode [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) erstellt, jedoch mit einigen [zusätzlichen Parametern](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-subscription), die die Bedingungen für das Abonnement angeben. Sobald ein Abonnement erstellt wurde, können Sie es belasten. Bei jeder Belastung wird ein neues Zahlungsobjekt erstellt und automatisch belastet.
+
+Das Abonnement regelt, **wie häufig** und **wie lange** Sie neue Zahlungen erstellen dürfen. Sie können jedoch für jede einzelne Zahlung neue Bestellpositionen bereitstellen und den Betrag ändern.
+
+![Abonnementzahlungen](https://images.ctfassets.net/di680may5c0k/5btC9LMoyphukrCQslsC0r/dd558833f31212fa62dcfbabb83fc8b9/subscriptions_overview.png?w=2014&h=1370&q=50&fm=png)
+
+Wie das obige Bild zeigt, können Sie nach dem Erstellen des Abonnements neue Zahlungen erstellen und das Abonnement belasten, ohne dass eine zusätzliche Interaktion mit dem Kunden erforderlich ist.
+
+<Warning>
+Es ist wichtig, eine Zahlung mit einem [Unscheduled Subscription Object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-unscheduledsubscription) und __amount=0__ zu erstellen, um die Karte zu verifizieren.
+
+Wenn die Karte gültig ist, können Sie das [Token (Unscheduled Subscription ID)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) abfragen und für künftige Belastungen verwenden.
+
+Dies ist die konforme Vorgehensweise, um eine Karte zu registrieren, ohne den Kunden zu belasten, und gleichzeitig ein Token zurückzubekommen.
+</Warning>
+
+<Steps>
+  <Step title="Neues Abonnement erstellen">
+    Wenn Sie bereits eine Checkout-Seite haben, die Einzelzahlungen verarbeiten kann, ist die zur Erstellung eines Abonnements erforderliche Änderung unkompliziert.
+
+    Wie bereits erwähnt, baut dieser Leitfaden auf dem [Web-Integrations-Leitfaden](/web-integration) ([embedded](/web-integration/integrate-checkout-on-your-website-embedded) oder [hosted](/web-integration/integrate-checkout-on-your-website-hosted)) auf. Um den Checkout so anzupassen, dass er Abonnementzahlungen statt Einzelzahlungen verarbeitet, aktualisieren Sie den JSON-Request-Body, der beim Aufruf der Methode [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) übergeben wird. Hier ein Beispiel einer aktualisierten Version von `payload.json `, die die erforderlichen `subscription `-Eigenschaften enthält:
+
+    ```json payload.json
+    {
+        "order": {
+            "items": [
+                {
+                    "reference": "10",
+                    "name": "Monthly subscription",
+                    "unit": "month"
+                }
+            ],
+            "amount": 0,
+            "currency": "SEK",
+            "reference": "Subscription Test"
+        },
+        "checkout": {
+            "integrationType": "EmbeddedCheckout",
+            "url": "https://<YOUR_WEBSITE>/cart.html",
+            "termsUrl": "https://<YOUR_WEBSITE>/terms.html"
+        },
+        "subscription": {
+          "interval": 0,
+          "endDate": "2021-07-18T00:00:00+00:00"
+       }
+    }
+    ```
+
+    <Info>
+    Denken Sie daran, den Text `&lt;YOUR_WEBSITE&gt;` im JSON-Request-Body zu ersetzen.
+    </Info>
+
+    
+
+    Es ist möglich, einen Betrag größer als null anzugeben und beim Erstellen des Abonnements eine erste Belastung vorzunehmen (siehe nächster Schritt).
+
+    <Info>
+    **Fehlerbehebung**
+
+    Es wird erwartet, dass __zero-amount__ die korrekte Einstellung in der __Create Payment-Anfrage__ ist. Falls diese Einstellung nicht durchgeht und Karten bei der Verifizierung abgelehnt werden, liegt das wahrscheinlich daran, dass die ausgebende Bank keine Zero-Amount-Verifizierungen zulässt.
+
+    Um dieses Problem zu lösen, kontaktieren Sie bitte den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) und wir helfen Ihnen weiter.
+    </Info>
+
+    Beachten Sie die am Ende des Bodys hinzugefügten Subscription-Eigenschaften:
+
+    - Die Eigenschaft [`subscription.interval `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-subscription-interval) definiert die Mindestanzahl an Tagen zwischen den einzelnen wiederkehrenden Belastungen. In diesem Fall verwenden wir den Wert 0, was bedeutet, dass keine Beschränkungen für das Zahlungsintervall gelten.
+    - Die Eigenschaft [`subscription.endDate `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-subscription-enddate) gibt das Datum an, an dem das Abonnement abläuft. Sie dürfen das Abonnement nach Ablauf dieses Datums nicht mehr belasten.
+
+    Eine erfolgreiche Anfrage gibt eine JSON-Antwort ähnlich dieser zurück:
+
+    ```json Create subscription (response)
+
+    {
+      "paymentId": "0260000060003b7b47f0833960dc60d6"
+    }
+    ```
+
+    Das Antwortobjekt enthält nur eine `paymentId `, die im gesamten Checkout-Flow Ihres Kunden verwendet wird. Sobald eine gültige Zahlungskarte angegeben wurde und Ihr Kunde das Abonnement akzeptiert, wird eine neue `subscriptionId ` erstellt.
+  </Step>
+  <Step title="Erste Belastung vornehmen (optional)">
+    Beim Erstellen eines Abonnements haben Sie die Möglichkeit, sofort eine erste Belastung vorzunehmen.
+
+    ![Erste Belastung](https://images.ctfassets.net/di680may5c0k/4HIwOmMtHZToGkLNe4C5l7/4c72d2b2d26f3813290d1fab3c43ffc3/initial_charge.png?w=1736&h=714&q=50&fm=png)
+
+    Indem Sie die boolesche Eigenschaft [`checkout.charge `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-charge) auf `true ` setzen, teilen Sie Checkout mit, dass Sie den Kunden zum Zeitpunkt der Erstellung des Abonnements belasten möchten. Die folgende JSON-Payload erstellt ein neues Abonnement und belastet den Kunden außerdem automatisch für die angegebene Bestellung:
+
+    ```json payload.json
+    {
+        "order": {
+            "items": [
+                {
+                    "reference": "10",
+                    "name": "Subscription product",
+                    "quantity": 1,
+                    "unit": "month",
+                    "unitPrice": 10000,
+                    "grossTotalAmount": 10000,
+                    "netTotalAmount": 10000
+                }
+            ],
+            "amount": 10000,
+            "currency": "SEK",
+            "reference": "Subscription Test"
+        },
+        "checkout": {
+            "integrationType": "EmbeddedCheckout",
+            "url": "https://<YOUR_WEBSITE>/cart.html",
+            "termsUrl": "https://<YOUR_WEBSITE>/terms.html",
+             "charge": true
+        },
+        "subscription": {
+          "interval": 0,
+          "endDate": "2021-07-18T00:00:00+00:00"
+       }
+    }
+    ```
+  </Step>
+  <Step title="Abonnement-Checkout testen">
+    Es ist Zeit, den Abonnement-Checkout zu testen:
+
+    1. Navigieren Sie in einem Webbrowser zu Ihrer Checkout-Seite. Wenn Sie eine Abonnementzahlung erfolgreich erstellt haben, sollte der Text auf der Zahlungsschaltfläche „Abonnieren" lauten und nicht „Bezahlen" (siehe Bild unten).
+    2. Füllen Sie das Adressformular mit Ihrer **E-Mail-Adresse**, **Telefonnummer** und **Postleitzahl** aus.
+    3. Geben Sie eine der [Beispiel-Kartennummern](/test-card-processing#build-sample-credit-cards) ein und klicken Sie auf die Schaltfläche „Abonnieren".
+
+    ![Abonnieren-Schaltfläche](https://images.ctfassets.net/di680may5c0k/5ULQyXBb0sHQlgOTyIsoJ2/64c2b846e92fc1e32bb06be3d44cf616/subscription_screen_shot.png?w=2214&h=1130&q=50&fm=png)
+
+    > info
+    > 
+    > Es ist möglich, den Text auf der Abonnieren-Schaltfläche anzupassen. Weitere Informationen finden Sie im Leitfaden [Inhalte anpassen](/customize-content/#build-customize-payment-button-text).
+
+    <Info>
+    **Fehlerbehebung** 
+
+    Im Beispiel-Request-Body aus Schritt 1 wird eine Embedded-Integration verwendet. Wenn Sie eine Hosted-Integration verwenden, müssen Sie die `checkout `-Parameter im Request-Body so ändern, dass sie einem [Hosted Checkout](/web-integration/integrate-checkout-on-your-website-hosted) entsprechen.
+    </Info>
+
+    Sobald das Abonnement erstellt wurde, müssen Sie die Abonnement-Kennung abrufen. In der Regel speichern Sie alle Abonnement-Kennungen in Ihrem Backend, sodass Sie sie später regelmäßig belasten können.
+
+    Es gibt zwei Möglichkeiten, Informationen zu einem neuen Abonnement abzurufen:
+    - Die Abonnementzahlungen im Checkout Portal finden
+    - Zahlungs- und Abonnementdetails über die Payment API abrufen
+  </Step>
+  <Step title="Abonnementdetails im Checkout Portal anzeigen">
+    Nachdem Sie eine Abonnementzahlung erstellt haben, finden Sie die Abonnementdetails im Checkout Portal:
+
+    1. Melden Sie sich beim [Checkout Portal](https://portal.dibspayment.eu) an.
+    2. Klicken Sie auf [„Zahlungen"](https://portal.dibspayment.eu/payments/NEW).
+    3. Unter den Zahlungen mit dem Status „Neu" sollte Ihr neues Abonnement sichtbar sein.
+    4. Klicken Sie auf das neu erstellte Zahlungsobjekt.
+    5. Klicken Sie auf „Transaktionsdetails".
+
+    ![Abonnementzahlung verifizieren](https://images.ctfassets.net/di680may5c0k/26XyNMOPLDm7ijI3NjoHxh/aca4b73b8fa43e153c9e13ef0e8a80fd/Subscription_verify.png?w=2878&h=1296&q=50&fm=png)
+
+    In der Spalte **WIEDERKEHRENDE ZAHLUNG** sollten Sie eine Abonnement-Kennung sehen können. Diese Kennung kann verwendet werden, wenn Sie das Abonnement mehrfach belasten. Sie sehen außerdem die **Frequenz** (Intervall) und das **Enddatum** des Abonnements.
+  </Step>
+  <Step title="Abonnement über die Payment API abrufen">
+    Es ist möglich, Informationen zu einem Abonnement programmatisch über die Payment API abzurufen. Rufen Sie zunächst das Abonnement-Zahlungsobjekt mit dem folgenden Beispielcode ab:
+
+    ### Zahlung abrufen
+
+    <CodeGroup>
+
+    ```php retrieve-payment.php
+    <?php
+
+    $paymentId = "<YOUR_PAYMENT_ID>";
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    echo "Response code: " . $http_code . PHP_EOL;
+    $json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+    echo $json_pretty . PHP_EOL;
+    ```
+
+    ```javascript retrieve-payment.js
+    const http = require("https");
+
+    const paymentId = "<PAYMENT_ID>";
+    const secretKey = "<YOUR_SECRET_KEY>";
+
+    const options = {
+      "method": "GET",
+      "hostname": "test.api.dibspayment.eu",
+      "port": null,
+      "path": "/v1/payments/" + paymentId,
+      "headers": {
+        "Authorization": secretKey
+      }
+    };
+
+    const req = http.request(options, function (res) {
+      const chunks = [];
+
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        console.log(JSON.stringify(JSON.parse(body), null, 2));
+      });
+    });
+
+    req.end();
+    ```
+
+    </CodeGroup>
+
+    Denken Sie daran, `&lt;PAYMENT_ID&gt;` durch die Zahlungskennung zu ersetzen, die Sie beim Erstellen der Abonnementzahlung von der API erhalten haben. Der Platzhalter `&lt;YOUR_SECRET_KEY&gt;` sollte durch Ihren Secret Key ersetzt werden.
+
+    Ein erfolgreicher API-Aufruf gibt etwas Ähnliches zurück:
+
+    ```json Retrieve payment response
+    {
+      "payment": {
+          "paymentId": "0260000060003b7b47f0833960dc60d6",
+          "summary": {
+              "reservedAmount": 10000
+          },
+          "consumer": {
+            ...
+          },
+          "paymentDetails": {
+              "paymentType": "CARD",
+              "paymentMethod": "Visa",
+              "invoiceDetails": {},
+              "cardDetails": {
+                  "maskedPan": "492500******0004",
+                  "expiryDate": "1222"
+              }
+          },
+          "orderDetails": {
+              "amount": 10000,
+              "currency": "SEK",
+              "reference": "Subscription Demo Order with charge"
+          },
+          "checkout": {
+              "url": "http:\/\/example.com\/cart.html"
+          },
+          "created": "2021-04-26T08:28:25.0946+00:00",
+          "subscription": {
+              "id": "4feb3b28d260458a88857b00f46261ba"
+          }
+      }
+    ```
+
+    Die Eigenschaft `payment.subscription.id ` ist die `subscriptionId `, nach der Sie suchen. Nun können Sie diese Kennung verwenden, um weitere Informationen zum Abonnement zu erhalten:
+
+    ### Abonnementdetails abrufen
+
+    ```php retrieve-subscription.php
+    <?php
+
+    $subscriptionId = "<SUBSCIRPTION_ID>";
+
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/subscriptions/' . $subscriptionId);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    echo "Response code: " . $http_code . PHP_EOL;
+    $json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+    echo $json_pretty . PHP_EOL;
+    ```
+
+    Stellen Sie auch hier sicher, dass Sie alle mit `<...>` markierten Platzhalter ersetzen.
+
+    Die JSON-Antwort der Anfrage zum Abrufen von Abonnements kann etwa so aussehen:
+
+    ```json Subscription details response
+    {
+        "subscriptionId": "205e808f6fba40828b0389c8b943aefe",
+        "frequency": 0,
+        "interval": 0,
+        "endDate": "2021-07-18T00:00:00.0000+00:00",
+        "paymentDetails": {
+            "paymentType": "CARD",
+            "paymentMethod": "Visa",
+            "cardDetails": {
+                "expiryDate": "1222",
+                "maskedPan": "492500******0004"
+            }
+        }
+    }
+    ```
+
+    Nun wissen Sie, wie Sie die Abonnement-Kennung und weitere Details zu einer Abonnementzahlung abrufen. Die Abonnement-Kennung wird benötigt, wenn Sie ein Abonnement zu einem späteren Zeitpunkt belasten möchten. Sie können mehrere Abonnements gesammelt mithilfe der API-Methode [Bulk charge subscriptions](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-post) belasten.
+
+    > tada
+    > **Glückwunsch!**
+    > 
+    > Nun haben Sie eine Checkout-Seite, die Abonnementzahlungen unterstützt, und wissen außerdem, wie Sie die für künftige Belastungen erforderlichen Abonnement-Kennungen abrufen.
+  </Step>
+</Steps>
+
+## Nächster Schritt
+
+- [Abonnement verwalten](/manage-subscriptions)

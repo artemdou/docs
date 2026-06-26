@@ -1,0 +1,151 @@
+---
+title: "Payment Methods"
+description: "This guide shows which payment methods are supported by Checkout, how they can be added and how that affects both, the payment flow and how to process these payments."
+---
+
+## Overview
+
+Checkout supports a variety of payment methods to provide convenience for your consumers. This ranges from:
+
+  -	Account to account (A2A)
+  -	Cards
+  -	Wallet based payment methods
+  -	Invoices
+  -	Installments
+
+<Warning>
+Please note, that certain payment methods such as Swish, Vipps, RatePay must be enabled in the configurations of your Checkout Account. Which of these appear on your payment window for your customers to choose from, might depend on your country and currency settings.
+</Warning>
+
+## Supported payment methods
+
+### Overview table of all supported payment methods Checkout
+| Name | Type | Countries |
+| --- | --- | --- |
+| SEPA Direct Debit | A2A | DE, AT |
+| Swish | A2A | SE |
+| Trustly | A2A | AT, CZ, DE, DK, EE, ES, FI, GB, LV, LT, NL, NO, PL, SE, SK |
+| American Express | Cards | All |
+| Visa & Mastercard | Cards | All |
+| Maestro | Cards | All |
+| Dankort | Cards | DK |
+| Riverty | Invoice/Installments/campaigns | SE, DE, AT |
+| Ratepay | Invoice/Installments | DE, AT |
+| MobilePay | Wallet | DK |
+| PayPal | Wallet | All |
+| Vipps | Wallet | NO |
+| Apple Pay | Wallet | All |
+| Klarna | Wallet | SE, NO, DK, DE, AT |
+| Google Pay | Wallet | All |
+
+You can find more in-depth information, including countries, currencies, testing, functionality of payment operations, etc. in the relevant linked sections.
+
+## Authorization times for charge, cancel and refund
+
+### Authorization times for charge, cancel and refund
+| Payment method | Guaranteed capture | Capture but not guaranteed | Cancel | Refund |
+| --- | --- | --- | --- | --- |
+| SEPA Direct Debit |  |  |  |  |
+| Swish |  |  |  |  |
+| Trustly |  |  |  |  |
+| Dankort | - | 30 days | - | 180 days after capture |
+| Visa | 7 days | 30 days | 7 days | 180 days after capture |
+| MasterCard | 7 days | 30 days | 7 days | 180 days after capture |
+| Maestro | 7 days | 30 days | 7 days | 180 days after capture |
+| American Express | 7 days | 30 days | 7 days | 180 days after capture |
+| Riverty |  |  |  |  |
+| Ratepay |  |  |  |  |
+| MobilePay |  |  |  |  |
+| Vipps |  |  |  |  |
+| Apple Pay | 7 days | 30 days | 7 days | 180 days after capture |
+| PayPal | 30 days |  | 30 days | 180 days after capture |
+| Google Pay | 7 days | 30 days | 7 days | 180 days after capture |
+| Klarna | 28 days |  |  |  |
+
+## Charge
+
+Charge, also known as *capture* in this context, outlines whether the amount is reserved or not:
+
+- Guaranteed capture means that the amount is reserved, and that you are guaranteed to collect the amount.
+- Not guaranteed capture means that the amount is *NOT* reserved any longer. But you can still try to capture the amount. 
+
+You can read more about charges from [here](/charge-payments).
+
+## Refund
+
+Refunds can still be done up to 365 days after capture as Checkout keeps the data of the transaction for 1 year.
+
+You can read more about refunds from [here](/refund-a-charge).
+
+## Cancel
+
+If you are canceling the payment then you are releasing the reservation which means that it will block you from doing the charge.
+
+You can read more about cancellations from [here](/cancel-payments).
+
+## Cards
+
+A credit card authorization is a request to a *card issuer* from a *card acquirer* to approve a request for funds on a *cardholder’s* account. The request is based on a *purchase transaction* between a cardholder and you. 
+
+In the process of the authorization request, the card issuer will check if the consumer has:
+
+- an active card
+- their card is not reported as stolen
+- the request does not seem fraudulent
+- the cardholder has sufficient funds to cover the cost of the transaction
+
+Once an authorization is approved, the amount is reserved and it can be captured. This means that transfer of funds occur upon capture. 
+
+However, please note that funds are only reserved during a limited time period. After this time period has exceeded, the issuer is not required to honour (to approve) the capture request. 
+
+The timeframe for authorization time for the different card schemes can be seen in the above table.
+
+## Wallets
+
+Vipps, MobilePay, Google Pay and Apple Pay transactions are processed according to the underlying card scheme’s rules i.e. Visa, Mastercard, and Dankort etc. 
+
+You can check the table above for the individual card scheme rules.
+
+## Account to account (A2A)
+
+We currently support A2A payment methods such as, Swish and Trustly. These funds are settled *instantly* to your account, with the key requirement that there is balance on the consumer's account.
+
+## Strong customer authentication
+
+Checkout is Strong Customer Authentication (SCA) compatible which means that 3D Secure is mandatory for all payments.
+
+Whenever a consumer goes through the checkout flow with any given payment method to pay, the SCA will be triggered.
+
+<Info>
+Some exemptions occurs for the SCA trigger but these lies on the issuer's side. This means that the SCA is not always triggered for example for cards and wallets. A use case for this could be a low value exemption where an order amount is under a certain value where it is not needed to go through SCA for the consumer.
+</Info>
+
+You can see all of the individual payment method types user journey from here to see how and when the SCA is triggered:
+
+- [Cards](/credit-cards)
+- [Account to account](/account-to-account-a2a)
+- [Wallets](/wallets)
+- [Invoices & installments ](/invoices-and-installments)
+
+For cards, you can read more [here](/credit-cards/#build-security).
+
+For more information about SCA, you can check this page [here](https://support.nets.eu/da-DK/article/sca-good-to-know) (in Danish).
+
+## 3D Secure
+
+The 3D Secure simulator as seen below makes it possible to either approve or decline a payment. The following image is taken from the test environment.
+
+![3D Secure simulator](https://images.ctfassets.net/di680may5c0k/3JWOSFhuzmWJimEEql71IJ/22ddc5930f884aad2c6c88f32beb7b1c/MicrosoftTeams-image__18_.png?w=390&h=279&q=50&fm=png)
+
+## Consumer information required
+
+<Warning>
+In order for consumers to be able to use invoice and installments (Riverty and Ratepay-invoice) payments in the checkout process, we need to receive the consumer information and address.
+</Warning>
+
+## See also
+
+- [Wallets](/wallets)
+- [Account to Account](/account-to-account-a2a)
+- [Credit Cards](/credit-cards)
+- [Invoices & Installments](/invoices-and-installments)

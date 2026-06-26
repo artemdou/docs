@@ -1,0 +1,158 @@
+---
+title: "Charge Payments"
+description: "Learn about Charge Payments for Nexi Checkout."
+---
+
+## Charge payment
+
+When you ship the order to your customer, make sure to charge the payment in order to receive the funds from Nexi Group.
+
+<Warning>
+By default, our system does not automatically charge/capture the amount which has been reserved. Depending on your business model, you should decide on the way how to handle this process. It is our recommendation to do the setup for immediate charge/capture.
+</Warning>
+
+### Immediate charge/capture setup
+
+A payment can be:
+
+- fully charged (default)
+- partially charged if needed
+- reserve and release partial amount if needed
+
+Note that it is not possible to charge an amount that exceeds the original order. The system will tell when you exceed the limit. Below is the server code to charge a payment:
+
+### Charge payment
+
+<CodeGroup>
+
+```php Charge payment (PHP)
+<?php
+
+$secretKey = "<YOUR_SECRET_API_KEY>";
+$paymentId = "<YOUR_PAYMENT_ID>";
+
+$payload = file_get_contents('payload.json');
+assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId . '/charges');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: ' . $secretKey));                                   
+
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+echo("HTTP code: " . $http_code);
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty;
+```
+
+```javascript Charge payment (Node)
+const http = require("https");
+
+const paymentId = "<PAYMENT_ID>";                // Replace payment ID
+const payload = fs.readFileSync('payload.json'); // Replace body
+const secretKey = "<YOUR_SECRET_KEY>";           // Replace key
+const idempotencyKey = "<SOME_UNIQUE_KEY>";      // Replace with unique string
+
+const options = {
+  "method": "POST",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId + "/charges",
+  "headers": {
+    "content-type": "application/json",
+    "Idempotency-Key": idempotencyKey,
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write(payload);
+req.end();
+```
+
+</CodeGroup>
+
+<Info>
+Enable safe retries by using an idempotency key when creating charges. Read more about [retries and idempotency keys](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#retries-and-idempotent-keys) in the API reference.
+</Info>
+
+### Full charge
+
+A full charge only requires you to specify the full amount to be charged, like this:
+
+```json payload.json
+{
+    "amount": 5500
+}
+```
+
+### Partial charge
+
+If you instead want to do a partial charge, you need to specify the order items that you charge for. A partial charge is typically used when you only ship a subset of the items ordered, or if you decide to lower the price of the items. Regardless, you always need to specify a new order so that the registered order of the payment aligns with the charge.
+
+```json payload.json
+{
+    "amount": 2750,
+    "orderItems": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 1,
+        "unit": "pcs",
+        "unitPrice": 2500,
+        "netTotalAmount": 2500,
+        "grossTotalAmount": 2750
+      }
+    ]
+}
+```
+
+### Charge and release the remaining amount
+
+When doing a partial charge, it is possible to specify that the remaining reserved amount should be released back to the customer. This can be done by using the flag __finalCharge__ in the charge request. If this is not specified the amount will be released back to the customer when the reservation normally is voided (usually 7 days from the initial reservation).
+
+__Example__
+
+A customer has bought 3 items where only 2 are in stock and will be delivered. To release the remaining reserved amount, simply include the items and amount that should be charged and include the flag __finalCharge__ set to __true__ in the charge request:
+
+```json payload.json
+{
+    "amount": 2750,
+    "orderItems": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 1,
+        "unit": "pcs",
+        "unitPrice": 2500,
+        "netTotalAmount": 2500,
+        "grossTotalAmount": 2750
+      }
+    ],
+    "finalCharge": true
+}
+```
+```
+
+You can subscribe to the following webhook events to track charges associated with a payment:
+
+- [`payment.charge.created `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#charge-created)
+- [`payment.charge.failed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#charge-failed)

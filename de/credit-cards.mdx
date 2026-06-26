@@ -1,0 +1,45 @@
+---
+title: "Kreditkarten - Checkout"
+description: "Dieser Leitfaden beschreibt die Grundlagen der Nutzung von Karten wie Mastercard, Visa, Dankort usw."
+---
+
+## Überblick
+
+Checkout unterstützt die folgenden Kreditkartenzahlungen:
+
+- [VISA & MasterCard](/visa-mastercard)
+- [Dankort](/dankort)
+- [American Express](/american-express)
+- [Maestro](/maestro)
+
+Eine Kartenzahlung wird in zwei Phasen abgewickelt: **Reservierung** und **Belastung**. Die Reservierung erfolgt am Ende eines erfolgreichen Checkout-Ablaufs. Wir empfehlen, eine Kartenzahlung beim Versand der Ware einzuziehen.
+
+<Info>
+Die Zahlungsreservierung ist in der Regel bis zu 30 Tage gültig. Sie müssen die Zahlung innerhalb dieses Zeitraums einziehen.
+</Info>
+
+Um Kartenzahlungen abzusichern, verlangt Checkout immer [3D Secure](https://en.wikipedia.org/wiki/3-D_Secure) für alle in Europa ausgestellten Karten. Weitere Informationen zu 3D Secure für Checkout finden Sie [hier](/payment-methods/#build-3d-secure).
+
+## Zahlungsablauf
+
+Eine Kreditkartenzahlung wird in zwei Schritten ausgeführt: *Reservierung* (oder Autorisierung) und *Belastung* (oder Capture, Settlement).
+
+Zunächst werden die Zahlungsdaten Ihres Kunden überprüft und die Transaktion genehmigt. Anschließend werden die Mittel reserviert und stehen Ihnen zur Einziehung bereit.
+
+Sobald die Bestellung versandt wurde, können Sie die Mittel innerhalb Ihres Checkout-Kontos einziehen (*Separate Capture*). Dies hilft, Rückerstattungen und Chargebacks zu vermeiden.
+
+Checkout-Kreditkartenzahlungen unterstützen Funktionen wie [Abonnements](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#subscriptions) (oder wiederkehrende Zahlungen), [Rückerstattungen (vollständig und teilweise)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-charges-chargeid-refunds-post) und [Belastungen (vollständig und teilweise)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-charges-post). Solange Sie die Mittel noch nicht eingezogen haben, können Sie Zahlungen auch [stornieren](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-cancels-post).
+
+Die ausführlichen Beschreibungen dieser und anderer Ereignisse (Bestellung aktualisieren, Zahlung beenden, ausstehende Rückerstattung stornieren) finden Sie in unserer [API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/).
+
+Das folgende Diagramm zeigt die Customer Journey für Kartenzahlungen:
+
+![Customer Journey für Karten](https://images.ctfassets.net/di680may5c0k/73mBbHDCn2MI63KGKt8hW0/04b6f785f4a9c1ae883b008475ea31fe/MicrosoftTeams-image__17_.png?w=2800&h=1600&q=50&fm=png)
+
+## Sicherheit
+
+Kreditkartentransaktionen über Checkout sind durch 3D Secure geschützt. Alle Checkout-Zahlungen werden gemäß der überarbeiteten europäischen Zahlungsdiensterichtlinie (PSD2) verarbeitet.
+
+Bitte beachten Sie, dass Kunden aus der EU diesen erweiterten europäischen Vorschriften unterliegen, während Nicht-EU-Bürger nicht in den Anwendungsbereich dieser Richtlinie fallen.
+
+Weitere Informationen zu 3D Secure finden Sie [hier](/payment-methods/#build-3d-secure) und auch [hier](/test-card-processing/#build-3d-secure).

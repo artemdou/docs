@@ -1,0 +1,178 @@
+---
+title: "Optimize the Checkout Flow"
+description: "This guide is for developers who want to optimize and customize the flow on the checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="yellow">Coding: Some (Backend)</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+This guide assumes that you already have a [Checkout Portal account](https://portal.dibspayment.eu) and have [integrated Checkout on your website](/web-integration/integrate-checkout-on-your-website-embedded).
+</Warning>
+
+## Configuring the payment flow
+
+All configurations described in this guide are applied when creating a new payment object from your backend. Please see the guide [Integrate Checkout on your website](/web-integration/integrate-checkout-on-your-website-embedded) for more details. The settings in this guide apply to both embedded and hosted integrations.
+
+The request body sent to the [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) method contains a [`checkout `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout) object that holds all properties related to the payment flow. The following checkout properties configure the payment flow:
+
+- [`merchantHandlesConsumerData `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-merchanthandlesconsumerdata): A boolean indicating whether the consumer data section should be hidden or whether consumer data should be collected on the checkout page.
+- [`consumerType `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-consumertype): The type of consumer data. Only relevant if you collect consumer data on the checkout page. 
+- [`consumer `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-consumer): Defines a consumer. Only relevant if you hide the consumer data section. 
+- [`countryCode `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-shippingcountries-countrycode): With the `countryCode ` property set, your customers benefit from having the [country specific payment methods displayed](/payment-methods/#build-country-and-currency). It also allows to have certain form fields prefilled according to country formats and to display the country specific terms and conditions.
+
+## Collect consumer data on the checkout page
+
+If you don't want to store any information about your customer, you can hand that over to Checkout. The payment object stored with Nexi Group will have the consumer data attached to it after the payment is completed. You can then retrieve the consumer data from Checkout Portal or by using the [Retrieve payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) method from the Payment API.  
+
+The consumer data section is visible by default when initiating the checkout. The property [`merchantHandlesConsumerData `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-merchanthandlesconsumerdata) determines whether the consumer data section should be visible or not. This property is specified when [creating the payment object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post):
+
+
+
+```json Collect consumer data (create payment)
+{
+  "order": {
+    ...
+  },
+  "checkout": {
+    ...
+    "merchantHandlesConsumerData": false,
+    "consumerType": {
+       ...
+    }
+  }
+}
+```
+
+The property `merchantHandlesConsumerData ` is `false ` by default, which makes the consumer data section visible on the checkout page.
+
+<Info>
+Checkout can collect data for both private customers (B2C) and business customers (B2B). Please see the guide [Support private and business customers](/support-private-and-business-customers) for more information about the `consumerTypes ` property.
+</Info>
+
+## Hide the consumer data section
+
+If you already have collected all the information about your customer that you need in order to deliver the product or service you are selling, you can choose to completely hide the consumer data section on the checkout page. This requires that you can associate a payment in Checkout with a customer in your backend, typically using the order reference (see the property [`order.reference `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-reference)).
+
+To hide the consumer data section, set the property [`merchantHandlesConsumerData `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-merchanthandlesconsumerdata) to `true ` when [creating the payment object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post).
+
+```json Hide consumer data section (create payment)
+{
+   "order": {
+      ...
+   },
+   "checkout": {
+      ...
+      "merchantHandlesConsumerData": true
+   }
+}
+```
+
+<Warning>
+The `consumerType ` property, which controls private and business customer settings, has no effect when `merchantHandlesConsumerData ` is set to `true `.
+</Warning>
+
+When the consumer data section is hidden, the payment details section is centered on the checkout page:
+
+![Consumer data section hidden](https://images.ctfassets.net/di680may5c0k/3HRniYafeguXGaP5Yrqh9W/90798eeeea0084ed212db7250d741f2b/consumer_data_2.png?w=2800&h=1600&q=50&fm=png)
+
+## Inject consumer data into the checkout
+
+If you have all the customer data collected before the actual checkout, to hide the consumer data section on the payment window might result in a faster checkout experience for your customer.
+
+However, we still recommend to pass the customer information to Checkout through the API for the following reasons:
+
+1. If existent, Checkout can find the customer and facilitate the payment flow accordingly by filling out payment details such as card numbers.
+2. Some payment methods, such as AfterPay or RatePay Invoice require customer data such as billing address. These payment methods won't be displayed if Checkout does not have that information.
+3. Checkout can create a new customer which allows customer recognition for future purchases (if the injected dataset is complete).
+4. The customer data is available in your Checkout account or through an API call.
+
+<Warning>
+Please make sure, the customer data you sent is complete and correct. In order for Checkout to create a customer, the dataset needs to be complete. Also keep in mind, that the customer data you transfer to Checkout might become userfacing (prefilled forms for future purchases).
+</Warning>
+
+Customer data can be passed to Checkout when creating the payment object. Use the `consumer ` object as demonstrated below:
+
+```json Inject consumer data (create payment)
+{
+  "order": {
+   ...
+  },
+  "checkout": {
+    ...
+    "merchantHandlesConsumerData": true,
+    "consumer": {
+      "reference": "user-id-2034",
+      "email": "john.doe@example.com",
+      "shippingAddress": {
+        "addressLine1": "Karl Johans gate",
+        "addressLine2": "c/o Johansen",
+        "postalCode": "12345",
+        "city": "Oslo",
+        "country": "NOR"
+      },
+      "phoneNumber": {
+        "number": "123456",
+        "prefix": "+47"
+      },
+      "privatePerson": {
+        "firstName": "John",
+        "lastName": "Doe"
+      }
+    }
+  }
+}
+```
+
+<Warning>
+The `consumer ` property is ignored unless you have set `merchantHandlesConsumerData ` to `true `. There is no reason to inject consumer data unless you have hidden the consumer data section.
+</Warning>
+
+Depending on your needs and the set of payment options you want to support, you can supply a subset of the consumer properties. Checkout uses email and postal code for matching the consumer with previous sessions, so you need at least provide these properties if you want Net to be able to find payment details. 
+
+<Warning>
+For Checkout to create a new consumer the dataset needs to be complete. Please note, that this data might become userfacing at some point and must not contain any made up information.
+</Warning>
+
+Here is a minimal example. It is sufficient to recognize potentially existing customers. But the data will not allow Checkout to create a new consumer if there isn't one already.
+
+```text Inject minimal consumer data (create payment)
+{
+  "order": {
+   ...
+  },
+  "checkout": {
+    ...
+    "merchantHandlesConsumerData": true,
+    "consumer": {
+      "email": "john.doe@example.com",
+      "shippingAddress": {
+        "postalCode": "12345",
+      }
+    }
+  }
+}
+```
+
+<Info>
+As stated earlier in this guide, Checkout uses both cookies and consumer data to find payment details from previous purchases. If you don't provide any consumer data at all and hide the consumer data section, Checkout will still use information saved in cookies.
+</Info>
+
+When Checkout is able to match a consumer with previously stored payment details, completing the purchase is a matter of clicking the "Pay" button thanks to the autofilled form:
+
+![Autofilled payment details ](https://images.ctfassets.net/di680may5c0k/1tbPXUWGIOZoNRrOg5AL8v/11d57875b1806da8aab8acfc283be609/consumer_data_3.png?w=2800&h=1200&q=50&fm=png)
+
+If the autofilled payment details are not correct, the customer has the option to click the "This is not me" link. In that case, the customer can provide new payment details and the consumer data that you injected will be cleared from the payment object. Therefore, make sure that you can match the order reference with the customer in your backend.
+
+<Check>
+You now have the tools for optimizing the checkout flow so that it suits your needs and minmizes the input required to complete a purchase in your webshop.
+</Check>
+
+## Next steps
+
+- [Support private and business customers](/support-private-and-business-customers)
+- [Customize text and language](/customize-text-and-language-embedded)

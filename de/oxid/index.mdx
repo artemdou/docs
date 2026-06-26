@@ -1,0 +1,206 @@
+---
+title: "Checkout für OXID"
+description: "Dieser Leitfaden beschreibt, wie Sie das Checkout-Webshop-Modul für Oxid installieren, konfigurieren und verwenden."
+---
+
+Kompatibilität: Oxid 7.0+
+
+Anforderungen: PHP 8.0 oder 8.1
+
+Neueste Version: 1.0.4
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie hierzu den Leitfaden:
+- Wie Sie ein [Testkonto für Checkout erstellen](/create-a-checkout-portal-account).
+</Warning>
+
+## Überblick
+
+Unser Oxid-Plugin ist die perfekte Erweiterung, mit der Sie Checkout für Ihren Oxid-Shop voll ausschöpfen können. Checkout unterstützt die meisten gängigen Zahlungsmethoden. Um verschiedene Segmente zu bedienen und bestimmte Zahlungsmethoden hervorzuheben, ist es außerdem möglich, Checkout entweder als Komplettlösung zu verwenden oder einzelne Zahlungsmethoden für Ihre Verbraucher festzulegen und anzuzeigen.
+
+<Info>
+Im Folgenden sehen Sie alle von Checkout angebotenen Zahlungsmethoden. Diese Liste bezieht sich auf alle Märkte.
+
+Je nach Land oder Region kann die Liste variieren. Wenn Sie sich bezüglich einer bestimmten Zahlungsmethode und ihrer Verfügbarkeit in Ihrem Land oder Ihrer Region nicht sicher sind, wenden Sie sich bitte an den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) für weitere Informationen.
+</Info>
+
+![Checkout-Plugin – Oxid eSales](https://images.ctfassets.net/di680may5c0k/4BnIrTO5I8TKvpiLQ6OaI6/4b2065f0fef96011aa41c56eaf0ada10/plugin_oxid_esales.jpg?w=1576&h=656&fl=progressive&q=50&fm=jpg)
+
+<Warning>
+Die Apple Pay-Konfiguration für das Oxid-Plugin wird auf der Seite [Zahlungsmethode Apple Pay](/apple-pay/#build-oxid-65) beschrieben.
+</Warning>
+
+### Shop-Funktionen
+
+- Schneller Checkout mit „Remember-me"-Funktionalität.
+- Eingebettetes Checkout für eine optimierte Benutzererfahrung. Benutzer werden nicht außerhalb von Oxid weitergeleitet.
+- Eine intelligente Mischung von Zahlungsmethoden, die allen Vorlieben gerecht wird.
+- Mehrere Checkout-Sprachen und -Währungen für den Verkauf in Ihrem Heimatmarkt und im Ausland.
+
+Der folgende Screenshot zeigt eine vom Checkout-Modul bereitgestellte Checkout-Seite:
+
+![Oxid eingebettetes Checkout](https://images.ctfassets.net/di680may5c0k/2gqEnGcaoTXB68K6ZFJHLM/9cbfce6e125d7a133a3e3c8c805aeeee/oxid_embedded_checkout.png?w=1177&h=516&q=50&fm=png)
+
+### Admin-Funktionen
+
+- Schnelle Einrichtung und flexible Konfiguration.
+- Intuitives Bestellmanagement mit synchronisierten Belastungen und Rückerstattungen.
+- Kompatibilität mit Rabatten, Steuern (MwSt.) und Versandoptionen.
+
+Der folgende Screenshot zeigt die Einstellungsseite im Oxid-Verwaltungsportal:
+
+![Admin-Funktionen](https://images.ctfassets.net/di680may5c0k/2ZaW9UGaaftTqj0yvRztsE/77dd43b49c28e7c69317922050d2cb0d/Admin_features.png?w=1894&h=720&q=50&fm=png)
+
+## Installation
+
+Befolgen Sie die nachstehenden Schritte, um das Checkout-Modul in Oxid zu installieren und zu aktivieren.
+
+### Schritt 1: Modul in Oxid hochladen
+
+1. Laden Sie das Modularchiv herunter: https://github.com/Nets-eCom/oxid7/archive/refs/heads/master.zip.
+2. Extrahieren Sie das ZIP-Archiv in den Ordner `/source/modules/nexi-checkout `.
+3. Leeren Sie Ihren Cache von Drittanbieter-Plugins oder löschen Sie einfach die Dateien im Ordner `/source/tmp `.
+
+<Warning>
+- Löschen Sie nicht die Datei `.htaccess `.
+- Löschen Sie nicht den Ordner `smarty `, sondern nur dessen Inhalt.
+</Warning>
+
+### Schritt 2: Modul installieren
+
+Verbinden Sie sich mit einem SSH-Client, navigieren Sie zum Stammverzeichnis Ihrer Oxid-7-Installation und führen Sie den folgenden Befehl aus:
+
+`$ php vendor/bin/oe-console oe:module:install-configuration source/modules/nets `
+
+### Schritt 3: Modul aktivieren
+
+Nach der Installation des Moduls müssen Sie es aktivieren:
+
+1. Navigieren Sie im Oxid-Admin zu **Erweiterungen > Module**.
+2. Suchen und wählen Sie das **Checkout**-Modul aus der Liste der installierten Module aus.
+3. Wählen Sie den Reiter **Übersicht** und drücken Sie die Schaltfläche **Aktivieren**. Wenn das Checkout-Modul korrekt installiert wurde, sehen Sie nun einen grünen Kreis mit Häkchen in der Spalte **AKTIV** neben Checkout in Ihrer Liste.
+
+![Admin-Funktionen](https://images.ctfassets.net/di680may5c0k/2ZaW9UGaaftTqj0yvRztsE/77dd43b49c28e7c69317922050d2cb0d/Admin_features.png?w=1894&h=720&q=50&fm=png)
+
+### Schritt 4: Neue Zahlungsmethode aktivieren
+
+So aktivieren Sie die neue Zahlungsmethode:
+
+1. Navigieren Sie zu **Shop-Einstellungen > Zahlungsmethoden**
+2. Zahlungsmethoden werden in alphabetischer Reihenfolge auf mehreren Seiten aufgeführt. Suchen oder finden Sie **Checkout** und wählen Sie es aus.
+3. Stellen Sie auf dem Reiter **Stamm** sicher, dass das Kontrollkästchen **Aktiv** aktiviert ist.
+4. (Optional) Füllen Sie die Felder **Name** und **Zahlungsbeschreibung** aus, wenn Sie den Text anpassen möchten, der in der Zahlungsmethodenauswahl im Webshop angezeigt wird.
+5. (Optional) Geben Sie bei Bedarf **Benutzergruppen** und **Länder und Übersetzungen** an.
+6. Klicken Sie auf **Speichern**.
+
+Das Modul ist jetzt installiert und kann für Ihr Checkout-Konto konfiguriert werden.
+
+## Konfiguration
+
+Nach der Installation und Aktivierung des Moduls müssen Sie nun einige grundlegende Konfigurationen vornehmen:
+
+1. Navigieren Sie zu den Plugin-Einstellungen: **Erweiterungen > Module > Checkout**.
+2. Wählen Sie den Reiter **Einstellungen** und klicken Sie auf **Checkout-Einstellungen**, um die Konfigurationseinstellungen anzuzeigen.
+3. Tragen Sie die erforderlichen Felder ein, wie z. B. Händler-ID und Integrationsschlüssel (Secret Keys und Checkout Keys).
+4. (Optional) Passen Sie das Modul mit den zusätzlichen Einstellungen auf der Konfigurationsseite an Ihre Bedürfnisse an.
+
+<Info>
+Sowohl die **Händler-ID** als auch die **Integrationsschlüssel** finden Sie im [Checkout Portal](https://portal.dibspayment.eu/). Weitere Hilfe finden Sie auf den folgenden Seiten:
+
+- [Wo finde ich meine Händlernummer (Händler-ID)?](https://developer.nexigroup.com/nexi-checkout/en-EU/support/where-can-i-find-my-merchant-number-merchant-id/)
+- [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys)
+</Info>
+
+Der folgende Screenshot zeigt die Einstellungsseite für das Modul:
+
+![Oxid Plugin-Einstellungen](https://images.ctfassets.net/di680may5c0k/6HpLlZaFFIr9MySqX2WcVE/3c1c6271875d9f24a6460ff15e89a8d8/oxid_plugin_settings.png?w=1048&h=560&q=50&fm=png)
+
+Die folgende Tabelle listet alle Einstellungen auf, die Sie im Verwaltungsbereich für das Checkout-Modul konfigurieren können:
+
+| Konfigurationseinstellung | Beschreibung
+| ---------------------------|------------ 
+| Modus | Schaltet zwischen **Live-Modus** und **Testmodus** um. Wählen Sie den Testmodus, wenn Sie Testkäufe in der [Testumgebung](/test-environment) durchführen möchten. Es gibt [Beispielkartennummern](/test-card-processing/#build-sample-credit-cards) und [Rechnungsadressen](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) zum Testen. Der Live-Modus erfordert ein freigegebenes Konto.
+| Live Secret Key | Ihr Live-Secret-Key aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Live Checkout Key | Ihr Live-Checkout-Key aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Secret Key | Ihr Secret-Key für Testkäufe aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Checkout Key | Ihr Checkout-Key für Testkäufe aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Terms Url | Die URL zu Ihrer Seite mit Allgemeinen Geschäftsbedingungen.
+| Merchant Terms Url | Die URL zu Ihrer Seite mit Nutzungsbedingungen und Cookies. Die Term-Links sind im Checkout-Zahlungsfenster zu finden.
+| Checkout Type | Wählen Sie zwischen **Hosted** und **Embedded**. Hosted lädt eine neue Zahlungsseite, während Embedded das Zahlungsfenster direkt auf der Checkout-Seite einfügt.
+| Auto-Capture | Diese Funktion ermöglicht es Ihnen, eine Zahlung sofort nach der Bestellung einzuziehen. **Hinweis!** Die Belastung einer Zahlung vor dem Versand der Bestellung kann je nach Gesetzgebung in Ihrem Land Beschränkungen unterliegen. Missbrauch kann dazu führen, dass Ihr Checkout-Konto verfällt.
+| Debug | Diese Funktion zeigt rohe API-Daten an, die Sie bei Fehlern in Ihren Transaktionen kopieren / einfügen können. Die Daten sind auf der Bestelldetailseite sichtbar.
+
+<Check>
+Sie haben nun das Checkout-Webshop-Modul installiert und konfiguriert. Wenn Sie weitere Fragen haben, lesen Sie bitte den Abschnitt zur Fehlerbehebung unten oder wenden Sie sich an unseren [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Bestellverwaltung
+
+Es ist möglich, Bestellungen direkt in Oxid zu verwalten:
+
+1. Navigieren Sie zu **Admin > Bestellungen verwalten > Bestellungen**. Wählen Sie eine Bestellposition aus, die über Checkout bezahlt wurde.
+2. Wählen Sie den gewünschten Zahlungsvorgang:
+   - Stornieren / belasten / erstatten Sie Ihre Bestellung vollständig.
+   - Belasten / erstatten Sie Ihre Bestellung teilweise.
+
+<Info>
+- Die Teilfunktionalität behandelt Artikel in Ihrer Bestellung als Blöcke. Ein benutzerdefinierter Betrag ist nicht möglich.
+- Verwenden Sie **-**/**+**, um die Menge für die Teilfunktionalität anzupassen.
+- Drücken Sie die Schaltfläche **Partial**, um die gewünschte Aktion für jede Bestellzeile auszuführen.
+- Alle von Nets durchgeführten Transaktionen sind im [Checkout Portal](https://portal.dibspayment.eu/) zugänglich.
+</Info>
+
+Der Zahlungsstatus wird in Echtzeit aktualisiert und in den Bestelldetails angezeigt, auch wenn Sie die Änderungen im Checkout-Portal vornehmen.
+
+![Bestellverwaltung](https://images.ctfassets.net/di680may5c0k/7BBW9I5ohuz76XqGQViAc9/a8790a030f4eaf288b8bd2504cc5caf0/Order_management.png?w=1885&h=829&q=50&fm=png)
+
+<Check>
+Sie haben nun das Checkout-Webshop-Modul installiert und konfiguriert. Wenn Sie weitere Fragen haben, lesen Sie bitte den Abschnitt zur Fehlerbehebung unten oder wenden Sie sich an unseren [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Fehlerbehebung
+
+Im Folgenden sind einige der häufigsten Konfigurationsfehler, ihre Ursachen und die Schritte aufgeführt, die Sie zur Behebung befolgen können.
+
+### Das Nexi-Group-Zahlungs-Plugin ist nicht als Zahlungsmethode sichtbar
+
+- Stellen Sie sicher, dass das Nets-Plugin in den **Shop-Einstellungen** und in der Konfiguration der Erweiterungen aktiviert ist.
+- Stellen Sie sicher, dass das Nets-Plugin in den verfügbaren Listen in verschiedenen Benutzergruppen und Ländern zugewiesen ist.
+- Verschiedene Listen für Benutzergruppen, Länder und Zahlungsmethoden finden Sie unter **Admin > Shop > Einstellungen** unter **Zahlungsmethoden und Versandmethoden**.
+
+### Das Nexi-Group-Zahlungsfenster ist leer
+
+- Stellen Sie sicher, dass Ihre Integrationsschlüssel in den Einstellungen der Nexi-Group-App korrekt sind und keine zusätzlichen Leerzeichen enthalten.
+- Deaktivieren Sie vorübergehend Drittanbieter-Plugins, die die Funktionalität der App beeinträchtigen könnten.
+- Prüfen Sie auf vorübergehende technische Inkonsistenzen: https://easy-status.developers.nets.eu/
+
+### Zahlungen im Live-Modus funktionieren nicht
+- Stellen Sie sicher, dass Sie ein freigegebenes Live-Checkout-Konto für die Produktion haben.
+- Stellen Sie sicher, dass Ihr Live-Checkout-Konto für Zahlungen in der ausgewählten Währung freigegeben ist.
+- Stellen Sie sicher, dass die Daten der Zahlungsmethode korrekt sind und von Ihrer Checkout-Vereinbarung unterstützt werden.
+
+### Wie wähle ich Währung und Sprache im Zahlungsfenster?
+
+- Währung und Sprache basieren auf der Auswahl des Kunden auf der Frontend-Shop-Seite.
+- Eine vollständige Liste der unterstützten Währungen und Sprachen finden Sie in der [Checkout API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#localization).
+
+## Go-Live-Checkliste
+
+Weitere Informationen finden Sie im Abschnitt [Go-Live-Checkliste](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Download">
+  </Card>
+  <Card title="Quelle">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Konto erstellen](/create-a-checkout-portal-account)
+- [Testumgebung](/test-environment)
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Rechnungs- & Ratenzahlungsverarbeitung testen](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

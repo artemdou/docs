@@ -1,0 +1,49 @@
+---
+title: "Test and Deploy"
+description: "This page outlines an overall description and overview of the different possibilities for testing Checkout payment methods in the checkout process."
+---
+
+## Overview
+
+This section outlines the testing options for Checkout with the different payment methods.
+
+<Warning>
+Before you start, you need a checkout page that uses the Checkout test environment.
+</Warning>
+
+The following table below shows an overview of the current testability's for the payment methods:
+
+## Table of testability
+
+### Overview of testability
+| Name | Type | Testable |
+| --- | --- | --- |
+| SEPA Direct Debit | A2A | ❌ |
+| Swish | A2A | ✅ |
+| Trustly | A2A | ✅ |
+| American Express | Cards | ✅ |
+| Visa & MasterCard | Cards | ✅ |
+| Maestro | Cards | ✅ |
+| AfterPay-Riverty | Invoice/Installments | ✅ |
+| Ratepay | Invoice/Installments | ❌ |
+| MobilePay | Wallet | ✅ |
+| PayPal | Wallet | ✅ |
+| Vipps | Wallet | ✅ |
+| Klarna | Wallet | ✅ |
+| Apple Pay | Wallet | ❌ |
+| Google Pay | Wallet | ✅ |
+
+<Columns cols={2}>
+  <Card title="Checkout Demo store">
+  </Card>
+  <Card title="Demo store guide" href="/test-the-demo-store">
+  </Card>
+</Columns>
+
+## Next steps
+
+- [Test environment](/test-environment)
+- [Test data](/test-data)
+- [Test card processing](/test-card-processing)
+- [Test account to account processing](/test-account-to-account-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)

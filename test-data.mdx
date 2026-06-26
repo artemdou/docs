@@ -1,0 +1,70 @@
+---
+title: "Test Data"
+description: "This guide outlines the test data needed for each payment method and type to execute tests for Checkout."
+---
+
+## Overview
+
+This guide shows an overview of the walk-throughs and possibilities of how to test the different payment methods in the checkout.
+
+Check the list below to see all the supported payment methods:
+
+
+
+### Overview table of all APMs for testing Checkout
+| Type | Name | Supported to test |
+| --- | --- | --- |
+| Cards | VISA | ✅ |
+| Cards | MasterCard | ✅ |
+| Cards | American Express | ✅ |
+| Cards | Dankort | ✅ |
+| Cards | Maestro | ✅ |
+| A2A | SEPA Direct Debit | ❌ |
+| A2A | Trustly | ✅ |
+| A2A | Swish | ✅ |
+| Invoice/Installments | AfterPay | ✅ |
+| Invoice/Installments | RatePay | ❌ |
+| Wallet | Vipps | ✅ |
+| Wallet | MobilePay | ✅ |
+| Wallet | PayPal | ✅ |
+| Wallet | Apple Pay | ❌ |
+| Wallet | Klarna | ✅ |
+| Wallet | Google Pay | ✅ |
+
+## Testability
+
+The following can be tested for Checkout:
+
+### Testability
+| Name | Type | Testable |
+| --- | --- | --- |
+| SEPA Direct Debit | A2A | ❌ |
+| Swish | A2A | ✅ |
+| Trustly | A2A | ✅ |
+| American Express | Cards | ✅ |
+| Visa & MasterCard | Cards | ✅ |
+| Maestro | Cards | ✅ |
+| Dankort | Cards | ✅ |
+| AfterPay-Riverty | Invoice/Installments | ✅ |
+| Ratepay | Invoice/Installments | ❌ |
+| MobilePay | Wallet | ✅ |
+| PayPal | Wallet | ❌ |
+| Vipps | Wallet | ✅ |
+| Apple Pay | Wallet | ✅ |
+| Klarna | Wallet | ✅ |
+| Google Pay | Wallet | ✅ |
+
+Check the different sections to learn how to test the different payment types and with test samples to use in the demo store:
+
+- [Test card processing](/test-card-processing)
+- [Test wallet processing](/test-wallet-processing)
+- [Test account to account processing](/test-account-to-account-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+
+## See also
+
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test account to account processing](/test-account-to-account-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Checkout demo store](https://shop.easy.nets.eu/)

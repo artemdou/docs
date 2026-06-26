@@ -1,0 +1,76 @@
+---
+title: "Use a Webshop Plugin"
+description: "This guide outlines the different functionality that each plugin can do related to the payment operations and Checkout."
+---
+
+## Before you start
+
+<Warning>
+Before you start, you need an [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide:
+- How to [create a test account for Checkout](/create-a-checkout-portal-account) and the Easy Portal.
+
+- Your [integration keys](https://portal.dibspayment.eu/integration) for the website you are developing. [Need help](/access-your-integration-keys)?
+</Warning>
+
+## Plugins
+Use our __ready-made, open source, and free webshop modules__ to offer a __great payment experience__ to your customers.
+
+They are optimised and tested for a seamless integration, on all most popular E-commerce platforms, as listed below:
+
+## Checkout plugins
+
+In the following table, you can check which functionalities are available for each of the plugins with Checkout:
+
+### Plugins functionality with Checkout table
+| Name | Redirect | Embedded | Split billing/shipping | Multi languages | Multi currency | B2B & B2C | MerchantHandlesConsumerData |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| WooCommerce | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Shopify | ✅ | ❌ | ✅ | ✅ | ❌ | ✅ | ✅ |
+| Magento 2 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| PrestaShop | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Shopware 6 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| JTL | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Oxid | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+You can learn more about the Checkout from [here](/checkout/).
+
+## Payment operations for plugins
+
+In the following table below, you can check which payment operations are available for each of the plugins:
+
+### Payment operations for plugins
+| Name | Authorization | Full capture | Partial capture | Auth. with automated capture | Cancel | Full refund | Partial refund | Subscriptions | Unscheduled subscriptions |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| WooCommerce | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Magento 2 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Shopify | ✅ | ✅ (possible only once) | ✅ (possible only once with whole amount) | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| PrestaShop | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Shopware 6 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| JTL | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Oxid | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+
+You can learn more about payment operations from [here](https://developers.nets.eu/order-management/#build-payment-operations) and [here](https://developers.nets.eu/payment-methods/#build-authorization-times-for-charge-cancel-and-refund).
+
+<Columns cols={2}>
+  <Card title="WooCommerce" href="/checkout-for-woocommerce" img="https://images.ctfassets.net/di680may5c0k/7FixoEvOcHFQobbVlTvajB/923f7840476cec3084dbeaaad3019d16/woo-commerce.png?w=1440&h=900&q=50&fm=png">
+  </Card>
+  <Card title="Shopify" href="/checkout-for-shopify" img="https://images.ctfassets.net/di680may5c0k/5YqSea4ZQQwH5ylZWbp0Xw/c6b5ac8fa44dbc97d0de76dfb6248bef/shopify.png?w=1440&h=900&q=50&fm=png">
+  </Card>
+  <Card title="PrestaShop" href="/checkout-for-prestashop-prestashop" img="https://images.ctfassets.net/di680may5c0k/2OFaFWVFPsfc2kLxKwuqwq/508608cb6a41788fd46983c85949530a/pretashop.png?w=1440&h=900&q=50&fm=png">
+  </Card>
+  <Card title="Magento" href="/magento" img="https://images.ctfassets.net/di680may5c0k/1BCAKmTSR0EiWpTZ9YrZCg/a43866a34dfe5f9ce9593721c5a243cb/magento.png?w=1440&h=900&q=50&fm=png">
+  </Card>
+  <Card title="Shopware" href="/shopware" img="https://images.ctfassets.net/di680may5c0k/3qk7iPd1epzALln0yUZc1J/ee1b190df7c948dfce4c8280b35803b1/shopware.png?w=1440&h=900&q=50&fm=png">
+  </Card>
+  <Card title="Oxid" href="/oxid" img="https://images.ctfassets.net/di680may5c0k/5MbGaRUdCPZLhXjbhf5QKm/2ec93a45bbe14f3a8df37bd933865371/oxid.png?w=356&h=142&q=50&fm=png">
+  </Card>
+  <Card title="JTL" href="/checkout-for-jtl" img="https://images.ctfassets.net/di680may5c0k/4iqQ4ci7CWN9aPBTFLrVj9/4e8551459b17a8a4315af5ea0982a201/MicrosoftTeams-image__14_.png?w=1440&h=900&q=50&fm=png">
+  </Card>
+</Columns>
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)
+- [Test environment](/test-environment)
+- [Test data](/test-data)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

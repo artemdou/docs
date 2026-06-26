@@ -1,0 +1,214 @@
+---
+title: "Customize Text and Language"
+description: "This guide is for developers who want to localize and customize text resources on their checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="yellow">Coding: Some</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+This guide assumes that you already have a [Checkout Portal account](https://portal.dibspayment.eu) and have [integrated Checkout on your website](/web-integration/integrate-checkout-on-your-website-embedded).
+</Warning>
+
+## What you are building
+
+Once you have the checkout process on your Checkout page integrated into your site, it’s time to customize it to make it fit your site and provide the best possible service to your customers. This page will guide you through the following customizations:
+
+- **Select language** - the language to be used on the checkout page 
+- **Set text on the payment button** - the text resources on the pay button can be customized when using subscriptions (recurring payments).
+- **Display webshop name** - the name of your webshop can be added to the checkout page.
+- **Show order items** - the order items can be listed on the checkout page.
+
+![Text customizations](https://images.ctfassets.net/di680may5c0k/1fokK2B4GzTLkACdaImSuY/f2d1c821573828fba80fe59b3ae6a2a9/customize-content.png?w=2000&h=1436&q=50&fm=png)
+
+## Set display language
+
+You can change the language to be used on the checkout page by using the Checkout JS SDK (frontend). The following example changes the default display language from English to Swedish when constructing the `Checkout ` object from your JavaScript:
+
+```javascript your-script.js
+var checkoutOptions = {
+    checkoutKey: "<YOUR_CHECKOUT_KEY>",
+    paymentId : "<PAYMENT_ID>",
+    containerId : "checkout-container-div",
+    language: "sv-SE"
+};
+var checkout = new Dibs.Checkout(checkoutOptions);
+```
+
+It is also possible to set the language after the `Checkout ` object has been constructed using the [`setLanguge() `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk/#setlanguage) method:
+
+```javascript your-script.js
+val checkoutOptions = { /*...*/ };
+const checkout = new Dibs.Checkout(checkoutOptions);
+checkout.setLanguage("sv-SE");
+```
+
+The complete [list of available language](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#localization) can be found in the [API reference](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/).
+
+## Customize payment button text 
+
+The text label on the payment button can be customized. The Payment API defines a set of [predefined values](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-textoptions-completepaymentbuttontext) that can be selected among when [creating the payment object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) from the backend of your site. See the [direct integration guide](/web-integration) for a complete example of how to create a new payment object.
+
+To customize the payment button, the JSON request object posted with the create payment method should define the property [`completePaymentButtonText `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-textoptions-completepaymentbuttontext). Here is an example of a request body:
+
+```json Specify payment button text
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "appearance": {
+      "textOptions": {
+        "completePaymentButtonText": "signup"
+    }
+  },
+  "order": {
+    ...
+  }
+}
+```
+
+The string value `signup ` is one of the [predeifined values](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-textoptions-completepaymentbuttontext) that can be specified. If you are using English on the checkout page, the payment button will now include the text "Sign up". The payment button text is localized.
+
+<Info>
+You can determine the button's background color as well by using the `buttonbackgroundColor ` parameter.
+</Info>
+
+## Display merchant name
+
+It is possible to show the name of your webshop (merchant name) on the checkout page. The option to show or hide the merchant name is specified when [creating the payment object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) using the Payment API from your backend.
+
+Use the property [`showMerchantName `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-displayoptions-showmerchantname) to show or hide the merchant name on the checkout page, like this:
+
+```json Show merchant name on checkout page
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "appearance": {
+      "displayOptions": {
+        "showMerchantName": true
+      }
+  },
+  "order": {
+    ...
+  }
+}
+```
+
+The example above makes the merchant name appear on the checkout page. 
+
+<Info>
+The merchant name to be displayed on the checkout page can only be specified once your account is in **live mode**. There is no way to specify the merchant name while in test mode.
+</Info>
+
+## Include order summary
+
+The order items associated with the current payment can be listed on the checkout page. A button that makes it possible for your customer to show or hide the order items is then included on the checkout page. Again, this  customization is defined when [creating the payment object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) from your backend.
+
+Use the property [`showOrderSummary `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-displayoptions-showordersummary) to include the order items on the checkout page as in the following example:
+
+```json Show order summary
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "appearance": {
+      "displayOptions": {
+        "showOrderSummary": true
+      }
+  },
+  "order": {
+    ...
+  }
+}
+```
+
+This guide has demonstrated how to customize the language and what content to be included on the checkout page. It's also possible to customize UI properties such as colors and fonts. See the guide [Styling and accessibility](/styling-and-accessibility).
+
+## Display payment methods
+
+In addition to which payment methods you have enabled in your Checkout account configurations, you can define what payment methods are displayed on the payment window. 
+
+### Country and currency parameter
+
+One way to determine which payment methods are displayed during checkout is to set the country and currency parameters, so that only [payment methods available for the specific country - currency combination](/payment-methods/#build-country-and-currency) are displayed.
+
+Another benefit is, that the Billing & Shipping address form allows to have the relevant fields prefilled according to the `countryCode ` parameter. Also, the Terms and Conditions can be displayed according to the country.
+
+Below is a sample.
+
+```json countryCode : FIN, currency : EUR
+{
+  "order": {
+      "items": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 2,
+        "unit": "pcs",
+        "unitPrice": 25000,
+        "taxRate": 0,
+        "taxAmount": 0,
+        "netTotalAmount": 50000,
+        "grossTotalAmount": 50000
+      }
+    ],
+    "amount": 50000,
+    "currency": "EUR",
+    "reference": "Order No 42369"
+  },
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "<WEBSHOP_URL>",
+    "termsUrl": "<TERMS_URL>",
+    "countryCode" : "FIN"
+  }
+}
+```
+
+Here, the `order.currency ` parameter is set to __EUR__, while the `checkout.countryCode ` is set to __FIN__. Depending on the payment methods enabled in the Checkout account, the payment window would look as here:
+
+![FI_EUR](https://images.ctfassets.net/di680may5c0k/4Fy6wWOm7ITenOu8CiXw2w/b04e7f8e4a67be8f442e9f31c513790b/FI_EUR.png?w=685&h=533&q=50&fm=png)
+
+### PayType filtering
+
+An additional way to control what payment methods are displayed on the Payment Window is to use the [paymentMethodsConfiguration](https://developers.nets.euhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-paymentmethodsconfiguration) array in the `Create Payment ` method's request body.
+
+That is useful if you want to offer specific payment methods dependent on
+ certain scenarios such as 
+- products, if for certain products you just want to accept card payments
+- amounts, if for example you accept all payment methods for smaller amounts, but just a few for larger ones
+- devices, if you want to offer a specific set of payment methods for users on their mobile device, but others for desktop users
+
+The sample below shows how you would set the `paymentMethodsConfiguration ` array, if you only want to offer Cards and PayPal as payment methods:
+
+```json Set paymentMethodsConfiguration
+{
+  "order": {
+   ...
+  },
+  "checkout": {
+    ...
+  },
+  "paymentMethodConfiguration":[
+      {
+      "name":"card"
+      },
+      {
+      "name":"paypal"
+      },
+  ]
+}
+```
+
+## Next steps
+
+- [Support private and business customers](/support-private-and-business-customers)
+- [Styling and accessibility](/styling-and-accessibility)

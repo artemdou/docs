@@ -1,0 +1,233 @@
+---
+title: "Checkout for Magento"
+description: "This guide describes how to install, configure, and use Checkout webshop module for Magento 2."
+---
+
+## Before you start
+
+<Warning>
+Before you start, you need an [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide
+- How to [create a test account for Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+## Overview
+
+Our plugin for Magento 2 supports all Checkout features such as smart customer recognition and the best converting payment methods. It is easy to integrate and is constantly updated. Checkout is compatible with Magento 2. 
+
+The plugin keeps your Magento store and our Checkout payment platform synchronized, so you can fully operate your orders in Magento, and access Checkout portal for more detailed reporting.
+
+<Info>
+You can see below all the payment methods offered by Checkout. This list refers to all markets. 
+
+Depending on your country or region, the list may vary. If you are uncertain about a specific payment method and whether it is available in your country or region, please contact [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) for more information.
+</Info>
+
+![Checkout plugin - Magento](https://images.ctfassets.net/di680may5c0k/5VRWNAwGCfFd4jgXWr0BrE/48d71e57dbc5d033bd63f82754831b67/plugin_magento.jpg?w=1576&h=608&fl=progressive&q=50&fm=jpg)
+
+<Warning>
+Apple Pay configuration for Magento 2 plugin is described on the [Apple Pay payment method](/apple-pay/#build-magento-2) page.
+</Warning>
+
+### Shop features
+
+- The fast checkout with "remember me" functionality.
+- Includes 2 checkout flows to match your desired customer experience: embedded (your customers are not redirected outside Magento checkout to pay) and hosted checkout (with redirect).
+- A smart mix of payment methods to suit all preferences.
+- Multiple checkout languages and currencies for selling in your domestic market and abroad.
+
+![Magento 2 checkout view](https://images.ctfassets.net/di680may5c0k/4nH4jWASY5R0WQFowmnUUV/09b0e266f7d38ed3bb2b941b0837f481/Magento_2_vanilla.png?w=942&h=690&q=50&fm=png)
+
+### Admin panel features
+
+- Quick setup and flexible configuration.
+- Intuitive order management with synchronized captures and refunds.
+- Compatible with discounts, tax  (VAT) and shipping variants.
+- Compatible with multi-shop setups.
+- Compatible with multiple visual themes (vanilla and redirect checkouts).
+
+![Magento 2 admin features](https://images.ctfassets.net/di680may5c0k/7py6oxocK8BzcqaAxyJDFn/bf30c13bffa2868855188bbd804ad19e/magento_2.png?w=1349&h=667&q=50&fm=png)
+
+## Installation
+
+Follow the steps below to install and enable the Checkout module in Magento 2.
+
+### Step 1: Install the module
+
+You have two options when installing the Checkout module.
+
+#### Alternative 1: Manual
+
+Manually upload the file to your Magento site:
+
+1. Download the latest Checkout module from GitHub: [https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip](https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip)
+
+2: Unzip the file and upload the content to your Magento site via FTP, into the directory `/app/code/Dibs/EasyCheckout `.
+Please create the folder `/Dibs/EasyCheckout ` first time you install the plugin.
+
+#### Alternative 2: Using composer
+
+Another option is to install the module via **composer** at your magento site by running the following commands: 
+
+```shell Composer commands
+$ composer require nexi-checkout/magento2
+```
+It is strongly recommended to have cleanup of Pending Payment orders active in Sales > Orders, Orders Cron Settings > Pending Payment Order Lifetime (minutes)
+
+### Step 2: Enable the module
+
+Enable the Nets Easy module in Magento by running the following commands:
+
+```shell Enable Checkout
+$ php bin/magento module:enable --clear-static-content Dibs_EasyCheckout 
+$ php bin/magento setup:upgrade
+```
+
+The module is now installed and ready to be configured for your Checkout account. 
+
+### Update
+#### Method 1: FTP
+
+If you installed plugin via FTP, you can update the module by following these steps:
+
+1. Download the latest Nets Easy module from GitHub: [https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip](https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip)
+2. Remove contents of /app/code/Dibs/EasyCheckout directory.
+3. Unzip the downloaded file and upload the content into the directory `/app/code/Dibs/EasyCheckout `.
+
+#### Method 2: VSC
+
+If you previously installed plugin by adding GitHub repository to composer, you can update the module by running following commands:
+
+```shell Update Module
+$ composer remove nets/easycheckout
+$ composer require nexi-checkout/magento2
+$ php bin/magento setup:upgrade
+```
+
+#### Method 3: Composer
+
+If you have installed plugin via composer, you can update the module by running following commands:
+
+```shell Update Module
+$ composer update nexi-checkout/magento2
+$ php bin/magento setup:upgrade
+```
+
+## Configuration
+
+After installing the module, you need to do some basic configuration of the module:
+
+1. Navigate to: **System > Configuration > Payment Methods**
+2. Locate **Checkout** and access **Configuration**.
+3. Fill out the required fields, such as merchant ID and integration keys (secret keys and checkout keys). 
+3. (Optional) Customize the module according to your needs using the additional settings on the configuration page.
+
+<Info>
+Both the **merchant ID** and the **integration keys** can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the following pages for more help:
+
+- [Where can I find my merchant number (merchant ID)?](https://developer.nexigroup.com/nexi-checkout/en-EU/support/where-can-i-find-my-merchant-number-merchant-id/)
+- [Access your integration keys](/access-your-integration-keys)
+</Info>
+
+The screenshot below shows the Checkout configuration page in the Admin Panel:
+
+![Magento 2 admin config](https://images.ctfassets.net/di680may5c0k/379SaDmpd9x5LtlNPR8G45/848c0a798dfcdbaf5c2cc80f2d8df8c6/Configuration-Settings-Stores-Magento-Admin.png?w=1340&h=839&q=50&fm=png)
+
+The following table lists all the settings you can configure in the administration area for the Checkout module:
+
+| Configuration&#160;setting | Description
+| ---------------------------|------------ 
+| Enabled | Activates the module in Magento
+| Testmode | Toggles between **Test** mode and **Live** mode. Choose test mode if you want to make test purchases using the [test environment](/test-environment). There are [sample card numbers](/test-card-processing/#build-sample-credit-cards) and [invoice addresses](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) for testing purposes. Live mode requires an approved account.
+| Checkout Key | Your checkout key which can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the guide [Access your integration keys](/access-your-integration-keys) for more help. _Important!_ Use the Test Checkout key or Live Checkout key depending on the specified mode (see the **Testmode** setting above).
+| Secret Key | Your secret key which can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the guide [Access your integration keys](/access-your-integration-keys) for more help. _Important!_ Use the Test Secret key or Live Secret key depending on the specified mode (see the **Testmode** setting above).
+| Webhook Authentication Password | The password that Nexi Group will use for authentication when invoking webhook endpoints set up by the Magento plugin (Checkout module).
+| Webhook Confirmation Timeout | The time in seconds that Magento will wait for an order confirmation from Nexi Group.
+| Default Shipping Method | Defines the the default shipping method. Possible values are **Fixed** (flatrate), TODO
+| Default Country | The default country used in the checkout.
+| Handle customer data | Enables you to initiate the checkout with customer data from Magento Checkout.
+| Split billing and shipping addresses | If **Yes**, allows your customer to provide separate addresses for billing and shipping.
+| Checkout Allowed Customer Types | Configures which customer types should be accepted on the checkout page. **B2C** means private customers (Business-to-Consumer). **B2B** means business customers (Business-to-Business).
+| Checkout Default Customer Type | Sets the default consumer type (B2C or B2B).
+| Checkout Flow | The checkout flow: **Vanilla Embedded**, **Redirect**, or **Embedded**.
+| Cancel / Return url | Specifies where your customer will return after a canceled payment.
+| Capture/Refund payment | If set to **No**, no payment operations (Capture/Refund/Void) will be done on Invoice/Creditmemo/Order.
+| Enable Auto-capture | This function enables you to instantly charge a payment straight after the order is placed. _Note!_ Capturing a payment before shipment of the order might be liable to restrictions based upon legislations set in your country. Misuse can result in your Checkout account being forfeit.
+| Can capture partial | If set to **No**, you will not be able to make partial invoices or partial refunds.
+| Subscribe Newsletter Checked by default | **Yes** or **No** - to be aligned with your term and conditions and country regulations.
+| Add Product Options to Name in Nexi Group | Enable so that if an option is defined in product, then it will be added to the order item list in Nets order details.
+| Register Guest Customers | If **Yes**, an account will be created for guest customers. 
+| Send order emails | If **Yes**, Magento will automatically send the default order email. If **No**, email configuration need to be set separately. 
+| Send individual order items to Nexi Group | If **Yes**, every order item, such as the product a customer buys and shipping, will be sent to the checkout gateway as a separate item. If **No**, all order items will be sent to the Nexi Group checkout gateway as one item with tax included. It enables support for custom surcharges and discounts.
+| Url for Terms page | The URL to the terms and conditions of your webshop.
+| Url for Privacy Policy page | The URL to the privacy and cookie settings of your webshop.
+| Replace checkout url with Checkout | This is a mandatory setting that needs to be set to **Yes** if you are using an embedded checkout.
+| Add Nexi Group Css file | If **Yes**, the `Nets.css ` stylesheet will be added to the frontend.
+| Show Nexi Group Success Page | If **Yes**, then the default Checkout success page will be shown after a completed payment.
+| Completed checkout order status | The status that order will have after your customer has completed the checkout process.
+| Use Invoice Fee | If **Yes**, it is possible to add a fee for invoice payments.
+| Display Newsletter checkout | **Yes**/**No**.
+| Display Discount form | **Yes**/**No**.
+| Display link to a different payment method | **Yes**/**No**.
+| Display Additional block | **Yes**/**No**.
+| Display default Magento shipping methods | **Yes**/**No**.
+| Display Checkout shipping methods | Set to **Yes** only for Unifaun shipping wallet when using an embedded checkout.
+| Display Cross Sell Products | **Yes**/**No**. 
+| Number of Products | The number of cross sell products.
+
+<Check>
+You've now installed and configured the Checkout webshop module. If you have further questions, please see the troubleshooting section below or reach out to our [support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Order management
+
+It's possible to manage orders directly in the Magento administration panel:
+
+1. Navigate to **Sales > Order > View**.
+2. Click on an order line to access order details.
+3. Choose your desired action, **refund/partial refund**, or update the order status. The Checkout plugin will synchronize automatically. The payment status will also be updated in [Checkout portal](https://portal.dibspayment.eu).
+
+<Info>
+All transactions performed by Nexi Group are accessible in [Checkout Portal](https://portal.dibspayment.eu/).
+</Info>
+
+![Magento 2 Sales Orders](https://images.ctfassets.net/di680may5c0k/36D6ggdnUCgn7R6INDMzUV/e48201c2fb9a5007d47684ef4c14dc4c/Orders-Sales-Magento2-Admin.png?w=1274&h=400&q=50&fm=png)
+
+## Troubleshooting
+
+Below are some of the most common configuration errors, their cause and steps that you can follow to solve them.
+
+## Nexi Group payment plugin is not visible as a payment method
+
+- Temporarily switch to the Magento 2 standard template. Custom templates might need additional changes to ensure correct display. Consult with your web designer or developer.
+
+### Nexi Group payment window is blank
+
+- Ensure your integration keys in the Nexi Group app settings are correct and do not contain additional blank spaces.
+- Temporarily deactivate third party plugins that might affect the functionality of the app.
+- Check if there are any temporary technical inconsistencies: https://easy-status.developers.nets.eu/
+
+### Payments in live mode don't work
+- Ensure you have an approved Live Checkout account for production.
+- Ensure your Live Checkout account is approved for payments with the selected currency.
+- Ensure payment method data is correct and supported by your Checkout agreement.
+
+## Go live checklist
+
+For more information, refer to the section [Go-live checklist](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Magento Marketplace">
+  </Card>
+  <Card title="Download">
+  </Card>
+  <Card title="Source">
+  </Card>
+</Columns>
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

@@ -1,0 +1,115 @@
+---
+title: "Klarna"
+description: "Dieser Leitfaden beschreibt die Grundlagen der Verwendung von Klarna über Checkout und enthält Anweisungen für eine reibungslose Implementierung."
+---
+
+## Überblick
+
+Klarna ist eine Zahlungsmethode vom Typ Wallet, mit der Ihre Verbraucher während des Checkouts aus einer Vielzahl von Zahlungsmethoden wählen können. Dies macht es für Verbraucher bequem, Waren in allen Preisklassen zu kaufen.
+
+Nach der Auswahl von Klarna im Checkout wird der Verbraucher in die spezielle Umgebung von Klarna weitergeleitet, in der er die jeweilige Zahlungsmethode auswählt. Die angezeigten Zahlungsmethoden werden von Klarna festgelegt und basieren auf dem Transaktionsbetrag und der Rechnungsadresse des Verbrauchers. Nach Abschluss des Kaufs kehrt der Verbraucher auf Ihre Website zurück und die Bestellung wird abgeschlossen.
+
+## Zahlungsoptionen
+
+### Zahlungsoptionen
+| Zahlungsmethode | Schweden SEK | Norwegen NOK | Dänemark DKK | Finnland EUR | Schweiz CHF |
+| --- | --- | --- | --- | --- | --- |
+| Pay Later – Rechnung in 30 Tagen | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Pay Later – Pay in 3 | ❌ | ❌ | ✅ | ❌ | ❌ |
+| Financing – Finanzierung | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Pay Now – Pay by Card | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Pay Now – Direct Debit | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Pay Now – Direct Bank Transfer | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Pay Now – Swish | ✅ | ❌ | ❌ | ❌ | ❌ |
+
+- __Pay in 3 oder 4 (auch als Ratenzahlung bekannt):__ Verbraucher zahlen den Kauf in drei oder vier zinsfreien Raten.
+- __Monatliche Ratenzahlung (auch als Financing bekannt):__ Verbraucher zahlen den Kauf über eine längere Laufzeit von bis zu 36 Monaten ab, was Zinsen beinhalten kann.
+- __Pay later:__ Verbraucher zahlen den Kauf in einer einzigen Zahlung innerhalb von 30 Tagen.
+- __Pay now:__ Verbraucher zahlen den Kauf sofort über eine verknüpfte Karte, Lastschrift oder Banküberweisung.
+
+## Funktionen
+
+### Klarna-Funktionen
+| Name | Beschreibung |
+| --- | --- |
+| Zahlungstyp | Wallet |
+| Wiederkehrende Zahlungen/Abonnements | ❌ |
+| Reservierung/Auth | ✅ bis zu 28 Tage |
+| Belastung/Capture | ✅ |
+| Teilbelastung | ✅ |
+| Rückerstattung | ✅ |
+| Teilrückerstattung | ✅ |
+| Bestellung stornieren | ✅ |
+| Zahlungsinformationen abrufen | ✅ |
+| CPSP | ✅ |
+| Währungen | SEK, NOK, DKK, EUR, CHF |
+| Länder | SE, NO, DK, DE, AT |
+
+## Aktivierung
+
+Um Klarna als Zahlungsmethode zu aktivieren, müssen Sie den Onboarding-Prozess abschließen.
+
+<Info>
+Wenn Sie bereits über ein bestehendes Checkout-Portal-Konto verfügen, müssen Sie sich für die Aktivierung an den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) wenden.
+</Info>
+
+## Benutzerführung
+
+1.\tDer Verbraucher wählt Klarna als Zahlungsmethode in Easy aus und drückt auf „Bezahlen".
+2.\tEr wird in die von Klarna gehostete Umgebung weitergeleitet.
+3.\tEr authentifiziert sich bei Klarna und erhält die für den jeweiligen Kauf verfügbaren Zahlungsmethoden angezeigt. (Abhängig von Bestellbetrag, Währung, Land usw.)
+4.\tEr wählt die bevorzugte Zahlungsmethode und schließt den Kauf ab.
+5.\tDer Verbraucher wird auf die Website des Händlers (Bestätigungsseite) zurückgeleitet.
+
+## Integration
+
+Damit Verbraucher Klarna-Zahlungen im Checkout verwenden können, müssen wir die Informationen und die Adresse des Verbrauchers erhalten.
+
+Dies kann von Ihnen auf zwei Arten ermöglicht werden:
+
+- Aktivieren Sie die Adressfelder im Checkout, z. B. indem Sie *checkout.merchantHandlesConsumerData* auf false setzen oder aus der Anfrage zur Zahlungserstellung weglassen, sodass der Verbraucher seine Informationen im Checkout eingeben kann.
+- Oder durch direktes Einfügen der Verbraucherdaten in die Anfrage zur Zahlungserstellung.
+
+Wenn Sie die Informationen in die Anfrage zur Zahlungserstellung einfügen, müssen Sie sicherstellen, dass die folgenden Informationen im checkout-Objekt enthalten sind:
+
+```text Including the consumer's data in the create payment request for the checkout object
+{
+    ...
+    "checkout": {
+        ...
+        "merchantHandlesConsumerData": true,
+        ...
+        "consumer": {
+            "email": "email@domain.com",
+            "shippingAddress": {
+                "addressLine1": "Address 1",
+                "addressLine2": "",
+                "postalCode": "12345",
+                "city": "City",
+                "Country": "ABC"
+            },
+            "phoneNumber": {
+                "number": "701234567",
+                "prefix": "+46"
+            },
+            "privatePerson": {
+                "firstName": "Firstname",
+                "lastName": "Lastname"
+            }
+        }
+    }
+    ...
+}
+```
+
+<Warning>
+Wenn Sie eine Shop-Plattform mit einem unserer Plugins verwenden, beachten Sie bitte, dass das Telefonnummernfeld für Klarna obligatorisch sein muss.
+
+Weitere Informationen finden Sie in der [Anleitung der einzelnen Webshop-Plugins](/use-a-webshop-plugin).
+</Warning>
+
+## Testen
+
+Checkout bietet die Möglichkeit, Klarna zu testen, wie in [dieser Übersichtstabelle](/test-and-deploy) aufgeführt.
+
+Weitere Informationen finden Sie unter „Wallet-Verarbeitung testen" für Klarna.

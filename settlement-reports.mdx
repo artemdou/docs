@@ -1,0 +1,70 @@
+---
+title: "Settlement Reports"
+description: "Learn about Settlement Reports for Nexi Checkout."
+---
+
+## Updates on settlement reports
+
+The proposed process affects the Settlement Reports as such: 
+
+- New definitions of current terms and addition of new terms in the existing Action column in the spreadsheet.
+- New columns containing new items.
+
+### Settlement report templates for day 1 and day 2
+
+- [Day 1 - Settlement Report Template](https://assets.ctfassets.net/di680may5c0k/2tzl8Y4DwaLzE1RwEzPr7C/1ce7eb85bcbce687b3e457e9c75e7ebb/day1_100178972_Payout_Settlement_5f6462b2ce64389fabb3566cb2895c48__3_.xlsx)
+- [Day 2 - Settlement Report Template](https://assets.ctfassets.net/di680may5c0k/4grOFK17IulGYWvLQpxQDk/b75dd24d26f4f0f9f360164fb176701d/day2_100178972_Payout_Settlement_23ce520922183121b7180654b0e4f064__5_.xlsx)
+
+## 1. New definitions within "Action" column
+
+- The existing "Charge" action now means Payment amount being paid out.  
+- The existing "Refund" action now means Refund amount being deducted. 
+- New actions:
+  - CHARGE
+  - REFUND
+  - CHARGE_FEE
+  - REFUND_FEE
+  - FEE
+  - ADJUSTMENT
+  - CHARGEBACK
+
+<Info>
+FEE is singular.
+</Info>
+
+![new terms settlement reports](https://images.ctfassets.net/di680may5c0k/6zpndJwBRC6tstdDMjXqN8/329b984c88d3be0755efa0b122a3e9ae/new_terms_settlement_reports.png?w=480&h=104&q=50&fm=png)
+
+## 2. Payout details report
+
+- Additional rows to be seen in payout details report for chargebacks and adjustments.
+- Action column has `CHARGEBACK ` and `ADJUSTMENT `.
+
+Below you can find the samples of the payout details report:
+
+- [Sample Payout Combined DKK EUR NOK](https://assets.ctfassets.net/di680may5c0k/4F2VEZPDUmBUgiXYZUoINW/e6955689739f20a33b2b518233183332/Sample_Payout_Combined_DKK_EUR_NOK_2023-05-12_2023-05-12-40-.xlsx)
+- [Sample Payout Settlement](https://assets.ctfassets.net/di680may5c0k/CvBu8cHMLGuu4rAFlhrDd/ed2f61d50ddd4d36c2a0ea38c31c554c/Sample_Payout_Settlement_e41d40d256c647989ed3e1cc60ce1f0e-84-.csv)
+- [Sample Payout Summary DKK EUR NOK](https://assets.ctfassets.net/di680may5c0k/7eQagzPOVfvSgSojMRZXtB/440ef614f2d8e38cfc6c1ea76bad2fec/Sample_Payout_Summary_DKK_EUR_NOK_2023-05-12_2023-05-12-76-.csv)
+
+## 3. New columns with added terms:
+
+- "Fee Type" column - will show information on payment type, Gross or Net. 
+- "Transaction Payout Reference" column will show information if a payment is __paid out__ and a __transaction fee is late__.
+- "Transaction Amount" column will show information if a payment has been paid out previously and now a __transaction fee is deducted__.
+- "Note" column will explain fees or payments that will occur later as reference.
+
+![New columns settlement report](https://images.ctfassets.net/di680may5c0k/1AqH1XBio1PbCjTqZEEsE5/fe334e159759fe41937aaa0be55daec9/New_columns_Settlement_reports.png?w=758&h=214&q=50&fm=png)
+
+## API summary
+
+1. Additional attributes `transactionPayoutReference `, `feeType `, `transactionAmount ` added in `paymentActions ` child structure.
+2. `paymentAction ` in  `paymentActions ` child structure will have one of the values : `CHARGE `, `CHARGE_FEE `, `FEE `, `REFUND `, `REFUND_FEE `.
+3. Based on what is settled in which settlement, their respective amount will be shown or set to __0__ in the child “*paymentActions*” structure. i.e., as shown below example,
+  -  if only CHARGE is settled then "*amount*": __201__, will have charge amount, and if fee is not settled in the same settlement, then "*fee*": __0__ , "*flexibleFee*": __0__, "fixedFee": __0__.
+  - if only FEE is settled then "*fee*": __-304__, "*flexibleFee*": __-4__,
+  "*fixedFee*": __-300__ will have Fee amount, and if charge amount is not settled in the same settlement, then "*amount*": __0__,
+  - If __FEE__ and __CHARGE__ both are settled in the same settlement then,  amount will have charge amount "*amount*": __9700__ and fee amount will be shown "*fee*": __-304__, "*flexibleFee*": __-4__, "*fixedFee*": __-300__,
+  - Same goes for refund.
+
+## Payout summary
+
+Chargebacks Amount, Adjustment Amount to be visible in Payout Summary API response, just like we have for charges and refunds today.

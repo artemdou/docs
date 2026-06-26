@@ -1,0 +1,69 @@
+---
+title: "Checkout für WooCommerce"
+description: "Dieser Leitfaden beschreibt, wie das Checkout-Webshop-Modul für WooCommerce installiert, konfiguriert und verwendet wird."
+---
+
+Erfordert mindestens: WordPress 5.0, WooCommerce 5.6.0, PHP 7.4 oder höher
+
+Getestet bis: WordPress 6.8.1, WooCommerce 8.8.0, PHP 8.2
+
+Aktuelle Plugin-Version: 2.14.1
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie den Leitfaden:
+- So [erstellen Sie ein Testkonto für Checkout](/create-a-checkout-portal-account) und das Easy Portal.
+</Warning>
+
+## Übersicht
+
+Unser WooCommerce-Plugin ist die perfekte Erweiterung, um das volle Potenzial von Checkout für Ihren WooCommerce-Shop zu nutzen. Checkout unterstützt die gängigsten Zahlungsmethoden.
+
+<Info>
+Im Folgenden sehen Sie alle von Checkout angebotenen Zahlungsmethoden. Diese Liste bezieht sich auf alle Märkte.
+
+Je nach Land oder Region kann die Liste variieren. Wenn Sie unsicher sind, ob eine bestimmte Zahlungsmethode in Ihrem Land oder Ihrer Region verfügbar ist, wenden Sie sich bitte an den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) für weitere Informationen.
+</Info>
+
+![Checkout Plugin - WooCommerce](https://images.ctfassets.net/di680may5c0k/3XNa5J7x3UdRLmADDtoNAr/d3a6bdedd404237ca33c98930d4b19a5/plugin_woocommerce.jpg?w=1576&h=641&fl=progressive&q=50&fm=jpg)
+
+## Fehlerbehebung
+
+Die Fehlerbehebung für Checkout wird von unserem WooCommerce-Experten Krokedil AB betreut. Bitte sehen Sie sich die vollständige Dokumentation an unter: [https://docs.krokedil.com/nexi-checkout/troubleshooting/](https://docs.krokedil.com/nexi-checkout/troubleshooting/)
+
+Wenn Sie nach Durchführung der Schritte unter dem obigen Link weiterhin Probleme haben, können Sie sich gerne unter [support@krokedil.se](mailto:support@krokedil.se) an uns wenden.
+
+Bevor Sie ein Support-Ticket erstellen, empfehlen wir Ihnen, das Problem zunächst selbst zu lokalisieren. Oder zumindest – die Ursache des Problems festzustellen und sich so weit wie möglich vorzubereiten.
+
+### Das Nexi Group-Zahlungsfenster ist leer
+
+- Stellen Sie sicher, dass Ihre Integrationsschlüssel in den Nexi Group-App-Einstellungen korrekt sind und keine zusätzlichen Leerzeichen enthalten.
+- Deaktivieren Sie vorübergehend Plugins von Drittanbietern, die die Funktionalität der App beeinträchtigen könnten.
+- Prüfen Sie, ob es vorübergehende technische Probleme gibt: https://easy-status.developers.nets.eu/
+
+### Zahlungen im Live-Modus funktionieren nicht
+- Stellen Sie sicher, dass Sie ein genehmigtes Live Checkout-Konto für die Produktion haben.
+- Stellen Sie sicher, dass Ihr Live Checkout-Konto für Zahlungen mit der gewählten Währung freigegeben ist.
+- Stellen Sie sicher, dass die Zahlungsmethodendaten korrekt sind und von Ihrem Checkout-Vertrag unterstützt werden.
+
+## Go-live-Checkliste
+
+Weitere Informationen finden Sie im Abschnitt [Go-live-Checkliste](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Download">
+  </Card>
+  <Card title="Marketplace">
+  </Card>
+  <Card title="Dokumentation">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Konto erstellen](/create-a-checkout-portal-account)
+- [Testumgebung](/test-environment)
+- [Test der Kartenverarbeitung](/test-card-processing)
+- [Test der Rechnungs- und Ratenzahlungsverarbeitung](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

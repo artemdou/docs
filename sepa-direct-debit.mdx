@@ -1,0 +1,107 @@
+---
+title: "SEPA Direct Debit"
+description: "This guide outlines the basics of using SEPA Direct Debit Payments via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+## Before you start
+
+<Warning>
+SEPA Direct Debit can currently only be integrated via Ratepay.
+</Warning>
+
+<Info>
+To process SEPA Direct Debit payments, Checkout partners with SEPA. Therefore, an additional agreement is required before you can enable SEPA Direct Debit in your Checkout portal. Please contact our Customer Service Team to get that process started.
+</Info>
+
+## Overview
+
+### Integration
+
+Checkout has an integration to SEPA Direct Debit.
+
+In order for you to completely integrate SEPA Direct Debit, the following steps should be taken:
+
+1. Sign the contract with Sales.
+2. Complete onboarding.
+3. __Activate the Ratepay payment method__ within the Checkout portal.
+
+The Ratepay solution offers two options:
+
+- __The "SEPA DD (Guaranteed)" option__ - the solution gives you a payment guarantee.
+- __The conventional Direct Debit option__ - this solution offers no payment guarantee. Please note that with this option, the IBAN number from the local current account/card is mandatory. This process also contains a security check that consists of your address data and your date of birth (this data can be saved for future security checks).
+
+### Methods
+
+SEPA Direct Debit payments are Account to Account payments. That means that certain card related operations are not applicable.
+
+**Applicable methods are:**
+
+-	Create payment
+-	Retrieve payment
+-	Update reference information
+-	Update order
+-	Terminate payment
+
+After a successful payment, it will take up to 5 days before the amount will appear in your Checkout Payment account.
+
+## Functionalities
+
+### Functionality Table SEPA
+|  |  |
+| --- | --- |
+| Payment type | A2A |
+| Subscriptions | ❌ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ✅ |
+| Cancel payment | ❌ |
+| Direct charge | ✅ |
+| Currencies | EUR |
+| Countries | DE, AT |
+
+<Info>
+You can learn more about the payment operations from [here](/order-management/#build-payment-operations).
+</Info>
+
+## Activation
+
+To activate SEPA Direct Debit as a payment method and to add it to your Checkout portal, you need to complete the onboarding journey.
+
+<Info>
+If you already have an existing Checkout portal account, you need to [contact Support](https://www.nets.eu/payments/contact-us) for this.
+</Info>
+
+Once the contract is signed, you can activate SEPA Direct Debit payments in your Checkout portal.
+
+1.	Find to the "Add-on" page in the Checkout admin portal
+2.	Fill out the form 
+3.	Click Onboard
+
+## User Journey & Payment Flow
+
+This following section will describe the user journey and payment flow for a consumer:
+
+1. When your consumer chooses SEPA Direct Debit as a payment method in the checkout, they will be prompted to enter their:
+   -  IBAN number
+   -  Date of birth (dd-mm-yyyy)
+   -  CVC (4 digits)
+2. Consent to the mandate.
+3. Accept the Terms and Conditions.
+4. After confirming the payment by clicking “Pay” they get a security prompt from their bank.
+5. The payment is completed after confirming the security prompt.
+
+
+
+<Warning>
+The maximum ammount per basket for SEPA Direct Debit payments is 3000 EUR.
+</Warning>
+
+![Sepa Direct Debit XO screen](https://images.ctfassets.net/di680may5c0k/2DbJd4sl7lYJsFiFDscXEK/ebfdbdddb962f5265cabeeb07a00da1b/SEPA_Direct_Debit_XO_page.jpeg?w=499&h=960&fl=progressive&q=50&fm=jpg)
+
+## Testing
+
+Checkout currently does not provide the possibility to test for SEPA Direct Debit as seen in this [overview table](/test-data).
+
+When it is available, you will be able to see it in the [Nexi Group testing environment](/test-environment).
+
+

@@ -1,0 +1,92 @@
+---
+title: "Cancel Payments"
+description: "Learn about Cancel Payments for Nexi Checkout."
+---
+
+## Cancel payment
+
+When a customer has completed the checkout flow and accepted the payment, the specified amount has been reserved (but not charged) on your customer's payment card.
+
+If a customer cancels an order before the goods are shipped, you have the possibility to cancel the payment. By canceling a payment, the reserved money will be released to the customer's payment card.
+To cancel a payment, call the method [Cancel payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-paymentid-cancels-post) as demonstrated in the following example:
+
+<Info>
+It is not possible to cancel a payment that has been already charged. In case you have already charged a payment you need to do a refund. You can read more about refunds below.
+</Info>
+
+### Cancel payment
+
+<CodeGroup>
+
+```php Cancel payment (PHP)
+<?php
+
+$paymentId = "<PAYMENT_ID>";
+$payload = '{
+  "amount": 180000
+}';
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId . '/cancels');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo("Status code: " . $http_code . "\n");
+echo $json_pretty;
+```
+
+```javascript Cancel payment (Node)
+const http = require("https");
+const fs = require("fs");
+
+const paymentId = "<PAYMENT_ID>";                // Replace payment ID
+const payload = fs.readFileSync('payload.json'); // Replace body
+const secretKey = "<YOUR_SECRET_KEY>";           // Replace key
+
+const options = {
+  "method": "POST",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId + "/cancels",
+  "headers": {
+    "content-type": "application/json",
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write(payload);
+req.end();
+```
+
+</CodeGroup>
+
+<Info>
+Remember to replace the `amount ` in the payload so that it matches your payment.
+</Info>
+
+You can subscribe to the following webhook events to track cancel requests associated with a payment:
+
+- [`payment.cancel.created `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#cancel-created)
+- [`payment.cancel.failed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#cancel-failed)
+
+It is not possible to cancel a payment that has been already charged. In case you have already charged a payment you need to do a refund. You can read more about charges and refunds in the following sections.

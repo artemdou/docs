@@ -1,0 +1,144 @@
+---
+title: "Riverty"
+description: "Erfahren Sie mehr über Riverty für Nexi Checkout."
+---
+
+## Bevor Sie beginnen
+
+<Info>
+Bevor Sie diese Zahlungsmethode in Ihrem Checkout Portal aktivieren können, müssen Sie die Allgemeinen Geschäftsbedingungen akzeptieren. Bitte wenden Sie sich an unser Kundenserviceteam, um den Prozess zu starten.
+</Info>
+
+## Übersicht
+
+Checkout verfügt über eine Integration mit [Riverty](https://www.riverty.com/ "Riverty Homepage"), die es Ihren Kunden ermöglicht, durch Aufteilung der Zahlungen in Raten zu bezahlen.
+
+## Funktionalitäten
+
+### Funktionstabelle Riverty
+|  |  |
+| --- | --- |
+| Zahlungsart | Ratenzahlung, Rechnung, Kampagne |
+| Abonnements | ❌ |
+| Rückerstattungen | ✅ |
+| Teilrückerstattung | ✅ |
+| Bestellung aktualisieren | ✅ |
+| Zahlung stornieren | ✅ |
+| Reservierung & Belastung | ✅ |
+| IPSP | ✅ |
+
+| Typ | Währungen | Länder |
+| --- | --- | --- |
+| Ratenzahlung | EUR | DE, AT |
+| Rechnung | SEK, EUR | SE, DE, AT |
+| Kampagne | SEK | SE |
+
+<Info>
+Mehr über die Zahlungsvorgänge erfahren Sie [hier](/order-management/#build-payment-operations).
+</Info>
+
+## Aktivierung
+
+Um Riverty als Zahlungsmethode zu aktivieren und in Ihrem Checkout Portal hinzuzufügen, müssen Sie den Onboarding-Prozess abschließen.
+
+<Info>
+Wenn Sie bereits ein bestehendes Checkout Portal-Konto haben, müssen Sie hierfür [den Support kontaktieren](https://www.nets.eu/payments/contact-us).
+</Info>
+
+
+
+## Customer Journey
+
+Im folgenden Abschnitt werden die Customer Journey und der Zahlungsablauf für einen Kunden beschrieben:
+
+<Info>
+Je nachdem, in welchem Land der Kunde ansässig ist, kann die persönliche Identifikationsnummer unterschiedlichen IDs entsprechen, z. B. Sozialversicherungsnummer, NemID, BankID usw. Diese wird für eine Bonitätsprüfung im Hintergrund verwendet.
+</Info>
+
+1. Wenn Ihr Kunde Riverty als Zahlungsmethode im Checkout auswählt, wird er aufgefordert, zwischen zwei Optionen zu wählen:
+   - Später bezahlen
+   - Ratenzahlung
+2. Anschließend muss er seine persönliche Identifikationsnummer eingeben.
+3. Die Allgemeinen Geschäftsbedingungen akzeptieren.
+4. Auf "Bezahlen" klicken.
+5. Von hier aus wird er in einem Pop-up-Fenster zur Seite mit der starken Authentifizierung weitergeleitet.
+6. Wie zuvor in der Infobox erwähnt, hängt die folgende Authentifizierung davon ab, aus welchem Land der Kunde stammt.
+7. Nach der Bestätigung und Validierung der Identität wird der Kunde zurück zum Checkout weitergeleitet, und die Zahlung wird genehmigt.
+8. Schließlich wird der Belastungsbetrag reserviert.
+
+## Zahlungsablauf
+
+Nachdem Ihre Kunden ihre Zahlung während des Checkout-Vorgangs bestätigt haben, wird das Geld an Ihr Checkout Portal gesendet.
+
+<Warning>
+Bei Riverty mit Rechnungen ist es wichtig zu beachten, dass die Bestellanforderung mit allen erforderlichen Parametern korrekt angegeben werden muss. Dazu gehören Parameter wie:
+- unitPrice
+- taxRate
+- taxAmount
+- grossTotalAmount
+- netTotalAmount
+- quantity
+
+Einige der Parameter sind optional, aber für __Riverty__ sind diese Parameter erforderlich, da ungültige Bestellpositionen andernfalls dazu führen, dass die Zahlung fehlschlägt. Sie können alle Parameter der Payment API für „Create Payment" [hier](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items) und für „Charge Payment" [hier](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-charges-post-body-orderitems) einsehen.
+
+Das folgende Beispiel zeigt eine korrekt ausgefüllte Bestellposition:
+</Warning>
+
+```json Beispiel für eine Bestellposition für Riverty
+{
+	"grossTotalAmount": 11900,
+	"name": "Item",
+	"netTotalAmount": 9520,
+	"quantity": 1,
+	"reference": "490",
+	"taxRate": 2500,
+	"taxTotalAmount": 2380,
+	"unit": "pcs",
+	"unitNetPrice": 9520
+}
+```
+
+## Integration
+
+Damit Kunden Riverty-Zahlungen im Checkout nutzen können, benötigen wir die Informationen und die Adresse des Kunden.
+
+Dies kann von Ihnen ermöglicht werden, indem Sie entweder:
+
+- Die Adressfelder im Checkout aktivieren, z. B. *checkout.merchantHandlesConsumerData* auf false setzen oder es aus der Create Payment-Anforderung weglassen, sodass der Kunde seine Informationen im Checkout eingeben kann.
+- Oder die Daten des Kunden direkt in der Create Payment-Anforderung enthalten.
+
+Wenn Sie die Informationen in der Create Payment-Anforderung enthalten, müssen Sie sicherstellen, dass die folgenden Informationen im Checkout-Objekt enthalten sind:
+
+```text Einbeziehung der Kundendaten in die Create Payment-Anforderung für das Checkout-Objekt
+{
+    ...
+    "checkout": {
+        ...
+        "merchantHandlesConsumerData": true,
+        ...
+        "consumer": {
+            "email": "email@domain.com",
+            "shippingAddress": {
+                "addressLine1": "Address 1",
+                "addressLine2": "",
+                "postalCode": "12345",
+                "city": "City",
+                "Country": "ABC"
+            },
+            "phoneNumber": {
+                "number": "701234567",
+                "prefix": "+46"
+            },
+            "privatePerson": {
+                "firstName": "Firstname",
+                "lastName": "Lastname"
+            }
+        }
+    }
+    ...
+}
+```
+
+## Testen
+
+Checkout bietet die Möglichkeit, Riverty zu testen. Sie können Riverty-Zahlungen in der [Nexi Group-Testumgebung](/test-environment) testen.

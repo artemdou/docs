@@ -1,0 +1,51 @@
+---
+title: "Surcharge"
+description: "Learn about Surcharge for Nexi Checkout."
+---
+
+## What is a surcharge?
+
+A **surcharge** is an additional fee applied to the end customer's order total.\
+It is charged under specific conditions to cover extra costs associated with certain types of payments.
+
+The surcharge amount paid by the customer is equal to the fee applied for the given payment charge.
+
+Surcharge is **not enabled by default** for merchants and can only be configured in countries where it is legally permitted.
+
+Surcharge is legally permitted for the following countries
+
+- Denmark,
+- Norway
+
+## Supported Payment Methods
+
+**Cards**
+
+Surcharge is supported for card payments **on non-stored cards**.\
+It is applied when the card used meets **either** of the following criteria:
+
+- It is a **business** card
+- It is issued **outside the EEA**
+
+It is only supported for VISA, Mastercard and Maestro.
+
+## Working with Surcharge
+
+The surcharge amount is included in all payment operations: **reservation, charge, and refund**.\
+The system automatically handles the appropriate surcharge amounts, including **proportional amounts for partial operations**, resulting in a prorated fee.
+
+This means there is **no difference in how you execute operations** compared to regular payments.
+
+There is **no need to specify the surcharge amount manually** — it is calculated and returned alongside the order amounts.\
+See the API documentation for more details.
+
+This makes surcharge handling **fully transparent** from an integration perspective:
+
+- You can **ignore surcharge values** and integrate as if they don't exist.
+- Or, you may **use them in your application** if they are relevant to your use case.
+
+## How to activate
+
+**How to activate** Surcharge needs to be activated by Nets. Please contact our Sales and Activation team on: [ecom-salessupport@nets.eu](mailto:ecom-salessupport@nets.eu)
+
+Once it is activated you need to integrate with the necessary webhooks which can be found here [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#payments)

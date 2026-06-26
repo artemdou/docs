@@ -1,0 +1,62 @@
+---
+title: "Trustly"
+description: "This guide outlines the basics of using Trustly via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+## Before you start
+
+<Info>
+Before you can enable Trustly in your Checkout portal, an additional agreement is required. Please contact our Customer Service Team to get that process started.
+</Info>
+
+## Overview
+
+Checkout has an integration to Trustly which enables your consumers to pay via their Trustly account.
+
+## Functionalities
+
+### Functionality Table Trustly
+|  |  |
+| --- | --- |
+| Payment type | A2A |
+| Subscriptions | ❌ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ✅ |
+| Cancel payment | ✅ |
+| Direct charge | ✅ |
+| CPSP | ✅ |
+| Currencies | DKK, EUR, GBP, NOK, PLN, SEK |
+| Countries | AT, CZ, DE, DK, EE, ES, FI, GB, LV, LT, NL, NO, PL, SE, SK |
+
+<Info>
+You can learn more about the payment operations from [here](/order-management/#build-payment-operations).
+</Info>
+
+## Activation
+
+To activate Trustly as a payment method and to add it to your Checkout portal, you need to complete the onboarding journey.
+
+<Info>
+If you already have an existing Checkout portal account, you need to [contact Support](https://www.nets.eu/payments/contact-us) for this.
+</Info>
+
+
+
+## User Journey
+
+This following section will describe the user journey for a consumer:
+
+1. Consumers chooses “Trustly” on the payment selection page.
+2. Consumers are asked to choose the bank.
+3. Consumers have the option to save payment details for future purchases.
+4. Consumers gets redirected to the bank page (login to their account).
+5. After successful login, the consumer is redirected back to Trustly to confirm their payment.
+6. They will see their payment details, before authorizing the payment using SCA.
+7. Now the payment is complete and the customer is directed bank to your shop.
+
+## Testing
+
+Checkout provides the possibility to test for Trustly. You can test Trustly payments in the [Nexi Group testing environment](/test-environment).
+
+

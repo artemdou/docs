@@ -1,0 +1,130 @@
+---
+title: "Complete Example for Sending a Checkout Paylink Request"
+description: "The examples above are meant for a Linux command-line."
+---
+
+## Before you start
+
+Please make sure that have completed the prerequisite steps outlined from [here](/checkout-paylink-and-one-page-shop-solution) before you can proceed with this.
+
+You will need a [Checkout Paylink account](/before-you-start/#build-1-nexi-checkout-paylink-account), so that you know your [Paylink instance name](/before-you-start/#build-3-paylink-instance-name) and your [API Secret - Integration keys](/access-your-integration-keys/).
+
+<Warning>
+This and the following steps are only relevant for you, if you want to automate your Paylink or One-Page-Shop payment processes by using the API. For most cases, the functionality provided through your __Checkout Paylink account__ is sufficient.
+</Warning>
+
+## Scenario
+
+For the following example, we will assume this scenario: 
+
+__A paylink needs to be created with these values:__
+
+- Amount is 89,25 CHF, VAT rate is 7.7%
+- Visa is offered as the only payment method
+- Your product stock keep unit value (SKU) is P01122000
+- The page title shown on the payment page is going to be "Test", the description will say "Testdescription" and the purpose will be "The purpose of the payment."
+- The contact name is "Max Mustermann"
+- The API Signature will consist of the made up value "a12345678"
+
+## 1. Build Query String
+
+First, we build the query string.
+
+<Warning>
+The query string has to be (RFC1738)[https://www.ietf.org/rfc/rfc1738.txt] encoded. That means, you have to replace spaces by "+" as in `purpose=This+is+a+test `. Also, the left and right square brackets (as in `pm[0]=visa `) have been replaced by `%5B ` and `%5D ` respectively.
+</Warning>
+
+For our example, the encoded query string would look like this:
+
+```html Example for an encoded query string - line breaks added for readability
+amount=8925&
+vatRate=7.7&currency=CHF&
+sku=P01122000&
+pm%5B0%5D=visa&
+preAuthorization=0&
+reservation=0&
+referenceId=975382&
+title=Test&
+description=Testdescription&
+purpose=This+is+a+test&
+fields%5Bforename%5D%5Bmandatory%5D=1&
+fields%5Bforename%5D%5BdefaultValue%5D=Max&
+fields%5Bsurname%5D%5Bmandatory%5D=0&
+fields%5Bsurname%5D%5BdefaultValue%5D=Muster
+```
+
+<Info>
+It is a common error, that the query string is not encoded according to RFC1738 encoding rules.
+</Info>
+
+## 2. Calculate API Signature
+
+We now need to calculate the binary hmac hash (API Signature) using the query string and the Checkout Paylink account's API Secret as a key.
+
+```bash 2a) Set the queryString variable (command line example)
+queryString="amount=8925&vatRate=7.7&currency=CHF&sku=P01122000&preAuthorization=0&reservation=0&referenceId=975382&title=Test&description=Testdescription&purpose=This+is+a+test&fields%5Bforename%5D%5Bmandatory%5D=1&fields%5Bforename%5D%5BdefaultValue%5D=Max&fields%5Bsurname%5D%5Bmandatory%5D=0&fields%5Bsurname%5D%5BdefaultValue%5D=Muster"
+```
+
+Using the `$queryString ` variable from the example above, we now calculate the API Signature. In our example, we use the fictional `a12345678` value as the API Secret:
+
+```bash 2b) Calculate API Signature - command line example
+digest=`echo -n $queryString| openssl dgst -sha256 -hmac "a12345678" -binary`
+```
+
+In a final step, the API Signature gets encrypted:
+
+```bash 2c) openssl encrypt API Signature - command line example
+apiSignature=`echo -n $digest| openssl enc -base64`
+```
+
+The result of our example would be: 
+`oZip7nkIb0HJsqX/EgIb7hF5aAov9y2bQhTnzs+0iF0=`
+
+This is how the string looks urlencoded: 
+`oZip7nkIb0HJsqX%2FEgIb7hF5aAov9y2bQhTnzs%2B0iF0%3D `
+
+## 3. Build the Request's Body (Payload)
+
+Now that we have the calculated API Signature, we build the requests payload. The payload consists of name - value pairs, similiar to the ones that we used as query parameter-values for the calculation of the API Signature.
+
+<Warning>
+The payload data has to be (url encoded) [http://www.ietf.org/rfc/rfc3986.txt)] and spaces will be percent encoded: "%20".
+</Warning>
+
+## 4. Send the Complete Request
+
+In order to send the complete Paylink request, your `instance ` Name has to be added to the query's header.
+
+`POST "https://api.nets-pay.link/v1.0/Invoice/?instance=INSTANCE_NAME"`
+
+Here is a commandline example for the complete request (calculation of the API Signature included):
+
+```bash Complete Paylink request - command line example
+apiSignature=`echo -n "amount=8925&vatRate=7.7&currency=CHF&sku=P01122000&pm%5B0%5D=visa&preAuthorization=0&reservation=0&referenceId=975382&title=Test&description=Testdescription&purpose=This+is+a+test&fields%5Bforename%5D%5Bmandatory%5D=1&fields%5Bforename%5D%5BdefaultValue%5D=Max&fields%5Bsurname%5D%5Bmandatory%5D=0&fields%5Bsurname%5D%5BdefaultValue%5D=Muster" | openssl dgst -sha256 -hmac "INSTANCE_API_SECRET" -binary | openssl enc -base64`
+
+curl --request POST "https://api.nets-pay.link/v1.0/Invoice/?instance=INSTANCE_NAME" \
+  --data-urlencode "amount=8925" \
+  --data-urlencode "vatRate=7.7" \
+  --data-urlencode "currency=CHF" \
+  --data-urlencode "sku=P01122000" \
+  --data-urlencode "pm[0]=visa" \
+  --data-urlencode "preAuthorization=0" \
+  --data-urlencode "reservation=0" \
+  --data-urlencode "referenceId=975382" \
+  --data-urlencode "title=Test" \
+  --data-urlencode "description=Testdescription" \
+  --data-urlencode "purpose=This is a test" \
+  --data-urlencode "fields[forename][mandatory]=1" \
+  --data-urlencode "fields[forename][defaultValue]=Max" \
+  --data-urlencode "fields[surname][mandatory]=0" \
+  --data-urlencode "fields[surname][defaultValue]=Muster" \
+  --data-urlencode "ApiSignature=$apiSignature"
+```
+
+## 5. Response
+
+The response to that request should be `{status:success}`.
+
+<Warning>
+In our example we have used the made up `a12345678` value as the API key. You need to replace that key with your actual API key from your Checkout Paylink account. The same is true for the `instance ` parameter: in our example we simply used the fictitious value `Instance_Name `.
+</Warning>

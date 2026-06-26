@@ -1,0 +1,335 @@
+---
+title: "Add Shipping Cost"
+description: "This guide shows you how to add and update shipping costs based on the destination address provided by your customer at checkout."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Complexity: Medium</Badge>
+  <Badge color="blue">Coding: Yes</Badge>
+  <Badge color="blue">Platform: PHP, Node</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+This guide assumes that you already have an [Checkout Portal account](https://portal.dibspayment.eu) and have integrated an embedded checkout directly on your website. See the [Web integration guide](/web-integration/integrate-checkout-on-your-website-embedded) for more information.
+</Warning>
+
+## Checkout Overview - Shipping costs
+
+If you are shipping goods to your customer, you probably want to add a  shipping cost to their order. If the shipping cost is a fixed amount regardless of the number of shopping cart items or the shipping address, you can simply add an item to the order that represents the shipping cost when you first create the payment object.
+
+However, the shipping cost is likely to vary depending on the number of items in the shopping cart and the shipping address. In this case, the shipping cost cannot be calculated until your customer has provided a shipping address for the order. 
+
+Checkout enables you to manage shipping costs on the checkout page. This requires that both the frontend and backend interact with Checkout. The flowchart below shows the process involved in updating shipping costs based on the destination provided by your customer.
+
+![Shipping cost](https://images.ctfassets.net/di680may5c0k/5TKYQ9UJOpfU5vaTIsgVme/2ca2ac4e38279dc3802b27faa3506131/Shipping_cost.png?w=2704&h=1726&q=50&fm=png)
+
+This guide shows you how to implement this functionality if you are using an embedded web integration. The actual calculation of the shipping cost is something you need to implement on your side, and is not provided in this guide.
+
+<Steps>
+  <Step title="Create payment object (backend)">
+    Checkout enables you to pause the checkout flow if a shipping cost is not specified. To enable this functionality, set the property [`merchantHandlesShippingCost `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-shipping-merchanthandlesshippingcost) to `true ` when [creating the payment object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post).
+
+    The following snippet demonstrates how to specify the `merchantHandlesShippingCost ` property when creating the payment object:
+
+    ```json Create payment payload
+    {
+      "order": {
+          "items": [
+          {
+            "reference": "Sneaky NE2816-82",
+            "name": "Sneaky",
+            "quantity": 2,
+            "unit": "pcs",
+            "unitPrice": 25000,
+            "taxRate": 0,
+            "taxAmount": 0,
+            "netTotalAmount": 50000,
+            "grossTotalAmount": 50000
+          }
+        ],
+        "amount": 50000,
+        "currency": "SEK",
+        "reference": "Order No 42369"
+      },
+      "checkout": {
+        "integrationType": "EmbeddedCheckout",
+        "url": "<WEBSHOP_URL>",
+        "termsUrl": "<TERMS_URL>",
+        "shipping": {
+          "countries": [],
+          "merchantHandlesShippingCost": true
+        }
+      }
+    }
+    ```
+
+    With the `merchantHandlesShippingCost ` property set to `true `, Checkout will not proceed with the checkout until you add a shipping cost to the payment (see [Step 3](#build-step-3-calculate-and-update-shipping-cost-backend)). But first, you need to track address changes in the frontend to calculate the new shipping cost.
+
+    <Warning>
+    This guide assumes that you already know how use the Payment API to create the payment object for an embedded web integration. If not, review the [Web integration](/web-integration/integrate-checkout-on-your-website-embedded) guide first.
+    </Warning>
+  </Step>
+  <Step title="Listen to the &quot;address-changed&quot; event (frontend)">
+    Next, you need to implement some more functionality in the frontend JavaScript to trigger a shipping cost calculation whenever the address changes on the checkout page. The frontend should:
+
+    1. **Listen to the event** named [`address-changed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk/#address-changed).
+    2. **Freeze checkout** using Checkout JS whenever an address changed event is triggered. This will temporarily disabled the checkout form.
+    3. Send a request to your backend that will compute a new shipping cost and **update the payment object** with Nexi Group.
+    4. **Thaw checkout** using Checkout JS. This will re-enable the checkout form so that your customer can continue to interact with the checkout.
+
+    The following JavaScript code will send a request to your backend, so that a new shipping cost can be calculated and added to the order for the payment object:
+
+    ### Subscribe to address-changed event
+
+    <CodeGroup>
+
+    ```javascript script.js
+    // Frontend JavaScript
+    // See Web integration guide for the complete JavaScript code
+
+    // 1. Listen to the address-changed event
+    checkout.on('address-changed', function (address) {
+      if (address) {
+
+        // 2. Disable checkout temporarily 
+        checkout.freezeCheckout();
+
+        // 3. Invoke backend to update shipping cost
+        var request = new XMLHttpRequest();
+        request.open("POST", 'update-shipping-cost.php');
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        const body = {
+            paymentId: paymentId,
+            postalCode: address.postalCode,
+            countryCode: address.countryCode
+          };
+          request.onload = function () {
+            // 4. Don't forget to re-enable the checkout
+            checkout.thawCheckout();
+          }
+          request.onerror = function () { 
+            console.error('connection error'); 
+          }
+          request.send(JSON.stringify(body));
+        }
+    });
+    ```
+
+    ```javascript script.js
+    // Frontend JavaScript
+    // See Web integration guide for the complete JavaScript code
+
+    // 1. Listen to the address-changed event
+    checkout.on('address-changed', function (address) {
+      if (address) {
+
+        // 2. Disable checkout temporarily 
+        checkout.freezeCheckout();
+
+        // 3. Invoke backend to update shipping cost
+        var request = new XMLHttpRequest();
+        request.open("POST", 'update-shipping-cost');
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        const body = {
+            paymentId: paymentId,
+            postalCode: address.postalCode,
+            countryCode: address.countryCode
+          };
+          request.onload = function () {
+            // 4. Don't forget to re-enable the checkout
+            checkout.thawCheckout();
+          }
+          request.onerror = function () { 
+            console.error('connection error'); 
+          }
+          request.send(JSON.stringify(body));
+        }
+    });
+    ```
+
+    </CodeGroup>
+
+    During the time the checkout is frozen (disabled), the checkout will indicate that you are updating the shipping cost. Here is an example:
+
+    ![Calculating shipping cost](https://images.ctfassets.net/di680may5c0k/1P1XCQcDMJfDITCiGorecl/d4038cebb692a8164d1a9fc58a5b7848/freeze.png?w=1800&h=956&q=50&fm=png)
+
+    The message "Calculating shipping cost" indicates that the checkout is busy updating the order, which you will manage in the next step.
+  </Step>
+  <Step title="Calculate and update shipping cost (backend)">
+    It's time to implement a new HTTP endpoint for updating the shipping cost. It should:
+
+    1. Read the shipping address from the HTTP POST request sent by the JavaScript from the previous step.
+    2. Calculate a new shipping cost based on the address.
+    3. Add or modify the shipping cost attached to the payment object by using the update order method from the Payment API. 
+
+    <Warning>
+    **Important!**
+
+    We need a backend script for this task since we are invoking the Payment API, which requires server-to-server communication. You must never pass the secret API key from the frontend JavaScript to Checkout.
+    </Warning>
+
+    Below is an example of a script for updating the shipping cost. The actual calculation of the new shipping cost is not implemented correctly here. Instead, a random cost is generated. The order items are also mocked for this example:
+
+    ### Update shipping cost
+
+    <CodeGroup>
+
+    ```php update-shipping-cost.php
+    <?php
+
+    // 1. Read and parse payload sent by frontend.
+    // The JSON object contains the paymentId and address information.
+
+    $inputJSON = file_get_contents('php://input');
+    $body = json_decode($inputJSON, TRUE);
+
+    $paymentId = $body['paymentId'];
+    $postalCode = $body['postalCode'];
+    $countryCode = $body['countryCode'];
+
+    // 2. Compute new shipping cost and generate new complete order 
+    $shippingCost = computeShippingCost($postalCode, $countryCode); // TODO: Implement
+    $payload = updateOrder($shippingCost); // TODO: Implement
+
+    // 3. Update order using Payment API
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId . '/orderitems');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                   
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: <YOUR_SECRET_API_KEY>'));                                               
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    echo($result);
+    ```
+
+    ```javascript index.js
+    const http = require("https");
+    const express = require('express')
+    const app = express()
+    const port = 3000
+
+    app.use(express.static('public'));
+    app.use(express.json());
+
+    app.get('/create-payment', (req, res) => {
+    	// See the web integration guide for a full implementation of this route.
+    })
+
+    app.post('/update-shipping-cost', (req, res) => {
+
+    	// 1. Read and parse payload sent by frontend.
+    	// The JSON object contains the paymentId and address information.
+    	const paymentId = req.body.paymentId;
+    	const postalCode = req.body.postalCode;
+    	const countryCode = req.body.countryCode;
+
+    	// 2. Compute new shipping cost and generate new complete order 
+    	const shippingCost = computeShippingCost(postalCode, countryCode);  // TODO: Implement
+    	const payload = updateOrder(shippingCost);                          // TODO: Implement
+
+    	// 3. Update order using Payment API
+    	const options = {
+    		"method": "PUT",
+    		"hostname": "test.api.dibspayment.eu",
+    		"port": null,
+    		"path": "/v1/payments/" + paymentId + "/orderitems",
+    		"headers": {
+    			"content-type": "application/json",
+    			"Authorization": "<YOUR_SECRET_API_KEY>"
+    		}
+    	};
+    	const restreq = http.request(options, function (resp) {
+    		const chunks = [];
+    		resp.on("data", function (chunk) {
+    			console.log("on data");
+    			chunks.push(chunk);
+    		});
+    		resp.on("end", function () {
+    			const body = Buffer.concat(chunks);
+    			res.send(body.toString());
+    		});
+    	});
+    	restreq.on('error', function (e) {
+    		console.error('error');
+    		console.error(e);
+
+    	});
+    	restreq.write(JSON.stringify(payload));
+    	restreq.end();
+    });
+
+    app.listen(port, () => {
+    	console.log(`Server listening on port ${port}`)
+    })
+    ```
+
+    </CodeGroup>
+
+    Let's walk through the code above:
+
+    1. Read the shipping address from the HTTP POST request sent by the JavaScript from the previous step.
+    2. Calculate a new shipping cost based on the address and generate a new JSON payload with the updated shipping cost. You need to define the methods `computeShippingCost() ` and `updateOrder() `. The payload returned from `updateOrder() ` should include the full order with the updated or new shipping cost. An example payload with shipping cost is shown below. The API reference also contains an example of a [payload for the update order request](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-orderitems-put-body).
+    3. Add or modify the shipping cost attached to the payment object by using the update order method from the Payment API. 
+
+    The following JSON payload shows an example of a request body sent to the Payment API when adding shipping cost to an existing order:
+
+    ```json Update shipping cost payload
+    {
+      "amount": 57500,
+      "items": [
+        {
+          "reference": "Sneaky NE2816-82",
+          "name": "Sneaky",
+          "quantity": 2,
+          "unit": "pcs",
+          "unitPrice": 25000,
+          "taxRate": 0,
+          "taxAmount": 0,
+          "netTotalAmount": 50000,
+          "grossTotalAmount": 50000
+        },
+        {
+          "reference": "Shipping A32",
+          "name": "Delivery service",
+          "quantity": 1,
+          "unit": "NA",
+          "unitPrice": 0,
+          "taxRate": 0,
+          "taxAmount": 0,
+          "grossTotalAmount": 7500,
+          "netTotalAmount": 7500
+        }
+      ],
+      "shipping": {
+        "costSpecified": true
+      }
+    }
+    ```
+
+    > info
+    > **Remember!**
+    > 
+    > Don't forget to set the [`shipping.costSpecified `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-orderitems-put-body-shipping-costspecified) flag when updating the order.
+  </Step>
+  <Step title="Test the checkout flow">
+    It's time to test the functionality for processing the shipping cost. 
+
+    1. Load the checkout page.
+    2. Enter address information in the checkout form.
+    3. Whenever the address is updated, the JavaScript event handler should be triggered and send a request to the backend. 
+    4. Verify that the checkout page displays the "Calculating shipping cost" message (as shown in the screenshot from [Step 2](/add-shipping-cost/#build-step-2-listen-to-the-address-changed-event-frontend)).
+    5. Click the "Pay" button when the checkout has been reactivated and make sure that the checkout flow does not contain any errors.
+
+    <Info>
+    Checkout ensures that you have added a shipping cost to your order. If you forgot to set the [`costSpecified `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-orderitems-put-body-shipping-costspecified) property to `true ` when updating the order, an error is displayed on the checkout page after you click the "Pay" button.
+    </Info>
+
+    > tada
+    > You have now learned how to add a shipping cost dynamically based on a destination provided by your customer on the checkout page. In addition, you have learned how to update an existing payment object using the Payment API.
+  </Step>
+</Steps>

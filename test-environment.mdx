@@ -1,0 +1,32 @@
+---
+title: "Test Environment"
+description: "Verify your Checkout integration using the test environment provided by Nexi."
+---
+
+## What is the test environment?
+
+The test environment allows you to perform test purchases using card and invoice payments. The test environment comprises:
+
+- [Integration keys](/access-your-integration-keys) for testing
+- [Sample card numbers](/test-card-processing)
+- [Sample invoice addresses](/test-invoice-installment-processing)
+- Test [API](https://developer.nexigroup.com/nexi-checkout/en-EU/api) available at the base address: ```https://test.api.dibspayment.eu ```
+- [Checkout.js](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk) available at: ```https://test.checkout.dibspayment.eu/v1/checkout.js?v=1```
+
+![Test environment](https://images.ctfassets.net/di680may5c0k/6OTnMqRkiCHm8AIGz8ibE4/a14670786c3a2d54f917469f4a000773/img_EASY.png?w=2880&h=920&q=50&fm=png)
+
+## Using the test environment
+
+In order to set up a checkout page that are using the test environment, you need to:
+
+1. Send all the API requests toward the [test API base address](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api#environments-and-base-addresses).
+2. Use the [integration keys](/access-your-integration-keys) for testing.
+3. Load the correct version of the [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk) (if you are building an embedded checkout).
+
+Once you have the checkout page configured toward the test environment, you can test card and invoice processing using the sample cards and sample invoice addresses.
+
+## See also
+
+- [Test credit card processing](/test-card-processing)
+- [Test account to account processing](/test-account-to-account-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)

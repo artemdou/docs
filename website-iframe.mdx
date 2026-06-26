@@ -1,0 +1,133 @@
+---
+title: "Website (iframe)"
+description: "The iframe solution allows you to display a Checkout Paylink payment page within your website."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Coding: Some</Badge>
+</div>
+
+## Necessary Resources
+
+For the basic implementation, no additional resources are necessary.
+
+## Example Code
+
+Paste the following code into your website's HTML.
+
+```markdown iframe.html
+<iframe src="https://demo.nets-pay.link/pay?tid=345a142d" width="530" height="700">
+</iframe>
+```
+
+For __src__, you will need to enter the URL of your payment page.
+
+## Advanced Integration
+
+```javascript Code Snippet
+var iFrame = jQuery('iframe');
+
+var postMessage = function(e) {
+  if (typeof e.data === 'string') {
+    try {
+      var data = JSON.parse(e.data);
+    } catch (e) {}
+    if (data && data.nets) {
+      jQuery.each(data.nets, function(name, value) {
+        switch (name) {
+          // implement functions here
+        }
+      });
+    }
+  }
+};
+
+iFrame.on('load', function() {
+        jQuery(this)\[0\].contentWindow.postMessage(JSON.stringify({origin: window.location.origin}), iFrame.attr('src'));
+});
+
+window.addEventListener('message', postMessage, false);
+```
+
+You might want to implement the following functions (where the comment is at):
+
+- __height__: Dynamic height of the iframe. Helps to avoid that the iframe has its own scroll bar.
+- You should not set the parameter `appview ` if you want a dynamic height.
+- 
+- __top__: If you have the dynamic __height__ functionality implemented, you probably need to implement the scroll functionality (e.g. on "Add to cart" button or on "Go to checkout").
+- 
+- __transaction__: Allows you to receive the transaction object with the transaction details like status.
+- 
+- __closeModal__: This contains the redirect URL which defines to what page your customer is led. The iFrame is not allowed to make redirections on your site, therefore you need execute this redirect yourself.
+
+Here is a complete code example:
+
+```javascript Complete Code Example
+var iFrame = jQuery('iframe');
+var transaction = null;
+var lastPostMessageHeight = 0;
+
+var updateIframeHeight = function() {
+  var height = lastPostMessageHeight;
+
+  // This can be individually changed.
+  // Currently the full height is only applied for big displays (> 590px in width)
+  if (window.innerWidth <= 590) {
+    iFrame.css('height', '100%');
+  } else if (height) {
+    iFrame.css('height', height + 'px');
+  }
+};
+
+var scrollPage = function(offset) {
+  var positionToScrollTo = iFrame.position().top + offset;
+  jQuery('body, html').animate({scrollTop: positionToScrollTo}, 1000, 'linear', function() {
+    jQuery(window).trigger('scroll')
+  });
+};
+
+var postMessage = function(e) {
+  if (typeof e.data === 'string') {
+    try {
+      var data = JSON.parse(e.data);
+    } catch (e) {}
+    if (data && data.nets) {
+      jQuery.each(data.nets, function(name, value) {
+        switch (name) {
+          case 'height':
+            lastPostMessageHeight = parseInt(value);
+            updateIframeHeight();
+            break;
+          case 'top':
+            scrollPage(parseInt(value));
+            break;
+          case 'transaction':
+            if (typeof value === 'object') {
+              transaction = value;
+            }
+            break;
+          case 'closeModal':
+            window.location.href = value;
+            break;
+        }
+      });
+    }
+  }
+};
+
+window.addEventListener('message', postMessage, false);
+
+iFrame.on('load', function() {
+  jQuery(this)[0].contentWindow.postMessage(JSON.stringify({origin: window.location.origin}), iFrame.attr('src'));
+  jQuery(window).resize(updateIframeHeight);
+  updateIframeHeight();
+});
+
+var t;
+jQuery(window).scroll(function(event) {
+  window.clearTimeout(t);
+  t = window.setTimeout(function() {
+    iFrame[0].contentWindow.postMessage(JSON.stringify({scrollTopShoppingCart: jQuery(window).scrollTop() - iFrame.position().top}), iFrame.attr('src'));
+  }, 100);
+});
+```

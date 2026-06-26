@@ -1,0 +1,45 @@
+---
+title: "Credit Cards - Checkout"
+description: "This guide outlines the basics of using Cards such as Mastercard, Visa, Dankort etc."
+---
+
+## Overview
+
+Checkout supports the following credit card payments:
+
+- [VISA & MasterCard](/visa-mastercard)
+- [Dankort](/dankort)
+- [American Express](/american-express)
+- [Maestro](/maestro)
+
+A card payment is handled in two stages: **reservation** and **charge**. The reservation is made at the end of a successful checkout flow. We recommend that you charge a card payment when shipping the goods.
+
+<Info>
+The payment reservation is usually valid up to 30 days, you must charge the payment within this time frame.
+</Info>
+
+To secure card payments, Checkout always requires [3D Secure](https://en.wikipedia.org/wiki/3-D_Secure) on all european issued cards. You can also read more about 3D Secure for Checkout from [here](/payment-methods/#build-3d-secure).
+
+## Payment Flow
+
+A credit card payment is executed in two steps: *reservation* (or authorization) and *charge* (or capture, settlement). 
+
+First, your customer's payment details get verified and the transaction gets approved. Now the funds are reserved and ready for you to collect. 
+
+Once the order has shipped, you can charge the funds from within your Checkout account (*separate capture*). That helps avoid refunds and chargebacks.
+
+Checkout credit card payments support features such as [subscriptions](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#subscriptions) (or recurring payments), [refunds (full and partial)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-charges-chargeid-refunds-post) and [charges (full and partial)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-charges-post). As long as you have not charged the funds, you can also [cancel](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-cancels-post) payments.
+
+Please find the detailed descriptions of these and other events (update order, terminate payment, cancel pending refund) in our [API reference](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/).
+
+The following diagram below shows the user journey for card payments:
+
+![User journey for cards](https://images.ctfassets.net/di680may5c0k/73mBbHDCn2MI63KGKt8hW0/04b6f785f4a9c1ae883b008475ea31fe/MicrosoftTeams-image__17_.png?w=2800&h=1600&q=50&fm=png)
+
+## Security
+
+Checkout Credit Card transactions are 3D Secure protected. All Checkout payments are processed according to the European Revised Payment Services Directive (PSD2). 
+
+Please note that while customers from within the EU are subject to these enhanced European regulations, non-EU citizens are not in scope of this directive.
+
+You can read more about the 3D Secure from [here](/payment-methods/#build-3d-secure) and [here](/test-card-processing/#build-3d-secure) as well.

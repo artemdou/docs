@@ -1,0 +1,154 @@
+---
+title: "Unternehmen"
+description: "Dieser Leitfaden beschreibt die Komponente Unternehmen des Checkout-Portals."
+---
+
+## Überblick
+
+Dieser Leitfaden beschreibt die verschiedenen Bereiche innerhalb der Komponente *Unternehmen*:
+
+- Kontoinformationen
+- Meine Rechnungen
+- Team
+- Checkout-Styler
+- Logo
+
+<Warning>
+Für *Integration* lesen Sie bitte diesen Leitfaden [hier](/access-your-integration-keys) zu den Integrationsschlüsseln.
+</Warning>
+
+## Kontoinformationen
+
+Der Bereich *Kontoinformationen* hat verschiedene Abschnitte:
+
+- Unternehmensdetails
+- Vereinbarungen und Bankkonto
+- Partnerinformationen
+
+Sie können hier auch Ihre eindeutige *Merchant ID* einsehen.
+
+## Unternehmensdetails
+
+Diese Daten umfassen die Stammdaten des Unternehmens wie den juristischen Firmennamen, den Geschäftsnamen, die Registrierungsnummer und die Kontaktdaten.
+
+## Vereinbarungen und Bankkonto
+
+Basierend auf Ihrer Vereinbarung zeigt dieser Abschnitt, welche *Währung* gewählt wurde, einschließlich der *Zahlungsmethoden*, *Vereinbarungsart* und *Bankkontodetails*.
+
+### Auszahlungszeit
+Für jede Zahlungsmethode können Sie die Auszahlungszeit einsehen, indem Sie auf die Schaltfläche *DETAILS ANZEIGEN* klicken.
+
+### Bankkontodaten ändern
+
+Um das Bankkonto zu aktualisieren, müssen Sie:
+- Das Startdatum des neuen Bankkontos mit Jahr, Monat und Datum eingeben
+- IBAN
+- BIC/SWIFT
+
+Nur Benutzer mit der Admin-Rolle können Änderungen an Ihren Bankkontodaten anfordern.
+Nachdem Sie die Änderung der Bankkontodaten eingereicht haben, prüft der Support Ihre Anfrage und meldet sich, falls weitere Informationen erforderlich sind.
+
+In der Regel dauert die Bearbeitung der Anfragen bis zu 5 Tage, aber Sie erhalten eine neue E-Mail, sobald der Vorgang abgeschlossen ist.
+
+Während wir Ihre Anfrage noch bearbeiten, gehen die Auszahlungen weiterhin auf das vorherige Konto. Wenn Sie die Auszahlungen auf das alte Konto einfrieren möchten, wenden Sie sich bitte [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) an unser Support-Team.
+
+Wenn Sie ein Bankkonto pro Währung ändern und dieses Bankkonto auch für andere Währungen verwendet wird, wird das gemeinsam genutzte Bankkonto für alle Währungen geändert, für die es verwendet wird.
+
+Sobald Sie dies abgeschlossen haben, können Sie auf die Schaltfläche *FORTFAHREN* klicken. Schließlich erscheint ein Erfolgsfenster, das Sie darüber informiert, dass die Anfrage erstellt wurde, und Sie werden per E-Mail benachrichtigt, wenn sie abgeschlossen ist.
+
+![Bankkonto im Portal ändern](https://images.ctfassets.net/di680may5c0k/288EgGTEgiUmcr77fgA131/0795a3ed70094bac35d9cf3cfe1a3af7/ChangeBankAccountSuccess.png?w=2078&h=1219&q=50&fm=png)
+
+### Einzahlung
+
+Mehr über die Einzahlungsaktion und Rückerstattungen erfahren Sie hier.
+
+## Partnerinformationen
+
+Eine Übersicht über Ihre Partner wird angezeigt, einschließlich der Berechtigungen, die sie über die API haben.
+
+Für Abrechnungsberichte könnte dies sein:
+- Auszahlungen
+- Auszahlungsdetails
+
+Für die Verwaltung von Zahlungen könnte dies sein:
+- Rückerstatten
+- Stornieren
+- Erstellen
+- Belasten
+
+### Berechtigungen
+
+Sie können auch die Berechtigungen für einen Partner aktualisieren, der in Ihrem Namen handelt:
+- Bearbeitungsrechte, bei denen der Partner Zahlungen belasten, rückerstatten und stornieren darf
+- Nur-Lese-Rechte
+
+Sie können auch festlegen, ob Sie Benachrichtigungen erhalten möchten, wenn sich Ihr Partner in Ihr Konto einloggt.
+
+## Meine Rechnungen
+
+Unter *Meine Rechnungen* können Sie Ihre Rechnungen nach Jahr getrennt einsehen.
+
+Jede Rechnung enthält:
+- Datum
+- Betrag mit Währung
+- Option zum Herunterladen der Rechnung
+
+![Meine Rechnungen](https://images.ctfassets.net/di680may5c0k/3KJPfImLWVGYyXBe6H9cSz/f168eeb3471eb77418ea4e16fcec345d/MyInvoicesView.png?w=2308&h=287&q=50&fm=png)
+
+## Team
+
+Mit der Komponente *Team* können Sie Benutzer einsehen und neue Benutzer zu Ihrem Team hinzufügen.
+
+## Benutzer hinzufügen
+Sie können einen Benutzer zu Ihrem Team hinzufügen, indem Sie seine E-Mail-Adresse eingeben und dem Benutzer Einstellungen mit einer Rolle und Sprache zuweisen. Nachdem Sie die erforderlichen Einstellungen eingegeben haben, können Sie auf die Schaltfläche *BENUTZER HINZUFÜGEN* klicken.
+
+## Rollen
+
+### Administrator
+Administrator-Benutzer haben alle Berechtigungen von Standard- und Nur-Lese-Benutzern, können aber auch Benutzerberechtigungen einladen und bearbeiten.
+
+### Standard
+Zusätzlich zu den Nur-Lese-Benutzern können Standard-Benutzer auch Zahlungen verwalten, einschließlich Aktionen wie Belastung, Rückerstattung und Stornierung von Zahlungen.
+
+### Nur Lesen
+Nur-Lese-Benutzer haben Zugriff auf Zahlungs- und Auszahlungsdetails, können aber außer dem Exportieren von Auszahlungsberichten keine Aktionen durchführen.
+
+### Nur Lesen mit Rückerstattungszugriff
+Dieser Benutzertyp kann zusätzlich zur Anzeige von Zahlungs- und Auszahlungsdetails sowie zum Exportieren von Auszahlungsberichten Zahlungen rückerstatten.
+
+## Übersicht der Benutzer
+
+Sie können die folgenden Informationen zu den hinzugefügten Benutzern einsehen:
+
+- Name
+- E-Mail
+- Telefonnummer
+- Letzte Anmeldung
+- Letzte Passwortaktualisierung
+- Erstellt
+- Ob der Benutzer Berichte erhalten kann
+- Rolle
+- Status
+- Schnellaktionen zum Versenden automatischer täglicher Auszahlungsberichte
+
+## Checkout-Styler
+
+Mit der Komponente *Checkout-Styler* können Sie testen, wie die Checkout-Seite sowohl auf dem Desktop als auch auf dem Mobilgerät aussehen könnte. Folgende Möglichkeiten zur Designänderung sind enthalten:
+
+- Themes
+- Hintergründe
+- Umrandungen
+- Text & Links
+- Zahlen-Schaltfläche
+
+Sie können das Design für verschiedene Stylingzwecke mit Farben, Schriftarten und Textstil frei ändern und aktualisieren. Sie können das Design als Entwurf speichern oder veröffentlichen.
+
+<Info>
+Checkout bietet eine schnelle und einfache Kontrastprüfung (WCAG-Kontrast-Schnellprüfung), um sicherzustellen, dass Ihr Checkout den aktuellen Anforderungen an die Barrierefreiheit entspricht.
+</Info>
+
+![Veröffentlichung eines Designs für den Checkout](https://images.ctfassets.net/di680may5c0k/3xxQGFg8X4O8sNvlHnQc83/8371582a15996ab43f877067acee863d/CheckoutStylerSuccess.png?w=2320&h=953&q=50&fm=png)
+
+## Siehe auch
+
+- [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys)

@@ -1,0 +1,358 @@
+---
+title: "Integrate Checkout on Your Website"
+description: "This guide is for developers who want to add online payments to their website using Checkout."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="gray">Configurability: Limited</Badge>
+  <Badge color="blue">Platform: PHP, Node</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+Before you start, you need:
+
+1. An [Checkout Portal account](https://portal.dibspayment.eu). See [create account](/create-a-checkout-portal-account) for more information.
+2. Your [integration keys](https://portal.dibspayment.eu/integration) for the website you are developing. [Need help](/access-your-integration-keys)?
+3. A running web server which can host HTML pages and execute server side scripts.
+</Warning>
+
+## What you are building
+
+This guide shows you how to integrate a hosted checkout on your website.
+
+The **backend** of your website communicates with the [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1) using your [**secret API key**](/access-your-integration-keys) to initiate a new payment. Your customer is then redirected to a checkout page, hosted by Nets, which manage the complete checkout flow. Once the purchase has been completed, the control is handed back to your webshop through a second redirect.
+
+![Hosted checkout](https://images.ctfassets.net/di680may5c0k/60BR1tFh0QRnMvXtYNLnrs/b80ec1a303cef51c72797dc22b641747/Direct_integration_hosted.png?w=2625&h=1683&q=50&fm=png)
+
+<Warning>
+The secret API key must never be exposed to the public and should only be
+passed over encrypted server-to-server communication (HTTPS). 
+In contrast, the checkout key is only an identifer and can be exposed 
+to the frontend of your site.
+</Warning>
+
+<Steps>
+  <Step title="Initiate the checkout from your site (frontend)">
+    The checkout is initiated from the client. The minimal shopping cart listed below will serve as a starting point for the payment flow:
+
+    ### Shopping cart
+
+    <CodeGroup>
+
+    ```html cart.html
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Shopping Cart</title>
+      </head>
+      <body>
+        <h1>Shopping Cart</h1>
+        <p>Add shopping cart items dynamically here...</p>
+        <a href="create-payment.php">Proceed to Checkout</a>
+      </body>
+    </html>
+    ```
+
+    ```html cart.html
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Shopping Cart</title>
+      </head>
+      <body>
+        <h1>Shopping Cart</h1>
+        <p>Add shopping cart items dynamically here...</p>
+        <a href="create-payment">Proceed to Checkout</a>
+      </body>
+    </html>
+    ```
+
+    </CodeGroup>
+
+    This guide uses [Express](https://expressjs.com) to host static files (html and frontend js). The following script servers as a starting point and will be extended in the steps below. Right now it will server static html pages from the `public ` directory:
+
+    ```javascript server.js
+    const http = require("https");
+    const express = require('express')
+    const app = express()
+    const port = 8080
+    const fs = require('fs');
+
+    // Host static html pages and JavaScripts
+    // from the "public" subdirectory
+    app.use(express.static('public'))
+
+    app.listen(port, () => {
+            console.log(`Server listening on port ${port}`)
+    })
+    ```
+
+    <Info>
+    **Troubleshooting**
+
+    - Place the file `cart.html ` in a subdirectory named `public `. 
+    - Add the port (8080) to the URL when using your browser to load the cart.
+    </Info>
+
+    If you try clicking the checkout link now, you will receive an error since you haven't implemented the backend yet. Let's move on to the next step and fix this error.
+  </Step>
+  <Step title="Create a payment object (backend)">
+    Each **payment session** is represented by a **payment object**. In order to start a checkout flow for your customer, you first need to create a payment object and retrieve the `paymentId ` referencing that object. Creating a payment object requires your [secret API key](/). Therefore, this request has to be initiated from the backend of your site. 
+
+    The following backend script will create a new payment object and return the `paymentId ` to the frontend:
+
+    ### Create payment
+
+    <CodeGroup>
+
+    ```php create-payment.php
+    <?php
+
+    function redirect_to_checkout($json) {
+            // Will be implemented in the next step
+            // For now just echo the response:
+            echo($json); 
+    }
+
+    $payload = file_get_contents('payload.json');
+    assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/payments');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    redirect_to_checkout($result);
+
+    ?>
+    ```
+
+    ```javascript server.js
+    const http = require("https");
+    const express = require('express')
+    const app = express()
+    const port = 8080
+    const fs = require('fs');
+
+    // Host static html pages and JavaScripts
+    // from the "public" subdirectory
+    app.use(express.static('public'))
+
+    app.get('/create-payment', (req, res) => {
+
+    	const options = {
+    		"method": "POST",
+    		"hostname": "test.api.dibspayment.eu",
+    		"port": null,
+    		"path": "/v1/payments",
+    		"headers": {
+    			"content-type": "application/json",
+    			"Authorization": "<YOUR_SECRET_API_KEY>"
+    		}
+    	};
+
+    	const redirect_to_checkout = function(json) {
+    		// Will be implemented in the next step
+    		// For now just send the json back to the client:
+    		res.send(json.toString());
+    	}
+
+    	const restreq = http.request(options, function (resp) {
+    		const chunks = [];
+
+    		console.log("statusCode: ", resp.statusCode);
+    		console.log("headers: ", resp.headers);
+
+    		resp.on("data", function (chunk) {
+    			console.log("on data");
+    			chunks.push(chunk);
+    		});
+    		resp.on("end", function () {
+    			const body = Buffer.concat(chunks);
+    			console.log(body.toString());
+    			redirect_to_checkout(body);    // Perform redirect
+    		});
+    	});
+
+    	let payload = fs.readFileSync('payload.json');
+    	restreq.write(payload);
+    	// console.log(JSON.parse(payload));
+
+    	restreq.on('error', function (e) {
+    		console.error('error');
+    		console.error(e);
+
+    	});
+    	restreq.end();
+    })
+
+    app.listen(port, () => {
+    	console.log(`Server listening on port ${port}`)
+    })
+    ```
+
+    </CodeGroup>
+
+    Replace the text `&lt;YOUR_SECRET_API_KEY&gt;` with your [secret API key](https://portal.dibspayment.eu/integration).
+
+    In this example we simply read a hardcoded JSON object from the file `payload.json ` shown below. 
+    Normally, this would be the place where you dynamically create a JSON object based on your customer's order items.
+    For now, you can just add the static JSON file `payload.json ` that can be used for testing:
+
+    ```json payload.json
+    {
+      "checkout": {
+        "integrationType": "HostedPaymentPage",
+        "returnUrl": "https://<YOUR_SERVER>/cart.html",
+        "termsUrl": "https://<YOUR_SERVER>/terms.htmtl"
+      },
+      "order": {
+        "items": [
+          {
+            "reference": "ref42",
+            "name": "Demo product",
+            "quantity": 2,
+            "unit": "pcs",
+            "unitPrice": 80000,
+            "grossTotalAmount": 160000,
+            "netTotalAmount": 160000
+          }
+        ],
+        "amount": 160000,
+        "currency": "SEK",
+        "reference": "Demo Order"
+      }
+    }
+    ```
+
+    Replace the text `&lt;YOUR_SERVER&gt;` with the server address to your site.
+
+    The request body includes:
+
+    - **Integration type** (`checkout.integrationType `): This setting determines whether to use an embedded checkout or a hosted checkout. The value `HostedPaymentPage ` tells Nexi Checkout that you want to redirect to a hosted checkout page.
+    - **Return URL** (`checkout.returnUrl `): The URL on your site which the customer will be to your checkout page. This URL must match the URL to your checkout page exactly, including protocol (http/https) and the fully qualified domain name (FQDN).
+    - **Terms URL** (`checkout.terms.Url `): A URL to a page on your site that describes the payment terms for your webshop.
+    - **Order details** (`order `): Includes order items, total amount, and currency. Here an example product is added to the order since at least one order item is required when creating a new payment object. Normally, you would add your actual products here instead.
+
+    You should now be able to click the checkout button and then see the JSON response in your web browser. Here is an example of a response:
+
+    ```json Response body
+    {
+      "paymentId": "0260000060003b7b47f0833...",
+      "hostedPaymentPageUrl": "https://test.checkout.dibspayment.eu/hostedpaymentpage/?check..."
+    }
+    ```
+
+    The response body includes:
+    - **Payment identifier** (`paymentId `): The identifier of the newly created payment object. You can use this identifier whenever you need to refer to this payment (for example in Checkout Portal).
+    - **Redirect URL** (`hostedPaymentPageUrl `): The URL to the pre-built checkout page which you should redirect your customer to.
+
+    Let's implement the functionality for redirecting your customer to the checkout page.
+  </Step>
+  <Step title="Redirect to the pre-built checkout page (backend)">
+    Instead of printing the JSON response back to the web browser, you should now instead redirect the customer to the checkout page. Here is the new version of the redirect function:
+
+    ### Redirect to checkout
+
+    <CodeGroup>
+
+    ```php create-payment.php
+    // ...
+
+    // Replace redirect function
+    function redirect_to_checkout($json) {
+      // echo($json);  // Don't print anything before call to header()
+      $a = json_decode($json, true);
+      if (json_last_error() != JSON_ERROR_NONE) {
+            echo(json_last_error_msg());
+            var_dump($json);
+            exit("Unable to parse json response");
+      }
+      $redirectURL = $a['hostedPaymentPageUrl'];
+      if (empty($redirectURL)) {
+            var_dump($json);
+            exit("Could not find the key 'hostedPaymentPageUrl'");
+      }
+      $lang = 'sv-SE';
+      $redirectURL = $redirectURL . '&language=' . $lang;
+      header("Location: " . $redirectURL);
+      exit();
+    }
+
+    // ...
+    ```
+
+    ```javascript server.js
+    // ... 
+
+    // Replace redirect function
+    const redirect_to_checkout = function(data) {
+    	var json;
+    	try {
+    		json = JSON.parse(data);
+    	} catch (e) {
+    		console.error(e);
+    		res.send("Unable to parse json response");
+    		return;
+    	}
+    	const url = json.hostedPaymentPageUrl;
+    	if (!url) {
+    		console.error("Key hostedPaymentPageUrl not found");
+    		res.send("Could not find the key 'hostedPaymentPageUrl'");
+    		return;
+    	}
+    	const lang = 'en-GB'; // Default language
+    	url + "&language=" + 
+    	res.redirect(url + "&language=" + lang);
+    }
+
+    // ...
+    ```
+
+    </CodeGroup>
+
+    This new version performs a HTTP redirect by returning a `Location ` HTTP header back to the browser. The optional language parameter (`language `) appended to the URL specifies the language to be used on the checkout page.
+
+    **Important**
+
+    Make sure you don't output anything from the server side script before sending the HTTP header, or the web browser will fail to perform the redirect.
+  </Step>
+  <Step title="Test your checkout page">
+    You should now have a rudimentary checkout page that can be tested using the test cards available on the page [Test card processing](/test-card-processing).
+
+    Here's how you test your new checkout page:
+
+    1. Reload the shopping cart page and click the "Proceed to Checkout" button.
+    3. Fill out the address form using your **email**, **phone**, and **postal code**.
+    4. Insert any of the [sample card numbers](/test-card-processing#build-sample-credit-cards) and click the "Pay" button.
+    5. Play around! 
+
+    The simulated payment processing should now start and eventually get you back to the "Payment completed" page you created in the previous step.
+
+    <Info>
+    **Troubleshooting**
+
+    - Verify that you are using the correct [integration keys](/access-your-integration-keys) for the [test environment](/test-environment).
+    - When changing the checkout URL, make sure you reload the shopping cart page so that a new payment session is created (and a new `paymentId `).
+    </Info>
+
+    > tada
+    > **Congratulations!**
+    > 
+    > You've now integrated a hosted checkout.
+  </Step>
+</Steps>
+
+## Next steps
+
+- [Customize text and language](/customize-text-and-language-embedded)
+- [Styling and accessibility](/styling-and-accessibility)

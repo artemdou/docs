@@ -1,0 +1,88 @@
+---
+title: "MobilePay"
+description: "This guide outlines the basics of using MobilePay via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+## Overview
+
+Checkout has an integration to MobilePay which enables your consumers to pay via their MobilePay payment app. This is done by entering their telephone number in the checkout. 
+
+Once the consumer has entered in their phone number, the consumer will be able to pay with only one-click in the checkout at a swipe in the MobilePay payment app.
+
+MobilePay is a mobile payment app (digital wallet) that lets users pay for products and services by using the payee’s mobile phone number. It also allows them to send money to each other. 
+
+<Info>
+MobilePay supports Danish Krone as a currency. Users must be resident in Denmark. They also must have a Danish phone number, a Danish bank account and a Danish Personal Identification number (CPR number).
+</Info>
+
+When your buyers select MobilePay as a payment method on the Checkout payment selection page, they need to enter their phone number. 
+
+They are then redirected to a MobilePay hosted confirmation page, where they confirm their purchase and get a notification on their mobile phone’s MobilePay app. Finally, they confirm their payment from within the app.
+
+<Info>
+The users MobilePay funding source can be both, Dankort and Visa. When your customers use their Dankort card to pay in the MobilePay wallet, the transaction fee can be different than when they use MobilePay with a Visa card. Most of the time, it is cheaper with Dankort.
+</Info>
+
+The amount is now authorized, and you can charge the funds anytime within a certain time frame after you ship the order. That helps to avoid refunds and chargebacks.
+
+Payments with MobilePay will be processed with the chosen card connected to what the consumer has registered with their MobilePay account. You can check the authorization timeframes from this table [here](/payment-methods/#build-authorization-times-for-charge-cancel-and-refund).
+
+## Functionalities
+
+### MobilePay Functionality Table
+|  |  |
+| --- | --- |
+| Payment type | Wallet |
+| Subscriptions | ❌ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ✅ |
+| Cancel payment | ✅ |
+| Reservation & charge | ✅ |
+| CPSP | ✅ |
+| Currencies | DKK |
+| Countries | DK, NO, SE, DE, AT, FI |
+
+<Info>
+You can learn more about the payment operations from [here](/order-management/#build-payment-operations).
+</Info>
+
+## Activation
+
+To activate MobilePay as a payment method and to add it to your Checkout portal, you need to complete the onboarding journey.
+
+<Info>
+If you already have an existing Checkout portal account, you need to [contact Support](https://www.nets.eu/payments/contact-us) for this.
+</Info>
+
+
+
+## User Journey
+
+This following section will describe the user journey and payment flow for a consumer:
+
+1. When your consumer chooses MobilePay as a payment method in the checkout, they will be prompted to enter their:
+   -  Phone number that is connected to their MobilePay account
+2. Accept the Terms and Conditions.
+3. Click on Pay.
+4. From here, they will be redirected to the MobilePay App landing page to enter the phone number connected to the MobilePay account.
+5. Approve the payment in the app.
+6. They will be redirected back to the checkout and the amount is charged immediately.
+
+
+
+## Payment Flow
+
+To ensure the correct update of the payment status from Checkout, you need to use the [*payment.checkout.completed* webhook](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#payment-events) (see the Webhooks section). By using this webhook, you will receive a notification from Checkout after the checkout process is completed.
+
+As seen from the functionality table, recurring payments (subscriptions) are not supported by Checkout MobilePay payments.
+
+Checkout MobilePay payments allow you to do partial refunds, separate captures and partial charges. If you haven’t yet captured the funds, you can also cancel payments.
+
+Please find the exact events and descriptions in our [API reference](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/).
+
+The amount for the payment will appear on your Checkout portal immediately.
+
+## Testing
+
+You can test Mobilepay with our test documentation here [Test wallet processing](/test-wallet-processing)

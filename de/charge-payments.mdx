@@ -1,0 +1,158 @@
+---
+title: "Zahlungen einziehen"
+description: "Erfahren Sie mehr über das Einziehen von Zahlungen für Nexi Checkout."
+---
+
+## Zahlung einziehen
+
+Wenn Sie die Bestellung an Ihren Kunden versenden, stellen Sie sicher, dass Sie die Zahlung einziehen, um die Mittel von Nexi Group zu erhalten.
+
+<Warning>
+Standardmäßig zieht unser System den reservierten Betrag nicht automatisch ein/erfasst diesen nicht automatisch. Je nach Geschäftsmodell sollten Sie entscheiden, wie Sie diesen Prozess handhaben möchten. Wir empfehlen, die sofortige Belastung/Erfassung einzurichten.
+</Warning>
+
+### Sofortige Belastung/Erfassung einrichten
+
+Eine Zahlung kann:
+
+- vollständig belastet werden (Standard)
+- bei Bedarf teilweise belastet werden
+- bei Bedarf reserviert und ein Teilbetrag freigegeben werden
+
+Beachten Sie, dass es nicht möglich ist, einen Betrag zu belasten, der die ursprüngliche Bestellung übersteigt. Das System teilt Ihnen mit, wenn Sie das Limit überschreiten. Im Folgenden finden Sie den Server-Code zum Einziehen einer Zahlung:
+
+### Zahlung einziehen
+
+<CodeGroup>
+
+```php Charge payment (PHP)
+<?php
+
+$secretKey = "<YOUR_SECRET_API_KEY>";
+$paymentId = "<YOUR_PAYMENT_ID>";
+
+$payload = file_get_contents('payload.json');
+assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId . '/charges');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: ' . $secretKey));                                   
+
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+echo("HTTP code: " . $http_code);
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty;
+```
+
+```javascript Charge payment (Node)
+const http = require("https");
+
+const paymentId = "<PAYMENT_ID>";                // Replace payment ID
+const payload = fs.readFileSync('payload.json'); // Replace body
+const secretKey = "<YOUR_SECRET_KEY>";           // Replace key
+const idempotencyKey = "<SOME_UNIQUE_KEY>";      // Replace with unique string
+
+const options = {
+  "method": "POST",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId + "/charges",
+  "headers": {
+    "content-type": "application/json",
+    "Idempotency-Key": idempotencyKey,
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write(payload);
+req.end();
+```
+
+</CodeGroup>
+
+<Info>
+Aktivieren Sie sichere Wiederholungen, indem Sie beim Erstellen von Belastungen einen Idempotency Key verwenden. Mehr über [Wiederholungen und Idempotency Keys](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#retries-and-idempotent-keys) finden Sie in der API-Referenz.
+</Info>
+
+### Vollständige Belastung
+
+Eine vollständige Belastung erfordert lediglich die Angabe des einzuziehenden Gesamtbetrags, wie hier:
+
+```json payload.json
+{
+    "amount": 5500
+}
+```
+
+### Teilbelastung
+
+Wenn Sie stattdessen eine Teilbelastung durchführen möchten, müssen Sie die Bestellpositionen angeben, die Sie belasten möchten. Eine Teilbelastung wird typischerweise verwendet, wenn Sie nur einen Teil der bestellten Artikel versenden oder wenn Sie sich entscheiden, den Preis der Artikel zu reduzieren. In jedem Fall müssen Sie immer eine neue Bestellung angeben, damit die registrierte Bestellung der Zahlung mit der Belastung übereinstimmt.
+
+```json payload.json
+{
+    "amount": 2750,
+    "orderItems": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 1,
+        "unit": "pcs",
+        "unitPrice": 2500,
+        "netTotalAmount": 2500,
+        "grossTotalAmount": 2750
+      }
+    ]
+}
+```
+
+### Belasten und den verbleibenden Betrag freigeben
+
+Bei einer Teilbelastung ist es möglich anzugeben, dass der verbleibende reservierte Betrag an den Kunden zurückfreigegeben werden soll. Dies kann mit dem Flag __finalCharge__ in der Belastungsanfrage erfolgen. Wird dies nicht angegeben, wird der Betrag an den Kunden freigegeben, wenn die Reservierung normal aufgehoben wird (üblicherweise 7 Tage nach der ursprünglichen Reservierung).
+
+__Beispiel__
+
+Ein Kunde hat 3 Artikel gekauft, von denen nur 2 auf Lager sind und geliefert werden. Um den verbleibenden reservierten Betrag freizugeben, geben Sie einfach die Artikel und den zu belastenden Betrag an und setzen Sie das Flag __finalCharge__ in der Belastungsanfrage auf __true__:
+
+```json payload.json
+{
+    "amount": 2750,
+    "orderItems": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 1,
+        "unit": "pcs",
+        "unitPrice": 2500,
+        "netTotalAmount": 2500,
+        "grossTotalAmount": 2750
+      }
+    ],
+    "finalCharge": true
+}
+```
+```
+
+Sie können die folgenden Webhook-Ereignisse abonnieren, um die Belastungen einer Zahlung zu verfolgen:
+
+- [`payment.charge.created `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#charge-created)
+- [`payment.charge.failed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#charge-failed)

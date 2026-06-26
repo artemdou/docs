@@ -1,0 +1,224 @@
+---
+title: "Bestellung bestätigen"
+description: "Dieser Leitfaden zeigt, welche Informationen Sie nach einem abgeschlossenen Checkout an Ihren Kunden senden müssen."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="yellow">Programmierung: Etwas (Backend)</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie bereits über ein [Checkout-Portal-Konto](https://portal.dibspayment.eu) verfügen und [Checkout auf Ihrer Website integriert](/web-integration/integrate-checkout-on-your-website-embedded) haben.
+</Warning>
+
+## Überblick
+
+Sobald ein Kauf abgeschlossen ist, muss eine Bestellbestätigung per E-Mail an Ihren Kunden gesendet werden. Die Bestätigung muss detaillierte Informationen zur Bestellung enthalten. Diese Informationen können auf zwei Arten abgerufen werden:
+- über das [Checkout Portal](https://portal.dibspayment.eu).
+- über die Methode [Retrieve payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) der Payment API.
+
+Sie können sich über neue Käufe auf der Checkout-Seite benachrichtigen lassen, indem Sie das Webhook-Ereignis [`payment.checkout.completed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#checkout-completed) abonnieren.
+
+Dieser Leitfaden listet alle Informationen auf, die Sie in der Bestellbestätigungs-E-Mail bereitstellen müssen, sowie die Vorgehensweise, um diese Informationen mithilfe von Webhooks und der Payment API von Checkout abzurufen.
+
+
+
+<Steps>
+  <Step title="Neue Bestellungen mit Webhooks verfolgen">
+    Um benachrichtigt zu werden, wenn ein Kunde eine neue Bestellung aufgegeben hat, können Sie das Ereignis [`payment.checkout.completed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#checkout-completed) abonnieren. Informationen zum Einrichten eines Webhook-Endpunkts finden Sie im Leitfaden [Ereignisse mit Webhooks verfolgen](/track-events-using-webhooks).
+
+    Hier ist ein Beispiel einer von Checkout für das Ereignis [Checkout completed](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#checkout-completed) gesendeten Payload:
+
+    ```json Payload (payment.checkout.completed)
+    {
+        "id": "36ce3ff4a896450ea2b70f3263554772",
+        "merchantId": 100017120,
+        "timestamp": "2021-05-04T22:09:08.4342+02:00",
+        "event": "payment.checkout.completed",
+        "data": {
+            "order": {
+                "amount": {
+                    "amount": 5500,
+                    "currency": "SEK"
+                },
+                "reference": "Hosted Demo Order",
+                "orderItems": [
+                    {
+                        "reference": "Sneaky NE2816-82",
+                        "name": "Sneaky",
+                        "quantity": 2,
+                        "unit": "pcs",
+                        "unitPrice": 2500,
+                        "taxRate": 1000,
+                        "taxAmount": 500,
+                        "netTotalAmount": 5000,
+                        "grossTotalAmount": 5500
+                    }
+                ]
+            },
+            "consumer": {
+               ...
+            },
+            "paymentId": "02a900006091a9a96937598058c4e474"
+        }
+    }
+    ```
+
+    
+
+    Die wichtigste Eigenschaft in dieser Payload ist die `paymentId `, die zum Abrufen weiterer Details zur Zahlung verwendet werden kann.
+    
+    
+  </Step>
+  <Step title="Informationen aus dem Checkout Portal abrufen (optional)">
+    Sie können Informationen zu abgeschlossenen Käufen im Checkout Portal finden, indem Sie die folgenden Schritte ausführen:
+
+    1. Melden Sie sich beim [Checkout Portal](https://portal.dibspayment.eu/) an.
+    2. Navigieren Sie zu [Neue Zahlungen](https://portal.dibspayment.eu/payments/NEW).
+    3. Klicken Sie auf die gewünschte Bestellzeile.
+    4. Klicken Sie auf „Bestelldetails" und „Transaktionsdetails", um alle Informationen zur Bestellung anzuzeigen.
+
+    Auch wenn Sie alle benötigten Informationen im Checkout Portal finden können, empfehlen wir, die Payment API zu verwenden, um die Details neuer Bestellungen automatisch programmatisch abzurufen.
+    
+  </Step>
+  <Step title="Zahlungsdetails über die Payment API abrufen">
+    Sie können detaillierte Informationen zu einer Zahlung mithilfe der Methode [Retrieve payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) abrufen. Sie müssen die Kennung der gewünschten Zahlung übergeben. Hier ein Beispiel:
+
+    ### Zahlungsdetails abrufen
+
+    <CodeGroup>
+
+    ```php Retrieve payment details (PHP)
+    <?php
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+      CURLOPT_URL => "https://test.api.dibspayment.eu/v1/payments/<PAYMENT_ID>",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_HTTPHEADER => [
+        "Authorization: <YOUR_SECRET_API_KEY>"
+      ],
+    ]);
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+
+    curl_close($curl);
+
+    if ($err) {
+      echo "cURL Error #:" . $err;
+    } else {
+      echo $response;
+    }
+    ```
+
+    ```javascript Retrieve payment details (Node)
+    const http = require("https");
+
+    const paymentId = "<PAYMENT_ID>";
+    const secretKey = "<YOUR_SECRET_KEY>";
+
+    const options = {
+      "method": "GET",
+      "hostname": "test.api.dibspayment.eu",
+      "port": null,
+      "path": "/v1/payments/" + paymentId,
+      "headers": {
+        "Authorization": secretKey
+      }
+    };
+
+    const req = http.request(options, function (res) {
+      const chunks = [];
+      console.log('HTTP code:', res.statusCode);
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        try {
+          console.log(JSON.stringify(JSON.parse(body), null, 2));
+        } catch (e) {
+          console.error("Failed to parse body: " + e);
+          console.error(body.toString());
+        }
+      });
+    });
+
+    req.end();
+    ```
+
+    </CodeGroup>
+
+    Ein erfolgreicher Request gibt Informationen zur angegebenen Zahlung zurück. Hier ein Beispiel eines Response-Bodys:
+
+    ```json Response (Retrieve payment)
+    {
+        "payment": {
+            "paymentId": "01cc000060c31fdc611b370244e765d0",
+            "summary": {
+                "reservedAmount": 160000
+            },
+            "consumer": {
+                ...
+            },
+            "paymentDetails": {
+                "paymentType": "CARD",
+                "paymentMethod": "Visa",
+                "invoiceDetails": {},
+                "cardDetails": {
+                    "maskedPan": "492500******0004",
+                    "expiryDate": "1222"
+                }
+            },
+            "orderDetails": {
+                "amount": 160000,
+                "currency": "SEK",
+                "reference": "order-2872349-9"
+            },
+            "checkout": {
+                "url": "http:\/\/example.com\/checkout.html"
+            },
+            "created": "2021-06-11T08:33:50.3816+00:00"
+        }
+    }
+    ```
+
+    Bitte beachten Sie, dass es keine Garantie gibt, dass Verbraucherdaten in der Antwort zurückgegeben werden, sofern Sie nicht auf der Checkout-Seite Verbraucherdaten erfasst haben. Wenn Sie Kundendaten in Ihrem eigenen Backend verwalten, müssen Sie in der Lage sein, die Bestellreferenz mit einem Kunden in Ihrer Datenbank abzugleichen.
+  </Step>
+  <Step title="Bestellbestätigung senden">
+    
+
+    Die Bestellbestätigungs-E-Mail muss detaillierte Informationen zum Kauf enthalten und sollte unmittelbar nach einer erfolgreichen Bestellung an den Kunden gesendet werden. Die folgende Tabelle listet alle Pflichtfelder auf, die Sie in die Bestellbestätigungs-E-Mail aufnehmen müssen:
+
+    | Feld |  Beschreibung  | Eigenschaft
+    |----|--|--|
+    | Payment&nbsp;ID | Die Zahlungs-Kennung. |  [`paymentId `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get-responses-200-payment-paymentid) | 
+    | Bestellnummer |  Die interne Bestellreferenznummer Ihres Webshops. | [`reference `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get-responses-200-payment-orderdetails-reference) 
+    | Lieferdatum | Voraussichtliches Lieferdatum (zum Beispiel „wird innerhalb von 5 Tagen geliefert").| n. v. 
+    | Kontaktdaten | Ihre Kontaktdaten einschließlich Firmenname, Adresse, E-Mail-Adresse und/oder Telefonnummer. | n. v.
+    | Gekaufte&nbsp;Produkte | Eine vollständige Beschreibung der gekauften Dienstleistungen/Produkte. | n. v.
+    | Maskierte&nbsp;PAN | Die letzten vier Ziffern der Kartennummer, wenn der Kauf per Karte erfolgt. |  [`maskedPan `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get-responses-200-payment-paymentdetails-carddetails-maskedpan)
+    | Bestelldatum | Das Datum, an dem die Bestellung erstellt wurde. | [`created `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get-responses-200-payment-created)
+    | Gesamtbetrag | Der belastete Gesamtbetrag (Gebühren, Mehrwertsteuer, Versand usw.). Der angegebene Betrag darf den im Bestellformular genannten Betrag nicht überschreiten. | [`amount `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get-responses-200-payment-orderdetails-amount)
+    | Währung | Alle Preise müssen die Währung enthalten (zum Beispiel SEK). | [`currency `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get-responses-200-payment-orderdetails-currency)
+
+    
+  </Step>
+</Steps>
+
+## Siehe auch
+
+- [Ereignisse mit Webhooks verfolgen](/track-events-using-webhooks)
+- [Zahlungen belasten](/charge-payments)

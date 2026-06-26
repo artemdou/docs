@@ -1,0 +1,234 @@
+---
+mode: "custom"
+title: "Welcome"
+---
+
+{/* Hero */}
+
+<section className="relative overflow-hidden bg-[#2D32A9] py-16 sm:py-20">
+  <img
+    src="https://www.nexigroup.com/content/dam/corp/img/business/medium-large-enterprises/payment-acceptance/payment-acceptance-hero-d.webp"
+    alt="A merchant accepting a card payment from a customer"
+    className="absolute inset-0 h-full w-full object-cover object-center"
+    noZoom
+  />
+  <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="max-w-2xl py-6 lg:py-16">
+      <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+        Build payments with Nexi Checkout
+      </h1>
+      <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg">
+        Integrate a conversion-optimized, hosted checkout into any website, webshop, or mobile app — and start accepting cards, wallets, and local payment methods across Europe.
+      </p>
+      <div className="mt-8 flex flex-wrap gap-3">
+        <a
+          href="/web-integration"
+          className="inline-flex items-center rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-[#2D32A9] no-underline shadow-sm transition-colors hover:bg-white/90"
+        >
+          Get started
+          <svg className="ml-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 010-1.06L11.168 10 7.21 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.04-.02z" clipRule="evenodd" />
+          </svg>
+        </a>
+        <a
+          href="https://developer.nexigroup.com/nexi-checkout/en-EU/api/"
+          className="inline-flex items-center rounded-lg border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white no-underline backdrop-blur transition-colors hover:bg-white/20"
+        >
+          API reference
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{/* Quick Start */}
+
+<section className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="max-w-3xl">
+    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Quick Start</h2>
+    <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
+      Go from zero to your first test payment in four steps.
+    </p>
+  </div>
+
+  <div className="mt-8">
+    <Steps>
+      <Step title="Create a Checkout Portal account">
+        Sign up for a free [Checkout Portal account](/create-a-checkout-portal-account) to access your sandbox, configure your checkout, and manage payments.
+      </Step>
+      <Step title="Get your integration keys">
+        Grab your **checkout key** (used in the frontend) and **secret API key** (used server-side) from the portal. See [access your integration keys](/access-your-integration-keys).
+
+        <Note>
+          The secret API key must never be exposed to the public. Only the checkout key is safe to embed in your frontend.
+        </Note>
+      </Step>
+      <Step title="Create a payment">
+        Call the Payment API from your backend to start a checkout session.
+
+        ```bash cURL
+        curl -X POST https://test.api.dibspayment.eu/v1/payments \
+          -H "Authorization: $SECRET_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "checkout": {
+              "integrationType": "EmbeddedCheckout",
+              "url": "https://your-shop.example/checkout",
+              "termsUrl": "https://your-shop.example/terms"
+            },
+            "order": {
+              "currency": "EUR",
+              "reference": "order-123",
+              "items": [
+                { "reference": "sku-1", "name": "T-shirt", "quantity": 1, "unit": "pcs", "unitPrice": 12900, "grossTotalAmount": 12900, "netTotalAmount": 12900, "taxAmount": 0, "taxRate": 0 }
+              ],
+              "amount": 12900
+            }
+          }'
+        ```
+
+        <Accordion title="Example response">
+          ```json
+          {
+            "paymentId": "017a0000abcd1234ef567890",
+            "hostedPaymentPageUrl": "https://test.checkout.dibspayment.eu/HostedPaymentPage/checkout?paymentid=017a0000abcd1234ef567890"
+          }
+          ```
+        </Accordion>
+      </Step>
+      <Step title="Embed the checkout on your page">
+        Use the [Checkout JS SDK](https://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk) to render the checkout in your page and listen for the `payment-completed` event.
+
+        Continue with the full [web integration guide](/web-integration) for the end-to-end flow.
+      </Step>
+    </Steps>
+
+  </div>
+</section>
+
+{/* Integration Options */}
+
+<section className="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="max-w-3xl">
+    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Integration Options</h2>
+    <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
+      Pick the path that fits your stack — from a copy-paste paylink to a fully embedded checkout.
+    </p>
+  </div>
+
+  <div className="mt-8">
+    <CardGroup cols={2}>
+      <Card title="Direct web integration" icon="desktop" href="/web-integration" cta="Build with the SDK">
+        Embed a customized checkout on your site with the Checkout JS SDK and Payment API.
+      </Card>
+      <Card title="Webshop plugin" icon="store" href="/use-a-webshop-plugin" cta="Browse plugins">
+        Drop-in modules for WooCommerce, Shopify, Magento, Shopware, PrestaShop, OXID, and JTL.
+      </Card>
+      <Card title="Mobile SDK" icon="mobile-screen-button" href="/integrate-mobile-sdks" cta="Set up the SDK">
+        Native iOS and Android SDKs to bring Checkout into your mobile apps.
+      </Card>
+      <Card title="Paylink &amp; One-Page-Shop" icon="link" href="/checkout-paylink-and-one-page-shop-solution" cta="Create a paylink">
+        Take payments without writing code by sharing a link or embedding a one-page shop.
+      </Card>
+    </CardGroup>
+  </div>
+</section>
+
+{/* Explore by Topic */}
+
+<section className="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="max-w-3xl">
+    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Explore by Topic</h2>
+    <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
+      Dive into the parts of Checkout you'll work with day to day.
+    </p>
+  </div>
+
+  <div className="mt-8">
+    <CardGroup cols={3}>
+      <Card title="Checkout flow" icon="cart-shopping" href="/checkout">
+        Customize the checkout page, surcharges, subscriptions, express buttons, and styling.
+      </Card>
+      <Card title="Order management" icon="boxes-stacked" href="/order-management">
+        Charge, cancel, and refund payments, plus webhook events and subscription handling.
+      </Card>
+      <Card title="Payment methods" icon="credit-card" href="/payment-methods">
+        Cards, wallets, A2A, and invoice/installments — all the methods Checkout supports.
+      </Card>
+      <Card title="Test &amp; deploy" icon="vial" href="/test-and-deploy">
+        Test data, the test environment, Postman collection, and your go-live checklist.
+      </Card>
+      <Card title="Account &amp; portal" icon="user-gear" href="/account-portal">
+        Set up your portal account, integration keys, and manage payments from the Checkout Portal.
+      </Card>
+      <Card title="Demo store" icon="store" href="/test-the-demo-store">
+        Walk through a working storefront powered by Checkout to see the full flow end-to-end.
+      </Card>
+    </CardGroup>
+  </div>
+</section>
+
+{/* Resources */}
+
+<section className="mx-auto mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="max-w-3xl">
+    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Resources</h2>
+    <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
+      Tools and references to help you build, test, and ship.
+    </p>
+  </div>
+
+  <div className="mt-8">
+    <CardGroup cols={2}>
+      <Card title="API reference" icon="code" href="https://developer.nexigroup.com/nexi-checkout/en-EU/api/" cta="Open the reference">
+        REST endpoints for server-to-server payments and the Checkout JS SDK for embedding.
+      </Card>
+      <Card title="Postman collection" icon="paper-plane" href="/postman" cta="Try the requests">
+        Import the Postman collection to call every Checkout endpoint without writing code.
+      </Card>
+      <Card title="Test data" icon="flask" href="/test-data" cta="Browse test cards">
+        Test cards, wallets, A2A, and invoice scenarios for your sandbox integration.
+      </Card>
+      <Card title="Go-live checklist" icon="circle-check" href="/go-live-checklist" cta="Prepare to launch">
+        Run through every box before pointing your integration at production.
+      </Card>
+    </CardGroup>
+  </div>
+</section>
+
+{/* Closing CTA */}
+
+<section className="mx-auto mt-20 mb-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div className="relative overflow-hidden rounded-3xl bg-[#2D32AB] px-6 py-12 sm:px-12 sm:py-16">
+    <div
+      className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/20 blur-3xl"
+      aria-hidden="true"
+    />
+    <div className="relative flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div className="max-w-2xl">
+        <h2 className="text-2xl font-bold text-white sm:text-3xl">
+          Ready to take your first payment?
+        </h2>
+        <p className="mt-3 text-base text-white/80">
+          Spin up a free Checkout Portal account, grab your test keys, and run
+          an end-to-end payment in under an hour.
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <a
+          href="/create-a-checkout-portal-account"
+          className="inline-flex items-center rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-[#2D32AB] no-underline shadow-sm transition-colors hover:bg-white/90"
+        >
+          Create an account
+        </a>
+        <a
+          href="/web-integration"
+          className="inline-flex items-center rounded-lg border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white no-underline backdrop-blur transition-colors hover:bg-white/20"
+        >
+          Read the integration guide
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

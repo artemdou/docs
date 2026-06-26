@@ -1,0 +1,427 @@
+---
+title: "Checkout auf Ihrer Website integrieren"
+description: "Diese Anleitung richtet sich an Entwickler, die Online-Zahlungen mit Checkout in ihre Website integrieren möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="green">Konfigurierbarkeit: Hoch</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie:
+
+1. Ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Weitere Informationen finden Sie unter [Konto erstellen](/create-a-checkout-portal-account).
+2. Ihre [Integrationsschlüssel](https://portal.dibspayment.eu/integration) für die Website, die Sie entwickeln. [Benötigen Sie Hilfe](/access-your-integration-keys)?
+3. Einen laufenden Webserver, der HTML-Seiten hosten und serverseitige Skripte ausführen kann.
+</Warning>
+
+## Was Sie erstellen
+
+Diese Anleitung zeigt Ihnen, wie Sie ein **eingebettetes Checkout** auf Ihrer Website integrieren. Die folgende Abbildung zeigt die Beziehungen zwischen dem Kunden, Ihrer Website und Checkout.
+
+![Eingebettetes Checkout](https://images.ctfassets.net/di680may5c0k/4fPy5dg1J0AG1owr1CLCd0/d2f755746cd1354b501dab2a190ec24c/Direct_integration_embedded.png?w=3060&h=1536&q=50&fm=png)
+
+Bei einem eingebetteten Checkout interagiert der **Kunde** ausschließlich mit *Ihrer* Website. Das **Backend** Ihrer Website kommuniziert mit Nexi Group über die RESTful [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1) unter Verwendung Ihres [geheimen API-Schlüssels](/access-your-integration-keys). Das **Frontend** Ihrer Website nutzt das von Nexi Group bereitgestellte [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk), um die API-Integration mit Checkout abzuwickeln. Das Frontend Ihrer Website verwendet den [Checkout-Schlüssel](/access-your-integration-keys), um Ihren Webshop bei der Kommunikation mit Nexi Group zu identifizieren.
+
+<Warning>
+Der geheime API-Schlüssel darf niemals öffentlich zugänglich gemacht werden und sollte ausschließlich über verschlüsselte Server-zu-Server-Kommunikation (HTTPS) übertragen werden.
+Der Checkout-Schlüssel hingegen ist lediglich ein Identifikator und kann
+im Frontend Ihrer Website verwendet werden.
+</Warning>
+
+<Steps>
+  <Step title="Checkout von Ihrer Website aus initiieren (Frontend)">
+    Das Checkout wird vom Client aus initiiert. Um den Checkout-Ablauf im Frontend zu implementieren, müssen Sie Folgendes hinzufügen:
+
+    - Eine Schaltfläche, mit der der Kunde das Checkout starten kann
+    - Einen JavaScript-Event-Handler, der an die Schaltfläche angehängt ist
+
+    Der folgende minimale Warenkorb dient als Ausgangspunkt für den Zahlungsablauf:
+
+    ### Warenkorb
+
+    <CodeGroup>
+
+    ```html cart.html
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Shopping Cart</title>
+      </head>
+      <body>
+        <h1>Shopping Cart</h1>
+        <button id="checkout-button">Proceed to Checkout</button>
+        <script type="text/javascript">
+        var button = document.getElementById('checkout-button');
+        button.addEventListener('click', function () {
+          var request = new XMLHttpRequest();
+
+          // create-payment.php is implemented in Step 2
+          request.open('GET', 'create-payment.php', true); 
+          request.onload = function () {
+            const data = JSON.parse(this.response);        // If parse error, check output 
+            if (!data.paymentId) {                         // from create-payment.php
+              console.error('Error: Check output from create-payment.php');
+              return;
+            }
+            console.log(this.response);
+
+            // checkout.html is implemented in Step 3
+            window.location = 'checkout.html?paymentId=' + data.paymentId;
+          }
+          request.onerror = function () { console.error('connection error'); }
+          request.send();
+        });
+       </script>
+      </body>
+    </html>
+    ```
+
+    ```html cart.html
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Shopping Cart</title>
+      </head>
+      <body>
+        <h1>Shopping Cart</h1>
+        <button id="checkout-button">Proceed to Checkout</button>
+        <script type="text/javascript">
+        var button = document.getElementById('checkout-button');
+        button.addEventListener('click', function () {
+          var request = new XMLHttpRequest();
+
+          // The node server that responds to the 
+          // create-payment request is implemented in Step 2
+          request.open('GET', 'create-payment', true); 
+          request.onload = function () {
+            const data = JSON.parse(this.response);        // If parse error, check output 
+            if (!data.paymentId) {                         // from create-payment.php
+              console.error('Error: Check output from create-payment');
+              return;
+            }
+            console.log(this.response);
+
+            // checkout.html is implemented in Step 3
+            window.location = 'checkout.html?paymentId=' + data.paymentId;
+          }
+          request.onerror = function () { console.error('connection error'); }
+          request.send();
+        });
+       </script>
+      </body>
+    </html>
+    ```
+
+    </CodeGroup>
+
+    Diese Anleitung verwendet [Express](https://expressjs.com), um statische Dateien (HTML und Frontend-JS) zu hosten. Das folgende Skript dient als Ausgangspunkt und wird in den weiteren Schritten erweitert. Aktuell stellt es statische HTML-Seiten aus dem Verzeichnis `public ` bereit:
+
+    ```javascript server.js
+    const http = require("https");
+    const express = require('express')
+    const app = express()
+    const port = 8080
+    const fs = require('fs');
+
+    // Host static html pages and JavaScripts
+    // from the "public" subdirectory
+    app.use(express.static('public'))
+
+    app.listen(port, () => {
+            console.log(`Server listening on port ${port}`)
+    })
+    ```
+
+    <Info>
+    **Fehlerbehebung**
+
+    - Legen Sie die Datei `cart.html ` in einem Unterverzeichnis namens `public ` ab.
+    - Fügen Sie den Port (8080) zur URL hinzu, wenn Sie den Warenkorb in Ihrem Browser laden.
+    </Info>
+
+    Wenn Sie auf die Checkout-Schaltfläche klicken, sendet der Event-Handler eine asynchrone Anfrage über HTTP(S) an das Backend Ihrer Website. Wenn Sie jetzt auf die Schaltfläche klicken, erhalten Sie einen Fehler, da das Backend noch nicht implementiert ist. Lassen Sie uns mit dem nächsten Schritt fortfahren und diesen Fehler beheben.
+  </Step>
+  <Step title="Ein Zahlungsobjekt erstellen (Backend)">
+    Jede **Zahlungssitzung** wird durch ein **Zahlungsobjekt** repräsentiert. Um einen Checkout-Ablauf für Ihren Kunden zu starten, müssen Sie zunächst [ein Zahlungsobjekt erstellen](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) und die `paymentId ` abrufen, die auf dieses Objekt verweist. Zum Erstellen eines Zahlungsobjekts wird Ihr [geheimer API-Schlüssel](/access-your-integration-keys) benötigt. Daher muss diese Anfrage vom Backend Ihrer Website aus initiiert werden.
+
+    Das folgende Backend-Skript erstellt ein neues Zahlungsobjekt und gibt die `paymentId ` an das Frontend zurück:
+
+    ### Zahlung erstellen
+
+    <CodeGroup>
+
+    ```php create-payment.php
+    <?php
+
+    $payload = file_get_contents('payload.json');
+    assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/payments');
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+    $result = curl_exec($ch);
+    echo($result);
+    ```
+
+    ```javascript server.js
+    const http = require("https");
+    const express = require('express')
+    const app = express()
+    const port = 8080
+    const fs = require('fs');
+
+    // Host static html pages and JavaScripts
+    // from the "public" subdirectory
+    app.use(express.static('public'))
+
+    app.get('/create-payment', (req, res) => {
+
+    	const options = {
+    		"method": "POST",
+    		"hostname": "test.api.dibspayment.eu",
+    		"port": 443,
+    		"path": "/v1/payments",
+    		"headers": {
+    			"content-type": "application/json",
+    			"Authorization": "<YOUR_SECRET_API_KEY>"
+    		}
+    	};
+
+    	const restreq = http.request(options, function (resp) {
+    		const chunks = [];
+
+    		console.log("statusCode: ", resp.statusCode);
+    		console.log("headers: ", resp.headers);
+
+    		resp.on("data", function (chunk) {
+    			console.log("on data");
+    			chunks.push(chunk);
+    		});
+    		resp.on("end", function () {
+    			const body = Buffer.concat(chunks);
+    			console.log(body.toString());
+    			res.send(body.toString());
+    		});
+    	});
+
+      // Read hard-coded payload from file in this example.
+    	// This is where you would normally generate a 
+    	// json object dynamically based on the current order.
+    	let payload = fs.readFileSync('payload.json');
+    	restreq.write(payload);
+    	// console.log(JSON.parse(payload));
+
+    	restreq.on('error', function (e) {
+    		console.error('error');
+    		console.error(e);
+
+    	});
+    	restreq.end();
+    })
+
+    app.listen(port, () => {
+    	console.log(`Server listening on port ${port}`)
+    })
+    ```
+
+    </CodeGroup>
+
+    Ersetzen Sie den Text `&lt;YOUR_SECRET_API_KEY&gt;` durch Ihren [geheimen API-Schlüssel](https://portal.dibspayment.eu/integration).
+
+    In diesem Beispiel lesen wir einfach ein fest codiertes JSON-Objekt aus der unten dargestellten Datei `payload.json `.
+    Normalerweise würden Sie an dieser Stelle ein JSON-Objekt dynamisch auf Basis der Bestellpositionen Ihres Kunden erzeugen.
+    Vorerst können Sie einfach die statische JSON-Datei `payload.json ` für Tests hinzufügen:
+
+    ```json payload.json
+    {
+      "checkout": {
+        "integrationType": "EmbeddedCheckout",
+        "url": "https://<YOUR_SERVER>/checkout.html",
+        "termsUrl": "https://<YOUR_SERVER>/terms.html"
+      },
+      "order": {
+        "items": [
+          {
+            "reference": "ref42",
+            "name": "Demo product",
+            "quantity": 2,
+            "unit": "pcs",
+            "unitPrice": 80000,
+            "grossTotalAmount": 160000,
+            "netTotalAmount": 160000
+          },
+            {
+            "reference": "discount",
+            "name": "Demo discount",
+            "quantity": 1,
+            "unit": "pcs",
+            "unitPrice": -20000,
+            "grossTotalAmount": -20000,
+            "netTotalAmount": -20000
+            }
+        ],
+        "amount": 140000,
+        "currency": "SEK",
+        "reference": "Demo Order"
+      }
+    }
+    ```
+
+    Der Anfragetext enthält:
+
+    - **Integrationstyp**: Entweder ein eingebettetes Checkout, das einen `iframe ` auf Ihrer Seite verwendet, oder eine vorgefertigte, von Nexi Group gehostete Checkout-Seite, zu der der Kunde weitergeleitet wird.
+    - **Checkout-URL**: Die URL zu Ihrer Checkout-Seite. Diese URL muss exakt mit der URL Ihrer Checkout-Seite übereinstimmen, einschließlich Protokoll (http/https) und vollqualifiziertem Domainnamen (FQDN).
+    - **Terms-URL**: Eine URL zu einer Seite auf Ihrer Website, die die Zahlungsbedingungen Ihres Webshops beschreibt.
+    - **Bestelldetails**: Beinhaltet Bestellpositionen, Gesamtbetrag und Währung
+
+    > info
+    >
+    > Stellen Sie sicher, dass Sie die Zeile:
+    >
+    > `"url": "https://&lt;YOUR_SERVER&gt;/checkout.html"`
+    >
+    > durch die **exakte URL** zu Ihrer Checkout-Seite ersetzen (im nächsten Schritt erstellt),
+    > andernfalls schlägt das Laden der Seite später fehl. Überprüfen Sie das **Protokoll** (http/https), die **Serveradresse** und den **Port**, den Sie verwenden.
+
+    Dies ist ein einfaches Beispiel, um Ihnen den Einstieg zu erleichtern. Beim Erstellen oder Aktualisieren eines Zahlungsobjekts gibt es zahlreiche Einstellungen, die hier nicht behandelt werden. Weitere Informationen finden Sie in der Anleitung [Versandkosten hinzufügen](/add-shipping-cost) und in der [Payment-API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#payments).
+
+    Sie sollten nun in der Lage sein, auf die Checkout-Schaltfläche zu klicken und die `paymentId ` in der JavaScript-Konsole Ihres Webbrowsers zu sehen.
+
+    <Info>
+    **Fehlerbehebung**
+
+    Wenn die `paymentId ` nicht in der JavaScript-Konsole ausgegeben wird, können Sie auch versuchen, die URL zum Backend-Skript (Zahlung erstellen) direkt in Ihrem Webbrowser zu laden.
+    Auf diese Weise können Sie die vom Skript ausgegebenen Fehlermeldungen leichter lesen.
+    </Info>
+
+    Nachdem das Backend implementiert ist, ist es Zeit, zum Frontend-Code zurückzukehren und die `paymentId ` zu verwenden, um die Checkout-Seite mit der Zahlungsansicht zu erstellen.
+  </Step>
+  <Step title="Eine Checkout-Seite hinzufügen (Frontend)">
+    Es ist Zeit, die HTML-Seite zu erstellen, in die das Checkout-`iframe ` eingebettet wird. Fügen Sie den folgenden HTML-Code in eine neue Datei ein:
+
+    ```html checkout.html
+    <!DOCTYPE html>
+    <html>
+     <head><title>Checkout</title></head>
+     <body>
+      <h1>Checkout</h1>
+       <div id="checkout-container-div">
+         
+       </div>
+       <script src="https://test.checkout.dibspayment.eu/v1/checkout.js?v=1"></script>
+       <script src="script.js"></script>
+     </body>
+    </html>
+    ```
+
+    Beachten Sie einige Punkte zum HTML-Code:
+
+    - Das Container-Element `<div id="checkout-container-div">` ist die Stelle, an der das Checkout-`iframe ` letztlich eingebettet wird.
+    - Es werden zwei JavaScripts geladen: `checkout.js ` von **Nexi Group** und das benutzerdefinierte `script.js `, das Sie im nächsten Schritt implementieren.
+    - Da diese Anleitung die [Easy-Testumgebung](/test-environment) verwendet, wird `checkout.js ` von `test.checkout.dibspayment.eu ` geladen. In der Live-Umgebung sollten Sie stattdessen `checkout.dibspayment.eu ` verwenden.
+
+    Die Seite `checkout.html ` sollte immer mit einem URL-Parameter namens `paymentId ` aufgerufen werden. Dies ist erforderlich, da die `paymentId ` benötigt wird, um die aktuelle Zahlungssitzung bei der Kommunikation mit Nexi Group zu identifizieren.
+
+    Wenn die `paymentId ` ausschließlich in der Sitzung gespeichert wird, kann sie bei einer Weiterleitung zur Checkout-URL und zurück bei bestimmten Zahlungsmethoden im eingebetteten Checkout verloren gehen.
+
+    Um dies zu verhindern, fügen wir den Query-Parameter beim Rückkehren von einem Drittanbieter zur Checkout-URL hinzu. Dies erfordert, dass das Checkout den Query-Parameter `paymentId ` erkennt und das Checkout mit dem angegebenen Wert initialisieren kann.
+  </Step>
+  <Step title="Checkout-iframe mit dem Checkout JS SDK generieren">
+    Nun ist es Zeit, das JavaScript zu erstellen, das mit Checkout über das [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk/) kommuniziert.
+
+    Erstellen Sie eine neue Datei und fügen Sie den folgenden JavaScript-Code ein:
+
+    ```javascript script.js
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paymentId = urlParams.get('paymentId');
+      if (paymentId) {
+        const checkoutOptions = {
+          checkoutKey: '<YOUR_CHECKOUT_KEY>', // Replace!
+          paymentId: paymentId,
+          containerId: "checkout-container-div",
+        };
+        const checkout = new Dibs.Checkout(checkoutOptions);
+        checkout.on('payment-completed', function (response) {
+          window.location = 'completed.html';
+        });
+      } else {
+        console.log("Expected a paymentId");   // No paymentId provided, 
+        window.location = 'cart.html';         // go back to cart.html
+      }
+    });
+    ```
+
+    Ersetzen Sie `&lt;YOUR_CHECKOUT_KEY&gt;` durch Ihren [Checkout-Schlüssel](https://portal.dibspayment.eu/integration) für die [Testumgebung](/test-environment).
+
+    Damit das Skript `checkout.js ` korrekt geladen wird, ist es wichtig, dass Sie in [Schritt 3](#build-step-3-add-a-checkout-page-frontend) die korrekte URL zu Ihrer Checkout-Seite angegeben haben.
+
+    Das Checkout-Objekt löst das Ereignis `'payment-completed'` aus, sobald die Zahlung abgeschlossen ist. Die von uns bereitgestellte Callback-Funktion navigiert zu `completed.html `, das Sie im nächsten Schritt erstellen.
+
+    <Info>
+    **Fehlerbehebung**
+
+    - Stellen Sie sicher, dass Sie die korrekten [Integrationsschlüssel](https://portal.dibspayment.eu/integration) für die [Testumgebung](/test-environment) verwenden.
+    - Damit das Skript `checkout.js ` korrekt geladen wird, müssen Sie die korrekte URL zu Ihrer Checkout-Seite angegeben haben. Siehe [Schritt 3](#step-3-add-a-checkout-page-frontend).
+    </Info>
+  </Step>
+  <Step title="Eine &quot;Bestellung erfolgreich&quot;-Seite hinzufügen">
+    Fügen Sie den folgenden Code zu Ihrer Website hinzu:
+
+    ```html completed.html
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Payment completed</title>
+      </head>
+      <body>
+        <h1>Payment completed!</h1>
+        <a href="cart.html">Back to cart</a>
+      </body>
+    </html>
+    ```
+
+    Das war's! Es ist Zeit, zu testen und zu überprüfen, ob Ihre neue eingebettete Checkout-Seite funktioniert.
+  </Step>
+  <Step title="Ihre Checkout-Seite testen">
+    Sie sollten nun eine einfache Checkout-Seite haben, die Sie mit den auf der Seite [Test card processing](/test-card-processing) verfügbaren Testkarten testen können.
+
+    So testen Sie Ihre neue Checkout-Seite:
+
+    1. Laden Sie die Warenkorbseite neu und klicken Sie auf die Schaltfläche „Proceed to Checkout".
+    3. Füllen Sie das Adressformular mit Ihrer **E-Mail**, **Telefonnummer** und **Postleitzahl** aus.
+    4. Geben Sie eine der [Beispielkartennummern](/test-card-processing#build-sample-credit-cards) ein und klicken Sie auf die Schaltfläche „Pay".
+    5. Probieren Sie es aus!
+
+    Die simulierte Zahlungsabwicklung sollte nun starten und Sie schließlich zurück auf die im vorherigen Schritt erstellte „Payment completed"-Seite leiten.
+
+    <Info>
+    **Fehlerbehebung**
+
+    - Überprüfen Sie, ob Sie die korrekten [Integrationsschlüssel](/access-your-integration-keys) für die [Testumgebung](/test-environment) verwenden.
+    - `checkout.js ` wird nicht geladen, wenn Sie nicht die korrekte Checkout-URL im JSON-Body angeben, der in [Schritt 2](#build-step-2-create-a-payment-object-backend) beim Erstellen der `paymentId ` festgelegt wird.
+    - Wenn Sie die Checkout-URL ändern, stellen Sie sicher, dass Sie die Warenkorbseite neu laden, sodass eine neue Zahlungssitzung erstellt wird (und eine neue `paymentId `).
+    </Info>
+
+    > tada
+    > **Herzlichen Glückwunsch!**
+    >
+    > Sie haben nun ein eingebettetes Checkout integriert.
+  </Step>
+</Steps>
+
+## Nächste Schritte
+
+- [Text und Sprache anpassen](/customize-text-and-language-embedded)
+- [Styling und Barrierefreiheit](/styling-and-accessibility)

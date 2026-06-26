@@ -1,0 +1,38 @@
+---
+title: "Fehlercodes"
+description: "Diese Anleitung beschreibt einige der häufigsten Fehlercodes."
+---
+
+## Fehlercodes
+
+Einige der häufigsten Checkout-Fehlercodes sind:
+
+### Tabelle gängiger Fehlercodes
+| Code | Beschreibung | Nächste Schritte |
+| --- | --- | --- |
+| 01 – Refer to card issuer | Die Transaktion wurde vom Kartenaussteller abgelehnt. Der Käufer sollte sich zur Klärung an seine Bank wenden.
+
+Der Käufer kann es nach Klärung des Problems mit seiner Bank erneut versuchen oder eine andere Zahlungsmethode verwenden. |  |
+| 03 – Invalid merchant | Die Transaktion wurde vom Kartenaussteller abgelehnt. Der Käufer sollte sich zur Klärung an seine Bank wenden.
+
+Der Käufer kann es nach Klärung des Problems mit seiner Bank erneut versuchen oder eine andere Zahlungsmethode verwenden. |  |
+| 04 – Capture card/pick-up | Der Kartenaussteller verlangt das Einbehalten der Karte. Dies kann auf eine vermutete Fälschung oder eine gestohlene Karte zurückzuführen sein.
+
+Dieser Grund wird in einer E-Commerce-Umgebung verwendet, obwohl er
+ursprünglich aus einem POS (Point Of Sale) stammt |  |
+| 05 – Do not honor | Dies ist eine generische Ablehnung mit mehreren möglichen Ursachen. Der Käufer sollte sich zur Klärung an seine ausstellende Bank wenden. |  |
+| 41 – Lost card | Die Kartennummer liegt nicht innerhalb eines vom System unterstützten Kartennummernbereichs. |  |
+| 51 – Insufficient funds/over credit limit / Not sufficient funds | Unzureichende Mittel auf dem Konto des Karteninhabers. Der Käufer kann es nach dem Auffüllen seines Bankkontos erneut versuchen oder eine andere Zahlungsmethode verwenden. |  |
+| 57 – Transaction not permitted to issuer/cardholder | Der Kartenaussteller erlaubt die Transaktion auf dieser Karte/diesem Konto nicht. Der Käufer kann eine andere Zahlungsmethode verwenden. Bei der Aktivierung oder dem Aufladen von Prepaid-Karten sind Händler, Acquirer-BIN und Aussteller-BIN nicht alle inländisch.
+
+Das Verarbeitungszentrum eines Ausstellers ist nicht zertifiziert, transaktionsspezifische Daten im TLV-Format zu empfangen (Feld 104 in der Anfragenachricht). |  |
+| b3 – Fraud / Security | Gilt für Mastercard. Die Transaktion wird abgelehnt, weil der Kartenaussteller den Verdacht auf Betrug hat.
+
+Sehen Sie sich den Merchant Advice Code für die Folgemaßnahmen an. |  |
+| 59 – Suspected fraud | Die Transaktion wird abgelehnt, weil der Kartenaussteller den Verdacht auf Betrug hat. |  |
+
+Sie können sich auch die Fehlercodes ansehen aus:
+
+- API-Referenz zu Fehlercodes [hier](https://developers.nets.euhttps://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#error-codes)
+- API-Referenz zu Acquirer-Antwortcodes bei fehlgeschlagenen Reservierungen [hier](https://developers.nets.euhttps://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#acquirer-response-codes-on-failing-reservations)
+- Anleitung zu Wiederholungen für Abonnement-Wiederholungen [hier](https://developers.nets.eu/manage-subscription-retries/#build-re-attempt-can-be-forbidden)

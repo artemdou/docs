@@ -1,0 +1,226 @@
+---
+title: "Go-Live-Checkliste"
+description: "Dieser Leitfaden richtet sich an Sie, wenn Sie Checkout auf Ihrer Website integriert und getestet haben und nun den Live-Gang planen."
+---
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie:
+
+1. Eine voll funktionsfähige Checkout-Integration über eine der folgenden Alternativen:
+   -  [Direkte Web-Integration](/web-integration)
+   -  [Webshop-Plugin](/use-a-webshop-plugin)
+   -  [Mobile SDK](/integrate-mobile-sdks)
+2. Ein Live-Konto für Checkout. Sie können ein Live-Konto im [Checkout Portal](https://portal.dibspayment.eu) beantragen, indem Sie oben rechts auf den TEST/LIVE-Schalter klicken.
+</Warning>
+
+## Testen Sie Ihre Checkout-Seite
+
+Stellen Sie sicher, dass Sie Ihre Checkout-Seite vor dem Live-Gang gründlich getestet haben. Siehe die Leitfäden:
+- [Testumgebung](/test-environment)
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Rechnungsverarbeitung testen](/test-invoice-installment-processing)
+
+## Webhook-Ereignisse verifizieren
+
+Webhooks sind die robusteste und effizienteste Methode, um Ihr Backend mit Checkout synchron zu halten. Sie sind robust gegenüber verschiedenen Laufzeitfehlern (Netzwerkfehler und andere temporäre Verarbeitungsfehler) und effizient, da sie ein Polling von Checkout auf Statusänderungen vermeiden.
+
+Stellen Sie sicher, dass Sie die für Ihren Webshop relevanten Zahlungsereignisse erhalten. Weitere Informationen zu Webhooks finden Sie auf den folgenden Seiten:
+
+- [Ereignisse mit Webhooks verfolgen](/track-events-using-webhooks) (Leitfaden)
+- [Webhooks](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/) (Referenz)
+
+## Sichern Sie Ihre Website (HTTPS)
+
+Ihr Webshop muss eine sichere Verbindung über [HTTPS](https://en.wikipedia.org/wiki/HTTPS) verwenden, um Ihren Kunden ein privates und sicheres Einkaufserlebnis zu bieten.
+
+## Verwenden Sie die Live-APIs und das JavaScript-SDK
+
+Stellen Sie sicher, dass die Produktionsumgebung Ihres Webshops die Live-URLs für die folgenden Checkout-Ressourcen verwendet:
+- Die REST-APIs (Payment API, Boarding API und Reporting API). Siehe den Abschnitt [Umgebungen und Basis-Adressen](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#environments-and-base-addresses) in der API-Referenz.
+- Das [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk/) (wenn Sie eine eingebettete Checkout-Seite verwenden).
+
+## Verwenden Sie die Integrationsschlüssel für die Live-Umgebung
+
+Stellen Sie sicher, dass die Produktionsumgebung Ihres Webshops die für die Checkout-Live-Umgebung vorgesehenen Integrationsschlüssel verwendet. Sie finden die Integrationsschlüssel im [Portal](https://portal.dibspayment.eu/integration). Siehe auch den Leitfaden [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys).
+
+## Kontaktdaten angeben
+
+Die Kontaktdaten Ihres Webshops sollten auf Ihrer Website deutlich sichtbar sein und Folgendes umfassen:
+- Name
+- Adresse (einschließlich Land)
+- E-Mail-Adresse und/oder Telefonnummer Ihres Supports oder Service-Desks
+- Die Handelsregisternummer des Shops (CVR, Organisationsnummer)
+
+## Allgemeine Geschäftsbedingungen einbinden
+
+Ihr Webshop sollte eine Seite bereitstellen, auf der die Allgemeinen Geschäftsbedingungen für Käufe auf Ihrer Website klar dargelegt sind. Die Seite sollte Folgendes enthalten:
+- Verkaufs- und Lieferbedingungen, einschließlich des Rechts, den Kaufvertrag zu beenden.
+- Bedingungen zum Recht des Verbrauchers, einen Kauf gemäß dem Fernabsatz- und Außergeschäftsraumgesetz zu widerrufen. Dies umfasst eine Widerrufsfrist und Bedingungen für den Widerruf.
+- Beschreibung der Waren und Dienstleistungen, die Ihr Webshop verkauft (einschließlich Preise, Steuern und Gebühren).
+- Klare Versandrichtlinien (per Kurier, Post, nachverfolgbar usw.) und voraussichtliche Lieferzeit.
+- Internationale Versandbeschränkungen, falls zutreffend.
+- Geben Sie an, welche Währungen Sie verwenden, anhand des Währungscodes (SEK). Z. B. „Alle Preise sind in SEK inkl. MwSt."
+- Informationen darüber, wie personenbezogene Daten verarbeitet werden.
+- Informationen darüber, wie Karteninformationen verarbeitet werden.
+
+<Info>
+Sie können die URL der Seite mit den Allgemeinen Geschäftsbedingungen beim Erstellen des Zahlungsobjekts über die Eigenschaft [`termsUrl `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-termsurl) bereitstellen. Dadurch wird auf der Checkout-Seite ein Link zur AGB-Seite Ihrer Website erstellt.
+</Info>
+
+## Group-Logo auf Ihrer Website einbinden
+
+Gemäß unseren Allgemeinen Geschäftsbedingungen muss das Nexi Group-Logo angezeigt werden, um darauf hinzuweisen, dass die Zahlungslösung von Nexi Group bereitgestellt wird. Das Logo muss entweder hinzugefügt werden:
+- zum Checkout in der Phase der Zahlungsmethodenauswahl,
+- zum Footer, falls Sie verfügbare Zahlungsoptionen im Footer anzeigen.
+
+Die Spezifikationen des Nexi Group-Logos finden Sie hier: [Logo (nexigroup.com)](https://www.nexigroup.com/en/brand-guidelines/).
+
+Die Allgemeinen Geschäftsbedingungen finden Sie hier: [Terms and conditions for Checkout (nets.eu)](https://www.nets.eu/en/payments/customerservice/legal-compliance/easy/)
+
+## Logos der Zahlungsmethoden auf Ihrer Website einbinden
+
+Die folgenden Zahlungsmethoden-Logos müssen auf Ihrer Website hinzugefügt werden, entweder:
+- zum Checkout in der Phase der Zahlungsmethodenauswahl,
+- zum Footer, falls Sie verfügbare Zahlungsoptionen im Footer anzeigen.
+
+Nachstehend ein Beispiel, wie die Logos aussehen und angezeigt werden könnten:
+
+![paymentOptionLogos2](https://images.ctfassets.net/di680may5c0k/6rl7e04tf3gImzGsCA0nDU/537c9449a9543c421004877ea5240875/paymentOptionLogos.png?w=804&h=59&q=50&fm=png)
+
+Es gibt drei verschiedene Möglichkeiten, wie Sie die für Ihre Website relevanten Zahlungsmethoden-Logos einfach zusammenstellen können:
+
+## Logos einzeln herunterladen
+
+Sie können die folgenden Links aus der Liste prüfen und die Logos einzeln herunterladen:
+
+- [Visa](https://www.merchantsignage.visa.com/brand_guidelines)
+- [Mastercard](https://brand.mastercard.com/brandcenter/artwork.html)
+- [Maestro](https://brand.mastercard.com/brandcenter/artwork/other-marks.html)
+- [Vipps](https://vipps.no/om-oss/vipps-logo-og-retningslinjer-bruk/)
+- [Ratepay](https://ratepay.gitbook.io/logos/brand/ratepay)
+- [PayPal](https://www.paypal.com/webapps/mpp/logo-center)
+- [Dankort](https://www.dankort.dk/dk/logo-og-billeder/)
+- [MobilePay](https://www.mobilepay.dk/materialebank/marketingmateriale/logoer)
+- [Swish](https://www.swish.nu/company/marketing-materials)
+- [Apple Pay](https://developer.apple.com/apple-pay/marketing/)
+- [Google Pay](https://developers.google.com/pay/api/web/guides/brand-guidelines)
+- [Klarna](https://docs.klarna.com/resources/marketing-tools/global-marketing-assets/brand-guidelines/?q=logo)
+
+## HTML-Tabelle
+
+Alternativ können Sie auch die spezifischen Logos der von Ihnen angebotenen Zahlungsmethoden anzeigen, indem Sie aus der untenstehenden HTML-Tabelle kopieren und einfügen.
+Alle Logos liegen im Format *.svg* vor und Sie können die Größen einfach anpassen.
+
+```markdown Table
+<table>
+<tr>
+
+ <td><img src="https://portal.dibspayment.eu/assets/images/main/easy-logo-blue_150px.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/3cd859387e29670974fe.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/visa-blue.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/mastercard_wtext.svg" width="35"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/maestro_wtext.svg" width="35"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/vipps.svg" width="50"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/swish_secondary.svg" width="60"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/mobilepay.svg" width="60"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/applepay.svg" width="60"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/dankort.svg" width="40"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/paypal-text.svg" width="70"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/ratepay.svg" width="70"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/klarna.svg"></td>
+
+ <td><img src="https://checkout.dibspayment.eu/v1/icons/googlepay.svg"></td>
+
+</tr>
+</table>
+```
+
+## Stellen Sie sicher, dass Ihre MwSt.-Werte korrekt sind
+
+Achten Sie beim [Erstellen des Zahlungsobjekts](/web-integration/integrate-checkout-on-your-website-embedded/#build-step-2-create-a-payment-object-backend) darauf, dass die Eigenschaften `taxRate ` und `taxAmount ` der Artikel im `order object ` Ihrer Zahlung korrekt sind:
+
+<Warning>
+Ein `taxRate ` von 1600 entspricht 16 %, 2400 entspricht 24 % und so weiter.
+</Warning>
+
+Außerdem muss `taxAmount ` entsprechend `unitPrice ` und `taxRate ` korrekt sein.
+
+Weder `unitPrice ` noch `netTotalAmount ` sollten den `taxRate ` enthalten.
+
+`grossTotalAmount ` muss pro Artikel der Summe von `taxAmount ` und `netTotalAmount ` entsprechen.
+
+<Info>
+Wenn Sie Ihre Integration testen, können Sie Ihre taxRate-Einstellungen in Ihrem Checkout-Testportal überprüfen, sobald Sie Ihre Testzahlung erstellt haben.
+</Info>
+
+## Verwenden Sie Dezimalstellen korrekt
+
+Checkout rundet Beträge niemals durch Neuberechnung Ihrer Daten auf oder ab. Wir senden Ihre Anfragen mit den von Ihnen erhaltenen Daten lediglich an die erforderlichen Komponenten weiter. Daher ist es sehr wichtig, dass Sie die folgenden Anweisungen beachten.
+
+Beachten Sie Folgendes:
+
+- __Dezimalstellen werden immer als kleinste Geldeinheit der jeweiligen Währung angegeben.__ Das bedeutet, dass beispielsweise 1 EUR die kleinste Geldeinheit von 1 Cent hat, da es keine kleinere Geldeinheit als den Cent gibt.
+- __Checkout erfordert genau zwei Dezimalstellen__, und Auf- oder Abrunden ist nicht empfehlenswert. Mit Checkout ist Auf- und Abrunden zwar möglich, jedoch nicht ratsam, da es einige Zahlungsmethoden gibt, die dies nicht zulassen, und in diesen Fällen die Zahlung deaktiviert wird.
+- Wenn der angegebene Betrag keine kleinste Geldeinheit enthält, müssen Sie am Ende zwei Nullen hinzufügen, um anzugeben, dass keine Dezimalstellen enthalten sind. Beispielsweise entspricht die Eingabe des Betrags 100 einer Einheit der angegebenen Währung, also z. B. 1 NOK.
+- __Beträge (auch solche mit Dezimalstellen) werden ohne Satzzeichen angegeben.__ Beispielsweise werden 9,99 USD als 999 angegeben.
+- Wenn Sie Transaktionsdetails an Checkout senden, werden die Details ohne Neuberechnung verarbeitet, sodass es in diesem Prozess __keine automatische Auf- oder Abrundung__ gibt.
+
+### Probleme
+
+- Manchmal kann es vorkommen, dass einige Plugins Beträge auf- oder abrunden und sie so an Checkout senden. In einem solchen Szenario stimmen einige Parameter möglicherweise nicht überein, sodass der Zahlungsprozess einen Fehler erhält. Daher ist es wichtig, für jeden Betrag 2 (zwei) Dezimalstellen einzubeziehen, auch wenn keine kleinste Geldeinheit vorhanden ist. Zum Beispiel:
+  - __im Fall eines Betrags ohne kleinste Geldeinheit:__ 19 EUR sollte als 1900 eingegeben werden (zwei Nullen am Ende geben an, dass im Betrag null Cent enthalten sind)
+  - __im Fall eines Betrags mit kleinster Geldeinheit:__ 19,99 EUR sollte als 1999 eingegeben werden (der Betrag wird mit Dezimalstellen, aber ohne Trennzeichen eingegeben)
+- Manchmal kann es vorkommen, dass eine Transaktionsanfrage nicht akzeptiert wird. Das liegt daran, dass verschiedene Zahlungsmethoden keine Auf- oder Abrundung akzeptieren, sodass unterschiedliche Parameter nicht übereinstimmen, da der auf- oder abgerundete Betrag nicht mit dem tatsächlichen Betrag mit Dezimalstellen übereinstimmt. Verwenden Sie zur Lösung immer 2 (zwei) Dezimalstellen, ohne Satzzeichen/Dezimaltrennzeichen (Komma oder Punkt).
+
+### Formeln zur Berechnung von Steuer, Preis und Gesamtbetrag
+
+- netTotalAmount = unitPrice * quantity
+- taxAmount = netTotalAmount * taxRate / 10000
+- grossTotalAmount = netTotalAmount + taxAmount
+
+### Links und weitere Informationen
+
+- Weitere Informationen zu jedem Parameter finden Sie auf unserer [API-Referenzseite](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-quantity).
+- Hier können Sie auch mehr darüber lesen, wie Sie [sicherstellen, dass Ihre MwSt.-Werte korrekt sind](/go-live-checklist/#build-make-sure-your-vat-values-are-correct).
+
+## Bestellübersicht anzeigen
+
+Bevor der Kunde zur Checkout-Seite weitergeleitet wird, sollte eine Zusammenfassung mit folgenden Informationen angezeigt werden:
+- Eine vollständige Beschreibung der in der Bestellung enthaltenen Dienstleistungen/Produkte. Mit anderen Worten: Der Kunde darf nie zweifeln, wofür er bezahlt.
+- Eine klare Aufschlüsselung des belasteten Gesamtbetrags einschließlich Versand, Mehrwertsteuer usw.
+- Es muss für den Verbraucher klar sein, welche Währung für die Transaktion gilt. Wenn Sie internationalen Versand anbieten, geben Sie auch in der Bestellübersicht den Währungscode an. (SEK)
+- Klarstellung, dass der Verbraucher per Karte zahlen kann.
+- Informieren Sie Ihren Kunden, dass die Rechnung per E-Mail versendet wird.
+
+<Info>
+Sie können die Eigenschaft [`showOrderSummary `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-appearance-displayoptions-showordersummary) verwenden, um die Bestellpositionen auf der Checkout-Seite einzubinden. Weitere Informationen finden Sie im Leitfaden [Text und Sprache anpassen](/customize-content/customize-text-and-language-embedded).
+</Info>
+
+## Bestellbestätigung senden
+
+Sobald ein Kauf abgeschlossen ist, muss der Kunde eine Bestätigung der Bestellung und einen Beleg in Form einer E-Mail erhalten.
+
+Informationen zu den Anforderungen an die Bestellbestätigung finden Sie im Leitfaden [Bestellung bestätigen](/confirm-order).
+
+## Siehe auch
+
+- [Testumgebung](/test-environment)
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Rechnungs- und Ratenzahlungsverarbeitung testen](/test-invoice-installment-processing)
+- [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys)
+- [Ereignisse mit Webhooks verfolgen](/track-events-using-webhooks)
+- [Text und Sprache anpassen](/customize-text-and-language-embedded)

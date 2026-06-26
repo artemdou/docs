@@ -1,0 +1,115 @@
+---
+title: "Privat- und Geschäftskunden unterstützen"
+description: "Dieser Leitfaden richtet sich an Entwickler, die unterschiedliche Kundentypen auf ihrer Checkout-Seite unterstützen möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Komplexität: Niedrig</Badge>
+  <Badge color="yellow">Coding: Etwas</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie:
+- Ein [Checkout-Portal-Konto](https://portal.dibspayment.eu) erstellt haben.
+- [Checkout in Ihre Website integriert haben](/web-integration).
+- [Den Checkout-Ablauf optimiert haben](/optimize-the-checkout-flow). 
+
+Dieser Leitfaden ist nur relevant, wenn Sie [Verbraucherdaten auf der Checkout-Seite erfassen](/optimize-the-checkout-flow/#build-collect-consumer-data-on-the-checkout-page).
+</Warning>
+
+## Was Sie erstellen werden
+
+Dieser Leitfaden zeigt Ihnen, wie Sie verschiedene Kundentypen auf Ihrer Checkout-Seite unterstützen. Die Eingabefelder des Formulars auf der Checkout-Seite werden an den Kundentyp angepasst, den Sie haben. Checkout unterstützt zwei Kundentypen:
+
+- **Privatkunden**, bekannt als **B2C** (Business-to-Consumer)
+- **Geschäftskunden**, bekannt als **B2B** (Business-to-Business)
+
+Sie haben drei Optionen bei der Konfiguration der Kundentyp-Unterstützung mit Checkout:
+
+- **B2C** – nur Privatkunden zulassen
+- **B2B** – nur Geschäftskunden zulassen
+- **B2C** und **B2B** – ein Schalter wird auf der Checkout-Seite hinzugefügt, sodass Ihr Kunde zwischen B2B und B2C wählen kann.
+
+Das folgende Bild zeigt den Schalter auf der Checkout-Seite, der dem Kunden ermöglicht, zwischen einem Geschäfts- und einem Privat-Checkout zu wählen:
+
+![B2B und B2C unterstützen](https://images.ctfassets.net/di680may5c0k/74Pt2VDbU36I6YY5sSLiI2/fb77ccc648abccb32b0182c8ac70825d/b2b.png?w=2000&h=1436&q=50&fm=png)
+
+Sie können auch festlegen, welcher Typ standardmäßig geladen werden soll, wenn das Zahlungsformular angezeigt wird. Bei direkten Integrationen muss das Verhalten des Kundentyps über die [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1) angegeben werden.
+
+<Info>
+Wenn Sie ein Webshop-Modul oder eine Partnerintegration mit integrierter B2B-Unterstützung verwenden, können Sie die Optionen für den Kundentyp im jeweiligen Portal festlegen.
+</Info>
+
+## Kundentypen mit der Payment API auswählen
+
+Standardmäßig geht Checkout davon aus, dass Ihr Kunde ein Privatkunde ist. Wenn Sie auf Ihrer Website Unterstützung für Geschäftskunden anbieten möchten (wie im Bild oben gezeigt), müssen Sie dies über die [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1) angeben, wenn Sie [das Zahlungsobjekt erstellen](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) im Backend Ihrer Website. Ein vollständiges Beispiel finden Sie im [Leitfaden zur direkten Integration](/web-integration).
+
+Das JSON-Anfrageobjekt, das mit der Methode zur Zahlungserstellung gepostet wird, sollte das Objekt `checkout.consumerType ` definieren. Im folgenden Beispiel gibt das `consumerType `-Objekt an, dass sowohl B2B- als auch B2C-Kunden auf der Checkout-Seite unterstützt werden sollen:
+
+```json Support B2B and B2C
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "consumerType": {
+        "supportedTypes": [ "B2B", "B2C" ]
+    }
+  },
+  "order": {
+    ...
+```
+
+Wenn Sie nur Geschäftskunden unterstützen möchten, würden Sie stattdessen B2B als einzigen unterstützten Kundentyp angeben:
+
+```json Support B2B only
+{
+  "checkout": {
+    ...
+    "consumerType": {
+        "supportedTypes": [ "B2B" ]
+    }
+    ...
+```
+
+<Info>
+Obwohl wir in diesem Beispiel `EmbeddedCheckout ` verwenden, könnten Sie dies auch für eine Hosted-Version verwenden, indem Sie den Integrationstyp-Wert `HostedPaymentPage ` angeben.
+</Info>
+
+## Den Standard-Kundentyp angeben
+
+Wenn Sie mehrere Kundentypen verwenden, ist es möglich anzugeben, welcher Kundentyp standardmäßig auf der Checkout-Seite verwendet werden soll. Dies wird mit dem Parameter `checkout.consumerType.default' beim Erstellen eines neuen Zahlungsobjekts definiert. Das folgende JSON-Anfrageobjekt gibt an, dass die Checkout-Seite sowohl B2B als auch B2C unterstützen, aber B2B als Standard verwenden soll:
+
+```json Use B2B by default
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl"
+    "consumerType": {
+        "supportedTypes": [ "B2B", "B2C" ],
+        "default": "B2B"
+    }
+  },
+  "order": {
+    ...
+```
+
+## Unterschiede zwischen B2C und B2B
+
+Der Checkout-Ablauf für B2C und B2B ist sehr ähnlich, und alle Ihre Kunden haben die Möglichkeit, sich auf einem oder mehreren Geräten merken zu lassen. B2B- und B2C-Kundenprofile werden in Checkout immer separat gespeichert. Kundendaten, die für einen Privatkunden gespeichert wurden, werden niemals zum Vorausfüllen eines Checkout-Formulars für einen Geschäftskunden verwendet und umgekehrt.
+
+### Privatkunden
+
+Privatkunden registrieren sich mit: **E-Mail-Adresse**, **Postleitzahl**, **persönlicher Sozialversicherungsnummer** und **Telefonnummer**.
+Checkout führt eine Suche durch und ruft den **Vornamen**, **Nachnamen** und die **Meldeadresse** ab.
+
+### Geschäftskunden
+
+Der Ablauf zur Registrierung als Unternehmen ist dem von B2C sehr ähnlich. Für Norwegen und Dänemark enthält das Formular zusätzlich zu den von einem Privatverbraucher gesammelten Informationen den **Firmennamen**. Beim schwedischen Ablauf haben Geschäftskunden die Möglichkeit, eine Suche nach der **Organisationsnummer** durchzuführen und die Adresse automatisch abzurufen.
+
+B2B-Kunden können die gleichen Zahlungsmethoden wie B2C-Kunden verwenden, mit Ausnahme von **Ratenzahlungen** und **Rechnungs-Kampagnen**, die nur für Privatkunden verfügbar sind.
+
+Eine B2B-Rechnung hat einige Einschränkungen, da die Sicherheit des Checkouts darauf basiert, dass nur an offiziell registrierte Adressen versandt wird, und B2B-Unternehmen können nur per Rechnung zahlen, wenn an ihren Geschäftssitz versandt wird. Ein wesentlicher Unterschied zu B2C besteht darin, dass das Fälligkeitsdatum auf 30 Tage und nicht auf 14 Tage festgelegt wird.

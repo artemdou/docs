@@ -1,0 +1,106 @@
+---
+title: "Zahlung"
+description: "Diese Anleitung beschreibt die Zahlungsfunktionalitäten im Bereich Einstellungen des Checkout-Demoshops."
+---
+
+## Überblick
+
+In diesem Abschnitt wird der Bereich __Zahlung__ unter __Einstellungen__ des Checkout-Demoshops vorgestellt.
+
+Dies umfasst Beschreibungen für jede der möglichen Zahlungseinstellungen, Anwendungsbeispiele und wie diese für Testzwecke eingerichtet werden.
+
+Der Zahlungsbereich umfasst die 21 Komponenten wie Währung, BIN-Filterung und Unscheduled Subscription. Die vollständige Liste der Komponenten finden Sie hier:
+
+|  |  |  |
+| --- | --- | --- |
+| Währung | BIN-Filterung | Unscheduled Subscription |
+| Webhooks | Zahlungsart-Filterung | Schaltflächentexte |
+| Öffentliches Gerät | Rechnungsgebühr | Bestelldetails anzeigen |
+| Hosted | Verbraucherdaten | MerchantHandlesConsumerData |
+| Verbrauchertyp | Reference | Direct Charge |
+| Versandländer | MyReference | Rechnungs- und Versandadresse trennen |
+| Ländercode | Subscription | Cancel-URL |
+
+![Zahlungsansicht-Einstellungen Demoshop](https://images.ctfassets.net/di680may5c0k/1mDMdb5MZ2urxJSX5jgp8g/a81afd06553c95e9f2fb14899e2cee16/image.png?w=1429&h=862&q=50&fm=png)
+
+Wann immer eine Komponente umgeschaltet wurde, werden auf der rechten Seite der __Checkout-Optionen__ die aktualisierten Informationen im *JSON*-Format angezeigt.
+
+Sie können die aktivierten und umgeschalteten Zahlungseinstellungen generieren und in eine Lade-URL für Einstellungen laden, in der Sie die Zahlungseinstellungen in einer Übersichtstabelle sehen können.
+
+Sie können auch alle Schalter zurücksetzen, indem Sie auf die Schaltfläche __Zahlungseinstellungen zurücksetzen__ klicken.
+
+![JSON-Demoshop-Beispiel](https://images.ctfassets.net/di680may5c0k/6KrnU1bVDLQTQdGjy8jZqD/391eb987664b30750a6b14707928f776/image.png?w=460&h=706&q=50&fm=png)
+
+## Zahlungseinstellungen
+
+Im Zahlungsbereich des Checkout-Demoshops können verschiedene Funktionen umgeschaltet werden, die auf Ihr Geschäft und Ihren Anwendungsfall zugeschnitten werden können und somit für die Optionsauswahl Ihrer Verbraucher beim Navigieren im Checkout-Bereich von Checkout geeignet sind.
+
+Jede der möglichen Funktionalitäten und Schalter im Zahlungsbereich aktualisiert das Checkout-Optionen-Panel entsprechend Ihren Anpassungen. Von hier aus können Sie die automatisch generierte `json `-Ausgabe kopieren und einfügen.
+
+### Tabelle der Komponenten des Zahlungsbereichs des Demoshops
+| Name | Funktionalität | Beispiel |
+| --- | --- | --- |
+| Schaltflächentexte | Standardmäßig ist der auf der Checkout-Schaltfläche für den Verbraucher angezeigte Text auf „pay" mit dem Gesamtbetrag eingestellt. Mit dieser Komponente können Sie den Text der Schaltfläche jedoch bei Bedarf ändern. | A. Wenn Sie Zeitschriften verkaufen, wäre es sinnvoll, die Schaltfläche „abonnieren" zu nennen. B. Wenn Sie ein Reisebüro sind, wäre es sinnvoll, die Schaltfläche „buchen" oder „reservieren" zu nennen. |
+| Cancel-URL | Wenn der Verbraucher eine Zahlung abbrechen möchte, haben Sie die Möglichkeit, die URL anzugeben, zu der der Verbraucher zurückkehren kann. | Wenn der Verbraucher die Zahlung abbricht, kann A. die URL den Verbraucher zurück zu einer Seite mit Sonderangeboten leiten, B. zu einer neuen Seite gehen, um Feedback dazu einzuholen, warum der Checkout-Prozess nicht abgeschlossen wurde, oder C. zur Startseite zurückkehren. |
+| Verbraucherdaten | Wenn Sie bereits über die Verbraucherdaten verfügen, kann Nexi Checkout eine Suche durchführen, um das Checkout-Erlebnis zu vereinfachen. Das bedeutet, dass die Felder vorausgefüllt werden und möglicherweise auch die Details der Zahlungsmethode. | Wenn Sie die Verbraucherinformationen im Webshop sammeln und an Checkout weitergeben, vereinfacht dies den Checkout-Ablauf für den Verbraucher. |
+| Verbrauchertyp | Legt fest, welcher Verbrauchertyp im Checkout-Fenster verfügbar ist. B2C ist für Privatverbraucher und B2B für Geschäftskunden gedacht. |  |
+| Ländercode | Setzt den Ländercode für die Zahlung. | Wenn Sie Geschäfte in EUR tätigen, können Sie diese Einstellung aktivieren, um ein optimales lokales Checkout-Erlebnis zu gewährleisten. |
+| Währung | Abhängig davon, welche Zahlungsmethoden Sie für Ihr Checkout-Konto aktiviert haben, wird eine Vielzahl von Währungsoptionen angezeigt. | Sie müssen immer eine Währung festlegen, um die richtigen lokalen Checkout-Optionen anzuzeigen. Wenn Sie EUR hinzufügen, sollten Sie auch den Ländercode wie oben gezeigt setzen. |
+| Direct Charge | Ermöglicht direkte Belastungen. | Wenn Sie Dienstleistungen verkaufen, die Sie online erhalten, können Sie diese Direct-Charge-Lösung anstelle von Reservieren und Belasten verwenden. Dies vereinfacht den Prozess. |
+| Bestelldetails anzeigen | Wenn Sie die gehostete Lösung für Ihren Webshop verwenden, können Sie diese Einstellung aktivieren, um den Händlernamen und die Bestelldetails anzuzeigen. |  |
+| Hosted | Sie können die Lösung entweder als gehostet oder eingebettet haben. Die gehostete Lösung leitet Sie zu einer neuen Seite für das Checkout weiter, während die eingebettete den Verbraucher auf derselben Checkout-Seite hält. |  |
+| Rechnungsgebühr | Wenn Sie möchten, dass der Verbraucher die Kosten der Zahlung trägt, können Sie dies als Verwaltungsgebühr aktivieren. |  |
+| MerchantHandlesConsumerData | Wenn Sie diese Komponente aktivieren, können Sie alle Informationen des Verbrauchers selbst verwalten. Das bedeutet, dass Nexi Checkout im Checkout nur die Zahlungsmethoden anzeigt. Wenn die Verbraucherdaten nicht an Nexi Checkout übergeben werden, zeigen wir keine Rechnungs- und Ratenzahlungsoptionen an. | Wenn Sie eine Benutzerprofil-Lösung in Ihrem Webshop haben, mit der sich Verbraucher anmelden können, dann: A. kann MerchantHandlesConsumerData aktiviert werden, B. wenn MerchantHandlesConsumerData deaktiviert ist, werden im Checkout nur Karten und Wallets angezeigt. |
+| MyReference | Wenn Sie eine eigene Referenz mit der Zahlung verknüpfen möchten, können Sie dieses Freitextfeld setzen. | Dies kann in Ihrem eigenen ERP-System für Buchhaltungszwecke verwendet werden. |
+| Zahlungsart-Filterung | Damit können Sie die Zahlungsmethoden beim Laden des Checkouts konfigurieren. | Wenn Sie diese Einstellung aktivieren, können Sie zum Beispiel die Logik hinzufügen, nur Rechnungen und Ratenzahlungen anzuzeigen, wenn der Verbraucher etwas zu höheren Kosten kauft. Dies vereinfacht den Checkout-Prozess für den Verbraucher. |
+| Öffentliches Gerät | Dies kann verwendet werden, wenn die Checkout-Lösung nur auf einem öffentlichen Gerät verwendet wird. | Wenn Sie öffentlich zugängliche Geräte in Ihrem physischen Geschäft haben, können Sie diese Einstellung aktivieren. |
+| Reference | Dies ist ein Freitextfeld, das auf der Bestellebene verwendet werden kann. | Wenn Sie möchten |
+| Versandländer | Dies ermöglicht es Ihnen, auszuwählen, in welche Länder Sie versenden können. | Wenn Sie in einem Land Geschäfte machen, dürfen Sie die Bestellung nicht in andere Länder versenden |
+| Rechnungs- und Versandadresse trennen | Dies ermöglicht Ihnen unterschiedliche Rechnungs- und Versandadressen. | Wenn der Verbraucher seinem Ehepartner Blumen kaufen möchte, kann der Verbraucher die Bestellung bezahlen, sie aber an eine andere Adresse liefern lassen. |
+| Subscription | Dies ermöglicht Ihnen, wiederkehrende Zahlungen in einer festen Frequenz anzubieten. | Wenn Sie Zeitschriften verkaufen, können Sie diese Einstellung aktivieren, um den Verbraucher monatlich zu belasten. |
+| Unscheduled Subscription | Dies ermöglicht Ihnen, wiederkehrende Zahlungen ohne festen Betrag und Frequenz anzubieten. | Wenn Sie Parken anbieten, können die Verbraucher ihre Kartendaten speichern, um belastet zu werden, wann immer sie Ihre Dienste nutzen. |
+| Webhooks | Dies ermöglicht Ihnen, Benachrichtigungen für die Aktivitäten der Zahlung zu erhalten. | Sie können die verfügbaren Webhooks im Webhook-Bereich überprüfen. |
+
+## Anwendungsfälle
+
+Im Folgenden werden einige Beispiele für Anwendungsfälle des *Zahlungs*-Bereichs erläutert:
+
+### Anwendungsfall #1
+Sie haben einen Webshop, der Artikel in der Währung NOK verkauft.
+
+### Anwendungsfall #1
+| Anwendungsfall # | Einrichtung |
+| --- | --- |
+| Anwendungsfall #1 | Gehen Sie in den Zahlungsbereich. Suchen Sie die Währungskomponente. Wählen Sie aus dem Währungs-Dropdown-Menü NOK aus. |
+
+![Zahlungseinstellungen Anwendungsfall #1](https://images.ctfassets.net/di680may5c0k/5P0kTcswpft5Fx95fbcI0c/ff727a6331beaf1dfe1788ca556979cc/image.png?w=1434&h=862&q=50&fm=png)
+
+![Zahlungseinstellungen JSON für Anwendungsfall #1](https://images.ctfassets.net/di680may5c0k/3GuHEYHhaA4N7dvFbnKfc5/0764fd8555196e3c2a34cfb2ea5e1012/image.png?w=472&h=765&q=50&fm=png)
+
+### Anwendungsfall #2
+Sie haben einen Webshop und müssen die Webhooks *payment.created, payment.charge.created und payment.checkout.completed* aktivieren, weil Sie die Benachrichtigungen über die Aktivitäten der Zahlungen erhalten möchten.
+
+### Anwendungsfall #2
+| Anwendungsfall # | Einrichtung |
+| --- | --- |
+| Anwendungsfall #2 | Gehen Sie in den Zahlungsbereich. Suchen Sie die Webhooks-Komponente. Wählen Sie aus dem Webhooks-Dropdown-Menü die erforderlichen Webhooks aus: payment.created, payment.charge.created und payment.checkout.completed |
+
+![Zahlungs-Anwendungsfall #2 Demoshop-Einstellungen](https://images.ctfassets.net/di680may5c0k/64YX2U1Sdv14KCdbYjyRMA/ca848135cf3125b1e1e240194a763dd5/image.png?w=1435&h=819&q=50&fm=png)
+
+![Zahlungseinstellungen JSON für Anwendungsfall #2](https://images.ctfassets.net/di680may5c0k/2ki0s9bKEZwhvJlNXjoTA9/d4dd20718148ec02871c8e69dfb2992f/image.png?w=466&h=691&q=50&fm=png)
+
+### Anwendungsfall #3
+Sie haben einen Webshop, in dem Sie die Verbraucherdaten besitzen, die Versandländer beschränken und nur in einigen Ländern in der Währung EUR Geschäfte machen möchten.
+
+### Anwendungsfall #3
+| Anwendungsfall # | Einrichtung |
+| --- | --- |
+| Anwendungsfall #3 | Aktivieren Sie die Versandländer. Aktivieren Sie als Nächstes den Ländercode. Aktivieren Sie schließlich die Versandgebühr. |
+
+![Zahlungseinstellungen Anwendungsfall #3](https://images.ctfassets.net/di680may5c0k/4O0ECH2CEhdGAlDkebn7DZ/b3e1b76eea2fa3a52b289657b2956567/image.png?w=1426&h=856&q=50&fm=png)
+
+![Zahlungseinstellungen JSON für Anwendungsfall #3](https://images.ctfassets.net/di680may5c0k/6GMqGjVFDJX9fTIPpTDJBq/b1f594dd2774e8570bd95db1038bd059/image.png?w=469&h=850&q=50&fm=png)
+
+## Siehe auch
+
+- [Testdaten](/test-data)

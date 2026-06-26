@@ -1,0 +1,233 @@
+---
+title: "Checkout für Magento"
+description: "Diese Anleitung beschreibt, wie Sie das Checkout-Webshop-Modul für Magento 2 installieren, konfigurieren und verwenden."
+---
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie die Anleitung
+- So [erstellen Sie ein Testkonto für Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+## Übersicht
+
+Unser Plugin für Magento 2 unterstützt alle Checkout-Funktionen wie die intelligente Kundenerkennung und die am besten konvertierenden Zahlungsmethoden. Es ist einfach zu integrieren und wird ständig aktualisiert. Checkout ist mit Magento 2 kompatibel.
+
+Das Plugin hält Ihren Magento-Shop und unsere Checkout-Zahlungsplattform synchronisiert, sodass Sie Ihre Bestellungen vollständig in Magento bearbeiten können und für detailliertere Berichte auf das Checkout Portal zugreifen können.
+
+<Info>
+Nachfolgend sehen Sie alle von Checkout angebotenen Zahlungsmethoden. Diese Liste bezieht sich auf alle Märkte.
+
+Je nach Land oder Region kann die Liste variieren. Wenn Sie bei einer bestimmten Zahlungsmethode unsicher sind, ob diese in Ihrem Land oder Ihrer Region verfügbar ist, kontaktieren Sie bitte den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) für weitere Informationen.
+</Info>
+
+![Checkout-Plugin – Magento](https://images.ctfassets.net/di680may5c0k/5VRWNAwGCfFd4jgXWr0BrE/48d71e57dbc5d033bd63f82754831b67/plugin_magento.jpg?w=1576&h=608&fl=progressive&q=50&fm=jpg)
+
+<Warning>
+Die Apple Pay-Konfiguration für das Magento 2-Plugin wird auf der Seite [Apple Pay Zahlungsmethode](/apple-pay/#build-magento-2) beschrieben.
+</Warning>
+
+### Shop-Funktionen
+
+- Der schnelle Checkout mit "Remember me"-Funktion.
+- Beinhaltet 2 Checkout-Abläufe, um dem gewünschten Kundenerlebnis zu entsprechen: Embedded (Ihre Kunden werden zur Bezahlung nicht aus dem Magento-Checkout umgeleitet) und Hosted Checkout (mit Weiterleitung).
+- Eine intelligente Mischung von Zahlungsmethoden für alle Vorlieben.
+- Mehrere Checkout-Sprachen und Währungen für den Verkauf im In- und Ausland.
+
+![Magento 2 Checkout-Ansicht](https://images.ctfassets.net/di680may5c0k/4nH4jWASY5R0WQFowmnUUV/09b0e266f7d38ed3bb2b941b0837f481/Magento_2_vanilla.png?w=942&h=690&q=50&fm=png)
+
+### Funktionen des Admin-Panels
+
+- Schnelle Einrichtung und flexible Konfiguration.
+- Intuitive Auftragsverwaltung mit synchronisierten Charges und Refunds.
+- Kompatibel mit Rabatten, Steuer (MwSt.) und Versandvarianten.
+- Kompatibel mit Multi-Shop-Setups.
+- Kompatibel mit mehreren visuellen Themes (Vanilla- und Redirect-Checkouts).
+
+![Magento 2 Admin-Funktionen](https://images.ctfassets.net/di680may5c0k/7py6oxocK8BzcqaAxyJDFn/bf30c13bffa2868855188bbd804ad19e/magento_2.png?w=1349&h=667&q=50&fm=png)
+
+## Installation
+
+Folgen Sie den nachstehenden Schritten, um das Checkout-Modul in Magento 2 zu installieren und zu aktivieren.
+
+### Schritt 1: Modul installieren
+
+Sie haben zwei Möglichkeiten zur Installation des Checkout-Moduls.
+
+#### Alternative 1: Manuell
+
+Laden Sie die Datei manuell auf Ihre Magento-Seite hoch:
+
+1. Laden Sie das aktuellste Checkout-Modul von GitHub herunter: [https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip](https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip)
+
+2: Entpacken Sie die Datei und laden Sie den Inhalt per FTP in das Verzeichnis `/app/code/Dibs/EasyCheckout ` Ihrer Magento-Seite hoch.
+Bitte legen Sie den Ordner `/Dibs/EasyCheckout ` beim ersten Installieren des Plugins an.
+
+#### Alternative 2: Mit Composer
+
+Eine weitere Option ist die Installation des Moduls über **Composer** auf Ihrer Magento-Seite, indem Sie folgende Befehle ausführen:
+
+```shell Composer commands
+$ composer require nexi-checkout/magento2
+```
+Es wird dringend empfohlen, die Bereinigung von ausstehenden Zahlungsbestellungen unter Sales > Orders, Orders Cron Settings > Pending Payment Order Lifetime (minutes) zu aktivieren.
+
+### Schritt 2: Modul aktivieren
+
+Aktivieren Sie das Nets Easy-Modul in Magento, indem Sie folgende Befehle ausführen:
+
+```shell Enable Checkout
+$ php bin/magento module:enable --clear-static-content Dibs_EasyCheckout 
+$ php bin/magento setup:upgrade
+```
+
+Das Modul ist nun installiert und kann für Ihr Checkout-Konto konfiguriert werden.
+
+### Aktualisieren
+#### Methode 1: FTP
+
+Wenn Sie das Plugin per FTP installiert haben, können Sie das Modul wie folgt aktualisieren:
+
+1. Laden Sie das aktuellste Nets Easy-Modul von GitHub herunter: [https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip](https://github.com/Nets-eCom/Magento2_easy/archive/refs/heads/master.zip)
+2. Entfernen Sie den Inhalt des Verzeichnisses /app/code/Dibs/EasyCheckout.
+3. Entpacken Sie die heruntergeladene Datei und laden Sie den Inhalt in das Verzeichnis `/app/code/Dibs/EasyCheckout ` hoch.
+
+#### Methode 2: VSC
+
+Wenn Sie das Plugin zuvor installiert haben, indem Sie das GitHub-Repository zu Composer hinzugefügt haben, können Sie das Modul mit folgenden Befehlen aktualisieren:
+
+```shell Update Module
+$ composer remove nets/easycheckout
+$ composer require nexi-checkout/magento2
+$ php bin/magento setup:upgrade
+```
+
+#### Methode 3: Composer
+
+Wenn Sie das Plugin über Composer installiert haben, können Sie das Modul mit folgenden Befehlen aktualisieren:
+
+```shell Update Module
+$ composer update nexi-checkout/magento2
+$ php bin/magento setup:upgrade
+```
+
+## Konfiguration
+
+Nach der Installation des Moduls müssen Sie einige grundlegende Konfigurationen vornehmen:
+
+1. Navigieren Sie zu: **System > Konfiguration > Zahlungsmethoden**
+2. Suchen Sie **Checkout** und gehen Sie zur **Konfiguration**.
+3. Füllen Sie die erforderlichen Felder aus, wie z. B. Händler-ID und Integrationsschlüssel (Secret-Keys und Checkout-Keys).
+3. (Optional) Passen Sie das Modul mit den zusätzlichen Einstellungen auf der Konfigurationsseite Ihren Bedürfnissen an.
+
+<Info>
+Sowohl die **Händler-ID** als auch die **Integrationsschlüssel** finden Sie im [Checkout Portal](https://portal.dibspayment.eu/). Weitere Informationen finden Sie auf den folgenden Seiten:
+
+- [Wo finde ich meine Händlernummer (Merchant-ID)?](https://developer.nexigroup.com/nexi-checkout/en-EU/support/where-can-i-find-my-merchant-number-merchant-id/)
+- [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys)
+</Info>
+
+Der folgende Screenshot zeigt die Checkout-Konfigurationsseite im Admin-Panel:
+
+![Magento 2 Admin-Konfiguration](https://images.ctfassets.net/di680may5c0k/379SaDmpd9x5LtlNPR8G45/848c0a798dfcdbaf5c2cc80f2d8df8c6/Configuration-Settings-Stores-Magento-Admin.png?w=1340&h=839&q=50&fm=png)
+
+Die folgende Tabelle listet alle Einstellungen auf, die Sie im Administrationsbereich für das Checkout-Modul konfigurieren können:
+
+| Konfigurationseinstellung | Beschreibung
+| ---------------------------|------------ 
+| Aktiviert | Aktiviert das Modul in Magento
+| Testmodus | Wechselt zwischen **Test**-Modus und **Live**-Modus. Wählen Sie den Testmodus, wenn Sie Testkäufe in der [Testumgebung](/test-environment) durchführen möchten. Es gibt [Beispielkartennummern](/test-card-processing/#build-sample-credit-cards) und [Rechnungsadressen](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) zu Testzwecken. Der Live-Modus erfordert ein genehmigtes Konto.
+| Checkout Key | Ihr Checkout-Key, den Sie im [Checkout Portal](https://portal.dibspayment.eu/) finden. Weitere Informationen finden Sie in der Anleitung [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys). _Wichtig!_ Verwenden Sie den Test-Checkout-Key oder Live-Checkout-Key je nach festgelegtem Modus (siehe Einstellung **Testmodus** oben).
+| Secret Key | Ihr Secret-Key, den Sie im [Checkout Portal](https://portal.dibspayment.eu/) finden. Weitere Informationen finden Sie in der Anleitung [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys). _Wichtig!_ Verwenden Sie den Test-Secret-Key oder Live-Secret-Key je nach festgelegtem Modus (siehe Einstellung **Testmodus** oben).
+| Webhook-Authentifizierungspasswort | Das Passwort, das die Nexi Group zur Authentifizierung verwendet, wenn die vom Magento-Plugin (Checkout-Modul) eingerichteten Webhook-Endpunkte aufgerufen werden.
+| Webhook-Bestätigungs-Timeout | Die Zeit in Sekunden, die Magento auf eine Bestellbestätigung der Nexi Group wartet.
+| Standard-Versandart | Definiert die Standard-Versandart. Mögliche Werte sind **Fixed** (Pauschale), TODO
+| Standardland | Das im Checkout verwendete Standardland.
+| Kundendaten verarbeiten | Ermöglicht es, den Checkout mit Kundendaten aus dem Magento-Checkout zu initiieren.
+| Rechnungs- und Versandadresse trennen | Bei **Ja** kann Ihr Kunde separate Adressen für Rechnung und Versand angeben.
+| Erlaubte Kundentypen im Checkout | Konfiguriert, welche Kundentypen auf der Checkout-Seite akzeptiert werden sollen. **B2C** steht für Privatkunden (Business-to-Consumer). **B2B** steht für Geschäftskunden (Business-to-Business).
+| Standardkundentyp im Checkout | Legt den Standardkundentyp fest (B2C oder B2B).
+| Checkout-Ablauf | Der Checkout-Ablauf: **Vanilla Embedded**, **Redirect** oder **Embedded**.
+| Cancel-/Return-URL | Gibt an, wohin Ihr Kunde nach einer abgebrochenen Zahlung zurückkehrt.
+| Zahlung einziehen/erstatten | Bei **Nein** werden auf Rechnung/Gutschrift/Bestellung keine Zahlungsoperationen (Capture/Refund/Void) durchgeführt.
+| Auto-Capture aktivieren | Mit dieser Funktion können Sie eine Zahlung sofort nach Aufgabe der Bestellung einziehen. _Hinweis!_ Die Einziehung einer Zahlung vor Versand der Bestellung kann je nach Gesetzgebung in Ihrem Land Beschränkungen unterliegen. Missbrauch kann zur Kündigung Ihres Checkout-Kontos führen.
+| Teilweise Einziehung möglich | Bei **Nein** können Sie keine Teilrechnungen oder Teilrückerstattungen vornehmen.
+| Newsletter standardmäßig abonniert | **Ja** oder **Nein** – passend zu Ihren AGB und den Vorschriften Ihres Landes.
+| Produktoptionen zum Namen bei Nexi Group hinzufügen | Aktivieren Sie diese Option, damit, falls in einem Produkt eine Option definiert ist, diese der Bestellpositionsliste in den Nets-Bestelldetails hinzugefügt wird.
+| Gastkunden registrieren | Bei **Ja** wird für Gastkunden ein Konto erstellt.
+| Bestell-E-Mails senden | Bei **Ja** versendet Magento automatisch die Standard-Bestell-E-Mail. Bei **Nein** muss die E-Mail-Konfiguration separat eingerichtet werden.
+| Einzelne Bestellpositionen an die Nexi Group senden | Bei **Ja** wird jede Bestellposition (z. B. das gekaufte Produkt und der Versand) als separate Position an das Checkout-Gateway gesendet. Bei **Nein** werden alle Bestellpositionen als ein Artikel inklusive Steuern an das Nexi Group Checkout-Gateway gesendet. Dies unterstützt benutzerdefinierte Aufschläge und Rabatte.
+| URL der AGB-Seite | Die URL zu den AGB Ihres Webshops.
+| URL der Datenschutzseite | Die URL zu den Datenschutz- und Cookie-Einstellungen Ihres Webshops.
+| Checkout-URL durch Checkout ersetzen | Diese Einstellung ist obligatorisch und muss bei Verwendung eines eingebetteten Checkouts auf **Ja** gesetzt werden.
+| Nexi Group CSS-Datei hinzufügen | Bei **Ja** wird das Stylesheet `Nets.css ` zum Frontend hinzugefügt.
+| Nexi Group Erfolgsseite anzeigen | Bei **Ja** wird nach Abschluss einer Zahlung die Standard-Checkout-Erfolgsseite angezeigt.
+| Bestellstatus nach abgeschlossenem Checkout | Der Status, den die Bestellung erhält, nachdem Ihr Kunde den Checkout-Prozess abgeschlossen hat.
+| Rechnungsgebühr verwenden | Bei **Ja** ist es möglich, eine Gebühr für Rechnungszahlungen hinzuzufügen.
+| Newsletter im Checkout anzeigen | **Ja**/**Nein**.
+| Rabattformular anzeigen | **Ja**/**Nein**.
+| Link zu einer anderen Zahlungsmethode anzeigen | **Ja**/**Nein**.
+| Zusätzlichen Block anzeigen | **Ja**/**Nein**.
+| Standard-Magento-Versandarten anzeigen | **Ja**/**Nein**.
+| Checkout-Versandarten anzeigen | Bei einem eingebetteten Checkout nur für die Unifaun-Versand-Wallet auf **Ja** setzen.
+| Cross-Sell-Produkte anzeigen | **Ja**/**Nein**.
+| Anzahl der Produkte | Die Anzahl der Cross-Sell-Produkte.
+
+<Check>
+Sie haben nun das Checkout-Webshop-Modul installiert und konfiguriert. Bei weiteren Fragen lesen Sie bitte den Abschnitt zur Fehlerbehebung unten oder wenden Sie sich an unseren [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Auftragsverwaltung
+
+Es ist möglich, Bestellungen direkt im Magento-Administrationsbereich zu verwalten:
+
+1. Navigieren Sie zu **Sales > Order > View**.
+2. Klicken Sie auf eine Bestellzeile, um die Bestelldetails aufzurufen.
+3. Wählen Sie die gewünschte Aktion, **Erstattung/Teilerstattung**, oder aktualisieren Sie den Bestellstatus. Das Checkout-Plugin synchronisiert sich automatisch. Der Zahlungsstatus wird auch im [Checkout Portal](https://portal.dibspayment.eu) aktualisiert.
+
+<Info>
+Alle von der Nexi Group durchgeführten Transaktionen sind im [Checkout Portal](https://portal.dibspayment.eu/) zugänglich.
+</Info>
+
+![Magento 2 Sales Orders](https://images.ctfassets.net/di680may5c0k/36D6ggdnUCgn7R6INDMzUV/e48201c2fb9a5007d47684ef4c14dc4c/Orders-Sales-Magento2-Admin.png?w=1274&h=400&q=50&fm=png)
+
+## Fehlerbehebung
+
+Nachfolgend finden Sie einige der häufigsten Konfigurationsfehler, deren Ursachen und Schritte zu deren Behebung.
+
+## Nexi Group Zahlungs-Plugin ist nicht als Zahlungsmethode sichtbar
+
+- Wechseln Sie vorübergehend zum Standard-Template von Magento 2. Benutzerdefinierte Templates erfordern möglicherweise zusätzliche Anpassungen, um eine korrekte Anzeige sicherzustellen. Wenden Sie sich an Ihren Webdesigner oder Entwickler.
+
+### Nexi Group Zahlungsfenster ist leer
+
+- Stellen Sie sicher, dass Ihre Integrationsschlüssel in den Nexi Group App-Einstellungen korrekt sind und keine zusätzlichen Leerzeichen enthalten.
+- Deaktivieren Sie vorübergehend Drittanbieter-Plugins, die die Funktionalität der App beeinträchtigen könnten.
+- Prüfen Sie, ob es vorübergehende technische Inkonsistenzen gibt: https://easy-status.developers.nets.eu/
+
+### Zahlungen im Live-Modus funktionieren nicht
+- Stellen Sie sicher, dass Sie über ein genehmigtes Live-Checkout-Konto für die Produktion verfügen.
+- Stellen Sie sicher, dass Ihr Live-Checkout-Konto für Zahlungen in der gewählten Währung freigegeben ist.
+- Stellen Sie sicher, dass die Zahlungsmethodendaten korrekt sind und durch Ihren Checkout-Vertrag unterstützt werden.
+
+## Go-Live-Checkliste
+
+Weitere Informationen finden Sie im Abschnitt [Go-Live-Checkliste](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Magento Marketplace">
+  </Card>
+  <Card title="Download">
+  </Card>
+  <Card title="Quellcode">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Konto erstellen](/create-a-checkout-portal-account)
+- [Testumgebung](/test-environment)
+- [Testen der Kartenverarbeitung](/test-card-processing)
+- [Testen der Rechnungs- und Ratenzahlungsverarbeitung](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

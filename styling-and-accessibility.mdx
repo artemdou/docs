@@ -1,0 +1,53 @@
+---
+title: "Styling and Accessibility"
+description: "This guide is for developers who want to customize the style and behavior of their Checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="yellow">Coding: Some</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+This guide assumes that you already have a [Checkout Portal account](https://portal.dibspayment.eu) and have [integrated Checkout on your website](/web-integration/integrate-checkout-on-your-website-embedded).
+</Warning>
+
+## Overview
+
+The style of the checkout page can be customized so that you can have the checkout page match the style of your site. You have two options when it comes to styling:
+- Use the [Checkout styler](https://portal.dibspayment.eu/account/checkout-styler) in Checkout portal. This options is the recommended way to style the checkout page and requires no coding.
+- Use the [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk) to style your checkout programmatically. This makes it possible to style multiple checkout pages individually on you website. This option is only available if you are using an embedded checkout page since it depends on the Checkout JS SDK.
+
+## Checkout styler
+
+To use the Checkout styler, navigate to the Customer Checkout styler in Checkout Portal. You can create and publish custom themes based on ready-made themes provided by Nexi Group or define a theme on your own.
+
+![Checkout styler](https://images.ctfassets.net/di680may5c0k/5FLKZbTVEw9HXKdzi0Vecx/beece92e2618673d9a2168ba2da9cbbb/MicrosoftTeams-image__25_.png?w=1886&h=713&q=50&fm=png)
+
+![Checkout styler themes](https://images.ctfassets.net/di680may5c0k/6VMZIgZRtBP8TRAQHxbsDS/7b8b00046212f5aacb7907cabfe2ef20/MicrosoftTeams-image__24_.png?w=1890&h=830&q=50&fm=png)
+
+The **accessibility check**, shown in the image above, can help you find color combinations that meet a certain contrast ratio required to make your checkout page accessible.
+
+## Specify theme using JavaScript
+
+If you are using an embedded checkout page, you can style the checkout page using JavaScript and the [Checkout JS SDK](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk). Pass a `theme ` object to the [`Checkout ` constructor](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#constructor) or use the method [`setTheme() `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#settheme) on your `Checkout ` object. The following example defines a gray background but keeps the panel elements white:
+
+```javascript Set theme using JavaScript
+// ...
+var checkout = new Dibs.Checkout(checkoutOptions);
+var theme = {
+  "backgroundColor": "#F2F2F2",
+  "panelColor": "white",
+};
+checkout.setTheme(theme);
+```
+
+The code will generate a checkout page as follows. Note the gray background and the white panels:
+
+![Custom styles using JavaScript](https://images.ctfassets.net/di680may5c0k/5dzceEzox4eXYINzLXINiZ/a257e96d894064213c22a5c3f2f01ee5/Screenshot_2021-03-29_at_09.07.14.png?w=1746&h=842&q=50&fm=png)
+
+It's not possible to combine style settings from the Checkout styler and the Checkout JS API. If you have defined a style in the Checkout styler, you cannot override the style using [`setTheme() `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#settheme). In order to use the [`setTheme() `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/checkout-js-sdk#settheme) API, you have to delete all your custom themes from the Checkout styler in Checkout Portal:
+
+![Delete custom themes](https://images.ctfassets.net/di680may5c0k/2Zdop2qOzJvRTmf2kTcjTI/21d2c23ecab8460465b7b33c7e1209e3/styling.png?w=2296&h=1436&q=50&fm=png)

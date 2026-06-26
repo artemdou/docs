@@ -1,0 +1,38 @@
+---
+title: "Error Codes"
+description: "This guide describes some of the common error codes."
+---
+
+## Error codes
+
+Some of the most common Checkout error codes are:
+
+### Common error codes table
+| Code | Description | Next steps |
+| --- | --- | --- |
+| 01 – Refer to card issuer | The transaction was refused by the card issuer. The shopper should contact their bank for clarification. 
+
+The shopper can try again after resolving the issue with their bank, or use another payment method. |  |
+| 03 – Invalid merchant | The transaction was refused by the card issuer. The shopper should contact their bank for clarification.
+
+The shopper can try again after resolving the issue with their bank, or use another payment method. |  |
+| 04 – Capture card/pick-up | The card issuer requests to retain the card. This can be due to a suspected counterfeit or stolen card. 
+
+This reason is used in an E-Commerce environment although it  
+originates from a POS (Point Of Sale) |  |
+| 05 – Do not honor | This is a generic refusal that has several possible causes. The shopper should contact their issuing bank for clarification. |  |
+| 41 – Lost card | The card number is not within a card number range supported by the scheme. |  |
+| 51 – Insufficient funds/over credit limit / Not sufficient funds | Insufficient funds in the cardholder's account. The shopper can try again after adding funds to their bank account, or use another payment method. |  |
+| 57 – Transaction not permitted to issuer/cardholder | The card issuer does not permit the transaction on this card/account. The shopper can use another payment method. For activation or loading of prepaid cards, the Merchant, acquirer BIN, and issuer BIN are not all domestic.
+
+An issuer's processing center is not certified to receive transaction-specific data in TLV format (field 104 in request message). |  |
+| b3 – Fraud / Security | Applies for Mastercard. The transaction is refused because the card issuer suspects this payment to be fraudulent.
+
+View the Merchant Advice Code for follow-up action. |  |
+| 59 – Suspected fraud | The transaction is refused because the card issuer suspects this payment to be fraudulent. |  |
+
+You can also check out the error codes from the:
+
+- API Ref on error codes [here](https://developers.nets.euhttps://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#error-codes)
+- API Ref on acquirer response codes on failing reservations [here](https://developers.nets.euhttps://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#acquirer-response-codes-on-failing-reservations)
+- Guide on Re-attempts for subscription retries [here](https://developers.nets.eu/manage-subscription-retries/#build-re-attempt-can-be-forbidden)

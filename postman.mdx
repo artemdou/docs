@@ -1,0 +1,140 @@
+---
+title: "Postman"
+description: "Postman, which is a API platform, allows you to explore the Checkout REST APIs so you can perform API testing."
+---
+
+## Before you start
+
+<Warning>
+Before you start, you need:
+1. A [Postman account](https://www.postman.com/postman-account/) so you can test and fork the collection from [here](https://www.postman.com/nexicheckout/workspace/nexi-checkout-apis/collection/24211773-6e0f6550-03ee-4162-a260-d0dd7254aa4c). 
+2. Also, this guide assumes that you already have an [Checkout Portal account](https://portal.dibspayment.eu/).
+3. Have an [integrated Checkout on your website](/web-integration/integrate-checkout-on-your-website-embedded).
+4. Find your [integration keys](/access-your-integration-keys) for the authorization.
+</Warning>
+
+## Overview
+
+You can configure and tests the HTTP requests and receive responses for the following APIs:
+
+- [Reporting](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/reporting-v1/)
+- [Payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/)
+- [Boarding](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/boarding-v1/)
+- [Paylink](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/paylink-v1/)
+
+You can read more overall about the Checkout APIs from [here](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/).
+
+## Getting started
+
+In order to get started with Postman, you will need to:
+
+1. Fork the collection
+2. Find your integration key(s) so you can make the correct authorization via the API key
+3. Start to send your first request to see responses
+
+You can get started testing with Checkout Postman by for example sending a request to retrieve a list of payouts, a request to create a new payment or a request to cancel a pending refund.
+
+## Forking the collection
+
+You can fork the collection which means that you will create a new instance of the collection locally in your own workspace. In this way, you can test and make changes with your own keys that does not affect the base collection.
+
+1. Sign into your Postman account.
+2. Go to the Checkout API collection from [here](https://www.postman.com/nexicheckout/workspace/nexi-checkout-apis/collection/24211773-6e0f6550-03ee-4162-a260-d0dd7254aa4c).
+3. Select the __Run in Postman__ button.
+4. Select the __Fork collection__ button.
+5. Name your work and select a workspace.
+
+## Authorization
+
+### Find your key
+
+You can find your integration keys inside of your Portal account by following this guide [here](/access-your-integration-keys).
+
+### Checkout & Recurring
+
+For the authorization for the Checkout and Recurring folders, the API key must be authorized following these steps:
+
+In the authorization type, you can choose __API Key__ from the drop-down menu.
+
+You will need to input your __secret API key__ from the __TEST__ environment inside *value* field that gets added to the header.
+
+- The key is named *Authorization*
+- The *value* field must be the secret key
+
+<Warning>
+Make sure to not include "*test-secret-key-*" when copying and pasting the secret key into the value field.
+</Warning>
+
+### Onboarding
+
+For the authorization for the Boarding folders, the API key must be authorized following these steps:
+
+In the authorization type, you can choose __API Key__ from the drop-down menu.
+
+You will need to input your __secret API key__ from the __LIVE__ environment inside *value* field that gets added to the header.
+
+<Warning>
+Please note that it is possible to use the __secret API key__ from the __TEST__ and __LIVE__ environment.
+However, we recommend to only test with the key from the __LIVE__ environment.
+</Warning>
+
+
+
+- The key is named *Authorization*
+- The *value* field must be the secret key
+
+<Warning>
+Make sure to not include "*test-secret-key-*" when copying and pasting the secret key into the value field.
+</Warning>
+
+### Reporting
+
+For the authorization for the Reporting folder, the API key must be authorized following these steps:
+
+In the authorization type, you can choose __API Key__ from the drop-down menu.
+
+You will need to input your __secret API key__ from the __TEST__ environment inside *value* field that gets added to the header.
+
+<Warning>
+For the Reporting API, it is possible to utilize both the __TEST__ and __LIVE__ keys for their respective environments. However, we recommend to use to the __TEST__ key in the __TEST__ environment.
+</Warning>
+
+- The key is named *Authorization*
+- The *value* field must be the secret key
+
+<Warning>
+Make sure to not include "*test-secret-key-*" when copying and pasting the secret key into the value field.
+</Warning>
+
+When the authorization has been completed, you can call any API in the collection to start with the requests.
+
+## Testing 
+
+As an example, the following steps of this request will outline how to create a new payment. 
+
+It will use the Payment API to create an order containing a pair of sneakers which will then be captured using your integration keys.
+
+### Send a request - Creating the order
+
+1. From the right-hand side bar, open up the *__Payment__* folder.
+2. Click into the *__Checkout__* folder.
+3. Next, choose *__Create payment__*.
+4. By default, the method is set to POST.
+5. Click on the *__Send__* button for the request.
+6. Finally, you will be able to see the response of the request.
+7. This newly created payment will also be visible inside your Portal under the __Payments__ section.
+
+From this, you will be able to see the following response of the request below:
+
+![Response of create payment request call](https://images.ctfassets.net/di680may5c0k/4MYZsHHGfMVk1E1c1pXnzX/b94c227bd5f7d3aa3162adcfdcdf76f9/image.png?w=1739&h=898&q=50&fm=png)
+
+<Columns cols={2}>
+  <Card title="Checkout Postman collection">
+  </Card>
+  <Card title="Getting started with Postman">
+  </Card>
+</Columns>
+
+## See also
+
+- [Go-live checklist](/go-live-checklist)

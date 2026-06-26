@@ -1,0 +1,272 @@
+---
+title: "Ereignisse mit Webhooks verfolgen"
+description: "Dieser Leitfaden richtet sich an Entwickler, die mit Webhooks verschiedene Ereignisse abonnieren möchten, die eine Zahlung betreffen."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="blue">Coding: Ja (Backend)</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie Nexi Checkout bereits integriert haben, sodass Sie Zahlungen über die [Testumgebung](/test-environment) erstellen können.
+</Warning>
+
+## Warum Webhooks verwenden?
+
+Webhooks (oder HTTP-Callbacks) ermöglichen es Ihnen, verschiedene Ereignisse zu abonnieren, die eine Zahlung betreffen, und direkt benachrichtigt zu werden, wenn diese Ereignisse eintreten. Wenn ein Ereignis in Nexi Checkout auftritt, beispielsweise wenn eine Belastung erfolgt oder eine Zahlung erstattet wird, kann dieses Ereignis zusammen mit den zugehörigen Daten gesendet werden.
+
+Um Ihr Backend mit Nexi Checkout synchron zu halten, empfehlen wir dringend die Verwendung von Webhooks. Die Vorteile sind vielfältig:
+
+- Webhooks sind **robust** gegenüber verschiedenen Laufzeitfehlern (Netzwerkausfälle und andere temporäre Verarbeitungsfehler). Nexi Checkout sendet die Ereignisse erneut, bis Sie den Webhook durch Rückgabe eines HTTP-Statuscodes 200 bestätigen.
+- Webhooks sind **effizient**, da sie das Polling von Nexi Checkout auf Statusänderungen vermeiden.
+- Einige Zahlungsmethoden (z. B. Mobile Wallets) garantieren nicht, dass Ihr Kunde nach Abschluss einer Zahlung zu Ihrer Checkout-Seite zurückkehrt. Mit Webhooks können Sie **alle Zahlungsereignisse verfolgen**, auch wenn Ihr Kunde Ihre Website verlassen hat.
+
+<Info>
+Wenn Sie über erfolgreiche Abonnement-Belastungen benachrichtigt werden möchten, sollten Sie [payment.charge.created.v2](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#charge-created) abonnieren.
+Wenn Sie über fehlgeschlagene Belastungsversuche bei Abonnements informiert werden möchten, sollten Sie [payment.reservation.failed](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#reservation-failed) abonnieren.
+</Info>
+
+Dieser Leitfaden zeigt Ihnen die Schritte, die Sie unternehmen müssen, um Benachrichtigungen von Nexi Checkout zu erhalten.
+
+<Steps>
+  <Step title="Einen Webhook empfangen">
+    Um einen Webhook empfangen zu können, müssen Sie zunächst einen **HTTPS-Endpunkt** auf Ihrer Website einrichten. Der Endpunkt sollte den JSON-Body der Anfrage lesen und parsen, um die mit dem ausgelösten Ereignis verbundenen Daten zu erhalten.
+
+    Die mit jedem Ereignis verbundenen Daten variieren. Alle Ereignisse haben jedoch die gleiche Grundstruktur. Hier ist ein Beispiel:
+
+    ```json Webhook payload example
+    { 
+       "id": "bcec42e7ba964e568b14691f259cfa3a",
+       "merchantId":100017120,
+       "timestamp": "2018-01-12T09:40:19.8919+00:00",
+       "event": "payment.created",
+       "data": { 
+          ...
+       }
+    }
+    ```
+    Das `data `-Objekt enthält Eigenschaften, die für jeden Ereignistyp spezifisch sind. Weitere Informationen zu den verschiedenen Eigenschaften finden Sie in der [Webhooks API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks).
+
+    Es ist Zeit, den Webhooks-Endpunkt auf Ihrer Website zu implementieren. Der folgende Code zeigt, wie das Ereignis `payment.created ` gelesen und geparst wird:
+
+    ### Process payment.created event
+
+    <CodeGroup>
+
+    ```php webhooks-endpoint.php
+    <?php
+
+    $json = file_get_contents('php://input');
+    $payload = json_decode($json, true);
+    if (json_last_error() != JSON_ERROR_NONE) {
+        echo (json_last_error_msg());
+        var_dump($result);
+        exit("Unable to parse json request body");
+    }
+
+    // Read properties common to all events
+    $name = $payload['event'];
+    $id = $payload['id'];
+    $merchantNumber = $payload['merchantNumber'];
+    if (empty($merchantNumber)) {
+        // Some of the events use the key "merchantId"
+        // for the merchant number.
+        $merchantNumber = $payload['merchantId'];
+    }
+    $timestamp = $payload['timestamp'];
+    $data = $payload['data'];
+    $paymentId = $data['paymentId'];
+
+    if ($name == "payment.created") {
+      // Process payment.created event here
+      // ...
+    }
+    ```
+
+    ```javascript webhooks-endpoint.js
+    const express = require('express')
+    const app = express()
+    const port = 3000
+
+    // HTTPS is required for the webhook endpoint.
+    // See https://nodejs.org/api/https.html#https_https
+    // for setting up a secure connection.
+
+    app.post('/', function (request, response) {
+
+        const chunks = [];
+
+        request.on('data', function (chunk) {
+            chunks.push(chunk);
+        });
+
+        request.on('end', function () {
+            const body = Buffer.concat(chunks);
+            const json = JSON.parse(body);
+            console.log(JSON.stringify(json, null, 2));
+            if (json.name == "payment.created") {
+                // Process payment.created event here
+                // ...
+            }
+        });
+        response.end();
+    });
+
+    app.listen(port, () => {
+        console.log(`Server listening on port ${port}`)
+    })
+    ```
+
+    </CodeGroup>
+
+    <Warning>
+    Um den von Nexi Checkout gesendeten Webhook zu bestätigen, ist ein **HTTP-Statuscode 200** erforderlich.
+    Jeder andere Statuscode, auch andere 2XX-Codes, wird als fehlgeschlagener Versuch gewertet.
+    </Warning>
+
+    Wenn der Webhook nicht erfolgreich an Ihren Endpunkt gesendet wurde, wird Nexi Checkout den Webhook mit zunehmender Wartezeit zwischen den einzelnen Versuchen weiterhin senden. Wenn Ihre Website nach diesem Zeitraum immer noch nicht mit 200 geantwortet hat, wird der Webhook nicht mehr erneut versucht.
+  </Step>
+  <Step title="Ihren Webhook-Endpunkt testen">
+    Sie können jeden HTTP(S)-Client verwenden, um zu testen und zu verifizieren, dass Ihr Webhook-Endpunkt wie erwartet funktioniert. Zwei Tools, die für das Senden von JSON über HTTP(S) beliebt sind, sind [Insomnia](https://insomnia.rest) und [Postman](https://www.postman.com).
+
+    Im folgenden Screenshot wird Insomnia verwendet, um einen Endpunkt zu testen, der einen Webhook empfängt. Sie können sehen, dass der Endpunkt den Antwortcode 200 (OK) zurückgibt.
+
+    ![Insomnia Screenshot](https://images.ctfassets.net/di680may5c0k/74pOk4Md8dInhgh1wjMnwI/ddd004da9283166261e6f64d7352fbd6/Screenshot_2021-06-14_at_10.49.29.png?w=2794&h=1868&q=50&fm=png)
+
+    Testen Sie Ihren Endpunkt mit der folgenden Payload des [`create-payment `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#created)-Ereignisses. Stellen Sie sicher, dass Ihr Endpunkt den Antwortcode 200 zurückgibt.
+
+    ```text Payload for the payment.created event
+    {
+        "id": "458a4e068f454f768a40b9e576914820",
+        "merchantId": 100017120,
+        "timestamp": "2021-05-04T22:08:16.6623+02:00",
+        "event": "payment.created",
+        "data": {
+            "order": {
+                "amount": {
+                    "amount": 180000,
+                    "currency": "SEK"
+                },
+                "reference": "42369",
+                "orderItems": [
+                    {
+                        "grossTotalAmount": 180000,
+                        "name": "A product",
+                        "netTotalAmount": 180000,
+                        "quantity": 2,
+                        "reference": "43",
+                        "taxRate": 0,
+                        "taxAmount": 0,
+                        "unit": "hours",
+                        "unitPrice": 90000
+                    }
+                ]
+            },
+            "paymentId": "02a900006091a9a96937598058c4e474"
+        }
+    }
+    ```
+
+    Vollständige Beispiel-Request-Bodies finden Sie in der [API-Referenz für Webhooks](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks).
+
+    <Warning>
+    Nexi Checkout erfordert eine **sichere Verbindung** über HTTPS, wenn Webhook-Benachrichtigungen an Ihren Endpunkt gesendet werden.
+    </Warning>
+
+    Stellen Sie sicher, dass Sie eine Beispiel-Webhook-Benachrichtigungsanfrage über HTTPS senden und parsen können, bevor Sie mit dem nächsten Schritt fortfahren.
+  </Step>
+  <Step title="Ereignisse abonnieren">
+    Sobald Ihr HTTPS-Endpunkt implementiert und getestet wurde, können Sie nun verschiedene Ereignisse über die Payment API abonnieren.
+
+    Webhooks werden pro Zahlung konfiguriert und können im Request-Body der folgenden Methoden angegeben werden:
+
+    - [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post)
+    - [Charge subscription](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-subscriptionid-charges-post)
+
+    Die Methoden akzeptieren ein `notifications `-Objekt, das eine Liste von Webhooks enthält.
+
+    Im folgenden Beispiel sehen Sie, wie Sie das Ereignis 'create.payment' mit der Methode [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) abonnieren:
+
+    ```text Subscribe to events
+    {
+       "order": {
+          "items": [
+             {
+                "reference": "43",
+                "name": "Hosted product",
+                "quantity": 1,
+                "unit": "hours",
+                "unitPrice": 13300,
+                "grossTotalAmount": 13300,
+                "netTotalAmount": 13300
+             }
+          ],
+          "amount": 13300,
+          "currency": "SEK",
+          "reference": "Hosted Demo Order"
+       },
+       "checkout": {
+          "integrationType": "HostedPaymentPage",
+          "returnUrl": "https://<YOUR_WEBSITE>/completed.html",
+          "termsUrl": "https://<YOUR_WEBSITE>/terms.html"
+       },
+       "notifications": {
+          "webhooks": [
+             {
+                "eventName": "payment.created",
+                "url": "https://<YOUR_WEBSITE>/webhooks-endpoint.php",
+                "authorization": "<AUTH_KEY>"
+             },
+             {
+                "eventName": "payment.checkout.completed",
+                "url": "https://<YOUR_WEBSITE>/webhooks-endpoint.php",
+                "authorization": "<AUTH_KEY>"
+             }
+          ]
+       }
+    }
+    ```
+
+    Jeder Webhook gibt einen `eventName ` und eine `url ` an, die immer dann aufgerufen werden soll, wenn das angegebene Ereignis in Nexi Checkout für die zugehörige Zahlung ausgelöst wird.
+
+    Der Wert, der in der Eigenschaft `authorization ` angegeben ist, wird im HTTP-Anfrage-Header `Authorization `, der von Nexi Checkout gesendet wird, gesetzt. Sie können auch benutzerdefinierte Header definieren, die der HTTP-Anfrage für einen bestimmten Webhook hinzugefügt werden. Hier ist ein Beispiel, in dem zwei zusätzliche Header (`HeaderX ` und `HeaderY `) zur Webhook-Benachrichtigungsanfrage hinzugefügt werden:
+
+    ```json Using customer headers
+    {
+       "order": {
+         ...
+       },
+       "checkout": {
+         ...
+       },
+       "notifications": {
+          "webhooks": [
+             {
+                "eventName": "payment.created",
+                "url": "https://<YOUR_WEBSITE>/webhooks-endpoint.php",
+                "authorization": "<AUTH_KEY>",
+                "headers": [
+                   {
+                      "HeaderX": "some_value"
+                   },
+                   {
+                      "HeaderY": "some_value"
+                   }
+                ]
+             }
+          ]
+       }
+    }
+    ```
+  </Step>
+</Steps>
+
+## Siehe auch
+
+- [Webhooks API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks)
+- [Payment API: Create payment (notifications)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post)
+- [Payment API: Create subscriptions (notifications)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-subscriptionid-charges-post-body-notifications)

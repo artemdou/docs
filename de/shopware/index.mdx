@@ -1,0 +1,190 @@
+---
+title: "Checkout für Shopware 2.x"
+description: "Dieser Leitfaden beschreibt, wie Sie Checkout-Webshop-Module für Shopware 6.7 installieren, konfigurieren und verwenden."
+---
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie den Leitfaden:
+- So [erstellen Sie ein Testkonto für Checkout](/create-a-checkout-portal-account)..
+</Warning>
+
+Anforderungen:
+
+- Shopware-Version: Kompatibel mit Shopware 6.6.x und höher.
+
+Hinweis: Für Shopware-Versionen 6.4.x und 6.5.x (z. B. 6.4.1, 6.5.2) verwenden Sie bitte Shopware 1.x
+
+Wenn Sie Shopware 1.x verwenden, müssen Sie Shopware 2.x parallel ausführen, bis die Bestellungen abgeschlossen sind.
+
+## Anforderungen
+
+__Shopware-Version: Kompatibel mit Shopware 6.6.x und höher.__
+
+Hinweis: Für Shopware-Versionen 6.4.x und 6.5.x (z. B. 6.4.1, 6.5.2) verwenden Sie bitte Shopware 1.x
+
+Wenn Sie Shopware 1.x verwenden, müssen Sie Shopware 2.x parallel ausführen, bis die Bestellungen abgeschlossen sind.
+
+## Überblick
+
+Unser Shopware-Plugin ist die perfekte Erweiterung, um das volle Potenzial von Checkout für Ihren Shopware-Shop zu nutzen. Checkout unterstützt die beliebtesten Zahlungsmethoden.
+Mit Version 2 haben wir eine Reihe leistungsstarker neuer Funktionen eingeführt:
+- Aufteilung von Embedded- und Hosted-Flows in zwei separate Zahlungsoptionen
+- Vollständige Webhook-Unterstützung
+- Charge-Handling (einschließlich Workflow-Integration – z. B. Charge-Aktion im Workflow)
+- Kompatibilität mit Shopware 6.7
+- Integration mit unserem SDK (nexi-checkout/php-payment-sdk)
+- Unterstützung für PHP 8.4
+- Layout-Verbesserungen für ein reibungsloseres Checkout-Erlebnis
+
+<Info>
+Unten sehen Sie alle von Checkout angebotenen Zahlungsmethoden. Diese Liste bezieht sich auf alle Märkte. 
+
+Je nach Land oder Region kann die Liste variieren. Wenn Sie unsicher sind, ob eine bestimmte Zahlungsmethode in Ihrem Land oder Ihrer Region verfügbar ist, kontaktieren Sie bitte den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) für weitere Informationen.
+</Info>
+
+![Checkout-Plugin – Shopware6](https://images.ctfassets.net/di680may5c0k/5EUrIEwPjU1uAibS1pFMkr/fdac5b6c11c2e75f81e08b1c4d7778de/plugin_shopware6.jpg?w=1576&h=601&fl=progressive&q=50&fm=jpg)
+
+### Shop-Funktionen
+
+- Eine intelligente Mischung von Zahlungsmethoden für alle Vorlieben
+
+![Shopware 6.7 Modul](https://images.ctfassets.net/di680may5c0k/1oFGRiBZGPeY22v1IdqTv9/f2a5244c2be7d1a11f32ed011fbb0679/image.png?w=624&h=710&q=50&fm=png)
+
+### Administrationsfunktionen
+
+- Schnelle Einrichtung und flexible Konfiguration.
+- Intuitive Auftragsverwaltung mit synchronisierten Belastungen und Rückerstattungen.
+- Kompatibilität mit Rabatten, Steuer (MwSt.) und Versandoptionen.
+- Automatisieren Sie verschiedene Prozesse mit der Flow-Builder-Funktionalität
+
+![Shopware 6.7 Admin-Konfiguration](https://images.ctfassets.net/di680may5c0k/7AUKELIHMLRoD3gXMFHYka/840d6829695483ac6552e6b9e8191276/image.png?w=800&h=480&q=50&fm=png)
+
+## Installation
+
+So installieren Sie das Checkout-Modul für Shopware 6 von github:
+
+- Verbinden Sie sich mit einem SSH-Client und navigieren Sie zum Stammverzeichnis Ihrer Shopware 6-Installation.
+
+- Klonen Sie das Repository, indem Sie den folgenden Befehl ausführen: git clone git@github.com:Nets-eCom/shopware6-easy-checkout.git --branch main-1.5 --single-branch custom/plugins/NexiCheckout
+
+Führen Sie nach dem Klonen diese Befehle aus:
+- bin/console plugin:refresh
+- bin/console plugin:install NexiCheckout
+- bin/console plugin:activate NexiCheckout
+- bin/build-js.sh
+
+Das Modul ist nun installiert und bereit, für Ihr Checkout-Konto konfiguriert zu werden.
+
+## Konfiguration
+
+Nach der Installation des Moduls müssen Sie einige grundlegende Konfigurationen des Moduls in der Shopware-Administration vornehmen:
+
+1. Navigieren Sie zu Erweiterungen > Meine Erweiterungen > NexiNets Checkout
+2. Suchen Sie das Nexi Group Payment-Plugin und drücken Sie die Schaltfläche mit den drei Punkten (...), um auf die Konfiguration zuzugreifen.
+3. Füllen Sie die erforderlichen Felder aus, wie z. B. Integrationsschlüssel (Secret Keys und Checkout Keys) und Webhook Code.
+4. (Optional) Passen Sie das Modul mithilfe der zusätzlichen Einstellungen auf der Konfigurationsseite an Ihre Bedürfnisse an.
+
+Beide Integrationsschlüssel finden Sie im Checkout-Portal. Auf den folgenden Seiten finden Sie weitere Hilfe:
+
+[Wo finde ich meine Händlernummer (Merchant ID)?](https://developer.nexigroup.com/nexi-checkout/en-EU/support/where-can-i-find-my-merchant-number-merchant-id/)](https://developer.nexigroup.com/nexi-checkout/en-EU/support/where-can-i-find-my-merchant-number-merchant-id/)
+[Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys)
+
+Integrationstyp: Embedded ist noch keine gültige Option. Bitte verwenden Sie Hosted Payment.
+
+## Auftragsverwaltung
+
+Es ist möglich, Bestellungen direkt in der Shopware-Administration zu verwalten:
+
+Navigieren Sie zu Admin > Bestellungen > Übersicht.
+Klicken Sie auf eine Bestellzeile, um auf die Bestelldetails zuzugreifen.
+Gehen Sie zum Abschnitt Details mit der neuen Nexi-Auftragsverwaltungskomponente.
+
+![order-details](https://images.ctfassets.net/di680may5c0k/2PEOw9hNRzHWIHflneFDye/6bf820ae2748185345a357e33c8872f6/order-details.png)
+
+Nun können alle Aktionen (Belasten, Erstatten, Stornieren) über die neue modale Komponente durchgeführt werden.
+
+![charge-modal](https://images.ctfassets.net/di680may5c0k/5puVzKOdX3O9sLIabFNLF3/b1cc621230e5f00b2f73f8d1b02feebb/charge-modal.png)
+
+Ein Klick auf Max. amount übergibt automatisch den Maximalwert an das Betragsfeld.
+
+__Teilbelastung & Teilrückerstattung__
+
+Die größte Änderung gegenüber der derzeit verwendeten Komponente besteht darin, dass Teilbelastungen und Teilrückerstattungen durch Auswahl des Artikels aus der Bestellliste vorgenommen werden können, anstatt den Wert manuell in das Feld einzutippen. Auf die Liste kann über das Kontrollkästchenfeld zugegriffen werden.
+
+![nexi-partials](https://images.ctfassets.net/di680may5c0k/7M46h7zMlr3BEX7NdMhKX5/c1d66351ef5d43f9ac8327eb0277c1ac/nexi-partials.png)
+
+Alle von Nexi Group durchgeführten Transaktionen sind im Checkout-Portal zugänglich.
+
+<Info>
+Alle von Nexi Group durchgeführten Transaktionen sind im [Checkout-Portal](https://portal.dibspayment.eu/) zugänglich.
+</Info>
+
+## Flow Builder
+
+Flow Builder
+Mit Shopware 6.6 kann unser Nexi-Flow mit dem Shopware-Flow ausgerichtet werden, um verschiedene Prozesse innerhalb des Zahlungssystems zu automatisieren.
+
+[Erste Schritte mit Flow Builder](https://github.com/Nets-eCom/shopware6-easy-checkout/blob/main/docs/flow-builder/getting-started.md)
+
+## Klarna
+
+Die Zahlungsmethode Klarna erfordert eine Telefonnummer, um ordnungsgemäß zu funktionieren. Damit Klarna als Zahlungsoption im Zahlungsfenster der Nexi Group angezeigt wird, ist es wichtig, das Telefonnummernfeld korrekt zu konfigurieren. Weitere Informationen finden Sie im [Klarna-Leitfaden](/klarna/#build-integration).
+
+Um das Telefonnummernfeld in Shopware 6 hinzuzufügen, befolgen Sie diese Schritte: 
+- Navigieren Sie zu Einstellungen > Shop > Login & Registrierung.
+- Aktivieren Sie das Kontrollkästchen Telefonnummer anzeigen. 
+- Aktivieren Sie das Kontrollkästchen Telefonnummernfeld erforderlich. 
+
+Weitere Informationen finden Sie in der [Dokumentation zu Shopware 6](https://docs.shopware.com/en/shopware-en/settings/login-registration).
+
+![shopware klarna contentful](https://images.ctfassets.net/di680may5c0k/7f1JSaWMEGxuUPPi5EVRaR/272c8bc26efb45188bf031d3171c8842/shopware_klarna_contentful.png?w=1273&h=638&q=50&fm=png)
+
+<Info>
+Wir unterstützen keine Drittanbieter-Plugins, die Telefonnummern-Funktionalität bieten, und können nicht garantieren, dass deren Lösung mit der Klarna-Zahlungsmethode kompatibel ist.
+</Info>
+
+## Apple Pay
+
+Die Konfiguration von Apple Pay für das Shopware-Plugin ist auf der Seite [Apple Pay-Zahlungsmethode](/apple-pay/#build-shopware-65) beschrieben.
+
+## Fehlerbehebung
+
+Im Folgenden finden Sie einige der häufigsten Konfigurationsfehler, ihre Ursachen und Schritte, mit denen Sie sie beheben können.
+
+### Die Nexi Group Payment-App ist nicht als Zahlungsmethode sichtbar
+
+- Stellen Sie sicher, dass die Nexi Group-App im richtigen **Sales Channel** in der App-Konfiguration verfügbar ist.
+- Wählen Sie unter dem Abschnitt **Sales Channel** Ihren **Shop-Namen** unter den **Allgemeinen** Einstellungen aus. Fügen Sie die gewünschten Zahlungsmethoden aus der Nexi-App hinzu.
+- Wechseln Sie vorübergehend zum Standard-Template von Shopware 6. Benutzerdefinierte Templates erfordern möglicherweise zusätzliche Anpassungen für eine korrekte Anzeige. Konsultieren Sie Ihren Webdesigner oder Entwickler.
+
+### Das Nexi Group Payment-Fenster ist leer
+
+- Stellen Sie sicher, dass Ihre Integrationsschlüssel in den Nexi Group App-Einstellungen korrekt sind und keine zusätzlichen Leerzeichen enthalten.
+- Deaktivieren Sie vorübergehend Drittanbieter-Plugins, die die Funktionalität der App beeinträchtigen könnten.
+- Prüfen Sie, ob es vorübergehende technische Inkonsistenzen gibt: https://easy-status.developers.nets.eu/
+
+### Zahlungen im Live-Modus funktionieren nicht
+- Stellen Sie sicher, dass Sie ein freigegebenes Live-Checkout-Konto für die Produktion haben.
+- Stellen Sie sicher, dass Ihr Live-Checkout-Konto für Zahlungen mit der ausgewählten Währung freigegeben ist.
+- Stellen Sie sicher, dass die Zahlungsmethodendaten korrekt sind und von Ihrer Checkout-Vereinbarung unterstützt werden.
+
+## Go-Live-Checkliste
+
+Weitere Informationen finden Sie im Abschnitt [Go-Live-Checkliste](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Download">
+  </Card>
+  <Card title="Quelle" href="https://github.com/Nets-eCom/shopware-app">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Konto erstellen](/create-a-checkout-portal-account)
+- [Testumgebung](/test-environment)
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Rechnungs- & Ratenzahlungsverarbeitung testen](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

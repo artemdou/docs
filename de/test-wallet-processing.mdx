@@ -1,0 +1,216 @@
+---
+title: "Wallet-Verarbeitung testen"
+description: "Dieser Artikel beschreibt, wie Sie die Wallet-Verarbeitung auf Ihrer Checkout-Seite testen können."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Komplexität: Niedrig</Badge>
+  <Badge color="gray">Programmierung: Keine</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie eine Checkout-Seite, die die [Checkout-Testumgebung](/test-environment) verwendet.
+</Warning>
+
+## So testen Sie
+
+Die Checkout-Seite bietet Ihren Kunden die Möglichkeit, mit Wallets zu bezahlen. Um die Wallet-Verarbeitung auf der Checkout-Seite zu testen, gehen Sie wie folgt vor:
+
+## Vipps
+
+__1.__ Kontaktieren Sie uns, um __Vipps__ für Ihre Test-Händler-ID zu __aktivieren__.
+
+__2.__ __Laden Sie die Vipps MT-App herunter.__ Wenn Sie weitere Informationen zu diesem Schritt benötigen, lesen Sie bitte die Seite [Vipps/Mobilepay-Testumgebung](https://developer.vippsmobilepay.com/docs/test-environment/#install-vipps-mt-on-ios).
+
+__3.__ __Registrieren__ Sie sich in der Vipps-Test-App mit fiktiven Testdaten: Telefonnummer und PIN. Zum Beispiel:
+
+__Vipps__
+-  __Telefonnummer:__ +47 99767804
+- __PIN:__ 1236
+- __NIN__ 43099599376
+
+__4.__ Ihr Testkonto sollte nun eingerichtet sein, sodass Sie __Zahlungen initiieren__ können in der Testumgebung.
+
+__5.__ __Verwenden Sie die fiktive Telefonnummer__ in unserem Checkout.
+
+__6.__ __Bestätigen__ Sie die Zahlung in der Vipps-Test-App.
+
+__7. Sie haben den Vorgang erfolgreich abgeschlossen!__ Sie können sich die folgenden Screenshots ansehen, um den Ablauf besser zu verstehen.
+
+|    |     |
+| ---------- | ---------- |
+| __1__  ![Vipps1](https://images.ctfassets.net/di680may5c0k/4CkNdmxq2ctjaWvEgxQVOe/44f40c4c023187d042b91fa63b8ffe6a/Vipps1.PNG)      | __2__ ![Vipps2](https://images.ctfassets.net/di680may5c0k/3VnVSDJjKftFw3pLkURdFw/09b545d67d2453d56efcae6a244260f9/Vipps2.PNG) |
+| __3__ ![Vipps3](https://images.ctfassets.net/di680may5c0k/6gQCel7U2wjniMudmdtXbq/54bd1bbf8b73fdf0a4c9d0d04b6bea0f/Vipps3.PNG)       | __4__ ![Vipps5](https://images.ctfassets.net/di680may5c0k/3VyBdjwoECfGtOWIta8SfC/07c9fcda67a5998552287383ecdc5178/Vipps5.png) |
+| __5__ ![Vipps6](https://images.ctfassets.net/di680may5c0k/vTxJLPBZdg7sUvbvWMfK0/e8354c62e0b9cab4df969bd82fd13f46/Vipps6.png) | __6__ ![Vipps7](https://images.ctfassets.net/di680may5c0k/4TfJXffYQL3bsx48CgWw7e/abc70b4795f4537e39c6d2843c2687f2/Vipps7.PNG) |
+
+## Klarna
+
+Um Klarna zu testen, verwenden Sie die folgenden Testdaten je nach Land
+
+__Norwegen__
+
+| Ablauf       | E-Mail-Adresse     | Telefonnummer     |
+| ---------- | ---------- | ---------- |
+| Genehmigt   | customer@email.no      | +4740123456  |
+| Abgelehnt      | customer+denied@email.no       | +4740123457   |
+
+Kundendaten Norwegen
+
+| Feld    | Genehmigt  | Abgelehnt   |
+| ---------- | ---------- | ---------- |
+| Vorname       | Jane      | Test       |
+| Nachname      | Test      | Person-no       | 
+| Adresse      | Edvard Munchs Plass 1     | Sæffleberggate 56     |
+| Postleitzahl      | 0194       | 0563       |
+| Land      | NO       |     NO   |
+| Geburtsdatum (TT-MM-JJJJ)    | 01-08-1970     | 01-08-1970     |
+| Personennummer     | NO01087000571      | NO01087000148      |
+
+__Schweden__
+
+| Ablauf     | E-Mail-Adresse     | Telefonnummer    |
+| ---------- | ---------- | ---------- |
+| Genehmigt      | customer@email.se      | +46701740615      |
+| Abgelehnt      | customer+denied@email.se      |   +46701740620    |
+
+Kundendaten Schweden
+
+| Feld    | Genehmigt     | Abgelehnt    |
+| ---------- | ---------- | ---------- |
+| Vorname      | Alice      | Test      |
+| Nachname       | Test      | Person-se    |
+| Adresse    | Södra Blasieholmshamnen 2    | Karlaplan 3       |
+| Postleitzahl       | 11 148       | 11 460       |
+| Stadt       | Stockholm       | Stockholm       |
+| Land       | SE       | SE      |
+| Geburtsdatum (TT-MM-JJJJ)      | 21-03-1941       | 28-10-1941       |
+| Personennummer       | SE194103219202       | SE194110288083       |
+
+__Dänemark__
+
+| Ablauf     | E-Mail-Adresse    | Telefonnummer     |
+| ---------- | ---------- | ---------- |
+| Genehmigt       | customer@email.dk      | 4542555628       |
+| Abgelehnt       | customer+denied@email.dk       | 4552555348       |
+
+Kundendaten Dänemark
+
+| Feld     | Genehmigt     | Abgelehnt     |
+| ---------- | ---------- | ---------- |
+| Vorname       | Test       | Test      |
+| Nachname       | Person-dk       | Person-dk       |
+| Adresse       | Dantes Plads 7       | Nygårdsvej 65       |
+| Postleitzahl       | 1556       | 2100       |
+| Stadt       | København Ø       | København Ø       |
+| Land       | DK       | DK       |
+| Geburtsdatum (TT-MM-JJJJ)      | 01-01-1980       | 10-07-1970       |
+
+__Deutschland__
+
+| Ablauf     | E-Mail-Adresse    | Telefonnummer     |
+| ---------- | ---------- | ---------- |
+| Genehmigt      | customer@email.de       | +49017614284340       |
+| Abgelehnt       | customer+denied@email.de       | +49017610927312       |
+
+Kundendaten Deutschland
+
+| Feld     | Genehmigt   | Abgelehnt    |
+| ---------- | ---------- | ---------- | 
+| Vorname       | Mock       | Test     | 
+| Nachname       | Mock       | Person-de       |
+| Adresse      | Neue Schönhauser Str. 2      | Neue Schönhauser Str. 2       | 
+| Postleitzahl       | 10178       | 10178       | 
+| Stadt      | Berlin    | Berlin       | 
+| Land       | DE      | DE       | 
+| Geburtsdatum (TT-MM-JJJJ)       | 	10-07-1970      | 	10-07-1970       |
+
+__Österreich__
+
+| Ablauf     | E-Mail-Adresse     | Telefonnummer     |
+| ---------- | ---------- | ---------- |
+| Genehmigt       | customer@email.at      | +4306762600456       |
+| Abgelehnt     | customer+denied@email.at       | +4306762600745       |
+
+Kundendaten Österreich
+
+| Feld     | Genehmigt    | Abgelehnt   |
+| ---------- | ---------- | ---------- |
+| Vorname      | Test      | Test       |
+| Nachname       | 	Person-at      | 	Person-at       |
+| Adresse       | Mariahilfer Straße 47       | Mariahilfer Straße 47       |
+| Postleitzahl       | 1060       | 1060       |
+| Stadt       | Wien       | Wien       |
+| Land       | AT       | AT      |
+| Geburtsdatum (TT-MM-JJJJ)      | 10-07-1970       | 10-07-1970       |
+
+__Finnland__
+
+| Ablauf     | E-Mail-Adresse     | Telefonnummer     |
+| ---------- | ---------- | ---------- |
+| Genehmigt      | customer@email.fi       | +358401234567     |
+| Abgelehnt      | customer+denied@email.fi       | +358401234567      |
+
+Kundendaten Finnland
+
+|Feld     | Genehmigt    | Abgelehnt     |
+| ---------- | ---------- | ---------- |
+| Vorname       | Test       | Person FI       |
+| Nachname       | Person-fi      | Test       |
+| Adresse       | Mannerheimintie 34       | Mannerheimintie 34      |
+| Postleitzahl       | 00100       | 00100       |
+| Stadt      | Helsinki       | Helsinki       |
+| Land       | FI       | FI       |
+| Geburtsdatum (TT-MM-JJJJ)      | 01-01-1999       | 01-01-1999       |
+| Personennummer     | 190122-829F      |        |
+
+## MobilePay
+
+1. Kontaktieren Sie uns, um __MobilePay__ für Ihre Test-Händler-ID zu __aktivieren__.
+
+2. __Laden Sie die Vipps MT-App herunter.__ Wenn Sie weitere Informationen zu diesem Schritt benötigen, lesen Sie bitte die Seite [Mobilepay-Testumgebung](https://developer.vippsmobilepay.com/docs/knowledge-base/test-environment/).
+
+3. __Registrieren__ Sie sich in der Mobilepay-Test-App mit fiktiven Testdaten: Telefonnummer und PIN. Zum Beispiel:
+
+  -   Telefonnummer: + 45 70 44 91 98
+
+  -   PIN: 1236
+
+4. Ihr Testkonto sollte nun eingerichtet sein, sodass Sie __Zahlungen initiieren__ können in der Testumgebung.
+
+5. __Verwenden Sie die fiktive Telefonnummer__ in unserem Checkout.
+
+6. __Bestätigen__ Sie die Zahlung in der Mobilepay-Test-App.
+
+7. __Sie haben den Vorgang erfolgreich abgeschlossen!__ Sie können sich die folgenden Screenshots ansehen, um den Ablauf besser zu verstehen.
+
+|    |     |
+| ---------- | ---------- |
+| __1__  ![Mobilepay test1](https://images.ctfassets.net/di680may5c0k/5MXzKpD9xe7ERxWjX6jQia/1d1bc53a140292bdd6c9396f8eda3a51/Mobilepay_test1.png)| __2__ ![Skærmbillede 2025-09-18 104126](https://images.ctfassets.net/di680may5c0k/6V67KalBEwZfQ0XrKJMJND/469daa5d85b7a6ec991e5e8809bc79aa/SkÃ_rmbillede_2025-09-18_104126.png)|
+| __3__ ![Skærmbillede 2025-09-18 104411](https://images.ctfassets.net/di680may5c0k/3nhw3vhkKKnxi11DyjYJL5/ef5972037a6e0ea55b951ed7b2ed3524/SkÃ_rmbillede_2025-09-18_104411.png)
+
+## Google Pay
+
+Um Google Pay zu testen, benötigen Sie ein Google-Konto
+
+1. Kontaktieren Sie uns, um Google Pay für Ihre Test-Händler-ID zu aktivieren
+2. Wenn Sie kein Google-Konto haben, können Sie hier eines erstellen: [gmail.com](https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&dsh=S1312044340%3A1760519556147499&emr=1&followup=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&ifkv=AfYwgwWhTkhYuP6pMZsZaIJbrtCyn7gKzkc5JJ-MaolWRgwV_vovLF_C2R9ceJurJJltyAMhy_ou&osid=1&passive=1209600&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin "gmail.com")
+3. Wenn Sie sich beim Zahlungsvorgang in Ihr Google-Konto einloggen, wird die Google-Testkartennummer automatisch angezeigt
+
+__Test des Zahlungsablaufs__
+
+1. Wählen Sie Google Pay im Checkout-Fenster
+![2025-10-15 11 24 48-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/7hb0JR0jSfeb1qut0orFhp/849238957d46c3e567f9558593fe6155/2025-10-15_11_24_48-GP_sandbox_-_Word.png)
+2. Melden Sie sich bei Ihrem Google-Konto an
+![2025-10-15 11 26 20-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/3XXo9S2fFHhtrdHXAfBgDU/e496800ea903a85b8ef9480b4989407b/2025-10-15_11_26_20-GP_sandbox_-_Word.png)
+3. Klicken Sie auf __Pay__
+![2025-10-15 11 31 05-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/7HFysis7Kfh7eOqviw9naD/2bb24eca22db348e4dfc5a94408aedc6/2025-10-15_11_31_05-GP_sandbox_-_Word.png)
+4. Zahlung wird verarbeitet
+![2025-10-15 11 32 27-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/407taB76GyKwodYFzkNFir/6d00170cd5ca17ec2689f4d2deed5538/2025-10-15_11_32_27-GP_sandbox_-_Word.png)
+5. Zahlung abgeschlossen
+![Googlepay successful](https://images.ctfassets.net/di680may5c0k/2TrkerPF67hF2OmQldKBKM/bde0208281da4585e4a92bcde0a6a40b/Googlepay_successful.png)
+
+## Siehe auch
+
+- [Testumgebung](/test-environment)

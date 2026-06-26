@@ -1,0 +1,222 @@
+---
+title: "Checkout for Shopify"
+description: "This guide describes how to install, configure, and use the Checkout app integration for Shopify."
+---
+
+PayPal, Apple Pay, and Google Pay not supported:: As per Shopify conditions, these payment methods are not supported with Easy. Consider adding them with a direct integration from Shopify store admin.
+
+Last documentation update: 2025-10-07
+
+## Before you start
+
+In 2025, we have introduced Payment Method splitting. This provides an improved consumer experience whereby the Shopify application allows the consumer to choose their preferred payment method ONCE and displays only that payment method on the subsequent page so that they can complete their purchase. The available apps are below. You are free to install any payment app that suits your business, and in addition you can use our general Nexi Checkout app. To do so, please click on the links below.
+
+<Warning>
+  Before you start, you need an [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide [Create a test account for Portal](/create-a-checkout-portal-account) for more information about creating a free test account.
+</Warning>
+
+## Overview
+
+Checkout for Shopify is an app that extends our gateway integration and enables you to accept payments in Shopify with Checkout. Checkout supports most popular payment methods.
+
+<Info>
+  You can see below all the payment methods offered by Checkout. This list refers to all markets.
+
+  Depending on your country or region, the list may vary. If you are uncertain about a specific payment method and whether it is available in your country or region, please contact [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) for more information.
+</Info>
+
+![Checkout plugin - Shopify](https://images.ctfassets.net/di680may5c0k/7jLGCOAwl6xrQttazhkjFI/e8935b4fd4a41922e7478a3c39e4d0ac/plugins_shopify.png?w=1576&h=593&q=50&fm=png)
+
+### Shop features
+
+- The fast checkout with "remember me" functionality.
+- Preferred payment methods.
+- Supported currencies (one per shop): EUR, DKK, SEK, NOK, CHF, USD, GBP, PLN.
+- Supported languages: German, English, Danish, Swedish, Norwegian, Finnish, Italian, French, Spanish.
+
+### Admin features
+
+- Quick setup and flexible configuration.
+- Intuitive order management with synchronized captures and refunds.
+- Compatibility with discounts, tax (VAT), and shipping options.
+- Multi-store support (same currency).
+- Auto-charge/capture possible for digital goods.
+- Automated extension updates, no action required.
+
+**Please note that the configuration settings are inherited across all the apps you install**
+
+The screenshot below shows the Checkout app settings:
+
+## Basic Configuration
+
+After installing and activating the app, you can always go back and reconfigure the Checkout app from Shopify Admin. The configuration is split into two parts:
+
+- Payment Gateway settings (located under **Settings \> Payments \> Supported Payment Methods \> Checkout is Active**) enables you to activate payment/deactivate the payment gateway, activate payment methods, and toggle between live and test mode.
+- If you want to change any of the configuration settings specifically like terms url or merchant terms url then clicking on Manage will redirect you to app settings page (located in **Settings \> Payments \> Supported Payment Methods \> Checkout is Active \> Manage**
+
+### App settings
+
+To configure the Checkout app settings, go to **Apps \> Checkout**.
+
+The following table lists all the settings you can configure under app settings:
+
+| Configuration settings | Description |
+| --- | --- |
+| Merchant id | Your merchant ID which can be found in [Checkout Portal](https://portal.dibspayment.eu/). |
+| Live Secret Key | Your live secret key from [Checkout Portal](https://portal.dibspayment.eu/integration). |
+| Test Secret Key | Your secret key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration). Test mode can be enabled under **Payment gateway settings**, see below. |
+| Terms & Conditions url | The URL to the terms and conditions of your webshop. |
+| Privacy policy url | The URL to the privacy and cookie settings of your webshop. |
+| Update order ID with prefix or suffix | Tick the box to import your orderID accordingly. |
+
+![Shopify\_Setting\_page\_main](https://images.ctfassets.net/di680may5c0k/22uKH353RRKkOnzDnSh6uZ/e6f7f15461bf697373ef45e59048fe65/image.png?w=1027&h=841&q=50&fm=png)
+
+### Language settings
+
+To select the **Checkout language**:
+
+1. Navigate to the **Shopify menu to Settings \> Checkout \>**.
+2. Scroll down to **Checkout language**.
+3. Click on **Manage checkout language \> Save**.
+
+## Advanced configuration - Optional
+
+### Synchronize Order ID
+
+The default configuration setting generates a randomized order ID in Checkout for each order. To synchronize the Shopify order ID, do the following:
+
+- From your Shopify admin, go to Settings \> Notifications.
+- Scroll down to the Webhooks section.
+- Click the Create webhook button A new window should appear.
+- Then enter information as below:
+
+![shopify\_create\_webhook](https://images.ctfassets.net/di680may5c0k/5braW8CahLMcsKmE5cNNSE/9008c17dc5a9cbfcedebb8d7cdca2468/image__2_.png?w=623&h=424&q=50&fm=png)
+
+| Field | Content |
+| --- | --- |
+| Event | Order creation |
+| Format | JSON |
+| URL | [https://shopifywebhooks.connect.easy.nets.eu/order](https://shopifywebhooks.connect.easy.nets.eu/order) |
+| Webhook API version | 2024-10 |
+
+### App settings – Import tax (VAT) amount in Checkout
+
+The default configuration settings do not import tax rate and tax amount in Checkout. It is possible to add a default tax rate and apply it to purchase items as well as shipping/discount amounts. To do this:
+
+1. From Shopify admin, go to Apps \> Checkout \> App settings
+2. Set tax rate (%) with the value for your shop (e.g 7.7 or 25).
+3. Then tick the checkbox corresponding to your case: “Product/item price includes tax" or "Product/item price is excluding tax. (B2B mode)" if you are displaying net prices. Checkout will automatically calculate the set tax rate accordingly. It will be displayed in Checkout portal and in your report.
+
+![shopify\_app\_setting\_tax](https://images.ctfassets.net/di680may5c0k/3BJ2XPsjrXGC5YrjaDaYyh/80eba5fd6120ce277cbcaaf7d8894558/shopify_optional_settings_3.png?w=2026&h=1139&q=50&fm=png)
+
+### Payment method configuration
+
+You can modify which payment methods icons get displayed in your store. For this, go to Payment Methods pages in your Shopify Admin settings.
+
+![Shopify\_congif\_payment\_methods](https://images.ctfassets.net/di680may5c0k/2Abu4FT8G2bwJh58V2U5OL/3099721dde95292ae1a6ac11dc59b5ca/Shopify_config_payment_methods.png?w=1434&h=926&q=50&fm=png)
+
+## Order management
+
+It's possible to manage orders directly in Shopify admin:
+
+<Steps>
+  <Step title="open shopify admin">
+  </Step>
+  <Step title="click on orders">
+  </Step>
+  <Step title="the order preview should be shown">
+    <Frame>
+      ![IMG 2551](/images/IMG_2551.jpeg)
+    </Frame>
+  </Step>
+  <Step title="select the order you want to preview">
+  </Step>
+</Steps>
+
+1. Navigate to **Orders** in Shopify admin.
+2. Click on an order line to access order details.
+3. Choose the **Capture** or **Refund** payment option. The Checkout app will synchronize automatically. The payment status will also be updated in [Checkout Portal](https://portal.dibspayment.eu).
+
+<Warning>
+  •	In **Shopify Admin \> Payments** settings it is possible to select either auto-capture (default) or manual capture. In that case, even order paid wit instant payment methods like Swish or Trustly will required manual capture.
+
+  •	It might take a little while (less than 1 minute) for order status to be updated.
+
+  •	It is possible to process partial or full refund is as applicable.
+
+  •	It is only possible to process partial/full capture once.
+
+  •	Abandoned/non-completed checkouts via Checkout can be re-initialized through Shopify admin portal, notifying customer with cart recovery email. (located in **Order \> Abandoned Checkout**).
+</Warning>
+
+![shopify capture payment in orders](https://images.ctfassets.net/di680may5c0k/6dRkxZxaFb6hH2kN6V5Nht/e0ef7da724b75f1cdb38bea4b02c43c0/shopify_capture_payment_in_orders.png?w=971&h=488&q=50&fm=png)
+
+## Troubleshooting
+
+### Important notice
+
+<Warning>
+  In Shopify admin, a payment can be flagged with **pending status**, look for this transaction in the Checkout portal. If it is indicated as "**charged**" in the Checkout portal, then you can mark the order as "**paid**" in Shopify admin.
+
+  To accept **PayPal**, **Apple Pay** or **Google Pay** you must use the specific app provided by Shopify. You cannot accept those payments with Checkout as per Shopify rules.
+</Warning>
+
+Below are some of the most common configuration errors, their cause and steps that you can follow to solve them.
+
+<AccordionGroup>
+  <Accordion title="Checkout is not visible as a payment method">
+    - Ensure the Checkout is available and activated in the Shopify store under **Settings \> Payment \> Checkout**.
+    - Make sure you have configured the Payment gateway correctly.
+  </Accordion>
+
+  <Accordion title="Nexi Group payment window is blank">
+    - Ensure your integration keys in the Nexi Group app settings are correct and do not contain additional blank spaces.
+    - Temporarily deactivate third party plugins that might affect the functionality of the app.
+    - Check if there are any temporary technical inconsistencies: [https://easy-status.developers.nets.eu/](https://easy-status.developers.nets.eu/)
+  </Accordion>
+</AccordionGroup>
+
+### Checkout is not visible as a payment method
+
+- Ensure the Checkout is available and activated in the Shopify store under **Settings \> Payment \> Checkout**.
+- Make sure you have configured the Payment gateway correctly.
+
+### Nexi Group payment window is blank
+
+### Payments in live mode don't work
+
+- Ensure you have an approved Live Checkout account for production.
+- Ensure your Live Checkout account is approved for payments with the selected currency.
+- Ensure payment method data is correct and supported by your Checkout agreement.
+
+## Go live checklist
+
+For more information, refer to the section [Go-live checklist](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Install Shopify Checkout App">
+  </Card>
+
+  <Card title="Install Shopify Card App">
+  </Card>
+
+  <Card title="Install Shopify Swish app">
+  </Card>
+
+  <Card title="Install Shopify Vipps app">
+  </Card>
+
+  <Card title="Install Shopify Klarna app">
+  </Card>
+
+  <Card title="Install Shopify Mobile Pay app">
+  </Card>
+</Columns>
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

@@ -1,0 +1,261 @@
+---
+title: "Checkout for OXID"
+description: "This guide describes how to install, configure, and use the Checkout webshop module for Oxid."
+---
+
+Compatibility: Oxid 6.5+
+
+Last version: v2.0.4 (2024-11-12)
+
+## Before you start
+
+<Warning>
+Before you start, you need an [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide
+- How to [create a test account for Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+## Overview
+
+Our Oxid plugin is the perfect extension that enables you to use the Checkout to its full potential for your Oxid store. Checkout supports most popular payment methods. Also, in order to cater to different segments and to highlight specific payment methods, it is possible to either use the Checkout as one solution or to specify and show individual payment methods for your consumers.
+
+<Info>
+You can see below all the payment methods offered by Checkout. This list refers to all markets. 
+
+Depending on your country or region, the list may vary. If you are uncertain about a specific payment method and whether it is available in your country or region, please contact [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) for more information.
+</Info>
+
+![Checkout plugin - Oxid esales](https://images.ctfassets.net/di680may5c0k/4BnIrTO5I8TKvpiLQ6OaI6/4b2065f0fef96011aa41c56eaf0ada10/plugin_oxid_esales.jpg?w=1576&h=656&fl=progressive&q=50&fm=jpg)
+
+<Warning>
+Apple Pay configuration for Oxid plugin is described on the [Apple Pay payment method](/apple-pay/#build-oxid-65) page.
+</Warning>
+
+### Shop features
+
+- The fast checkout with "remember me" functionality.
+- Embedded checkout for an optimized user experience. Users are not redirected outside Oxid.
+- A smart mix of payment methods to suit all preferences.
+- The possibility to use Checkout as either in one solution or to split the individual payment methods out as outlined from [here](/oxid#build-logos).
+- Multiple checkout languages and currencies for selling in your domestic market and abroad.
+
+The following screenshot shows a checkout page provided by the Checkout module:
+
+![oxid embedded checkout](https://images.ctfassets.net/di680may5c0k/2gqEnGcaoTXB68K6ZFJHLM/9cbfce6e125d7a133a3e3c8c805aeeee/oxid_embedded_checkout.png?w=1177&h=516&q=50&fm=png)
+
+### Admin features
+
+- Quick setup and flexible configuration.
+- Intuitive order management with synchronized captures and refunds.
+- Compatibility with discounts, tax (VAT), and shipping options.
+
+The screenshot below shows the Settings page in the Oxid administration portal:
+
+![oxid activate plugin](https://images.ctfassets.net/di680may5c0k/700hyLEHGKnBz8hZ8QsjVR/fc696e8f38c1376e6ee6d398e862489d/oxid_activate_plugin.png?w=1331&h=556&q=50&fm=png)
+
+## Installation
+
+Follow the steps below to install and activate the Checkout module in Oxid.
+
+### Step 1: Upload the module to Oxid
+
+1. Download the module archive: [https://github.com/Nets-eCom/oxid6_easy/archive/refs/heads/master.zip](https://github.com/Nets-eCom/oxid6_easy/archive/refs/heads/master.zip).
+2. Extract the zip archive to the folder `/source/modules/nets `.
+3. Clear your cache from third party plugins or simply delete the files in the `/source/tmp ` folder. 
+
+<Warning>
+- Do not delete the `.htaccess ` file.
+- Do not delete the `smarty ` folder, but only its content.
+</Warning>
+
+### Step 2: Install the module
+
+Connect with an SSH client and navigate to the root directory of your Oxid 6 installation and run the command: 
+
+`$ php vendor/bin/oe-console oe:module:install-configuration source/modules/nets `
+
+### Step 3: Activate the module
+
+After installing the module, you need to activate it:
+
+1. Navigate to **Extensions > Modules** in Oxid Admin.
+2. Locate and select **Checkout** module from the list of installed modules.
+3. Select the **Overview** tab and press the **Activate** button. If the Checkout module has been installed correctly, you will now see a green checked circle in the **ACTIVE** column next to Checkout on your list.
+
+![oxid activate plugin](https://images.ctfassets.net/di680may5c0k/700hyLEHGKnBz8hZ8QsjVR/fc696e8f38c1376e6ee6d398e862489d/oxid_activate_plugin.png?w=1331&h=556&q=50&fm=png)
+
+### Step 4: Activate the new payment method
+
+Here's how to activate the new payment method: 
+
+1. Navigate to **Shop Settings > Payment Methods**
+2. Payment methods are listed in alphabetical order on multiple pages. Find or search for **Checkout** and select it.
+3. On the **Main** tab, make sure to check the **Active** box.
+4. (Optional) Fill out the **Name** and **Payment Description** fields if you want to customize the text displayed in the payment method selector presented to your customers in the webshop.
+5. (Optional) Specify **User Groups** and **Countries and translations** if needed.
+6. Click **Save**.
+
+The module is now installed and ready to be configured for your Checkout account.
+
+## Configuration
+
+After installing and activating the module, you now need to do some basic configuration of the module:
+
+1. Navigate to the plugin settings: **Extensions > Modules > Checkout**.
+2. Select the **Settings** tab and press  **Checkout settings** to reveal the configuration settings.
+3. Fill out the required fields, such as merchant ID and integration keys (secret keys and checkout keys). 
+4. (Optional) Customize the module according to your needs using the additional settings on the configuration page.
+
+<Info>
+Both the **merchant ID** and the **integration keys** can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the following pages for more help:
+
+- [Where can I find my merchant number (merchant ID)?](https://developer.nexigroup.com/nexi-checkout/en-EU/support/where-can-i-find-my-merchant-number-merchant-id/)
+- [Access your integration keys](/access-your-integration-keys)
+</Info>
+
+The screenshot below shows the settings page for the module:
+
+![oxid plugin settings](https://images.ctfassets.net/di680may5c0k/6HpLlZaFFIr9MySqX2WcVE/3c1c6271875d9f24a6460ff15e89a8d8/oxid_plugin_settings.png?w=1048&h=560&q=50&fm=png)
+
+The following table lists all the settings you can configure in the administration area for the Checkout module:
+
+| Configuration&#160;setting | Description
+| ---------------------------|------------ 
+| Mode | Toggles between **live mode** and **test mode**. Choose test mode if you want to make test purchases using the [test environment](/test-environment). There are [sample card numbers](/test-card-processing/#build-sample-credit-cards) and [invoice addresses](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) for testing purposes. Live mode requires an approved account.
+| Live Secret key | Your live secret key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Live Checkout key | Your live checkout key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Secret key | Your secret key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Checkout key | Your checkout key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Terms Url | The URL for your Terms and Conditions page.
+| Merchant Terms Url | The URL for your Terms of use and Cookies page. Term Links can be found inside the Checkout payment window.
+| Checkout Type | Select between **Hosted** and **Embedded**. Hosted loads a new payment page whereas embedded inserts the payment window directly on the checkout page.
+| Auto-capture | This function enables you to instantly charge a payment straight after the order is placed. **Note!** Capturing a payment before shipment of the order might be liable to restrictions based upon legislations set in your country. Misuse can result in your Checkout account being forfeit.
+| Debug | This function will reveal raw api data that you can copy / paste in case you experience errors on your transactions. Data will be visible in order details page.
+
+<Check>
+You've now installed and configured the Checkout webshop module. If you have further questions, please see the troubleshooting section below or reach out to our [support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Order management
+
+It's possible to manage orders directly in Oxid:
+
+1. Navigate to **Admin > Administer Orders > Orders**. Select an order item paid through Checkout.
+2. Choose your desired payment operation:
+   - Fully cancel / charge / refund your order.
+   - Partially charge / refund your order.
+
+<Info>
+- Partial functionality handles items in your order as blocks. Custom amount is not possible.
+- Use **-**/**+** to adjust quantity for partial functionality.
+- Press the **Partial** button to execute the desired action for each order line.
+- All transactions performed by Nets are accessible in [Checkout Portal](https://portal.dibspayment.eu/).
+</Info>
+
+Payment status is updated in real-time and reflected in Order details even if you make the changes in Checkout Portal.
+
+![Order management](https://images.ctfassets.net/di680may5c0k/7BBW9I5ohuz76XqGQViAc9/a8790a030f4eaf288b8bd2504cc5caf0/Order_management.png?w=1885&h=829&q=50&fm=png)
+
+<Check>
+You've now installed and configured the Checkout webshop module. If you have further questions, please see the troubleshooting section below or reach out to our [support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Logos
+
+This section is if you are using other payment service providers with our Checkout solution on your webshop. 
+
+If you would like to to customize your OXID plugin with more categorized and grouped payment methods then you choose and display the payment method logos separately along with a description so it is clear and precise with what selection of payment methods are available towards your consumers.
+
+This includes two processes:
+
+1. Adding and activating the extra plugin into your OXID backend
+2. Adding the payment method logos
+
+The following will outline the steps of how to set it up.
+
+## Process of adding the extension
+
+1. Log into your OXID backend dashboard.
+2. In the left-hand side menu, click on __Extensions__.
+3. Within Extensions, click on __Modules__.
+7. Find the module called __WYSIWYG Editor + Mediathek__.
+8. Activate this module.
+
+![OXID extension](https://images.ctfassets.net/di680may5c0k/3lAzkNlM1W7wNAiin1fbLu/6fe40732793aada9303bae2c1648f718/oxid_extension.png?w=1908&h=691&q=50&fm=png)
+
+<Warning>
+Make sure that the extension WYSIWYG Editor + Mediathek has been activated into your OXID backend otherwise the following steps will not be applicable.
+</Warning>
+
+## Process of adding the logos
+
+1. Log into your OXID backend dashboard.
+2. In the left-hand side menu, click on __Shop Settings__.
+3. Within Shop Settings, click on __Payment Methods__.
+4. Then select the payment method for which you would like to add the logo for. You can select the payment method by clicking on it.
+5. Scroll down to see the text input box field called __Payment Description__ where it is possible to enter different things.
+6. Click on the image icon.
+7. A new window called __Media gallery__ will appear where it is possible for you to upload the payment method logos. It is also possible to see the current media list.
+8. Upload the payment method logos either by drag & drop or by finding it in your local folder.
+8. Upload the payment method logos either by drag & drop or by finding it in your local folder.
+10. Click on the __Apply__ button when you have finalised the upload of the images
+
+<Info>
+By default, the logos that you download from here are set to 40 width and 20 in height, all in the file format of **.svg**. 
+
+This sizing is consistent and follows the same as also outlined from our demostore and the logos that you can download from the go-live checklist [here](/go-live-checklist/#build-include-payment-method-logos-on-your-website).
+
+When uploading the logos, they will be hosted and stored into OXID's own hosting system which is why it is not possible to use the logos from the go
+</Info>
+
+![OXID image upload](https://images.ctfassets.net/di680may5c0k/3LNXrjYGOcnFqrayPksTB0/8607d427c711d16c91a781df2c8afa8d/MicrosoftTeams-image__47_.png?w=1915&h=857&q=50&fm=png)
+
+When the final step has been completed, you will be able to see the following in the description field:
+
+![OXID logo final step](https://images.ctfassets.net/di680may5c0k/2sxJYDbB21ixVyujiiFMTS/5374924f26515a7d30deeff4bda0877c/MicrosoftTeams-image__48_.png?w=1910&h=847&q=50&fm=png)
+
+You can get the payment method logos from [here](/go-live-checklist/#build-include-payment-method-logos-on-your-website). From here, it is possible to retrieve the logos either individually or from the HTML table.
+
+## Troubleshooting
+
+Below are some of the most common configuration errors, their cause and steps that you can follow to solve them.
+
+### Nexi Group payment plugin is not visible as a payment method
+
+- Ensure the Nets plugin is activated in **Shop Settings** and in the Extensions plugin configuration.
+- Ensure the Nets plugin is assigned in available listings in various User Groups and Countries.
+- Various User Groups, Countries and Payment Methods setup listings can be found in **Admin > Shop > Settings** under **Payment Methods and Shipping Methods**.
+
+### Nexi Group payment window is blank
+
+- Ensure your integration keys in the Nexi Group app settings are correct and do not contain additional blank spaces.
+- Temporarily deactivate third party plugins that might affect the functionality of the app.
+- Check if there are any temporary technical inconsistencies: https://easy-status.developers.nets.eu/
+
+### Payments in live mode don't work
+- Ensure you have an approved Live Checkout account for production.
+- Ensure your Live Checkout account is approved for payments with the selected currency.
+- Ensure payment method data is correct and supported by your Checkout agreement.
+
+### How do I choose currency and language in the payment window?
+
+- Currency and Language is based on customers selection on the frontend shop page.
+- A complete list of supported currencies and languages can be found in the [Checkout API Reference](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#localization).
+
+## Go live checklist
+
+For more information, refer to the section [Go-live checklist](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Download">
+  </Card>
+  <Card title="Source">
+  </Card>
+</Columns>
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

@@ -1,0 +1,60 @@
+---
+title: "Dankort"
+description: "Dieser Leitfaden beschreibt die Grundlagen der Nutzung von Dankort über Checkout und enthält die für eine reibungslose Implementierung erforderlichen Anweisungen."
+---
+
+## Überblick
+
+Checkout verfügt über eine Integration zu Dankort.
+
+## Funktionen
+
+### Funktionstabelle Dankort
+|  |  |
+| --- | --- |
+| Zahlungsart | Karte |
+| Abonnements | ✅ |
+| Rückerstattungen | ✅ |
+| Teilrückerstattung | ✅ |
+| Bestellung aktualisieren | ✅ |
+| Zahlung stornieren | ✅ |
+| Reservierung & Belastung | ✅ |
+| IPSP | ✅ |
+| CPSP | ✅ |
+| Währungen | DKK |
+| Länder | DK |
+
+<Info>
+Weitere Informationen zu den Zahlungsoperationen finden Sie [hier](/order-management/#build-payment-operations).
+</Info>
+
+## Aktivierung
+
+Um Dankort als Zahlungsmethode zu aktivieren und in Ihrem Checkout-Portal hinzuzufügen, müssen Sie den Onboarding-Prozess abschließen.
+
+<Info>
+Wenn Sie bereits ein bestehendes Checkout-Portal-Konto haben, müssen Sie sich hierzu an den [Sales Support](https://www.nets.eu/payments/contact-us) wenden.
+</Info>
+
+## Benutzerablauf
+
+Im folgenden Abschnitt wird der Ablauf für einen Verbraucher beschrieben:
+
+<Info>
+Je nachdem, in welchem Land der Verbraucher ansässig ist, muss er sich mit der entsprechenden Authentifizierung verifizieren, z. B. Bank-ID, NemID usw.
+</Info>
+
+1. Wenn Ihr Verbraucher Dankort als Zahlungsmethode im Checkout auswählt, wird er aufgefordert, Folgendes einzugeben:
+   -  Kartennummer (16 Stellen)
+   -  Ablaufdatum (mm/jj)
+   -  CVC (3 Stellen)
+2. Anschließend wird er zur 3DS-Verifizierung weitergeleitet.
+3. Nach der Verifizierung und Validierung der echten Identität über die Seite zur starken Authentifizierung kann der Verbraucher die Zahlung entweder bestätigen oder ablehnen.
+4. Wenn die Zahlung genehmigt wurde, wird der Betrag auf der Karte reserviert.
+5. Wenn Sie die Ware versenden, wird der Belastungsbetrag abgebucht, da eine Belastungsanforderung Checkout darüber informiert.
+
+## Testen
+
+Checkout bietet die Möglichkeit, Dankort zu testen. Sie können Dankort-Zahlungen in der [Nexi Group-Testumgebung](/test-environment) testen.
+
+

@@ -1,0 +1,130 @@
+---
+title: "Vollständiges Beispiel für das Senden einer Checkout Paylink-Anfrage"
+description: "Die obigen Beispiele sind für eine Linux-Befehlszeile gedacht."
+---
+
+## Bevor Sie beginnen
+
+Stellen Sie sicher, dass Sie die unter [hier](/checkout-paylink-and-one-page-shop-solution) beschriebenen Voraussetzungen erfüllt haben, bevor Sie fortfahren.
+
+Sie benötigen ein [Checkout Paylink-Konto](/before-you-start/#build-1-nexi-checkout-paylink-account), damit Sie Ihren [Paylink-Instanznamen](/before-you-start/#build-3-paylink-instance-name) und Ihren [API Secret – Integrationsschlüssel](/access-your-integration-keys/) kennen.
+
+<Warning>
+Dieser und die folgenden Schritte sind nur für Sie relevant, wenn Sie Ihre Paylink- oder One-Page-Shop-Zahlungsprozesse über die API automatisieren möchten. In den meisten Fällen ist die über Ihr __Checkout Paylink-Konto__ bereitgestellte Funktionalität ausreichend.
+</Warning>
+
+## Szenario
+
+Für das folgende Beispiel gehen wir von diesem Szenario aus:
+
+__Ein Paylink soll mit diesen Werten erstellt werden:__
+
+- Betrag ist 89,25 CHF, MwSt.-Satz beträgt 7,7 %
+- Visa wird als einzige Zahlungsmethode angeboten
+- Ihre Stock Keeping Unit (SKU) lautet P01122000
+- Der auf der Zahlungsseite angezeigte Seitentitel lautet „Test", die Beschreibung lautet „Testdescription" und der Verwendungszweck lautet „The purpose of the payment."
+- Der Kontaktname lautet „Max Mustermann"
+- Die API-Signatur besteht aus dem fiktiven Wert „a12345678"
+
+## 1. Query-String erstellen
+
+Zunächst erstellen wir den Query-String.
+
+<Warning>
+Der Query-String muss nach (RFC1738)[https://www.ietf.org/rfc/rfc1738.txt] kodiert sein. Das bedeutet, Sie müssen Leerzeichen durch „+" ersetzen, wie in `purpose=This+is+a+test `. Außerdem werden die linken und rechten eckigen Klammern (wie in `pm[0]=visa `) durch `%5B ` und `%5D ` ersetzt.
+</Warning>
+
+Für unser Beispiel würde der kodierte Query-String wie folgt aussehen:
+
+```html Example for an encoded query string - line breaks added for readability
+amount=8925&
+vatRate=7.7&currency=CHF&
+sku=P01122000&
+pm%5B0%5D=visa&
+preAuthorization=0&
+reservation=0&
+referenceId=975382&
+title=Test&
+description=Testdescription&
+purpose=This+is+a+test&
+fields%5Bforename%5D%5Bmandatory%5D=1&
+fields%5Bforename%5D%5BdefaultValue%5D=Max&
+fields%5Bsurname%5D%5Bmandatory%5D=0&
+fields%5Bsurname%5D%5BdefaultValue%5D=Muster
+```
+
+<Info>
+Es ist ein häufiger Fehler, dass der Query-String nicht gemäß den RFC1738-Kodierungsregeln kodiert ist.
+</Info>
+
+## 2. API-Signatur berechnen
+
+Wir müssen nun den binären HMAC-Hash (API-Signatur) unter Verwendung des Query-Strings und des API Secret des Checkout Paylink-Kontos als Schlüssel berechnen.
+
+```bash 2a) Set the queryString variable (command line example)
+queryString="amount=8925&vatRate=7.7&currency=CHF&sku=P01122000&preAuthorization=0&reservation=0&referenceId=975382&title=Test&description=Testdescription&purpose=This+is+a+test&fields%5Bforename%5D%5Bmandatory%5D=1&fields%5Bforename%5D%5BdefaultValue%5D=Max&fields%5Bsurname%5D%5Bmandatory%5D=0&fields%5Bsurname%5D%5BdefaultValue%5D=Muster"
+```
+
+Mit der `$queryString `-Variable aus dem obigen Beispiel berechnen wir nun die API-Signatur. In unserem Beispiel verwenden wir den fiktiven Wert `a12345678` als API Secret:
+
+```bash 2b) Calculate API Signature - command line example
+digest=`echo -n $queryString| openssl dgst -sha256 -hmac "a12345678" -binary`
+```
+
+In einem letzten Schritt wird die API-Signatur verschlüsselt:
+
+```bash 2c) openssl encrypt API Signature - command line example
+apiSignature=`echo -n $digest| openssl enc -base64`
+```
+
+Das Ergebnis unseres Beispiels wäre:
+`oZip7nkIb0HJsqX/EgIb7hF5aAov9y2bQhTnzs+0iF0=`
+
+So sieht die Zeichenfolge URL-kodiert aus:
+`oZip7nkIb0HJsqX%2FEgIb7hF5aAov9y2bQhTnzs%2B0iF0%3D `
+
+## 3. Anfragetext (Payload) erstellen
+
+Nachdem wir die berechnete API-Signatur haben, erstellen wir die Anfrage-Payload. Die Payload besteht aus Name-Wert-Paaren, ähnlich denen, die wir als Query-Parameter-Werte für die Berechnung der API-Signatur verwendet haben.
+
+<Warning>
+Die Payload-Daten müssen (URL-kodiert) [http://www.ietf.org/rfc/rfc3986.txt)] sein, und Leerzeichen werden prozentkodiert: „%20".
+</Warning>
+
+## 4. Vollständige Anfrage senden
+
+Um die vollständige Paylink-Anfrage zu senden, muss Ihr `instance `-Name dem Header der Anfrage hinzugefügt werden.
+
+`POST "https://api.nets-pay.link/v1.0/Invoice/?instance=INSTANCE_NAME"`
+
+Hier ist ein Befehlszeilenbeispiel für die vollständige Anfrage (einschließlich Berechnung der API-Signatur):
+
+```bash Complete Paylink request - command line example
+apiSignature=`echo -n "amount=8925&vatRate=7.7&currency=CHF&sku=P01122000&pm%5B0%5D=visa&preAuthorization=0&reservation=0&referenceId=975382&title=Test&description=Testdescription&purpose=This+is+a+test&fields%5Bforename%5D%5Bmandatory%5D=1&fields%5Bforename%5D%5BdefaultValue%5D=Max&fields%5Bsurname%5D%5Bmandatory%5D=0&fields%5Bsurname%5D%5BdefaultValue%5D=Muster" | openssl dgst -sha256 -hmac "INSTANCE_API_SECRET" -binary | openssl enc -base64`
+
+curl --request POST "https://api.nets-pay.link/v1.0/Invoice/?instance=INSTANCE_NAME" \
+  --data-urlencode "amount=8925" \
+  --data-urlencode "vatRate=7.7" \
+  --data-urlencode "currency=CHF" \
+  --data-urlencode "sku=P01122000" \
+  --data-urlencode "pm[0]=visa" \
+  --data-urlencode "preAuthorization=0" \
+  --data-urlencode "reservation=0" \
+  --data-urlencode "referenceId=975382" \
+  --data-urlencode "title=Test" \
+  --data-urlencode "description=Testdescription" \
+  --data-urlencode "purpose=This is a test" \
+  --data-urlencode "fields[forename][mandatory]=1" \
+  --data-urlencode "fields[forename][defaultValue]=Max" \
+  --data-urlencode "fields[surname][mandatory]=0" \
+  --data-urlencode "fields[surname][defaultValue]=Muster" \
+  --data-urlencode "ApiSignature=$apiSignature"
+```
+
+## 5. Antwort
+
+Die Antwort auf diese Anfrage sollte `{status:success}` sein.
+
+<Warning>
+In unserem Beispiel haben wir den fiktiven Wert `a12345678` als API-Schlüssel verwendet. Sie müssen diesen Schlüssel durch Ihren tatsächlichen API-Schlüssel aus Ihrem Checkout Paylink-Konto ersetzen. Dasselbe gilt für den `instance `-Parameter: In unserem Beispiel haben wir einfach den fiktiven Wert `Instance_Name ` verwendet.
+</Warning>

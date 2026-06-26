@@ -1,0 +1,32 @@
+---
+title: "Verarbeitung virtueller Karten"
+description: "Erfahren Sie mehr über die Verarbeitung virtueller Karten für Nexi Checkout."
+---
+
+## Virtuelle Karte
+
+__Verarbeitung virtueller Karten__
+&nbsp;
+
+Wenn Sie Buchungen über externe Plattformen wie Booking.com oder Expedia erhalten, können Sie diese Buchungszahlungen automatisch in das Easy-Portal importieren und über die Virtual Card API verarbeiten. Die API überträgt die virtuellen Kartendetails direkt von der Buchungsplattform an Easy und macht das manuelle Kopieren und Einfügen von Kartendaten überflüssig.
+
+__Funktionsweise__
+&nbsp;
+
+Die Virtual Card API ermöglicht es Ihnen, die Bestellung an das Easy-Portal zu senden. Die Buchung erscheint im Easy-Portal, wo sie wie jede andere Bestellung bearbeitet werden kann.
+
+1. Die Implementierung dieser Funktion stellt einen neuen Endpunkt in der Merchant API bereit, über den der Händler in einem einzigen synchronen Aufruf eine Zahlung reservieren oder direkt belasten kann. Der Aufruf erhält eine Antwort, deren Body entweder eine JSON-Payload enthält, die die Payment-ID einer erfolgreich ausgeführten Transaktion liefert, oder eine Nachricht, die einen Fehler anzeigt.
+2. Die API-Referenzdokumentation für den Endpunkt ist über diesen Link leicht erreichbar.
+3. Der Händler kann Webhooks als Teil der Anfrage-Payload angeben, um Ereignisse zu abonnieren, sobald sie eintreten
+4. Die zurückgegebenen Payment-IDs für die erfolgreich ausgeführten Transaktionen können wie herkömmliche/traditionelle/normale Zahlungen behandelt werden, das heißt, sie können belastet/storniert – sofern sie nur reserviert sind – oder zurückerstattet werden.
+5. Über diesen neuen Endpunkt ausgeführte Zahlungen verfügen über keine Checkout-Informationen, da es sich um vom Händler initiierte Zahlungen handelt. Daher müssen Bestellinformationen und andere Zahlungsinformationen wie Rechnungsadresse usw. vom Aufrufer im Anfragetext angegeben werden.
+
+__Voraussetzungen__
+
+Die Funktion ist nur für Händler verfügbar, die PCI-DSS-konform sind. Händler müssen eine Dokumentation vorlegen, die belegt, dass sie Karteninformationen sicher speichern, verarbeiten und übertragen können.
+
+Bitte wenden Sie sich an unseren Vertrieb, um mehr zu erfahren.
+
+__API-Referenz__
+
+Die API-Endpunkte sind in der Standard-Nets/Easy-API-Dokumentation [hier](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-cardpayments-post) verfügbar

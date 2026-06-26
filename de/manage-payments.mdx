@@ -1,0 +1,137 @@
+---
+title: "Zahlungen verwalten"
+description: "Diese Anleitung beschreibt, wie Sie Ihre Zahlungen im Checkout Portal verwalten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="gray">Programmierung: Keine</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie die Anleitung:
+- So [erstellen Sie ein Testkonto für Checkout](/create-a-checkout-portal-account)..
+</Warning>
+
+Voraussetzungen:
+
+- Shopware-Version: Kompatibel mit Shopware 6.6.x und höher.
+
+Hinweis: Für Shopware-Versionen 6.4.x und 6.5.x (z. B. 6.4.1, 6.5.2) verwenden Sie bitte Shopware 1.x
+
+Wenn Sie Shopware 1.x verwenden, müssen Sie Shopware 2.x parallel betreiben, bis die Bestellungen abgeschlossen sind.
+
+## Übersicht
+
+Wann immer ein Kunde etwas auf Ihrer Seite kauft, wird eine neue **Zahlung** in Checkout erstellt. Zahlungen können direkt im [Checkout Portal](https://portal.dibspayment.eu/payments) oder programmatisch über die [Checkout-APIs](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/) verwaltet werden.
+
+Neue Zahlungen erfordern Ihre Aktion:
+- Wenn Sie die Bestellung versenden, müssen Sie die Zahlung **einziehen** (charge), um die Gelder von Nets zu erhalten.
+- Wenn die Bestellung vom Kunden storniert wird, müssen Sie die Zahlung **stornieren**, um die Reservierung auf der Zahlungskarte des Kunden freizugeben.
+
+## Zahlungen einziehen
+
+Ziehen Sie eine Zahlung am selben Tag ein, an dem Sie die zugehörige Bestellung versenden.
+
+Eine Kartenzahlung muss **innerhalb von 30 Tagen** eingezogen werden, andernfalls wird die Zahlung automatisch storniert. Danach ist eine neue Bestellung des Kunden erforderlich, falls Sie nach den 30 Tagen einziehen möchten.
+
+Eine Zahlung kann vollständig (Standard) oder teilweise eingezogen werden.
+
+## Vollständige Einziehung
+
+Um eine einzelne Zahlung vollständig einzuziehen, wählen Sie die Bestellung in der Zahlungsübersicht aus und wählen Sie **Charge** im Dropdown-Menü **QUICK ACTIONS**. Um mehrere Zahlungen gleichzeitig einzuziehen, wählen Sie die gewünschten Zahlungen aus und wählen Sie **CHARGE**.
+
+Die Charge-Aktion zieht den vollen Betrag der Bestellung ein. Es ist auch möglich, Teile einer Bestellung einzuziehen, indem Sie die Bestellung vor dem Einziehen bearbeiten.
+
+## Bestellung vor dem Einziehen bearbeiten
+
+Bestellungen können teilweise eingezogen werden. Im Folgenden finden Sie drei häufige Szenarien mit Beispielen.
+
+### Szenario 1: Einziehung für ein bestimmtes Produkt
+
+Um für ein oder mehrere Produkte einzuziehen, aktivieren Sie die Auswahlkästchen. Die Gesamtsumme der Erstattung wird basierend auf den ausgewählten Bestellpositionen berechnet. Überprüfen Sie den Betrag und wählen Sie **Charge**.
+
+**Beispiel:** Sie haben eine Bestellung für 1 rotes T-Shirt und 1 gelbes T-Shirt erhalten, aber es stellt sich heraus, dass Sie nur das rote T-Shirt auf Lager haben. Sie möchten das rote T-Shirt jetzt liefern und das gelbe, sobald es vom Lieferanten eintrifft. Aktivieren Sie die Bestellzeile für das rote T-Shirt und wählen Sie **Charge**. Sie können das gelbe T-Shirt zu einem späteren Zeitpunkt einziehen (sofern dies innerhalb von 30 Tagen erfolgt).
+
+### Szenario 2: Menge vor dem Einziehen ändern
+
+Sie können die Menge in einer Bestellzeile ändern, indem Sie einen neuen Wert in das Mengenfeld eingeben. Die Summe wird entsprechend Ihren Änderungen aktualisiert. Überprüfen Sie den Betrag und wählen Sie **Charge**.
+
+**Beispiel:** Sie haben eine Bestellung für 100 rote T-Shirts erhalten. Sie haben nur 80 auf Lager und der Kunde möchte, dass Sie schicken, was Sie haben, sobald es geht. Geben Sie hierzu „80" in das Mengenfeld ein. Das System aktualisiert die Summe automatisch und Sie können **Charge** wählen, um die Bestellung abzuschließen. Sie können die verbleibenden 20 T-Shirts zu einem späteren Zeitpunkt einziehen (sofern dies innerhalb von 30 Tagen erfolgt).
+
+### Szenario 3: Den Betrag vor dem Einziehen ändern
+
+Sie können den Betrag in einer Bestellzeile ändern, indem Sie einen neuen Wert in das Preisfeld eingeben. Die Summe wird entsprechend Ihren Änderungen aktualisiert. Überprüfen Sie den Betrag und wählen Sie **Charge**.
+
+**Beispiel:** Ihr Kunde hat angerufen, um die Bestellung zu stornieren. Sie sind jedoch ein hervorragender Verkäufer und haben den Kunden überzeugt, den Kauf abzuschließen – mit einem Rabatt von 20 SEK. Reduzieren Sie den Betrag im Eingabefeld auf den vereinbarten Preis. Das System berechnet die Summe entsprechend Ihren Änderungen.
+
+Wenn der Preis gesenkt wird, wird eine neue Bestellzeile erstellt, die den verbleibenden Teil des reservierten Betrags enthält. Beachten Sie außerdem, dass es nicht möglich ist, einen Betrag einzuziehen, der die ursprüngliche Bestellung überschreitet. Das System informiert Sie, wenn Sie das Limit überschreiten.
+
+### Zurücksetzen, falls Sie den Überblick verlieren
+
+Alle oben genannten Änderungen können auch kombiniert vorgenommen werden. Wenn Sie Änderungen vornehmen und den Überblick verlieren, haben Sie immer die Möglichkeit, die Änderungen zurückzusetzen, um zum Ausgangspunkt beim Öffnen des Modal-Fensters zurückzukehren.
+
+## Zahlungsdetails anzeigen
+
+Auf der Zahlungsdetailseite können Sie die Details zu den Charges und Refunds der ausgewählten Zahlung einsehen. Es ist auch möglich, Aktionen direkt von der Zahlungsdetailseite aus auszuführen.
+
+Um die Details zu einer Zahlung anzuzeigen, klicken Sie auf die Bestellzeile oder wählen Sie **View details** im Dropdown-Menü **QUICK ACTIONS** auf der [Zahlungsübersichtsseite](https://portal.dibspayment.eu/payments).
+
+Die Zahlungsdetailseite enthält drei Reiter:
+
+- Der Reiter **Order details** zeigt den **Namen des Kunden** und den **Zahlungsstatus** der Bestellpositionen. Dort sehen Sie, wer die Bestellung aufgegeben hat und welchen spezifischen Status die Bestellpositionen haben.
+
+- Der Reiter **Transaction details** zeigt Informationen, die im Kontakt mit unserem Support-Team nützlich sein können.
+
+- Der Reiter **History** zeigt alle Ereignisse zu einer bestimmten Zahlung, einschließlich, welcher Benutzer eine bestimmte Aktion durchgeführt hat.
+
+## Zahlungen stornieren
+
+Reservierte Beträge bei Kartenzahlungen freigeben
+
+Wenn ein Kunde eine Bestellung storniert, bevor die Ware versandt wird, können Sie die Zahlung stornieren. Durch das Stornieren einer Zahlung wird das reservierte Geld auf der Zahlungskarte des Kunden freigegeben, und **Nets erhebt keine Gebühr für die Zahlung.**
+
+Um eine Zahlung zu stornieren, wählen Sie sie einfach in der Zahlungsübersicht aus und wählen Sie **Cancel** im Dropdown-Menü **QUICK ACTIONS**. Um mehrere Zahlungen gleichzeitig zu stornieren, wählen Sie die gewünschten aus und wählen Sie **Cancel**.
+
+<Note>
+Beachten Sie, dass es nicht möglich ist, den Status einer Zahlung zu ändern, sobald sie storniert wurde.
+</Note>
+
+## Erstattungen
+
+Erstatten Sie den vollen Betrag oder Teile einer Zahlung.
+
+### Vollständige Erstattung
+Um den Gesamtbetrag zu erstatten, wählen Sie einfach „Refund" im Dropdown-Menü **QUICK ACTIONS**.
+
+<Warning>
+Wenn die Zahlung teilweise eingezogen wurde und Sie die volle Zahlung erstatten möchten, müssen Sie pro Charge eine Erstattung vornehmen.
+Die vollständige Liste aller Charges, die zur selben ursprünglichen Zahlung gehören, finden Sie über die [Zahlungsdetails](#view-payment-details).
+Um alle Charges zu finden, die mit derselben ursprünglichen Zahlung zusammenhängen, wählen Sie „View details" für eine beliebige Zeile in der Zahlungsliste, die zur Bestellung gehört.
+</Warning>
+
+### Bearbeiten und erstatten
+
+Alle eingezogenen Zahlungen, einschließlich einzelner oder mehrerer Bestellpositionen, können teilweise erstattet werden. Um eine Zahlung teilweise zu erstatten, wählen Sie **Edit and refund** im Dropdown-Menü **QUICK ACTIONS**, wählen Sie die gewünschten Bestellpositionen aus und/oder bearbeiten Sie die Felder, bevor Sie **REFUND** wählen. Sie können je nach Bedarf mehrere Aktionen ausführen. Nachfolgend listen wir drei Beispiele auf.
+
+### Nicht genug Geld für eine Erstattung?
+
+Wenn beim Initiieren einer Erstattung nicht genügend Mittel auf Ihrem Konto vorhanden sind, erscheint die Transaktion als „refunding", bis das Saldo dem Betrag entspricht oder ihn übersteigt, den Sie erstatten möchten – zuzüglich der Transaktionsgebühr. Eine Erstattung kann auf zwei Wegen abgeschlossen werden:
+
+1. Neue Zahlungen einziehen
+2. Eine Einzahlung tätigen
+
+Wenn Sie keine Zahlungen zum Einziehen haben, können Sie eine Einzahlung über eine reguläre Banküberweisung auf Ihr Konto vornehmen.
+
+Die Einzahlung muss nicht exakt dem Betrag der Erstattung und der Transaktionsgebühr entsprechen. Der überschüssige Betrag wird als Einzahlung verbucht und in Ihrer nächsten Auszahlung berücksichtigt.
+
+Die eingezahlten Mittel sind einige Tage nach der Banküberweisung auf der Auszahlungsseite Ihres Easy-Kontos sichtbar.
+
+Weitere Informationen darüber, wie Sie eine Einzahlung tätigen können, einschließlich Kontodaten und Verwendungszweck, finden Sie im Kontobereich und auf der Auszahlungsseite, falls das Saldo negativ ist.
+
+<Warning>
+- Es dauert in der Regel einige Tage, bis die Mittel auf das Konto Ihres Kunden überwiesen werden – abhängig von den Abläufen des Karten-Issuers (in der Regel die Bank Ihres Kunden).
+- Ihr Saldo muss höher sein als der Betrag, den Sie erstatten möchten, einschließlich Transaktionsgebühren. Tätigen Sie eine Einzahlung oder ziehen Sie neue Zahlungen ein, falls Ihr Saldo zu niedrig ist.
+</Warning>

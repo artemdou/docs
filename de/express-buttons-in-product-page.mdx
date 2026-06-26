@@ -1,0 +1,154 @@
+---
+title: "Express-Buttons auf der Produktseite"
+description: "Erfahren Sie mehr über Express-Buttons auf der Produktseite für Nexi Checkout."
+---
+
+## Express-Button
+
+### Express-Button
+
+Sie können einen Express-Button für Apple Pay oder Google Pay an beliebiger Stelle auf Ihrer Produktseite platzieren. Der Express-Button ermöglicht es Ihren Kunden, direkt auf der Produktseite zu zahlen, ohne den Checkout zu durchlaufen.
+
+![Express-Button.](https://images.ctfassets.net/di680may5c0k/7bITXtW7A4hf3ybGoAfYlR/4eb97016e56659ea0df198f66efebacb/Express_button..png)
+
+&nbsp; 
+
+### Wie funktioniert es
+&nbsp;
+
+**Express** ist ein vereinfachtes, einbettbares Zahlungserlebnis, das auf derselben Backend-Integration wie Nexi Checkout basiert.
+Sie können Ihre bestehende Logik zur Zahlungserstellung wiederverwenden – der Unterschied liegt nur im Frontend, wo Sie das Express-Widget laden und rendern.
+
+Durch das Hinzufügen von zwei Zeilen im Frontend können Sie den Express-Button überall auf Ihrer Produktseite anzeigen.
+
+Wir übergeben den checkoutKey, die Sprache, die paymentId und die ID des Containers, in dem Express gerendert werden soll.
+
+### Einschränkung
+- Plug-ins: Wenn Sie ein Plug-in verwenden, können Sie keine Express-Buttons nutzen
+- Abonnement: Express-Buttons sind nicht mit Abonnements kompatibel
+
+### Backend-Integration
+
+Die Backend-Integration ist ähnlich wie der reguläre eingebettete Nexi-Checkout-Ablauf.
+
+* Sie erstellen eine Zahlung auf die gleiche Weise.
+* Sie aktualisieren die Zahlungsdetails über dieselbe Backend-API.
+* Es sind keine zusätzlichen Endpunkte oder Konfigurationsebenen erforderlich.
+* integrationType sollte auf 'Express' gesetzt werden
+
+Express verwendet einfach dieselbe `paymentId `.
+
+### Frontend-Integration
+
+1\. SDK laden
+
+  Laden Sie die Easy-SDK-Datei genauso wie für einen Standard-Checkout.
+  | Umgebung | JavaScript-URL |
+  | ----------- | ---------------|
+  |	Test        | https://test.checkout.dibspayment.eu/express/sdk.js |
+  | Live        |	https://checkout.dibspayment.eu/express/sdk.js |
+
+&nbsp;
+
+2\. Nexi Checkout initialisieren
+
+  ```javascript
+  const easy = Easy({
+  checkoutKey: '&lt;YOUR_CHECKOUT_KEY&gt;',
+  language: "en-GB",
+  });
+  ```
+&nbsp;
+
+3\. Das Express-Widget rendern
+
+```javascript
+const widget = easy.renderExpress({
+  paymentId: '&lt;YOUR_PAYMENT_ID&gt;',
+  containerId: '<container-div>'
+});
+```
+
+### __Parameter__
+
+| Parameter     | Beschreibung                                            |
+| ------------- | ------------------------------------------------------ |
+| `checkoutKey ` | Öffentlicher Schlüssel zur Initialisierung des SDKs.             |
+| `language `    | ISO-Sprachcode (z. B. `en-GB `).                     |
+| `paymentId `   | Die ID der zuvor erstellten Zahlung.              |
+| `containerId ` | Die ID des DOM-Elements, in dem Express gerendert werden soll. |
+
+---
+&nbsp;
+
+### __Ereignisse__
+
+- `paymentcompleted `
+
+Wird ausgelöst, wenn die Zahlung erfolgreich abgeschlossen wurde.
+
+```javascript
+widget.on('paymentcompleted', (payload) => {
+  console.log('Payment completed:', payload);
+});
+```
+
+- `shippingaddresschange `
+
+Wird ausgelöst, wenn der Benutzer seine Lieferadresse im Express-Widget aktualisiert.
+
+```javascript
+widget.on('shippingaddresschange', (payload) => {
+  console.log('Shipping address changed:', payload);
+});
+```
+
+Der Event-Handler erhält ein **Payload-Objekt** mit der folgenden Struktur:
+
+```javascript
+{
+  shippingAddress: {
+    postalCode: string;
+    country: string; // A three-letter country code (ISO 3166-1)
+  };
+}
+```
+
+* `shippingAddress.postalCode ` – vom Kunden eingegebene Postleitzahl
+* `shippingAddress.country ` – dreistelliger Ländercode (ISO 3166-1)
+
+&nbsp;
+
+### Sie sollten diese Daten verwenden, um:
+
+&nbsp; 
+1. **Die Kosten neu zu berechnen** (z. B. Versand, Steuern, Aufschläge) basierend auf der neuen Adresse.
+2. **Die Zahlung zu aktualisieren**, indem Sie eine Anfrage an Ihr Backend senden (das unsere API aufruft, genauso wie beim regulären Checkout).
+3. **Das Widget zu aktualisieren**, um die neuesten Zahlungsdetails abzurufen.
+
+&nbsp;
+Ein typischer Ablauf könnte folgendermaßen aussehen:
+
+```javascript
+widget.on('shippingaddresschange', async (payload) => {
+  const { shippingAddress } = payload;
+
+  // 1. Recalculate costs on your backend and call payment api
+
+  // 2. Pull the latest payment data from the backend and refresh the widget
+  widget.update();
+});
+```
+
+### Aktualisieren von Zahlungsdetails
+
+Express unterstützt Backend-gesteuerte Aktualisierungen.
+
+1. Aktualisieren Sie die Zahlung über die Backend-API (derselbe Endpunkt wie beim regulären Easy Checkout).
+2. Holen Sie sich die aktuellen Daten im Frontend:
+
+```javascript
+widget.update();
+```
+
+Dies lädt den aktuellen Zahlungszustand aus Ihrem Backend neu.

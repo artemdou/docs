@@ -1,0 +1,178 @@
+---
+title: "Den Checkout-Flow optimieren"
+description: "Dieser Leitfaden richtet sich an Entwickler, die den Ablauf auf der Checkout-Seite optimieren und anpassen möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Komplexität: Niedrig</Badge>
+  <Badge color="yellow">Coding: Etwas (Backend)</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie bereits ein [Checkout Portal-Konto](https://portal.dibspayment.eu) besitzen und [Checkout auf Ihrer Website integriert](/web-integration/integrate-checkout-on-your-website-embedded) haben.
+</Warning>
+
+## Konfigurieren des Zahlungsflusses
+
+Alle in diesem Leitfaden beschriebenen Konfigurationen werden beim Erstellen eines neuen Zahlungsobjekts in Ihrem Backend angewendet. Weitere Details finden Sie im Leitfaden [Checkout auf Ihrer Website integrieren](/web-integration/integrate-checkout-on-your-website-embedded). Die Einstellungen in diesem Leitfaden gelten sowohl für eingebettete als auch für gehostete Integrationen.
+
+Der Request-Body, der an die Methode [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) gesendet wird, enthält ein [`checkout `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout)-Objekt, das alle Eigenschaften zum Zahlungsfluss enthält. Die folgenden Checkout-Eigenschaften konfigurieren den Zahlungsfluss:
+
+- [`merchantHandlesConsumerData `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-merchanthandlesconsumerdata): Ein boolescher Wert, der angibt, ob der Bereich für Kundendaten ausgeblendet oder ob Kundendaten auf der Checkout-Seite erfasst werden sollen.
+- [`consumerType `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-consumertype): Der Typ der Kundendaten. Nur relevant, wenn Sie Kundendaten auf der Checkout-Seite erfassen.
+- [`consumer `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-consumer): Definiert einen Kunden. Nur relevant, wenn Sie den Bereich für Kundendaten ausblenden.
+- [`countryCode `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-shippingcountries-countrycode): Mit gesetzter `countryCode `-Eigenschaft profitieren Ihre Kunden davon, dass die [länderspezifischen Zahlungsmethoden angezeigt](/payment-methods/#build-country-and-currency) werden. Außerdem können bestimmte Formularfelder gemäß den landesspezifischen Formaten vorausgefüllt und die landesspezifischen Geschäftsbedingungen angezeigt werden.
+
+## Kundendaten auf der Checkout-Seite erfassen
+
+Wenn Sie keine Informationen über Ihren Kunden speichern möchten, können Sie dies an Nexi Checkout übergeben. Das bei Nexi Group gespeicherte Zahlungsobjekt erhält die Kundendaten, sobald die Zahlung abgeschlossen ist. Sie können die Kundendaten dann aus dem Checkout Portal abrufen oder die Methode [Retrieve payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) der Payment API verwenden.
+
+Der Bereich für Kundendaten ist beim Initiieren des Checkouts standardmäßig sichtbar. Die Eigenschaft [`merchantHandlesConsumerData `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-merchanthandlesconsumerdata) bestimmt, ob der Bereich für Kundendaten sichtbar sein soll oder nicht. Diese Eigenschaft wird beim [Erstellen des Zahlungsobjekts](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) angegeben:
+
+
+
+```json Collect consumer data (create payment)
+{
+  "order": {
+    ...
+  },
+  "checkout": {
+    ...
+    "merchantHandlesConsumerData": false,
+    "consumerType": {
+       ...
+    }
+  }
+}
+```
+
+Die Eigenschaft `merchantHandlesConsumerData ` ist standardmäßig `false `, wodurch der Bereich für Kundendaten auf der Checkout-Seite sichtbar wird.
+
+<Info>
+Nexi Checkout kann Daten sowohl für Privatkunden (B2C) als auch für Geschäftskunden (B2B) erfassen. Weitere Informationen zur Eigenschaft `consumerTypes ` finden Sie im Leitfaden [Privat- und Geschäftskunden unterstützen](/support-private-and-business-customers).
+</Info>
+
+## Bereich für Kundendaten ausblenden
+
+Wenn Sie bereits alle Informationen über Ihren Kunden gesammelt haben, die Sie für die Lieferung des verkauften Produkts oder der verkauften Dienstleistung benötigen, können Sie den Bereich für Kundendaten auf der Checkout-Seite vollständig ausblenden. Dies setzt voraus, dass Sie eine Zahlung in Nexi Checkout mit einem Kunden in Ihrem Backend verknüpfen können, typischerweise über die Bestellreferenz (siehe Eigenschaft [`order.reference `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-reference)).
+
+Um den Bereich für Kundendaten auszublenden, setzen Sie die Eigenschaft [`merchantHandlesConsumerData `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-merchanthandlesconsumerdata) beim [Erstellen des Zahlungsobjekts](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) auf `true `.
+
+```json Hide consumer data section (create payment)
+{
+   "order": {
+      ...
+   },
+   "checkout": {
+      ...
+      "merchantHandlesConsumerData": true
+   }
+}
+```
+
+<Warning>
+Die Eigenschaft `consumerType `, die die Einstellungen für Privat- und Geschäftskunden steuert, hat keine Wirkung, wenn `merchantHandlesConsumerData ` auf `true ` gesetzt ist.
+</Warning>
+
+Wenn der Bereich für Kundendaten ausgeblendet ist, wird der Bereich für Zahlungsdetails auf der Checkout-Seite zentriert:
+
+![Bereich für Kundendaten ausgeblendet](https://images.ctfassets.net/di680may5c0k/3HRniYafeguXGaP5Yrqh9W/90798eeeea0084ed212db7250d741f2b/consumer_data_2.png?w=2800&h=1600&q=50&fm=png)
+
+## Kundendaten in den Checkout einfügen
+
+Wenn Sie alle Kundendaten vor dem eigentlichen Checkout erfasst haben, kann das Ausblenden des Bereichs für Kundendaten im Zahlungsfenster zu einem schnelleren Checkout-Erlebnis für Ihren Kunden führen.
+
+Wir empfehlen jedoch, die Kundeninformationen über die API an Nexi Checkout weiterzugeben, und zwar aus folgenden Gründen:
+
+1. Falls vorhanden, kann Nexi Checkout den Kunden finden und den Zahlungsfluss entsprechend erleichtern, indem Zahlungsdetails wie Kartennummern ausgefüllt werden.
+2. Einige Zahlungsmethoden, wie AfterPay oder RatePay Invoice, erfordern Kundendaten wie die Rechnungsadresse. Diese Zahlungsmethoden werden nicht angezeigt, wenn Nexi Checkout diese Informationen nicht hat.
+3. Nexi Checkout kann einen neuen Kunden anlegen, wodurch eine Wiedererkennung des Kunden für zukünftige Käufe möglich ist (sofern der eingefügte Datensatz vollständig ist).
+4. Die Kundendaten sind in Ihrem Checkout-Konto oder über einen API-Aufruf verfügbar.
+
+<Warning>
+Bitte stellen Sie sicher, dass die von Ihnen gesendeten Kundendaten vollständig und korrekt sind. Damit Nexi Checkout einen Kunden anlegen kann, muss der Datensatz vollständig sein. Beachten Sie auch, dass die Kundendaten, die Sie an Nexi Checkout übertragen, für den Endbenutzer sichtbar werden können (vorausgefüllte Formulare für zukünftige Käufe).
+</Warning>
+
+Kundendaten können beim Erstellen des Zahlungsobjekts an Nexi Checkout übergeben werden. Verwenden Sie das `consumer `-Objekt wie unten gezeigt:
+
+```json Inject consumer data (create payment)
+{
+  "order": {
+   ...
+  },
+  "checkout": {
+    ...
+    "merchantHandlesConsumerData": true,
+    "consumer": {
+      "reference": "user-id-2034",
+      "email": "john.doe@example.com",
+      "shippingAddress": {
+        "addressLine1": "Karl Johans gate",
+        "addressLine2": "c/o Johansen",
+        "postalCode": "12345",
+        "city": "Oslo",
+        "country": "NOR"
+      },
+      "phoneNumber": {
+        "number": "123456",
+        "prefix": "+47"
+      },
+      "privatePerson": {
+        "firstName": "John",
+        "lastName": "Doe"
+      }
+    }
+  }
+}
+```
+
+<Warning>
+Die Eigenschaft `consumer ` wird ignoriert, sofern Sie nicht `merchantHandlesConsumerData ` auf `true ` gesetzt haben. Es gibt keinen Grund, Kundendaten einzufügen, wenn Sie nicht den Bereich für Kundendaten ausgeblendet haben.
+</Warning>
+
+Je nach Ihren Anforderungen und den von Ihnen unterstützten Zahlungsoptionen können Sie eine Teilmenge der Kundendaten-Eigenschaften angeben. Nexi Checkout verwendet E-Mail und Postleitzahl, um den Kunden mit früheren Sitzungen abzugleichen. Sie müssen daher mindestens diese Eigenschaften angeben, damit Net Zahlungsdetails finden kann.
+
+<Warning>
+Damit Nexi Checkout einen neuen Kunden anlegen kann, muss der Datensatz vollständig sein. Bitte beachten Sie, dass diese Daten möglicherweise irgendwann für den Endbenutzer sichtbar werden und keine erfundenen Informationen enthalten dürfen.
+</Warning>
+
+Hier ist ein minimales Beispiel. Es reicht aus, um potenziell vorhandene Kunden zu erkennen. Aber die Daten reichen nicht aus, damit Nexi Checkout einen neuen Kunden anlegen kann, falls noch keiner vorhanden ist.
+
+```text Inject minimal consumer data (create payment)
+{
+  "order": {
+   ...
+  },
+  "checkout": {
+    ...
+    "merchantHandlesConsumerData": true,
+    "consumer": {
+      "email": "john.doe@example.com",
+      "shippingAddress": {
+        "postalCode": "12345",
+      }
+    }
+  }
+}
+```
+
+<Info>
+Wie zuvor in diesem Leitfaden erwähnt, verwendet Nexi Checkout sowohl Cookies als auch Kundendaten, um Zahlungsdetails aus früheren Käufen zu finden. Wenn Sie überhaupt keine Kundendaten bereitstellen und den Bereich für Kundendaten ausblenden, verwendet Nexi Checkout dennoch in Cookies gespeicherte Informationen.
+</Info>
+
+Wenn Nexi Checkout in der Lage ist, einen Kunden mit zuvor gespeicherten Zahlungsdetails abzugleichen, ist der Kaufabschluss dank des automatisch ausgefüllten Formulars nur einen Klick auf die Schaltfläche "Pay" entfernt:
+
+![Automatisch ausgefüllte Zahlungsdetails](https://images.ctfassets.net/di680may5c0k/1tbPXUWGIOZoNRrOg5AL8v/11d57875b1806da8aab8acfc283be609/consumer_data_3.png?w=2800&h=1200&q=50&fm=png)
+
+Wenn die automatisch ausgefüllten Zahlungsdetails nicht korrekt sind, hat der Kunde die Möglichkeit, auf den Link "This is not me" zu klicken. In diesem Fall kann der Kunde neue Zahlungsdetails angeben und die von Ihnen eingefügten Kundendaten werden aus dem Zahlungsobjekt entfernt. Stellen Sie daher sicher, dass Sie die Bestellreferenz mit dem Kunden in Ihrem Backend abgleichen können.
+
+<Check>
+Sie verfügen nun über die Werkzeuge, um den Checkout-Flow so zu optimieren, dass er Ihren Anforderungen entspricht und die für einen Kaufabschluss in Ihrem Webshop erforderlichen Eingaben minimiert.
+</Check>
+
+## Nächste Schritte
+
+- [Privat- und Geschäftskunden unterstützen](/support-private-and-business-customers)
+- [Text und Sprache anpassen](/customize-text-and-language-embedded)

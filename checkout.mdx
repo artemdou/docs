@@ -1,0 +1,34 @@
+---
+title: "Checkout"
+description: "This guide outlines the checkout process of the Checkout product, including walk-throughs of the checkout flow, customizing content, subscriptions & unscheduled subscriptions."
+---
+
+## Before you start
+
+<Warning>
+This guide assumes that you already have a [Checkout Portal account](https://portal.dibspayment.eu) and have [integrated Checkout on your website](/web-integration/integrate-checkout-on-your-website-embedded).
+</Warning>
+
+## Overview
+
+The Checkout page with the checkout flow is highly flexible and can manage a wide range of payment methods. It's important to **optimize** your customers' payment flow to **minimize** the **input** needed to complete a purchase. 
+
+Therefore, Checkout provides the option to save both consumer data and payment information for your customer. Checkout uses **cookies** or consumer data (**email** and **postal code**) when searching for previously stored information about a customer.
+
+The following image shows the two main sections of a checkout page:
+
+![Checkout page sections](https://images.ctfassets.net/di680may5c0k/6Rl2IBrhLCnidA373Ze1KL/9e58155c86da32baa01412a1359b55d6/consumer_data.png?w=2800&h=1308&q=50&fm=png)
+
+The following diagram outlines the general checkout flow:
+
+![Checkout diagram flow](https://images.ctfassets.net/di680may5c0k/4rtHOzRq9BJApB8Q7gyQf1/ebefb6f7b779d242e65b72901855f008/Clean_Version_-_General_checkout.png?w=2800&h=1600&q=50&fm=png)
+
+The two main sections of the checkout page are: 
+
+1. **Consumer data section**, which includes email, postal code, name, address, etc. This section is optional on the checkout page. The API enables you to hide this section if you don't want to collect consumer data on the checkout page. 
+2. **Payment details section**, which includes credit card number, invoice data, etc. Checkout is always responsible for collecting this information. Checkout offers your customers the ability to save the information to make future purchases easy.
+
+<Columns cols={2}>
+  <Card title="Test the checkout in the demo store">
+  </Card>
+</Columns>

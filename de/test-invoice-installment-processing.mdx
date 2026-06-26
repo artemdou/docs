@@ -1,0 +1,93 @@
+---
+title: "Rechnungs- und Ratenzahlungs-Verarbeitung testen"
+description: "Diese Anleitung beschreibt, wie Sie die Rechnungs- und Ratenzahlungs-Verarbeitung auf Ihrer Checkout-Seite testen."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Komplexität: Niedrig</Badge>
+  <Badge color="gray">Programmierung: Keine</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie eine Checkout-Seite, die die [Checkout-Testumgebung](/test-environment) verwendet.
+</Warning>
+
+## So testen Sie
+
+Die Checkout-Seite bietet Ihren Kunden die Möglichkeit, per Rechnung zu bezahlen. Um die Rechnungsverarbeitung auf der Checkout-Seite zu testen, gehen Sie wie folgt vor:
+
+## Riverty Nordic – Schritte
+
+1. Navigieren Sie zu Ihrer Checkout-Seite
+2. Wählen Sie „Pay later"
+3. Geben Sie eine der **PINs** aus der untenstehenden Tabelle in das Feld „Personal identification number" ein.
+4. Geben Sie die **Postleitzahl** und **Adresse** ein, die mit der ausgewählten PNO verknüpft ist.
+5. Geben Sie einen beliebigen **Namen** und eine **Telefonnummer** ein
+6. (Bedingt) Wenn eine starke Kundenauthentifizierung (SCA) angefordert wird, können Sie eine Test-BankID gemäß den [hier für SEK](https://www.bankid.com/en/utvecklare/test/skaffa-testbankid/test-bankid-get) verfügbaren Anweisungen verwenden. Verwenden Sie eine der Beispiel-PNOs aus der untenstehenden Tabelle.
+
+<Warning>
+Verwenden Sie einen geringen Betrag, um zu vermeiden, dass eine SCA für Testkäufe abgeschlossen werden muss.
+</Warning>
+
+![Rechnungszahlung](https://images.ctfassets.net/di680may5c0k/T32GMShoY3XkzrMTUI5W1/434d1ccea8403741210413576a179ecb/invoice.png?w=2092&h=1512&q=50&fm=png)
+
+## Beispiel-Rechnungsadressen Nordic
+
+Die folgenden Adressen und Beispiel-Personennummern (PIN) können in der Testumgebung beim Testen von Rechnungszahlungen verwendet werden:
+
+| PNO         | Postleitzahl | Adresse   | Ergebnis
+|:-----------:|:--------:|:------------:|:------
+| 420913-1111 | 79021    | Vasavägen    | Erfolg
+| 421101-1111 | 83162    | Centralvägen | Erfolg
+| 440424-1111 | 14552    | Bruksgatan   | Reservierung nicht genehmigt
+
+## Riverty DACH – Schritte
+
+1. Navigieren Sie zu Ihrer Checkout-Seite
+2. Wählen Sie „Pay later"
+3. Geben Sie eine beliebige **E-Mail** ein
+4. Geben Sie die Testdaten aus der untenstehenden Tabelle für positive oder negative Testfälle ein: **Postleitzahl, Ländercode, Telefonnummer, Vorname, Nachname, Adresse, Land, Stadt und Geburtsdatum**
+5. Akzeptieren Sie die Bedingungen
+6. Klicken Sie auf die Schaltfläche **Pay**
+
+<Warning>
+Damit Riverty mit EUR im Demoshop angezeigt wird, müssen Sie wählen: *EasyInvoice, EasyInstallment, EasyCampaign* in der Zahlungseinstellung „Payment Type Filtering". Lesen Sie mehr dazu [hier](/payment/#build-payment-settings).
+Sie müssen außerdem *MerchantHandlesConsumerData* deaktivieren.
+
+Verwenden Sie einen geringen Betrag, um zu vermeiden, dass eine SCA für Testkäufe abgeschlossen werden muss.
+</Warning>
+
+## Beispiel-Rechnungsadressen DACH – positive Testfälle
+
+### Positive Testfälle
+| Vorname | Nachname | Geburtsdatum | Straßenname | Hausnummer | PLZ | Ort | Abweichende Lieferadresse | Land | Versandgebühr | Zahlungsgebühr | Rabatt |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Nein | DE | Nein | Nein | Nein |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Nein | DE | Nein | Nein | Ja, Pauschale |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Nein | DE | Ja | Nein | Nein |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Ja | DE | Nein | Ja | Ja, Pauschale |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Nein | DE | Ja | Nein | Ja, prozentual |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Nein | DE | Ja | Nein | Nein |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Ja | DE | Nein | Nein | Ja, prozentual |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Ja | DE | Nein | Nein | Ja, Pauschale |
+
+## Beispiel-Rechnungsadressen DACH – negative Testfälle
+
+### Negative Testfälle
+| Vorname | Nachname | Geburtsdatum | Adresse | Hausnummer | PLZ | Ort | Land | Beschreibung der Ablehnung |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Reject | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | DE | Der Aufruf wird abgelehnt. |
+| Underage | Doe | 11/1/2012 | Gütersloher Str. | 123 | 33415 | Verl | DE | Der Aufruf wird abgelehnt, da der Kunde zu jung ist, um diesen Kauf zu tätigen. |
+| 80 | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | DE | Zahlungsmethode für diesen Kunden nicht zulässig. |
+| NotOfficial | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | DE | Der Aufruf wird wegen einer falschen Rechnungsadresse abgelehnt. |
+| John | Doe | 11/1/1980 | PackstationNotAllowed | 123 | 33415 | Verl | DE | Der Aufruf wird abgelehnt, weil der Kunde die Adresse einer Paketabholstation/eines automatisierten Paketspinds angegeben hat, was nicht zulässig ist. |
+| John | Doe | 11/1/1980 | ShipToBilling | 123 | 33415 | Verl | DE | Der Aufruf wird abgelehnt, weil dem Kunden nicht erlaubt ist, das Paket an eine andere als seine Rechnungsadresse zu versenden |
+| Jane | Doe | 11/1/1980 | InvalidAddress | 123 | 33415 | Verl | DE | Der Aufruf wird abgelehnt, da die angegebene Adresse von den Riverty-Systemen nicht als zu diesem Kunden passend verifiziert werden konnte. |
+| John | Doe | 11/1/1980 | AddressCorrection | 123 | 33415 | Verl | DE | Der Aufruf wird abgelehnt, weil die angegebene Adresse falsch oder fehlerhaft formatiert ist, und die API gibt die Adresse zurück, die sie für diesen Kunden für korrekt hält. |
+
+## Siehe auch
+
+- [Testumgebung](/test-environment)
+- [Test card processing](/test-card-processing)

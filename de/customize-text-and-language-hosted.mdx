@@ -1,0 +1,247 @@
+---
+title: "Text und Sprache anpassen"
+description: "Diese Anleitung richtet sich an Entwickler, die Textressourcen auf ihrer Checkout-Seite lokalisieren und anpassen möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="yellow">Coding: Some (Backend)</Badge>
+  <Badge color="blue">Platform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Diese Anleitung setzt voraus, dass Sie bereits ein [Checkout Portal-Konto](https://portal.dibspayment.eu) haben und [Checkout auf Ihrer Website integriert haben](/web-integration/integrate-checkout-on-your-website-embedded).
+</Warning>
+
+## Was Sie erstellen
+
+Sobald Sie den Checkout-Prozess auf Ihrer Checkout-Seite in Ihre Website integriert haben, ist es an der Zeit, ihn so anzupassen, dass er zu Ihrer Website passt und Ihren Kunden den bestmöglichen Service bietet. Diese Seite führt Sie durch die folgenden Anpassungen:
+
+- **Sprache auswählen** – die auf der Checkout-Seite zu verwendende Sprache
+- **Text auf der Zahlungsschaltfläche festlegen** – die Textressourcen auf der Bezahlen-Schaltfläche können bei Verwendung von Abonnements (wiederkehrenden Zahlungen) angepasst werden.
+- **Webshop-Namen anzeigen** – der Name Ihres Webshops kann auf der Checkout-Seite hinzugefügt werden.
+- **Bestellpositionen anzeigen** – die Bestellpositionen können auf der Checkout-Seite aufgelistet werden.
+
+![Textanpassungen](https://images.ctfassets.net/di680may5c0k/1fokK2B4GzTLkACdaImSuY/f2d1c821573828fba80fe59b3ae6a2a9/customize-content.png?w=2000&h=1436&q=50&fm=png)
+
+## Anzeigesprache festlegen
+
+Sie können die auf der Checkout-Seite zu verwendende Sprache ändern, indem Sie der URL der gehosteten Checkout-Seite einen optionalen Parameter `language ` hinzufügen. Das folgende Beispiel ändert die Standardsprache von Englisch auf Schwedisch bei der Weiterleitung zur vorgefertigten, von Nets gehosteten Checkout-Seite:
+
+### Anzeigesprache festlegen
+
+<CodeGroup>
+
+```php create-payment.php
+
+function redirect_to_checkout($json) {
+  $a = json_decode($json, true);
+  if (json_last_error() != JSON_ERROR_NONE) {
+        echo(json_last_error_msg());
+        var_dump($json);
+        exit("Unable to parse json response");
+  }
+  $redirectURL = $a['hostedPaymentPageUrl'];
+  if (empty($redirectURL)) {
+        var_dump($json);
+        exit("Could not find the key 'hostedPaymentPageUrl'");
+  }
+  $lang = 'sv-SE';
+  $redirectURL = $redirectURL . '&language=' . $lang;
+  header("Location: " . $redirectURL);
+  exit();
+}
+```
+
+```javascript server.js
+
+const redirect_to_checkout = function(data) {
+	var json;
+	try {
+		json = JSON.parse(data);
+	} catch (e) {
+		console.error(e);
+		res.send("Unable to parse json response");
+		return;
+	}
+	const url = json.hostedPaymentPageUrl;
+	if (!url) {
+		console.error("Key hostedPaymentPageUrl not found");
+		res.send("Could not find the key 'hostedPaymentPageUrl'");
+		return;
+	}
+	const lang = 'sv-SE'; // Change language 
+	url + "&language=" + 
+	res.redirect(url + "&language=" + lang);
+}
+```
+
+</CodeGroup>
+
+Die Weiterleitung erfolgt unmittelbar nach der Erstellung eines Zahlungsobjekts vom Backend. Das obige Beispiel ist aus der [Direkt-Integrationsanleitung](/web-integration/integrate-checkout-on-your-website-embedded) entnommen, wo Sie ein vollständiges Beispiel für die Erstellung eines Zahlungsobjekts und das Durchführen einer Weiterleitung sehen können.
+
+Die vollständige [Liste der verfügbaren Sprachen](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#localization) finden Sie in der [API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/).
+
+## Text der Zahlungsschaltfläche anpassen
+
+Die Textbeschriftung auf der Zahlungsschaltfläche kann angepasst werden. Die Payment API definiert eine Reihe von [vordefinierten Werten](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-textoptions-completepaymentbuttontext), aus denen ausgewählt werden kann, wenn das [Zahlungsobjekt erstellt wird](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) vom Backend Ihrer Website. In der [Direkt-Integrationsanleitung](/web-integration) finden Sie ein vollständiges Beispiel zur Erstellung eines neuen Zahlungsobjekts.
+
+Um die Zahlungsschaltfläche anzupassen, sollte das mit der Create-Payment-Methode gesendete JSON-Anforderungsobjekt die Eigenschaft [`completePaymentButtonText `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-textoptions-completepaymentbuttontext) definieren. Hier ist ein Beispiel für einen Anforderungsbody:
+
+```json Text der Zahlungsschaltfläche festlegen
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "appearance": {
+      "textOptions": {
+        "completePaymentButtonText": "signup"
+    }
+  },
+  "order": {
+    ...
+  }
+}
+```
+
+Der Zeichenkettenwert `signup ` ist einer der [vordefinierten Werte](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-textoptions-completepaymentbuttontext), die angegeben werden können. Wenn Sie auf der Checkout-Seite Englisch verwenden, enthält die Zahlungsschaltfläche nun den Text "Sign up". Der Text der Zahlungsschaltfläche wird lokalisiert.
+
+<Info>
+Sie können die Hintergrundfarbe der Schaltfläche auch über den Parameter `buttonbackgroundColor ` bestimmen.
+</Info>
+
+## Händlernamen anzeigen
+
+Es ist möglich, den Namen Ihres Webshops (Händlernamen) auf der Checkout-Seite anzuzeigen. Die Option, den Händlernamen anzuzeigen oder auszublenden, wird beim [Erstellen des Zahlungsobjekts](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) über die Payment API von Ihrem Backend angegeben.
+
+Verwenden Sie die Eigenschaft [`showMerchantName `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-displayoptions-showmerchantname), um den Händlernamen auf der Checkout-Seite anzuzeigen oder auszublenden, wie hier:
+
+```json Händlernamen auf Checkout-Seite anzeigen
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "appearance": {
+      "displayOptions": {
+        "showMerchantName": true
+      }
+  },
+  "order": {
+    ...
+  }
+}
+```
+
+Das obige Beispiel lässt den Händlernamen auf der Checkout-Seite erscheinen.
+
+<Info>
+Der auf der Checkout-Seite angezeigte Händlername kann nur festgelegt werden, sobald sich Ihr Konto im **Live-Modus** befindet. Im Testmodus kann der Händlername nicht festgelegt werden.
+</Info>
+
+## Bestellübersicht einbinden
+
+Die mit der aktuellen Zahlung verknüpften Bestellpositionen können auf der Checkout-Seite aufgelistet werden. Eine Schaltfläche, mit der Ihr Kunde die Bestellpositionen ein- oder ausblenden kann, wird dann auf der Checkout-Seite eingebunden. Auch diese Anpassung wird beim [Erstellen des Zahlungsobjekts](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) von Ihrem Backend definiert.
+
+Verwenden Sie die Eigenschaft [`showOrderSummary `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-checkout-appearance-displayoptions-showordersummary), um die Bestellpositionen auf der Checkout-Seite einzubinden, wie im folgenden Beispiel:
+
+```json Bestellübersicht anzeigen
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "appearance": {
+      "displayOptions": {
+        "showOrderSummary": true
+      }
+  },
+  "order": {
+    ...
+  }
+}
+```
+
+Diese Anleitung hat gezeigt, wie Sie die Sprache und die auf der Checkout-Seite angezeigten Inhalte anpassen können. Es ist auch möglich, UI-Eigenschaften wie Farben und Schriftarten anzupassen. Siehe die Anleitung [Styling und Barrierefreiheit](/styling-and-accessibility).
+
+## Zahlungsmethoden anzeigen
+
+Zusätzlich zu den Zahlungsmethoden, die Sie in den Konfigurationen Ihres Checkout-Kontos aktiviert haben, können Sie definieren, welche Zahlungsmethoden im Zahlungsfenster angezeigt werden.
+
+### Land- und Währungsparameter
+
+Eine Möglichkeit zu bestimmen, welche Zahlungsmethoden während des Checkouts angezeigt werden, besteht darin, die Land- und Währungsparameter so festzulegen, dass nur [Zahlungsmethoden, die für die jeweilige Land-Währung-Kombination verfügbar sind](/payment-methods/#build-country-and-currency), angezeigt werden.
+
+Ein weiterer Vorteil ist, dass das Rechnungs- und Versandadressformular die relevanten Felder gemäß dem Parameter `countryCode ` vorausgefüllt werden können. Außerdem können die Allgemeinen Geschäftsbedingungen entsprechend dem Land angezeigt werden.
+
+Nachfolgend ein Beispiel.
+
+```json countryCode : FIN, currency : EUR
+{
+  "order": {
+      "items": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 2,
+        "unit": "pcs",
+        "unitPrice": 25000,
+        "taxRate": 0,
+        "taxAmount": 0,
+        "netTotalAmount": 50000,
+        "grossTotalAmount": 50000
+      }
+    ],
+    "amount": 50000,
+    "currency": "EUR",
+    "reference": "Order No 42369"
+  },
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "<WEBSHOP_URL>",
+    "termsUrl": "<TERMS_URL>",
+    "countryCode" : "FIN"
+  }
+}
+```
+
+Hier ist der Parameter `order.currency ` auf __EUR__ gesetzt, während `checkout.countryCode ` auf __FIN__ gesetzt ist. Abhängig von den im Checkout-Konto aktivierten Zahlungsmethoden würde das Zahlungsfenster wie hier aussehen:
+
+![FI_EUR](https://images.ctfassets.net/di680may5c0k/4Fy6wWOm7ITenOu8CiXw2w/b04e7f8e4a67be8f442e9f31c513790b/FI_EUR.png?w=685&h=533&q=50&fm=png)
+
+### PayType-Filterung
+
+Eine zusätzliche Möglichkeit, zu steuern, welche Zahlungsmethoden im Zahlungsfenster angezeigt werden, ist die Verwendung des Arrays [paymentMethodsConfiguration](https://developers.nets.euhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-paymentmethodsconfiguration) im Anforderungsbody der `Create Payment `-Methode.
+
+Das ist nützlich, wenn Sie bestimmte Zahlungsmethoden abhängig von bestimmten Szenarien anbieten möchten, wie zum Beispiel:
+- Produkte: wenn Sie für bestimmte Produkte nur Kartenzahlungen akzeptieren möchten
+- Beträge: wenn Sie zum Beispiel alle Zahlungsmethoden für kleinere Beträge akzeptieren, aber nur einige wenige für größere
+- Geräte: wenn Sie eine bestimmte Auswahl an Zahlungsmethoden für Nutzer auf ihrem Mobilgerät anbieten möchten, aber andere für Desktop-Nutzer
+
+Das folgende Beispiel zeigt, wie Sie das Array `paymentMethodsConfiguration ` festlegen würden, wenn Sie nur Karten und PayPal als Zahlungsmethoden anbieten möchten:
+
+```json paymentMethodsConfiguration festlegen
+{
+  "order": {
+   ...
+  },
+  "checkout": {
+    ...
+  },
+  "paymentMethodConfiguration":[
+      {
+      "name":"card"
+      },
+      {
+      "name":"paypal"
+      },
+  ]
+}
+```
+
+## Nächste Schritte
+
+- [Styling und Barrierefreiheit](/styling-and-accessibility)

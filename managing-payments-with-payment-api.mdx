@@ -1,0 +1,114 @@
+---
+title: "Managing Payments with Payment API"
+description: "This guide is for developers who want to charge and manage payments programmatically using the Payment API."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Complexity: Medium</Badge>
+  <Badge color="blue">Coding: Yes (Backend)</Badge>
+  <Badge color="blue">Platform: PHP, Node</Badge>
+</div>
+
+## Overview
+
+Whenever your customer buys something on your site, a new payment is created in Checkout. New payments require your action:
+- When you ship the order, make sure to **charge** the payment in order to receive the funds from Nexi Group.
+- If the order is **canceled** by the customer, make sure to cancel the payment in order to release the reservation on the customer's payment card.
+- If you have already charged your customer and need to compensate your customer for a returned order etc, you can **refund** the charge.
+- If your customer has placed an order with multiple items, the amount is reserved. However, if some of the items from the order is out of stock, you can **release the reserved amount after with split capture**.
+
+Payments can be managed in [Checkout Portal](https://portal.dibspayment.eu) or programmatically through the [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1). The guide [Manage payment](/manage-payments) describes how to use Checkout Portal to manage payments while this guide shows you how to use the Payment API.
+
+## Retrieve payment details
+
+The Payment API allows you to fetch details about a payment registered in Checkout. 
+
+First, load your checkout page and go through the checkout flow so that a new payment is created in Checkout. You will need the payment identifier in subsequent requests, so be sure to save the `paymentId ` returned from the [create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) method or collect the new payment identifier using [webhooks](/track-events-using-webhooks) with the [`payment.created `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#created) event. 
+
+<Info>
+See the [integration guide](/web-integration) for more information about creating a new payment object.
+</Info>
+
+Once you have the new `paymentId `, you can query the Payment API for the payment details associated with the new payment:
+
+### Retrieve payment details
+
+<CodeGroup>
+
+```php Retrieve payment details (PHP)
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "https://test.api.dibspayment.eu/v1/payments/<PAYMENT_ID>",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "GET",
+  CURLOPT_HTTPHEADER => [
+    "Authorization: <YOUR_SECRET_API_KEY>"
+  ],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  echo $response;
+}
+```
+
+```javascript Retrieve payment details (Node)
+const http = require("https");
+
+const paymentId = "<PAYMENT_ID>";
+const secretKey = "<YOUR_SECRET_KEY>";
+
+const options = {
+  "method": "GET",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId,
+  "headers": {
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+  console.log('HTTP code:', res.statusCode);
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    try {
+      console.log(JSON.stringify(JSON.parse(body), null, 2));
+    } catch (e) {
+      console.error("Failed to parse body: " + e);
+      console.error(body.toString());
+    }
+  });
+});
+
+req.end();
+```
+
+</CodeGroup>
+
+<Warning>
+As always, remember to replace the text `&lt;YOUR_SECRET_API_KEY&gt;` and any other parameters within `<...>`. You can [find your integration keys](/access-your-integration-keys) in [Checkout Portal](https://portal.dibspayment.eu/integration).
+</Warning>
+
+## See also
+
+- [Manage payments](/manage-payments)
+- [Track events using webhooks](/track-events-using-webhooks)

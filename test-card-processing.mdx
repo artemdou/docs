@@ -1,0 +1,103 @@
+---
+title: "Test Card Processing"
+description: "This guide describes how to test card processing on your checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="gray">Coding: None</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+Before you start, you need a checkout page that uses the [Checkout test environment](/test-environment).
+</Warning>
+
+## How to test
+
+The Checkout page provides your customers with the option to pay by card. To test card payments on the checkout page, follow the steps below:
+
+1. Navigate to your checkout page.
+2. Select "Pay by card".
+3. Add one of the sample card numbers from **Number** column in the table below.
+4. Enter an expire date in the future.
+5. Enter any 3 digits in the CVC field.
+6. Enter any arbitrary name, address, and phone number in the address form.
+
+![Test card processing](https://images.ctfassets.net/di680may5c0k/5l8yIooGbWH44h9PO533Od/91649112157f5a51a0d29035b1a8d9e7/Screenshot_2021-03-30_at_21.37.59.png?w=1676&h=1168&q=50&fm=png)
+
+<Warning>
+When using the sample cards in the test environment, some amounts have special meaning and will generate error codes or increase the API response times. This is not a bug, but a feature of the test environment so that you can test your system against error codes and delayed responses. See the following section for more information.
+</Warning>
+
+### Reason codes
+
+You can check the reason codes for card schemes outlined in this guide [here](/reason-codes).
+
+## 3D Secure
+
+When testing card payments in the checkout, you can be prompted for the 3D Secure simulator as outlined from [here](/payment-methods/#build-3d-secure).
+
+From here, it is possible if you would like to test success or failure payment flows with the test data from [here](/test-card-processing/#build-sample-credit-cards).
+
+## Amounts with special meaning
+
+It is possible to test how your website behaves when Checkout returns various **error codes** or if the checkout process is **delayed**. The following amounts have a special meaning and changes the checkout behaviour when creating a new payment in the test environment:
+
+- The amount **0.XX** and **1.XX** will raise the **error code XX**. For example, if the property [`order.amount `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-order-amount) is set to `133`, the error code `33` will be raised.
+
+- The amount **3.XX** will **delay** the API response by **XX seconds**. For example, if the property [`order.amount `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-order-amount) is set to `310`, the reply from the checkout flow will be delayed by 10 seconds.
+
+<Info>
+Note that amounts are specified in the [lowest monetary unit for the given currency, without punctuation marks](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api#data-types-and-formats).
+</Info>
+
+You can read more about reason codes from [here](/reason-codes).
+
+## Discounts
+
+It is possible to specify for discounts in the payment requests. This is done by adding an order line with a negative amount.
+
+You can see an example of this in the payload example from [here](/web-integration/integrate-checkout-on-your-website-embedded/#build-step-2-create-a-payment-object-backend).
+
+<Warning>
+Please note that it is not possible for the total amount to ever be 0 or lower for the following requests:
+- [unit price](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-unitprice)
+- [gross total amount](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-grosstotalamount)
+- [net total amount](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-nettotalamount)
+- [orderItems](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-charges-post-body-orderitems)
+- [charge orderItems  ](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-charges-chargeid-refunds-post-body-orderitems)
+</Warning>
+
+## Sample credit cards
+
+The following sample cards can be used in the test environment when testing card payments:
+
+### Sample credit cards
+| Card Type | Number | Expiry Date | CVV | Additional info |
+| --- | --- | --- | --- | --- |
+| Visa | 4268270087374847 | > today | Any 3 digits | Success |
+| Visa | 4925000000000087 | > today | Any 3 digits | Reservation will fail |
+| Visa | 4925000000000079 | > today | Any 3 digits | Non-recurring charge will fail |
+| Visa | 4925000000000061 | > today | Any 3 digits | Direct Charge Fails. Code: 99 |
+| Visa | 4761731000000027 | > 12/31 | Any 3 digits | Surcharge, Success |
+| MasterCard | 5213199803453465 | > today | Any 3 digits | Success |
+| MasterCard | 5544330000000235 | > today | Any 3 digits | Surcharge, Success |
+| Mastercard | 5544330000000011 | > today | Any 3 digits | Surcharge, Success |
+| Maestro | 6761638084569584 | > today | Any 3 digits | Success |
+| Dankort | 5019397000156065 | 12/27 | 604 | Success |
+| Dankort | 4571530112345142 | 01/28 | 564 | Success |
+| American Express | 376206000000009 | > today | Any 4 digits | Surcharge, Success |
+
+**Expire date** can be any date from today and in the future. For the **CVC** (Card Verification Code), you can use three arbitrary digits (123 for example).
+
+<Warning>
+If the [Create payment request](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) contains `"charge":true `, then charge with test card 4925000000000079 will not fail.
+</Warning>
+
+## See also
+
+- [Test environment](/test-environment)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Reason codes](/reason-codes)

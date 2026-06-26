@@ -1,0 +1,195 @@
+---
+title: "Checkout für Shopify"
+description: "Dieser Leitfaden beschreibt, wie Sie die Checkout-App-Integration für Shopify installieren, konfigurieren und verwenden."
+---
+
+PayPal, Apple Pay und Google Pay nicht unterstützt:: Gemäß den Shopify-Bedingungen werden diese Zahlungsmethoden nicht mit Easy unterstützt. Erwägen Sie, sie über eine direkte Integration aus dem Shopify-Store-Admin hinzuzufügen.
+
+Letzte Aktualisierung der Dokumentation: 2025-10-07
+
+## Bevor Sie beginnen
+
+Im Jahr 2025 haben wir die Aufteilung der Zahlungsmethoden eingeführt. Dies bietet ein verbessertes Verbrauchererlebnis, bei dem die Shopify-Anwendung dem Verbraucher ermöglicht, EINMAL seine bevorzugte Zahlungsmethode auszuwählen, und auf der nachfolgenden Seite nur diese Zahlungsmethode anzeigt, damit er seinen Kauf abschließen kann. Die verfügbaren Apps sind unten aufgeführt. Sie können jede für Ihr Geschäft passende Zahlungs-App installieren und zusätzlich unsere allgemeine Nexi Checkout-App verwenden. Klicken Sie dazu auf die Links unten.
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Weitere Informationen zum Erstellen eines kostenlosen Testkontos finden Sie im Leitfaden [Testkonto für das Portal erstellen](/create-a-checkout-portal-account).
+</Warning>
+
+## Überblick
+
+Checkout für Shopify ist eine App, die unsere Gateway-Integration erweitert und es Ihnen ermöglicht, Zahlungen in Shopify mit Checkout zu akzeptieren. Checkout unterstützt die meisten gängigen Zahlungsmethoden.
+
+<Info>
+Sie können unten alle von Checkout angebotenen Zahlungsmethoden sehen. Diese Liste bezieht sich auf alle Märkte.
+
+Je nach Land oder Region kann die Liste variieren. Wenn Sie sich bei einer bestimmten Zahlungsmethode unsicher sind und ob sie in Ihrem Land oder Ihrer Region verfügbar ist, kontaktieren Sie bitte den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) für weitere Informationen.
+</Info>
+
+![Checkout-Plugin – Shopify](https://images.ctfassets.net/di680may5c0k/7jLGCOAwl6xrQttazhkjFI/e8935b4fd4a41922e7478a3c39e4d0ac/plugins_shopify.png?w=1576&h=593&q=50&fm=png)
+
+### Shop-Funktionen
+
+- Schneller Checkout mit "Remember-me"-Funktion.
+- Bevorzugte Zahlungsmethoden.
+- Unterstützte Währungen (eine pro Shop): EUR, DKK, SEK, NOK, CHF, USD, GBP, PLN.
+- Unterstützte Sprachen: Deutsch, Englisch, Dänisch, Schwedisch, Norwegisch, Finnisch, Italienisch, Französisch, Spanisch.
+
+### Admin-Funktionen
+
+- Schnelle Einrichtung und flexible Konfiguration.
+- Intuitive Bestellverwaltung mit synchronisierten Belastungen und Rückerstattungen.
+- Kompatibilität mit Rabatten, Steuern (MwSt.) und Versandoptionen.
+- Multi-Store-Unterstützung (gleiche Währung).
+- Auto-Charge/Capture für digitale Güter möglich.
+- Automatisierte Erweiterungs-Updates, keine Aktion erforderlich.
+
+**Bitte beachten Sie, dass die Konfigurationseinstellungen für alle Apps, die Sie installieren, übernommen werden**
+
+Der Screenshot unten zeigt die Einstellungen der Checkout-App:
+
+## Grundkonfiguration
+
+Nach der Installation und Aktivierung der App können Sie jederzeit zurückgehen und die Checkout-App über den Shopify Admin neu konfigurieren. Die Konfiguration ist in zwei Teile gegliedert:
+
+- Die Einstellungen des Zahlungsgateways (zu finden unter **Einstellungen > Zahlungen > Unterstützte Zahlungsmethoden > Checkout ist aktiv**) ermöglichen es Ihnen, das Zahlungsgateway zu aktivieren/deaktivieren, Zahlungsmethoden zu aktivieren und zwischen Live- und Testmodus zu wechseln.
+- Wenn Sie spezifische Konfigurationseinstellungen wie die URL für Allgemeine Geschäftsbedingungen oder die URL für Händlerbedingungen ändern möchten, werden Sie durch Klicken auf "Verwalten" zur App-Einstellungsseite weitergeleitet (zu finden unter **Einstellungen > Zahlungen > Unterstützte Zahlungsmethoden > Checkout ist aktiv > Verwalten**
+
+### App-Einstellungen
+
+Um die Einstellungen der Checkout-App zu konfigurieren, gehen Sie zu **Apps > Checkout**.
+
+Die folgende Tabelle listet alle Einstellungen auf, die Sie unter App-Einstellungen konfigurieren können:
+
+| Konfigurationseinstellungen | Beschreibung
+| ---------------------------|------------ 
+| Merchant ID | Ihre Merchant-ID, die Sie im [Checkout-Portal](https://portal.dibspayment.eu/) finden.
+| Live Secret Key | Ihr Live-Geheimschlüssel aus dem [Checkout-Portal](https://portal.dibspayment.eu/integration).
+| Test Secret Key | Ihr geheimer Schlüssel für Testkäufe aus dem [Checkout-Portal](https://portal.dibspayment.eu/integration). Der Testmodus kann unter **Zahlungsgateway-Einstellungen** aktiviert werden, siehe unten.
+| URL für Allgemeine Geschäftsbedingungen | Die URL zu den Allgemeinen Geschäftsbedingungen Ihres Webshops.
+| URL für Datenschutzerklärung | Die URL zu den Datenschutz- und Cookie-Einstellungen Ihres Webshops.
+| Order ID mit Präfix oder Suffix aktualisieren | Aktivieren Sie das Kontrollkästchen, um Ihre orderID entsprechend zu importieren.
+
+![Shopify_Setting_page_main](https://images.ctfassets.net/di680may5c0k/22uKH353RRKkOnzDnSh6uZ/e6f7f15461bf697373ef45e59048fe65/image.png?w=1027&h=841&q=50&fm=png)
+
+### Spracheinstellungen
+
+So wählen Sie die __Checkout-Sprache__ aus:
+
+1. Navigieren Sie im __Shopify-Menü zu Einstellungen > Checkout >__.
+2. Scrollen Sie nach unten zu __Checkout-Sprache__.
+3. Klicken Sie auf __Checkout-Sprache verwalten > Speichern__.
+
+## Erweiterte Konfiguration – Optional
+
+### Order-ID synchronisieren
+
+Die Standardkonfiguration generiert für jede Bestellung eine zufällige Order-ID in Checkout.
+Um die Shopify-Order-ID zu synchronisieren, gehen Sie wie folgt vor:
+- Gehen Sie in Ihrem Shopify-Admin zu Einstellungen > Benachrichtigungen.
+- Scrollen Sie nach unten zum Abschnitt Webhooks.
+- Klicken Sie auf die Schaltfläche Webhook erstellen. Es sollte ein neues Fenster erscheinen.
+- Geben Sie dann die folgenden Informationen ein:
+
+![shopify_create_webhook](https://images.ctfassets.net/di680may5c0k/5braW8CahLMcsKmE5cNNSE/9008c17dc5a9cbfcedebb8d7cdca2468/image__2_.png?w=623&h=424&q=50&fm=png)
+
+| Feld     | Inhalt     |
+| ---------- | ---------- |
+| Ereignis       | Bestellung erstellen       |
+| Format       | JSON       |
+| URL       | https://shopifywebhooks.connect.easy.nets.eu/order       |
+| Webhook-API-Version       | 2024-10       |
+
+### App-Einstellungen – Steuerbetrag (MwSt.) in Checkout importieren
+
+Die Standardkonfigurationseinstellungen importieren keinen Steuersatz und keinen Steuerbetrag in Checkout.
+Es ist möglich, einen Standardsteuersatz hinzuzufügen und ihn auf Kaufartikel sowie Versand-/Rabattbeträge anzuwenden. Gehen Sie dazu wie folgt vor:
+
+1. Gehen Sie im Shopify-Admin zu Apps > Checkout > App-Einstellungen
+2. Legen Sie den Steuersatz (%) mit dem Wert für Ihren Shop fest (z. B. 7,7 oder 25).
+3. Aktivieren Sie dann das Kontrollkästchen, das Ihrem Fall entspricht: "Produkt-/Artikelpreis enthält Steuer" oder "Produkt-/Artikelpreis ist exklusive Steuer. (B2B-Modus)", wenn Sie Nettopreise anzeigen.
+Checkout berechnet den festgelegten Steuersatz automatisch entsprechend. Er wird im Checkout-Portal und in Ihrem Bericht angezeigt.
+
+![shopify_app_setting_tax](https://images.ctfassets.net/di680may5c0k/3BJ2XPsjrXGC5YrjaDaYyh/80eba5fd6120ce277cbcaaf7d8894558/shopify_optional_settings_3.png?w=2026&h=1139&q=50&fm=png)
+
+### Konfiguration der Zahlungsmethoden
+
+Sie können ändern, welche Zahlungsmethoden-Symbole in Ihrem Shop angezeigt werden. Gehen Sie dazu in Ihren Shopify-Admin-Einstellungen zu den Zahlungsmethoden-Seiten.
+
+![Shopify_congif_payment_methods](https://images.ctfassets.net/di680may5c0k/2Abu4FT8G2bwJh58V2U5OL/3099721dde95292ae1a6ac11dc59b5ca/Shopify_config_payment_methods.png?w=1434&h=926&q=50&fm=png)
+
+## Bestellverwaltung
+
+Es ist möglich, Bestellungen direkt im Shopify-Admin zu verwalten:
+
+1. Navigieren Sie im Shopify-Admin zu **Bestellungen**.
+2. Klicken Sie auf eine Bestellzeile, um auf die Bestelldetails zuzugreifen.
+3. Wählen Sie die Zahlungsoption **Capture** oder **Refund**. Die Checkout-App synchronisiert sich automatisch. Der Zahlungsstatus wird auch im [Checkout-Portal](https://portal.dibspayment.eu) aktualisiert.
+
+<Warning>
+•	In den Einstellungen unter __Shopify Admin > Zahlungen__ ist es möglich, entweder Auto-Capture (Standard) oder manuelles Capture auszuwählen. In diesem Fall erfordern auch Bestellungen, die mit Sofortzahlungsmethoden wie Swish oder Trustly bezahlt wurden, ein manuelles Capture.
+
+•	Es kann eine Weile dauern (weniger als 1 Minute), bis der Bestellstatus aktualisiert wird.
+
+•	Es ist möglich, eine Teil- oder vollständige Rückerstattung zu verarbeiten, sofern zutreffend.
+
+•	Eine Teil-/Vollerfassung ist nur einmal möglich.
+
+•	Abgebrochene/nicht abgeschlossene Checkouts über Checkout können über das Shopify-Admin-Portal erneut initialisiert werden, wobei der Kunde mit einer Warenkorb-Wiederherstellungs-E-Mail benachrichtigt wird. (zu finden unter **Bestellung > Abgebrochener Checkout**).
+</Warning>
+
+![shopify capture payment in orders](https://images.ctfassets.net/di680may5c0k/6dRkxZxaFb6hH2kN6V5Nht/e0ef7da724b75f1cdb38bea4b02c43c0/shopify_capture_payment_in_orders.png?w=971&h=488&q=50&fm=png)
+
+## Fehlerbehebung
+
+### Wichtiger Hinweis
+
+<Warning>
+Im Shopify-Admin kann eine Zahlung mit dem Status __ausstehend__ gekennzeichnet sein. Suchen Sie nach dieser Transaktion im Checkout-Portal. Wenn sie im Checkout-Portal als "__belastet__" angezeigt wird, können Sie die Bestellung im Shopify-Admin als "__bezahlt__" markieren.
+
+Um __PayPal__, __Apple Pay__ oder __Google Pay__ zu akzeptieren, müssen Sie die spezifische von Shopify bereitgestellte App verwenden. Sie können diese Zahlungen gemäß den Shopify-Regeln nicht mit Checkout akzeptieren.
+</Warning>
+
+Im Folgenden finden Sie einige der häufigsten Konfigurationsfehler, ihre Ursache und Schritte, die Sie zur Behebung befolgen können.
+
+### Checkout ist nicht als Zahlungsmethode sichtbar
+
+- Stellen Sie sicher, dass Checkout im Shopify-Shop unter **Einstellungen > Zahlung > Checkout** verfügbar und aktiviert ist.
+- Stellen Sie sicher, dass Sie das Zahlungsgateway korrekt konfiguriert haben.
+
+### Nexi Group-Zahlungsfenster ist leer
+
+- Stellen Sie sicher, dass Ihre Integrationsschlüssel in den Nexi Group-App-Einstellungen korrekt sind und keine zusätzlichen Leerzeichen enthalten.
+- Deaktivieren Sie vorübergehend Plugins von Drittanbietern, die die Funktionalität der App beeinträchtigen könnten.
+- Überprüfen Sie, ob es vorübergehende technische Inkonsistenzen gibt: https://easy-status.developers.nets.eu/
+
+### Zahlungen im Live-Modus funktionieren nicht
+- Stellen Sie sicher, dass Sie ein genehmigtes Live-Checkout-Konto für die Produktion haben.
+- Stellen Sie sicher, dass Ihr Live-Checkout-Konto für Zahlungen mit der ausgewählten Währung genehmigt ist.
+- Stellen Sie sicher, dass die Zahlungsmethodendaten korrekt sind und von Ihrer Checkout-Vereinbarung unterstützt werden.
+
+## Go-Live-Checkliste
+
+Weitere Informationen finden Sie im Abschnitt [Go-Live-Checkliste](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Shopify Checkout App installieren">
+  </Card>
+  <Card title="Shopify Card App installieren">
+  </Card>
+  <Card title="Shopify Swish App installieren">
+  </Card>
+  <Card title="Shopify Vipps App installieren">
+  </Card>
+  <Card title="Shopify Klarna App installieren">
+  </Card>
+  <Card title="Shopify Mobile Pay App installieren">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Konto erstellen](/create-a-checkout-portal-account)
+- [Testumgebung](/test-environment)
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Rechnung & Ratenzahlung testen](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

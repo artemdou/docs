@@ -1,0 +1,176 @@
+---
+title: "Checkout for Magento"
+description: "This guide describes how to install, configure, and use the Checkout webshop module for Magento 1."
+---
+
+Compatibility: Magento 1.9+
+
+Latest version: 1.3.1 (2022-05-02)
+
+## Before you start
+
+<Warning>
+Before you start, you need an [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide
+- How to [create a test account for Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+<Warning>
+[Adobe Commerce](https://business.adobe.com/blog/basics/support-magento-1-software-ends-june-30-2020), also known as __Magento__, announced that the __Magento 1 version had its end-of-support (EOS) on June 30, 2020__. 
+
+This means that Checkout is no longer actively supporting Magento 1 with any new security patches or features. This can also affect your PCI DSS (Payment Card Industry Data Security Standard) compliance. For this reason, __we recommend that you migrate or upgrade to Magento 2__.
+</Warning>
+
+## Overview
+
+Our Magento 1 plugin is the perfect extension that enables you to use the Checkout to its full potential for your Magento store. Checkout supports most popular payment methods.
+
+<Info>
+You can see below all the payment methods offered by Checkout. This list refers to all markets. 
+
+Depending on your country or region, the list may vary. If you are uncertain about a specific payment method and whether it is available in your country or region, please contact [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) for more information.
+</Info>
+
+![Checkout plugin - Magento](https://images.ctfassets.net/di680may5c0k/5VRWNAwGCfFd4jgXWr0BrE/48d71e57dbc5d033bd63f82754831b67/plugin_magento.jpg?w=1576&h=608&fl=progressive&q=50&fm=jpg)
+
+### Shop features
+
+- The fast checkout with "remember me" functionality.
+- Includes 2 checkout options for an optimized user experience: embedded checkout (users can pay from the Magento checkout confirmation page) or Checkout hosted checkout with redirect.
+- A smart mix of payment methods to suit all preferences.
+- Multiple checkout languages and currencies for selling in your domestic market and abroad.
+
+The following screenshot shows a checkout page provided by the Magento plugin:
+
+![Magento 1 embedded checkout](https://images.ctfassets.net/di680may5c0k/skscpgKT2wH5WCdXD0rhy/2558ba68f4af873058ded24d89632456/MicrosoftTeams-image__17_.png?w=1349&h=625&q=50&fm=png)
+
+### Admin Panel features
+
+- Quick setup and flexible configuration.
+- Intuitive order management with synchronized captures and refunds.
+- Compatibility with discounts, tax (VAT), and shipping options.
+- Compatible with multi-shop setups.
+
+The screenshot below shows the Settings page in Magento Admin:
+
+![Nets Configuration in Magento 1](https://images.ctfassets.net/di680may5c0k/BOjlxLwf9Q2bjNSwIQAcw/0336361f47b0dba6bc7410c29b69e609/magento1-admin-config.png?w=1340&h=551&q=50&fm=png)
+
+## Installation
+
+Follow the steps below to install the Checkout module in Magento.
+
+### Step 1: Upload the module
+
+The first thing you need to do when installing a Magento 1 extension is to unzip the folder where the extension is stored and copy all the folders and files into the root directory of your store using FTP.
+
+### Step 2: Install the module
+
+1. Go to your Magento Admin Panel
+1. Go to **System > Configuration > Payment Methods**
+1. Find **Checkout** in the list of checkout options
+1. Set **Enable Checkout Checkout** to **Yes**
+1. Fill out your integration keys (secret keys and checkout keys) and select an order status to new orders. (Please note that orders are fully paid once they appear in the system.)
+
+<Info>
+The **integration keys** can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the following page for more help:
+
+- [Access your integration keys](/access-your-integration-keys)
+</Info>
+
+### Step 3: Disable the standard checkout (optional)
+
+If you wish to disable the standard checkout, you can do this in the following way:
+
+1. Go to **System > Configuration > Checkout**
+1. Under **Checkout Options**, in the field **Enable Onepage Checkout**, choose **No**
+
+### Step 4: Clear the cache
+
+Finally, it's time to clear the cache to ensure that your changes take effect:
+
+1. Go to **System > Cache Management**
+1. Select all the files in the list
+1. Choose the refresh option in the dropdown menu
+1. Click the **Submit** button
+
+## Configuration
+
+After installing the module, you need to do some basic configuration of the module:
+
+1. Navigate to: **System > Configuration > Payment Methods**
+2. Locate the **Checkout** and access **Configuration**.
+3. Fill out the required integration keys (secret keys and checkout keys). 
+3. (Optional) Customize the module according to your needs using the additional settings on the configuration page.
+
+<Info>
+The **integration keys** can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the following page for more help:
+
+- [Access your integration keys](/access-your-integration-keys)
+</Info>
+
+The screenshot below shows the Checkout configuration page in the Admin Panel:
+
+![Nets Configuration in Magento 1](https://images.ctfassets.net/di680may5c0k/BOjlxLwf9Q2bjNSwIQAcw/0336361f47b0dba6bc7410c29b69e609/magento1-admin-config.png?w=1340&h=551&q=50&fm=png)
+
+The following table lists all the settings you can configure in the administration area for the Checkout module:
+
+| Configuration&#160;setting | Description
+| ---------------------------|------------ 
+| Enable Checkout Checkout | Activates the module.
+| Select Environment | Toggles between **Live** mode and **Test** mode. Choose test mode if you want to make test purchases using the [test environment](/test-environment). There are [sample card numbers](/test-card-processing/#build-sample-credit-cards) and [invoice addresses](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) for testing purposes. Live mode requires an approved account. 
+| Live Secret key | Your live secret key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Live Checkout key | Your live checkout key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Invoice fee ID | Creates a hidden (virutal) product that acts as the invoice fee. Enter the product ID in this field or leave it blank to disable.
+| Test Secret key | Your secret key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Tets Checkout key | Your checkout key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Supported&#160;customer&#160;types | Configures which customer types should be accepted on the checkout page. **B2C** means private customers (Business-to-Consumer). **B2B** means business customers (Business-to-Business).
+| Terms & Condition Direct Link | The URL to the terms and conditions of your webshop.
+| New order status | New orders placed through Checkout will set the order status to **Processing**.
+| Auto Capture | Allows you to instantly charge a payment straight after the order is placed. **Important!** Capturing a payment before shipment of the order might be liable to restrictions based upon legislations set in your country. Misuse can result in your Checkout account being forfeit.
+| Merchant Terms URL | The URL to your Terms of use and Cookies page. Term links can be found inside the Checkout payment window.
+
+<Check>
+You've now installed and configured the Checkout webshop module. If you have further questions, please see the troubleshooting section below or reach out to our [support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Order management
+
+It's possible to manage orders directly in the Magento Admin Panel:
+
+1. Navigate to **Sales > Orders**
+2. Click on an order line to access order details.
+3. Choose your desired action, **refund/partial refund**, or update the order status. The Checkout plugin will synchronize automatically. The payment status will also be updated in [Checkout portal](https://portal.dibspayment.eu).
+
+<Info>
+All transactions performed by Nexi Group are accessible in [Checkout Portal](https://portal.dibspayment.eu/).
+</Info>
+
+The following screenshot shows the list of orders in the Magento Admin Panel.
+
+![Order Listing](https://images.ctfassets.net/di680may5c0k/3y0bs3qFxTYW4c3DSAjKqA/fa55bf6ef925304e15967d6516a08487/Orders-Sales-Magento-Admin.png?w=1330&h=466&q=50&fm=png)
+
+## Troubleshooting
+
+Below are some of the most common configuration errors, their cause and steps that you can follow to solve them.
+
+### Nexi Group payment window is blank
+
+- Ensure your integration keys in the Nexi Group app settings are correct and do not contain additional blank spaces.
+- Temporarily deactivate third party plugins that might affect the functionality of the app.
+- Check if there are any temporary technical inconsistencies: https://easy-status.developers.nets.eu/
+
+### Payments in live mode don't work
+- Ensure you have an approved Live Checkout account for production.
+- Ensure your Live Checkout account is approved for payments with the selected currency.
+- Ensure payment method data is correct and supported by your Checkout agreement.
+
+## Go live checklist
+
+For more information, refer to the section [Go-live checklist](/go-live-checklist).
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

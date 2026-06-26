@@ -1,0 +1,100 @@
+---
+title: "API"
+description: "Nur wenn Sie bestimmte Prozesse im Zusammenhang mit Ihrem Checkout Paylink oder One-Page-Shop automatisieren, müssen Sie eine API-Signatur erstellen, um die API zu verwenden."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Coding: Etwas (Backend)</Badge>
+</div>
+
+## Den geheimen API-Schlüssel Ihrer Instanz finden
+
+<Warning>
+Dieser und die folgenden Schritte sind nur für Sie relevant, wenn Sie Ihre Paylink- oder One-Page-Shop-Zahlungsprozesse mithilfe der API automatisieren möchten. In den meisten Fällen ist die über Ihr __Checkout-Paylink-Konto__ bereitgestellte Funktionalität ausreichend.
+</Warning>
+
+Sie finden Ihren API-Schlüssel in Ihrem __Checkout-Paylink-Konto__, nachdem Sie in der linken Navigationsspalte auf „API & Plugins" geklickt haben.
+
+## Erstellen Ihrer API-Signatur
+
+### API-Signatur erhalten
+
+<CodeGroup>
+
+```bash Shell
+echo -n "HTTP-QUERY-STRING" | openssl dgst -sha256 -hmac "API-SECRET" -binary | openssl enc -base64
+```
+
+```php PHP
+base64_encode(hash_hmac('sha256', http_build_query($params, null, '&'), $apiSecret, true));
+```
+
+```javascript NodeJS
+function buildSignature (query = '') {
+  return Base64.stringify(hmacSHA256(query, secret))
+}
+
+let queryParams = Object.assign({}, params)
+const queryStr = qs.stringify(queryParams)
+queryParams.ApiSignature = buildSignature(queryStr)
+```
+
+</CodeGroup>
+
+<Warning>
+Der Query-String muss gemäß [RFC1738](https://www.ietf.org/rfc/rfc1738.txt) kodiert sein. Das bedeutet, dass Sie Leerzeichen durch „+" ersetzen müssen.
+</Warning>
+
+Aus Sicherheitsgründen möchten wir, dass Sie bei der Verwendung der API eine __API-Signatur__ übergeben, die mit dem __API-Secret__ Ihrer Instanz berechnet wurde.
+
+<Warning>
+Die API-Signatur wird HMAC-kodiert gemäß [RFC 2104](https://www.ietf.org/rfc/rfc2104.txt): Leerzeichen müssen als „+" dargestellt werden.
+</Warning>
+
+Der Parametername dieser API-Signatur sollte `ApiSignature ` lauten. Sie können die Signatur unter Verwendung aller Parameter mit Ausnahme des Parameters `instance ` berechnen.
+
+- Erstellen Sie den Query-String (z. B. model=Page&id=17)
+- Berechnen Sie den binären HMAC-Hash unter Verwendung des API-Secrets Ihres Checkout-Paylink-Kontos als Schlüssel
+- Kodieren Sie das Ergebnis mit Base64
+
+## API-Basisadresse
+
+Die __Checkout Paylink REST APIs__ sind unter der folgenden Basisadresse erreichbar:  
+<Warning>
+https://api.nets-pay.link/v1.0/:object/:id?instance=:instance
+</Warning>
+
+### Anfragen
+
+Die __Payload-Daten__ müssen gemäß [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt) URL-kodiert sein, und Leerzeichen werden prozentual als „%20" kodiert.
+
+<Warning>
+Bitte beachten Sie, dass die __Payload-Daten__ und die __API-Signatur__ unterschiedlich kodiert werden müssen: Die __API-Signatur__ wird HMAC-kodiert gemäß [RFC2104](https://www.ietf.org/rfc/rfc2104.txt): Leerzeichen müssen als „+" dargestellt werden.
+</Warning>
+
+| Parameter     | Wert     |
+| ---------- | ---------- |
+| object       | Paylink, Transaction       |
+| id       | Wird nur für die Anforderungstypen GET, PUT und DELETE verwendet, bei denen nur eine Entität geändert wird.       |
+| instance       | Der Name der Paylink-Instanz. |
+
+Bei POST-Anfragen müssen alle Query-Parameter außer `instance` im Body enthalten sein.
+
+Eine umfassende Liste der Endpunkte und Funktionen finden Sie in unserer [API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/paylink-v1/).
+
+## Paylink API – Fehlermeldungen
+
+| HTTP-Code    | Status     | Nachricht     |
+| ---------- | ---------- | ---------- |
+| `200`       | OK       | Alles hat erfolgreich funktioniert!       |
+| `403`       | Forbidden       | Die API-Signatur ist falsch       |
+| `404`       | Not Found       | Der angeforderte Endpunkt existiert nicht       |
+
+Alle Fehler geben ein JSON im folgenden Format zurück:
+
+```json JSON
+{
+  status: "error",
+  message: "An error occurred: Human readable message goes here"
+}
+```

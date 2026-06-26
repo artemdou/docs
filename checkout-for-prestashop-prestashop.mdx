@@ -1,0 +1,175 @@
+---
+title: "Checkout for PrestaShop"
+description: "This guide describes how to install, configure, and use the Checkout webshop module for PrestaShop."
+---
+
+Compatibility: PrestaShop 1.7+ to 9.0
+
+Latest version: 1.1.12
+
+Supported from: 1.7+ to 9.0
+
+Tested from: 1.7+ to 9.0
+
+## Before you start
+
+<Warning>
+Before you start, you need a [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide:
+- How to [create a test account for Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+## Overview
+
+Our PrestaShop plugin is the perfect extension that enables you to use the Checkout to its full potential for your PrestaShop store. Checkout supports most popular payment methods.
+
+<Info>
+You can see below all the payment methods offered by Checkout. This list refers to all markets. 
+
+Depending on your country or region, the list may vary. If you are uncertain about a specific payment method and whether it is available in your country or region, please contact [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) for more information.
+</Info>
+
+![Checkout plugin - Prestashop](https://images.ctfassets.net/di680may5c0k/54JCRmRafJI4toB11i3pcJ/7fdb64e3b6dab73bdf3ceac8acdeff58/plugin_prestashop.jpg?w=1576&h=566&fl=progressive&q=50&fm=jpg)
+
+<Warning>
+Apple Pay configuration for PrestaShop plugin is described on the [Apple Pay payment method](/apple-pay/#build-prestashop-17) page.
+</Warning>
+
+### Shop features
+
+- The fast checkout with "remember me" functionality.
+- Embedded checkout for an optimized user experience. Users are not redirected outside PrestaShop.
+- A smart mix of payment methods to suit all preferences.
+- Multiple checkout languages and currencies for selling in your domestic market and abroad.
+- Fully syncronized payment statuses in admin order page with Checkout portal.
+- Intuitive order management with synchronized captures and refunds from admin order details page.
+- Custom webhook events for real-time payment statuses.
+- Custom Build-in debugging features.
+
+The following screenshot shows a checkout page provided by the Checkout module (Embedded and Nexi Group Payment as one payment option):
+
+![Checkout PrestaShop 1.7](https://images.ctfassets.net/di680may5c0k/echOAETvxTqwCtfdrtPRx/ed9affe808c465d3f5dc902558fde5c2/ps17paymentscreen.JPG?w=563&h=562&fl=progressive&q=50&fm=jpg)
+
+### Administration area features
+
+- Quick setup and flexible configuration.
+- Intuitive order management with synchronized captures and refunds.
+- Compatibility with discounts, tax (VAT), and shipping options.
+- Compatible with [PrestaShop multistore feature](http://doc.prestashop.com/display/PS17/Managing+Multiple+Shops) for managing multiple shops.
+- Latest plugin version notification with compatibility, github and techsite link.
+
+## Installation
+
+### Install module
+
+Follow the step below to install the Checkout module in PrestaShop.
+
+1.	Download the plugin from above github link.
+2.	Extract the zip file.
+3.	Rename extract folder name to __netseasy__ with folder name
+4.	Create zip of __netseasy__ folder.
+5.	Login to __Admin Panel__.
+6.	Click on __Modules > Module Manager__ tab and click on "__Upload a module__".
+7.	Drop your __netseasy__ folder zip archive here or select from your machine.
+8.	After installation completed, press “__Configure__”.
+9.	Set your API Credentials and configuration.
+
+## Configuration
+
+After installing the module, you need to do some basic configuration of the module:
+
+1. Navigate to **Improve > Modules > Modules Manager** in PrestaShop. 
+2. Select category as Payment or search __netseasy__ in searchbox and click on Configure.
+3. Fill out the required fields, such as Test Mode, integration keys (secret keys and checkout keys), Terms Url and Merchant Terms Url.
+
+<Info>
+The **integration keys** can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the following pages for more help:
+
+- [Access your integration keys](/access-your-integration-keys)
+</Info>
+
+The screenshot below shows the configuration page in the administration area for the module:
+
+![Checkout PrestaShop configuration 1](https://images.ctfassets.net/di680may5c0k/4pLsor8oS0itgCdeD244Sl/7428eb576a764cfea9528b4d9a770094/Nets_Easy_PrestaShop_configuration_1.png?w=936&h=678&q=50&fm=png)
+
+The screenshot below shows the latest plugin version notification in configuration page in the administration area for the module:
+
+![Prestashop 1.7 latest plugin version notification](https://images.ctfassets.net/di680may5c0k/7F5ZKPYqNrC86OhrACWWhh/f981e286f0fde38ab09bc76c7a4f457e/p17Notification.jpg?w=1345&h=658&fl=progressive&q=50&fm=jpg)
+
+The following table lists all the settings you can configure in the administration area for the Checkout module:
+
+| Configuration&#160;setting | Description
+| ---------------------------|------------ 
+| Test mode | Choose test mode if you want to make test purchases using the [test environment](/test-environment). There are [sample card numbers](/test-card-processing/#build-sample-credit-cards) and [invoice addresses](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) for testing purposes. Live mode requires an approved account.
+| Merchant Id | Your merchant id from [Checkout Portal](https://portal.dibspayment.eu/integration)
+| Merchant Email Id | Your merchant email address. 
+| Name Of Payment Gateway | It display payment gateway name as payment option in checkout page.
+| Test Checkout key | Your checkout key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Secret key | Your secret key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Production Checkout key | Your live checkout key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Production Secret key | Your live secret key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Integration type | **Embedded** or **Redirect**. An embedded checkout inserts the payment window directly on the checkout page. Redirect (Nexi Group Hosted) loads a new payment page.
+| Terms Url | Selects the page containing your Terms and Conditions.
+| Merchant Terms Url | Selects the page containing Merchant Terms and Conditions.
+| Auto-capture | Allows you to instantly charge a payment straight after the order is placed. Important! Capturing a payment before shipment of the order might be liable to restrictions based upon legislations set in your country. Misuse can result in your Checkout account being forfeit.
+| Admin Debug Mode | It displays the api request content in order detail page. Optionally activate this feature and copy/send debug content to our support in case you experience issues with your transactions.
+| Frontend Debug Mode | It displays the api request content in checkout page. Optionally activate this feature and copy/send debug content to our support in case you experience issues with your transactions.
+| Webhook URL | It is the custom webhook event listener url, that handles payment statuses on your orders paid with Checkout. You can only use webhooks if you have an SSL certificate.
+| Webhook Auth | Set your custom authorization password on incoming webhook event data to tighten security.
+
+<Check>
+You've now installed and configured the Checkout webshop module. If you have further questions, please see the troubleshooting section below or reach out to our [support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Order management
+
+It's possible to manage orders directly in the PrestaShop administration area:
+
+1. Navigate to **SELL > Orders** in PrestaShop. 
+2. Click on an order line to access order details.
+3. Choose your desired action. Click **Charge All** or click the **Charge** button for partial charge. Click **Refund All** or click the **Refund** button for partial refund. Click **Cancel** to cancel the payment. Checkout plugin will synchronize automatically. The payment status will also be updated in [Checkout portal](https://portal.dibspayment.eu).
+
+<Info>
+All transactions performed by Nexi Group are accessible in [Checkout Portal](https://portal.dibspayment.eu/).
+</Info>
+
+The following screenshot shows the list of orders in the PrestaShop administration area:
+
+![Order actions PrestaShop 1.7](https://images.ctfassets.net/di680may5c0k/4lzOT0wMCFRPdcb3w9LLbq/11cc3f656f65a1c5954f38d9934221ab/ps17orderdetail.JPG?w=785&h=514&fl=progressive&q=50&fm=jpg)
+
+## Troubleshooting
+
+Below are some of the most common configuration errors, their cause and steps that you can follow to solve them.
+
+### Checkout payment plugin is not visible as a payment method
+
+- Temporarily switch to the PrestaShop standard template. Custom templates might need additional changes to display correctly. Consult with your web designer or developer.
+
+### Nexi Group payment window is blank
+
+- Ensure your integration keys in the Nexi Group app settings are correct and do not contain additional blank spaces.
+- Temporarily deactivate third party plugins that might affect the functionality of the app.
+- Check if there are any temporary technical inconsistencies: https://easy-status.developers.nets.eu/
+
+### Payments in live mode don't work
+- Ensure you have an approved Live Checkout account for production.
+- Ensure your Live Checkout account is approved for payments with the selected currency.
+- Ensure payment method data is correct and supported by your Checkout agreement.
+
+## Go live checklist
+
+For more information, refer to the section [Go-live checklist](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Download">
+  </Card>
+  <Card title="Source">
+  </Card>
+</Columns>
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

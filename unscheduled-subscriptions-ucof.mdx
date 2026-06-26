@@ -1,0 +1,287 @@
+---
+title: "Unscheduled Subscriptions (uCoF)"
+description: "This guide is for developers who want to add unscheduled subscriptions to their checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Complexity: Medium</Badge>
+  <Badge color="blue">Coding: Yes (Backend)</Badge>
+  <Badge color="blue">Platform: PHP, Node</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+This guide assumes that you have followed and implemented the guide [Integrate Checkout on your website](/web-integration). 
+So, before you read this guide you should already have a checkout page up and running that handles single payments.
+</Warning>
+
+## Overview
+
+**Unscheduled Subscriptions** (Unscheduled Card on File, UCoF) allow merchant-initiated transactions on a non-fixed schedule with flexible amounts (opposed to regular subscriptions, where the same amount is charged on a defined schedule as a recurring payment). Common scenarios for the use of unscheduled subscriptions are pay-per-use services such as car sharing, electric scooters, top up for internally used payment cards (canteen), payments for meal delivery and so on.
+
+The payment details (cards) for unscheduled subscriptions are stored with Checkout, so that PCI (data security standard) compliance is ensured. However, your Terms and Conditions must cover the user's consent to store their payment details for unscheduled subscriptions.
+
+Similar to regular subscriptions, an unscheduled subscription is always associated with at least one payment object. A new unscheduled subscription is created by the [create payment method](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) with some specific parameters.
+
+After an unscheduled subscription is created, you can charge new payments without additional interaction with the customer. At every charge, a new payment object is created and then automatically charged.
+
+<Info>
+Since each [charging of an unscheduled subscription](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-unscheduledsubscriptionid-charges-post) will create a new payment object with an individual `chargeID ` and `paymentID `, you can refund individual charges from an unscheduled subscription, as you would do with regular payments.
+</Info>
+
+## Create a new unscheduled subscription
+
+To configure the checkout for unscheduled subscriptions, the `unscheduledSubscription ` object has to be added to the [create payment’s](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post) request body. Here is an example of an updated version of payload.json that includes the required `unscheduledSubscription ` properties:
+
+```json Create unscheduled subscription
+{
+    "order": {
+        "items": [
+            {
+            "reference": "ST Top up mobile",
+            "name": "ST Top up mobile",
+            "quantity": 1,
+            "unit": "pcs",
+            "unitPrice": 0,
+            "taxRate": 1000,
+            "taxAmount": 0,
+            "netTotalAmount": 0,
+            "grossTotalAmount": 0
+            }
+        ],
+        "amount": 1,
+        "currency": "SEK",
+        "reference": "Nets Easyshop"
+    },
+    "checkout": {
+        "termsUrl": "https://st-easyshop.nets.eu/terms",
+        "publicDevice": false,
+        "charge": false,
+        "integrationType": "HostedPaymentPage",
+        "merchantHandlesConsumerData": false,
+        "consumerType": {
+            "supportedTypes": [
+                "B2B",
+                "B2C"
+            ],
+        "default": "B2C"
+        },
+        "returnUrl": "https://pp-easyshop.nets.eu/confirmation"
+        },
+        "notifications": {
+            "webhooks": [
+                {
+                    "eventName": "payment.created",
+                    "url": "https://pp-easyshop.nets.eu/api/WebhookState",
+                    "authorization": "myAuthorizationKey"
+                }
+            ]
+        },
+        "unscheduledSubscription": {
+            "create": true
+        }
+}
+```
+
+. 
+
+It is possible to specify an amount greater than zero and make an initial charge when creating the unscheduled subscription.
+
+<Info>
+If you are sending zero amount in the create payment request and cards are getting declined when verifying, that is likely because the issuing bank doesn't allow for zero amount verifications. To overcome this problem, please send a value of 1 instead of 0 (regardless of currency).
+</Info>
+
+<Warning>
+It is not permitted to create subscriptions with low amount (like 1.00 EUR) just to register a card with Checkout. Instead, [create a payment with unscheduled subscription object amount=0 to verify the card](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-unscheduledsubscription). 
+
+If the card is valid, you will be able to query for the [token (unscheduled subscription ID) and use it for future charges](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get).
+
+This is the compliant way to register a card without charging the customer and get a token back.
+Low-value amount transactions (1.00 EUR / SEK / DKK /etc.) that are not captured or cancelled may be declined or generate fines from Visa or MasterCard.
+</Warning>
+
+The `unscheduledSubscription ` key of the payload.json request body contains `create `. When set to `true `, a new unscheduled card on file agreement is going to be created. This can be omitted, if an existent unscheduled card on file agreement is going to be updated.
+
+<Info>
+With `create:true `, a new `unscheduledSubscriptionId ` will be created. However, the call will return only a `paymentID `. To get the newly created `unscheduledSubscriptionId ` you must use the [Retrieve payment call](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) and find the `unscheduledSubscriptionId ` in this call's response.
+</Info>
+
+## New unscheduled subscription with initial charge
+
+By setting the boolean property `checkout.charge ` to `true `, the customer is charged when the unscheduled subscription is created. The following JSON payload will create a new unscheduled subscription and also automatically charge the customer for the specified order.
+
+```json payload.json
+{
+    "order": {
+        "items": [
+            {
+                "reference": "10",
+                "name": "Subscription product",
+                "quantity": 1,
+                "unit": "month",
+                "unitPrice": 10000,
+                "grossTotalAmount": 10000,
+                "netTotalAmount": 10000
+            }
+        ],
+        "amount": 10000,
+        "currency": "SEK",
+        "reference": "Subscription Test"
+    },
+    "checkout": {
+        "integrationType": "EmbeddedCheckout",
+        "url": "https://<YOUR_WEBSITE>/cart.html",
+        "termsUrl": "https://<YOUR_WEBSITE>/terms.html",
+        "charge": true
+    },
+    "unscheduledSubscription": {
+      "create": true
+   }
+}
+```
+
+## Retrieve unscheduled subscription ID using the Payment API
+
+The __unscheduled subscription ID__ can be retrieved programatically. For this, you must retrieve the unscheduled subscription payment object sending the [retrieve-payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get) call:
+
+### Retrieve payment
+
+<CodeGroup>
+
+```php retrieve-payment.php
+<?php
+
+$paymentId = "<YOUR_PAYMENT_ID>";
+$ch = curl_init('https://test.api.dibspayment.eu/v1/payments/' . $paymentId);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+echo "Response code: " . $http_code . PHP_EOL;
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty . PHP_EOL;
+```
+
+```javascript retrieve-payment.js
+const http = require("https");
+
+const paymentId = "<PAYMENT_ID>";
+const secretKey = "<YOUR_SECRET_KEY>";
+
+const options = {
+  "method": "GET",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId,
+  "headers": {
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(JSON.stringify(JSON.parse(body), null, 2));
+  });
+});
+
+req.end();
+```
+
+</CodeGroup>
+
+Remember to replace `&lt;PAYMENT_ID&gt;` with the payment identifier you received from the API when creating the subscription payment. The placeholder `&lt;YOUR_SECRET_KEY&gt;` should be replaced with your secret key. 
+
+A successful API call will return something similar to this:
+
+```json Retrieve payment response (uCoF)
+{
+  "payment": {
+      "paymentId": "0260000060003b7b47f0833960dc60d6",
+      "summary": {
+          "reservedAmount": 10000
+      },
+      "consumer": {
+        ...
+      },
+      "paymentDetails": {
+          "paymentType": "CARD",
+          "paymentMethod": "Visa",
+          "invoiceDetails": {},
+          "cardDetails": {
+              "maskedPan": "492500******0004",
+              "expiryDate": "1222"
+          }
+      },
+      "orderDetails": {
+          "amount": 10000,
+          "currency": "SEK",
+          "reference": "Subscription Demo Order with charge"
+      },
+      "checkout": {
+          "url": "http:\/\/example.com\/cart.html"
+      },
+      "created": "2021-04-26T08:28:25.0946+00:00",
+      "unscheduledSubscription": {
+          "id": "4feb3b28d260458a88857b00f46261ba"
+      }
+  }
+```
+
+The `payment.unscheduledSubscription.id ` key's value is the `unscheduledSubscriptionId ` you are looking for. Use that identifier to get more information about the unscheduled subscription with the [Retrieve unscheduled subscription](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-unscheduledsubscriptionid-get) call:
+
+### Retrieve uCoF details
+
+```php retrieve-unscheduledsubscription.php
+<?php
+
+$unscheduledSubscriptionId = "<UNSCHEDULEDSUBSCIRPTION_ID>";
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/unscheduledsubscriptions/' . $unscheduledSubscriptionId);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: <YOUR_SECRET_API_KEY>'));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+echo "Response code: " . $http_code . PHP_EOL;
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty . PHP_EOL;
+```
+
+Again, make sure you replace all the placeholder strings marked with `<...>`. 
+
+The JSON response from the retrieve subscriptions request can look something like this:
+
+```json uCoF subscription details response
+{
+    "unscheduledSubscriptionId": "205e808f6fba40828b0389c8b943aefe",
+    "paymentDetails": {
+        "paymentType": "CARD",
+        "paymentMethod": "Visa",
+        "cardDetails": {
+            "expiryDate": "1222",
+            "maskedPan": "492500******0004"
+        }
+    }
+}
+```
+
+Now you know how to retrieve the unscheduledSubscription identifier and other details related to a uCoF set up. The unscheduledSubscription identifier is required when you want to charge an unscheduled subscription at a later stage. 
+
+You can charge multiple subscriptions in bulk using the API method [Bulk charge unscheduled subscriptions](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-unscheduledsubscriptions-charges-post).
+
+<Check>
+Now you know how to set up your checkout page to support unscheduled transactions. You also know how to get the `unscheduledSubscriptionId ` which is necessary for future charges.
+</Check>

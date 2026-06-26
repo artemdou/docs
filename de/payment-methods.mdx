@@ -1,0 +1,151 @@
+---
+title: "Zahlungsmethoden"
+description: "Dieser Leitfaden zeigt, welche Zahlungsmethoden von Checkout unterstützt werden, wie sie hinzugefügt werden können und wie sich dies sowohl auf den Zahlungsablauf als auch auf die Verarbeitung dieser Zahlungen auswirkt."
+---
+
+## Überblick
+
+Checkout unterstützt eine Vielzahl von Zahlungsmethoden, um Komfort für Ihre Verbraucher zu bieten. Diese reichen von:
+
+  -\tAccount to Account (A2A)
+  -\tKarten
+  -\tWallet-basierte Zahlungsmethoden
+  -\tRechnungen
+  -\tRatenzahlungen
+
+<Warning>
+Bitte beachten Sie, dass bestimmte Zahlungsmethoden wie Swish, Vipps oder RatePay in den Konfigurationen Ihres Checkout-Kontos aktiviert werden müssen. Welche dieser Methoden in Ihrem Zahlungsfenster zur Auswahl angezeigt werden, hängt von Ihren Land- und Währungseinstellungen ab.
+</Warning>
+
+## Unterstützte Zahlungsmethoden
+
+### Übersichtstabelle aller von Checkout unterstützten Zahlungsmethoden
+| Name | Typ | Länder |
+| --- | --- | --- |
+| SEPA Direct Debit | A2A | DE, AT |
+| Swish | A2A | SE |
+| Trustly | A2A | AT, CZ, DE, DK, EE, ES, FI, GB, LV, LT, NL, NO, PL, SE, SK |
+| American Express | Karten | Alle |
+| Visa & Mastercard | Karten | Alle |
+| Maestro | Karten | Alle |
+| Dankort | Karten | DK |
+| Riverty | Rechnung/Ratenzahlung/Kampagnen | SE, DE, AT |
+| Ratepay | Rechnung/Ratenzahlung | DE, AT |
+| MobilePay | Wallet | DK |
+| PayPal | Wallet | Alle |
+| Vipps | Wallet | NO |
+| Apple Pay | Wallet | Alle |
+| Klarna | Wallet | SE, NO, DK, DE, AT |
+| Google Pay | Wallet | Alle |
+
+Detailliertere Informationen, einschließlich Länder, Währungen, Tests, Funktionalität von Zahlungsvorgängen usw. finden Sie in den entsprechenden verlinkten Abschnitten.
+
+## Autorisierungszeiträume für Belastung, Stornierung und Rückerstattung
+
+### Autorisierungszeiträume für Belastung, Stornierung und Rückerstattung
+| Zahlungsmethode | Garantierte Belastung | Belastung, aber nicht garantiert | Stornieren | Rückerstattung |
+| --- | --- | --- | --- | --- |
+| SEPA Direct Debit |  |  |  |  |
+| Swish |  |  |  |  |
+| Trustly |  |  |  |  |
+| Dankort | - | 30 Tage | - | 180 Tage nach Belastung |
+| Visa | 7 Tage | 30 Tage | 7 Tage | 180 Tage nach Belastung |
+| MasterCard | 7 Tage | 30 Tage | 7 Tage | 180 Tage nach Belastung |
+| Maestro | 7 Tage | 30 Tage | 7 Tage | 180 Tage nach Belastung |
+| American Express | 7 Tage | 30 Tage | 7 Tage | 180 Tage nach Belastung |
+| Riverty |  |  |  |  |
+| Ratepay |  |  |  |  |
+| MobilePay |  |  |  |  |
+| Vipps |  |  |  |  |
+| Apple Pay | 7 Tage | 30 Tage | 7 Tage | 180 Tage nach Belastung |
+| PayPal | 30 Tage |  | 30 Tage | 180 Tage nach Belastung |
+| Google Pay | 7 Tage | 30 Tage | 7 Tage | 180 Tage nach Belastung |
+| Klarna | 28 Tage |  |  |  |
+
+## Belastung
+
+Belastung, in diesem Zusammenhang auch als *Capture* bezeichnet, gibt an, ob der Betrag reserviert ist oder nicht:
+
+- Garantierte Belastung bedeutet, dass der Betrag reserviert ist und Sie den Betrag garantiert einziehen können.
+- Nicht garantierte Belastung bedeutet, dass der Betrag *NICHT* mehr reserviert ist. Sie können jedoch weiterhin versuchen, den Betrag einzuziehen.
+
+Weitere Informationen zu Belastungen finden Sie [hier](/charge-payments).
+
+## Rückerstattung
+
+Rückerstattungen können noch bis zu 365 Tage nach der Belastung durchgeführt werden, da Checkout die Transaktionsdaten ein Jahr lang aufbewahrt.
+
+Weitere Informationen zu Rückerstattungen finden Sie [hier](/refund-a-charge).
+
+## Stornieren
+
+Wenn Sie die Zahlung stornieren, geben Sie die Reservierung frei, wodurch Sie keine Belastung mehr durchführen können.
+
+Weitere Informationen zu Stornierungen finden Sie [hier](/cancel-payments).
+
+## Karten
+
+Eine Kreditkartenautorisierung ist eine Anfrage von einem *Card Acquirer* an einen *Card Issuer*, um eine Anforderung von Mitteln auf dem Konto eines *Karteninhabers* zu genehmigen. Die Anfrage basiert auf einer *Kauftransaktion* zwischen einem Karteninhaber und Ihnen.
+
+Im Rahmen der Autorisierungsanfrage prüft der Kartenherausgeber, ob der Verbraucher:
+
+- eine aktive Karte besitzt
+- die Karte nicht als gestohlen gemeldet wurde
+- die Anfrage nicht betrügerisch erscheint
+- der Karteninhaber über ausreichende Mittel verfügt, um die Kosten der Transaktion zu decken
+
+Sobald eine Autorisierung genehmigt wurde, wird der Betrag reserviert und kann eingezogen werden. Das bedeutet, dass die Geldübertragung beim Einzug erfolgt.
+
+Bitte beachten Sie jedoch, dass die Mittel nur für einen begrenzten Zeitraum reserviert werden. Nach Ablauf dieses Zeitraums ist der Herausgeber nicht verpflichtet, die Belastungsanforderung zu genehmigen.
+
+Den Zeitrahmen für die Autorisierungszeit der verschiedenen Kartensysteme finden Sie in der obigen Tabelle.
+
+## Wallets
+
+Vipps-, MobilePay-, Google Pay- und Apple Pay-Transaktionen werden gemäß den Regeln des zugrunde liegenden Kartensystems verarbeitet, d. h. Visa, Mastercard, Dankort usw.
+
+Sie können die obige Tabelle für die individuellen Kartensystem-Regeln einsehen.
+
+## Account to Account (A2A)
+
+Wir unterstützen derzeit A2A-Zahlungsmethoden wie Swish und Trustly. Diese Mittel werden *sofort* auf Ihr Konto verbucht, mit der wesentlichen Voraussetzung, dass auf dem Konto des Verbrauchers ein entsprechendes Guthaben vorhanden ist.
+
+## Strong Customer Authentication
+
+Checkout ist Strong Customer Authentication (SCA)-kompatibel, was bedeutet, dass 3D Secure für alle Zahlungen obligatorisch ist.
+
+Wann immer ein Verbraucher den Checkout-Prozess mit einer beliebigen Zahlungsmethode durchläuft, um zu bezahlen, wird die SCA ausgelöst.
+
+<Info>
+Es gibt einige Ausnahmen für die SCA-Auslösung, diese liegen jedoch auf der Seite des Herausgebers. Das bedeutet, dass die SCA z. B. bei Karten und Wallets nicht immer ausgelöst wird. Ein Anwendungsfall hierfür könnte eine Ausnahme bei niedrigen Beträgen sein, bei denen ein Bestellbetrag unter einem bestimmten Wert liegt, sodass der Verbraucher die SCA nicht durchlaufen muss.
+</Info>
+
+Sie können die Benutzerführung aller einzelnen Zahlungsmethoden hier einsehen, um zu sehen, wie und wann die SCA ausgelöst wird:
+
+- [Karten](/credit-cards)
+- [Account to Account](/account-to-account-a2a)
+- [Wallets](/wallets)
+- [Rechnungen & Ratenzahlungen](/invoices-and-installments)
+
+Für Karten können Sie [hier](/credit-cards/#build-security) mehr erfahren.
+
+Weitere Informationen zu SCA finden Sie auf dieser Seite [hier](https://support.nets.eu/da-DK/article/sca-good-to-know) (auf Dänisch).
+
+## 3D Secure
+
+Mit dem unten gezeigten 3D-Secure-Simulator ist es möglich, eine Zahlung entweder zu genehmigen oder abzulehnen. Das folgende Bild stammt aus der Testumgebung.
+
+![3D-Secure-Simulator](https://images.ctfassets.net/di680may5c0k/3JWOSFhuzmWJimEEql71IJ/22ddc5930f884aad2c6c88f32beb7b1c/MicrosoftTeams-image__18_.png?w=390&h=279&q=50&fm=png)
+
+## Erforderliche Verbraucherinformationen
+
+<Warning>
+Damit Verbraucher im Checkout-Prozess Rechnungs- und Ratenzahlungen (Riverty und Ratepay-Rechnung) verwenden können, müssen wir die Verbraucherinformationen und die Adresse erhalten.
+</Warning>
+
+## Siehe auch
+
+- [Wallets](/wallets)
+- [Account to Account](/account-to-account-a2a)
+- [Kreditkarten](/credit-cards)
+- [Rechnungen & Ratenzahlungen](/invoices-and-installments)

@@ -1,0 +1,154 @@
+---
+title: "Express Buttons in Product Page"
+description: "Learn about Express Buttons in Product Page for Nexi Checkout."
+---
+
+## Express button
+
+### Express button
+
+You can place an express button for Applepay or Googlepay anywhere on your product page. The express button enables your customer to pay directly on the product page without going to the checkout. 
+
+![Express button.](https://images.ctfassets.net/di680may5c0k/7bITXtW7A4hf3ybGoAfYlR/4eb97016e56659ea0df198f66efebacb/Express_button..png)
+
+&nbsp; 
+
+### How does it work
+&nbsp;
+
+**Express** is a simplified, embeddable payment experience that relies on the same backend integration as Nexi Checkout.
+You can reuse your existing payment creation logic - the difference is only on the frontend, where you load and render the Express widget.
+
+By adding two lines in the frontend you can display the Express button anywhere you want on your product page. 
+
+We pass in the checkoutKey, language, paymentId, and the ID of the container where express should render. 
+
+### Limitation
+- Plug-ins: If you are using a plug-in, you cannot use express buttons
+- Subscription: Express buttons are not compatible for subscription
+
+### Backend integration
+
+Backend integration is similar to the regular Nexi Checkout embedded flow.
+
+* You create a payment the same way.
+* You update payment details via the same backend API.
+* No additional endpoints or configuration layers are needed.
+* integrationType should be set to 'Express'
+
+Express simply consumes the same `paymentId `.
+
+### Frontend integration
+
+1\. Load the SDK
+
+  Load the Easy SDK file exactly as you would for a standard checkout.
+  | Environment | JavaScript URL |
+  | ----------- | ---------------|
+  |	Test        | https://test.checkout.dibspayment.eu/express/sdk.js |
+  | Live        |	https://checkout.dibspayment.eu/express/sdk.js |
+
+&nbsp;
+
+2\. Initialize Nexi checkout
+
+  ```javascript
+  const easy = Easy({
+  checkoutKey: '&lt;YOUR_CHECKOUT_KEY&gt;',
+  language: "en-GB",
+  });
+  ```
+&nbsp;
+
+3\. Render the Express Widget
+
+```javascript
+const widget = easy.renderExpress({
+  paymentId: '&lt;YOUR_PAYMENT_ID&gt;',
+  containerId: '<container-div>'
+});
+```
+
+### __Parameters__
+
+| Parameter     | Description                                            |
+| ------------- | ------------------------------------------------------ |
+| `checkoutKey ` | Public key required to initialize the SDK.             |
+| `language `    | ISO language code (e.g., `en-GB `).                     |
+| `paymentId `   | The ID of the previously created payment.              |
+| `containerId ` | The ID of the DOM element where Express should render. |
+
+---
+&nbsp;
+
+### __Events__
+
+- `paymentcompleted `
+
+Triggered when the payment completes successfully.
+
+```javascript
+widget.on('paymentcompleted', (payload) => {
+  console.log('Payment completed:', payload);
+});
+```
+
+- `shippingaddresschange `
+
+Triggered when the user updates their shipping address in the Express widget.
+
+```javascript
+widget.on('shippingaddresschange', (payload) => {
+  console.log('Shipping address changed:', payload);
+});
+```
+
+The event handler receives a **payload object** with the following structure:
+
+```javascript
+{
+  shippingAddress: {
+    postalCode: string;
+    country: string; // A three-letter country code (ISO 3166-1)
+  };
+}
+```
+
+* `shippingAddress.postalCode ` – postal / ZIP code entered by the customer
+* `shippingAddress.country ` – three-letter country code (ISO 3166-1)
+
+&nbsp;
+
+### You should use this data to:
+
+&nbsp; 
+1. **Recalculate the cost** (e.g. shipping, taxes, surcharges) based on the new address.
+2. **Update the payment** by sending a request to your backend (which will call our API, same as for regular checkout).
+3. **Refresh the widget** to pull the latest payment details.
+
+&nbsp;
+A typical flow might look like this:
+
+```javascript
+widget.on('shippingaddresschange', async (payload) => {
+  const { shippingAddress } = payload;
+
+  // 1. Recalculate costs on your backend and call payment api
+
+  // 2. Pull the latest payment data from the backend and refresh the widget
+  widget.update();
+});
+```
+
+### Updating payment details
+
+Express supports backend-driven updates.
+
+1. Update the payment via the backend API (same endpoint as for regular Easy Checkout).
+2. Pull fresh data in the frontend:
+
+```javascript
+widget.update();
+```
+
+This reloads the latest payment state from your backend.

@@ -1,0 +1,93 @@
+---
+title: "Test Invoice & Installment Processing"
+description: "This guide describes how to test invoice and installment processing on your checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="gray">Coding: None</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+Before you start, you need a checkout page that uses the [Checkout test environment](/test-environment).
+</Warning>
+
+## How to test
+
+The Checkout page provides your customers with the option to pay by invoice. To test invoice processing on the checkout page, follow the steps below:
+
+## Riverty Nordic steps
+
+1. Navigate to your checkout page
+2. Select "Pay later"
+3. Add one of the **PINs** from the table below in the field named "Personal identification number".
+4. Enter the **Postal code** and **Address** associated with the PNO you selected.
+5. Enter an arbitrary **name** and **phone number**
+6. (Conditionally) If strong consumer authentication (SCA) is requested then you are able to use a test BankID using the instructions found [here for SEK](https://www.bankid.com/en/utvecklare/test/skaffa-testbankid/test-bankid-get) payments. Make sure to use one of the sample PNO found in the table below.
+
+<Warning>
+Use a small amount in order to avoid having to complete SCA for test purchases.
+</Warning>
+
+![Invoice payment](https://images.ctfassets.net/di680may5c0k/T32GMShoY3XkzrMTUI5W1/434d1ccea8403741210413576a179ecb/invoice.png?w=2092&h=1512&q=50&fm=png)
+
+## Sample invoice Nordic addresses
+
+The following addresses and sample personal identification numbers (PIN) can be used in the test environment when testing invoice payments:
+
+| PNO         | Postal code | Address   | Result
+|:-----------:|:--------:|:------------:|:------
+| 420913-1111 | 79021    | Vasavägen    | Success
+| 421101-1111 | 83162    | Centralvägen | Success
+| 440424-1111 | 14552    | Bruksgatan   | Reservation not approved
+
+## Riverty DACH steps
+
+1. Navigate to your checkout page
+2. Select "Pay later"
+3. Enter an arbitrary **email**
+4. Enter in the test data from either the positive or negative test case tables below: **postal code, country code, phone number, first name, last name, address, country, city and date of birth**
+5. Accept the terms
+6. Click on the **Pay** button
+
+<Warning>
+In order to have Riverty be shown with EUR in the demostore, you have to choose: *EasyInvoice, EasyInstallment, EasyCampaign* in the Payment Type Filtering payment setting. Read more about this from [here](/payment/#build-payment-settings). 
+You also need to toggle off *MerchantHandlesConsumerData*.
+
+Use a small amount in order to avoid having to complete SCA for test purchases.
+</Warning>
+
+## Sample invoice DACH addresses - positive test cases
+
+### Positive test cases
+| First name | Last name | Birthdate | Street name | House number | ZIP | Place | Different delivery address | Country | Shipping fee | Payment fee | Discount |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | No | DE | No | No | No |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | No | DE | No | No | Yes, flat-rate |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | No | DE | Yes | No | No |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Yes | DE | No | Yes | Yes, flat-rate |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | No | DE | Yes | No | Yes, percentage |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | No | DE | Yes | No | No |
+| Jane | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Yes | DE | No | No | Yes, percentage |
+| John | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | Yes | DE | No | No | Yes, flat-rate |
+
+## Sample invoice DACH addresses - negative test cases
+
+### Negative test cases
+| First name | Last name | Birthdate | Address | House number | ZIP | Place | Country | Description of rejection |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Reject | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | DE | The call is rejected. |
+| Underage | Doe | 11/1/2012 | Gütersloher Str. | 123 | 33415 | Verl | DE | The call is rejected because the customer is too young to make this purchase. |
+| 80 | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | DE | Payment-Method not allowed for this customer. |
+| NotOfficial | Doe | 11/1/1980 | Gütersloher Str. | 123 | 33415 | Verl | DE | The call is rejected due to incorrect billing address. |
+| John | Doe | 11/1/1980 | PackstationNotAllowed | 123 | 33415 | Verl | DE | The call is rejected because the customer provided the address of a package pickup station / automated package locker, and this is not allowed. |
+| John | Doe | 11/1/1980 | ShipToBilling | 123 | 33415 | Verl | DE | The call is rejected because the customer is not allowed to ship the package to an address different from their billing address |
+| Jane | Doe | 11/1/1980 | InvalidAddress | 123 | 33415 | Verl | DE | The call is rejected, because the provided address could not be verified by Riverty's systems as matching this customer. |
+| John | Doe | 11/1/1980 | AddressCorrection | 123 | 33415 | Verl | DE | The call is rejected because the provided address is incorrect or malformed, and the API returns the address that it believes to be correct for this customer. |
+
+## See also
+
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)

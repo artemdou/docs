@@ -1,0 +1,83 @@
+---
+title: "Swish"
+description: "Diese Anleitung beschreibt die Grundlagen der Verwendung von Swish über Checkout und gibt Ihnen die nötigen Anweisungen für eine reibungslose Implementierung."
+---
+
+## Bevor Sie beginnen
+
+<Info>
+Bevor Sie Swish aktivieren können, müssen Sie eine Swish-Vereinbarung mit Ihrer Hausbank abgeschlossen haben.
+</Info>
+
+## Übersicht
+
+Checkout verfügt über eine Integration mit SWISH, die es Verbrauchern ermöglicht, über ihre SWISH-Zahlungs-App zu bezahlen, indem sie ihre Telefonnummer im Checkout eingeben.
+
+Sobald der Verbraucher seine Telefonnummer eingegeben hat, kann er mit nur einem Klick im Checkout per Wisch in der SWISH-Zahlungs-App bezahlen.
+
+Swish ist eine mobile Zahlungs-App (digitales Wallet), mit der Nutzer Produkte und Dienstleistungen über ihr Bankkonto bezahlen können. Sie benötigen ein Swish-Konto mit einem schwedischen Bankkonto als Zahlungsquelle.
+
+Wenn Ihre Käufer Swish als Zahlungsmethode auf der Auswahlseite der Checkout-Zahlungen wählen, müssen sie ihre Telefonnummer eingeben. Sie erhalten dann eine Benachrichtigung in der Swish-App auf ihrem Mobiltelefon, in der sie ihre Zahlung direkt in der App bestätigen. Da Swish vollständig in die Checkout-Zahlungslösung integriert ist, werden sie nicht auf eine andere Seite weitergeleitet.
+
+Die zugrunde liegende Transaktion ist immer eine Banktransaktion.
+
+## Funktionalitäten
+
+### Funktionalitätstabelle Swish
+|  |  |
+| --- | --- |
+| Zahlungstyp | A2A |
+| Abonnements | ❌ |
+| Erstattungen | ✅ |
+| Teilerstattung | ✅ |
+| Bestellung aktualisieren | ✅ |
+| Zahlung stornieren | ❌ |
+| Direkte Einziehung | ✅ |
+| IPSP | ✅ |
+| Währungen | SEK |
+| Länder | SE |
+
+<Info>
+Mehr über die Zahlungsoperationen erfahren Sie [hier](/order-management/#build-payment-operations).
+</Info>
+
+## Aktivierung
+
+Um Swish als Zahlungsmethode zu aktivieren und zu Ihrem Checkout Portal hinzuzufügen, müssen Sie den Onboarding-Prozess abschließen.
+
+<Info>
+Wenn Sie bereits ein bestehendes Checkout-Portal-Konto haben, müssen Sie hierzu den [Support kontaktieren](https://www.nets.eu/payments/contact-us).
+</Info>
+
+
+
+## User Journey
+
+Der folgende Abschnitt beschreibt die User Journey eines Verbrauchers:
+
+1. Wenn Ihr Verbraucher Swish als Zahlungsmethode im Checkout wählt, wird er aufgefordert, Folgendes einzugeben:
+   -  Telefonnummer, die mit seinem Swish-Konto verknüpft ist
+2. Klick auf „Bezahlen".
+3. Von hier aus wird er zur Swish-App-Seite weitergeleitet.
+4. Zahlung genehmigen.
+5. Der Betrag wird sofort eingezogen.
+
+
+
+## Zahlungsablauf
+
+Um diese Transaktionen nachverfolgen zu können, sollten Sie den Webhook *payment.checkout.completed* konfigurieren (siehe [Abschnitt zu Webhooks](/track-events-using-webhooks)). Durch das Abonnieren dieses Webhooks erhalten Sie eine Benachrichtigung von Checkout, nachdem der Checkout-Prozess abgeschlossen ist.
+
+Wie aus der Funktionalitätstabelle hervorgeht, werden wiederkehrende Zahlungen (Abonnements) von Swish nicht unterstützt.
+
+Die genauen Bezeichnungen jedes Ereignisses sind in unserer [API-Referenz](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/) aufgeführt.
+
+Die Mittel aus einer Swish-Transaktion werden direkt auf Ihr Konto übertragen. Der Zwischenschritt, das Geld auf Ihr Checkout-Händlerkonto zu überweisen, entfällt. Dadurch wird die Zahlung schneller auf Ihr Konto übertragen.
+
+
+
+## Testen
+
+Sie können Swish-Zahlungen in der [Nexi Group-Testumgebung](/test-environment) testen.
+
+

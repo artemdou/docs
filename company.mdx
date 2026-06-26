@@ -1,0 +1,154 @@
+---
+title: "Company"
+description: "This guide describes the Checkout Portal component of Company."
+---
+
+## Overview
+
+This guide outlines the different sections within the *Company* component:
+
+- Account information
+- My invoices
+- Team
+- Checkout styler
+- Logo
+
+<Warning>
+For *Integration*, please read this guide [here](/access-your-integration-keys) on the integration keys.
+</Warning>
+
+## Account information
+
+The section *Account information* have different sections:
+
+- Company details
+- Agreements and bank account
+- Partner information
+
+You will also be able to see your unique *Merchant ID* here.
+
+## Company details
+
+This data outlines master data of the company such as the legal company name, business name, registration number and contact details.
+
+## Agreements and bank account
+
+Based on your agreement, this section will show which *currency* is chosen, including the *payment methods*, *agreement type* and *bank account details*.
+
+### Payout time
+For each payment method, you will be able to see the payout time by clicking on the *SEE DETAILS* button.
+
+### Change bank account details
+
+To update the bank account, you will need to:
+- Input the start date of the new bank account with year, month and date
+- IBAN
+- BIC/SWIFT
+
+Only users with the Admin role are able to request changes to your bank account details.
+After you have submitted the change for the bank account details, the next steps will be that Support will look into your request, and reach out if there is need for more information. 
+
+Usually, the requests take up to 5 days to complete, but you will receive a new email when the process has been finished.
+
+While we are still processing your request, the payouts will continue to go into the previous account. If you'd like to freeze the payouts to the old account, please reach out to our support team [here](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+
+When changing one bank account per currency, if that bank account is used for other currencies, that shared bank account will be changed for all currencies it's used.
+
+Once you have finalized this, you can click on the *CONTINUE* button. Lastly, a success window will be prompted letting you know that the request has been created and whenever it has been completed, you will be notified through an email.
+
+![Change bank account Portal](https://images.ctfassets.net/di680may5c0k/288EgGTEgiUmcr77fgA131/0795a3ed70094bac35d9cf3cfe1a3af7/ChangeBankAccountSuccess.png?w=2078&h=1219&q=50&fm=png)
+
+### Deposit
+
+You can read more about the deposit action and refunds from here.
+
+## Partner information
+
+An overview of your partner(s) will be shown including what permission rights they have via the API.
+
+For reconciliation reports, it could be for:
+- Payouts
+- Payout details
+
+For managning payments, it could be to:
+- Refund
+- Cancel
+- Create
+- Charge
+
+### Permission rights
+
+You can also update the permissions for a partner to take action on your behalf with either:
+- Edit rights where the partner is allowed to charge, refund and cancel payments
+- Read only rights
+
+You can also toggle on if you would like to receive notifications whenever your partner has logged into your acount.
+
+## My invoices
+
+Inside of *My invoices*, you will be able to see your invoices separated by year. 
+
+For each invoice, it will include the:
+- Date
+- Amount with currency
+- Option to download the invoice
+
+![My invoices](https://images.ctfassets.net/di680may5c0k/3KJPfImLWVGYyXBe6H9cSz/f168eeb3471eb77418ea4e16fcec345d/MyInvoicesView.png?w=2308&h=287&q=50&fm=png)
+
+## Team
+
+The *Team* component lets you view and add new users to your team.
+
+## Add user
+You can add a user to your team by entering their email address and assigning settings to the user with a role and language. Once you have completed inputting the needed settings, you can click on the *ADD USER* button.
+
+## Roles
+
+### Administrator
+Admin users have all permissions of Standard and Read only users, but can also invite and edit user permissions.
+
+### Standard
+In addition to Read only users, Standard users can also manage payments, including actions such as charge, refund and cancel payments.
+
+### Read Only
+Read only users have access to viewing payment and payout details, but cannot perform any actions, except exporting payout reports.
+
+### Read only with refund access
+This user type can refund payments in addition to viewing payment and payout details, and exporting payout reports.
+
+## Overview of users
+
+You can see the following information on the added user(s):
+
+- Name
+- Email
+- Telephone number
+- Last login
+- Last password update
+- Created
+- If the user can receive reports
+- Role
+- Status
+- Quick actions to send automamic daily payout reports
+
+## Checkout styler
+
+The *Checkout styler* component lets you test out how the checkout page could look like on both desktop and mobile. The following posibilities to change design includes:
+
+- Themes
+- Backgrounds
+- Outlines
+- Text & links
+- Payment button
+
+You can freely change and update for different styling purposes with colors, fonts and text style. You can save the design as a draft or publish it.
+
+<Info>
+Checkout offers a quick and simple contrast check (WCAG contrast quick-check) to ensure that your checkout is on pair with current accessibility requirements accessibility.
+</Info>
+
+![Publishing a design for the checkout](https://images.ctfassets.net/di680may5c0k/3xxQGFg8X4O8sNvlHnQc83/8371582a15996ab43f877067acee863d/CheckoutStylerSuccess.png?w=2320&h=953&q=50&fm=png)
+
+## See also
+
+- [Access your integration keys](/access-your-integration-keys)

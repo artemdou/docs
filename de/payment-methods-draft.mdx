@@ -1,0 +1,117 @@
+---
+title: "Zahlungsmethoden – Entwurf"
+description: "Dieser Artikel beschreibt die verschiedenen von Checkout unterstützten Zahlungsmethoden."
+---
+
+## Überblick
+
+Checkout unterstützt die folgenden Zahlungsmethoden:
+
+- **Karten:** [Visa](https://visa.com/), [Mastercard](https://www.mastercard.com/), [American Express](https://www.americanexpress.com/)
+- **Account-to-Account:** Checkout unterstützt SEPA-Lastschrift, SOFORT und Trustly
+- **Rechnung und Ratenzahlung:** ermöglicht Ihren Kunden, innerhalb von 30 Tagen zu bezahlen. Wir unterstützen After Pay und RatePay Rechnung. Mit AfterPay können Sie Ihren Kunden zudem ermöglichen, einen Kauf in mehrere Zahlungen aufzuteilen.
+- **Wallets:** wie [Swish](https://www.swish.nu) (Schweden), [Vipps](https://www.vipps.no) (Norwegen) und [MobilePay](https://www.mobilepay.dk/) (Dänemark). [Apple Pay](/apple-pay), [Google Pay](/google-pay) und [PayPal](https://www.paypal.com/) werden ebenfalls unterstützt.
+
+<Warning>
+Bitte beachten Sie, dass bestimmte Zahlungsmethoden wie Swish, Vipps und RatePay in den Konfigurationen Ihres Checkout-Kontos aktiviert sein müssen. Welche dieser Methoden in Ihrem Zahlungsfenster erscheinen, aus denen Ihre Kunden wählen können, hängt von Ihren Land- und Währungseinstellungen ab.
+</Warning>
+
+## Karte
+
+Checkout unterstützt Visa- und Mastercard-Zahlungen (sowie Dankort in Dänemark). Eine Kartenzahlung wird in zwei Schritten abgewickelt: **Reservierung** und **Belastung**.
+
+Die Reservierung erfolgt am Ende eines erfolgreichen Checkout-Flows. Wir empfehlen, eine Kartenzahlung beim Versand der Ware zu belasten.
+
+<Info>
+Die Zahlungsreservierung ist bis zu 30 Tage gültig. Sie müssen die Zahlung innerhalb dieses Zeitraums belasten.
+</Info>
+
+Zum Schutz von Kartenzahlungen erfordert Checkout für alle in Europa ausgestellten Karten stets [3-D Secure](https://en.wikipedia.org/wiki/3-D_Secure).
+
+## Rechnung
+
+Checkout bietet Ihren Kunden Rechnungszahlungen über [arvato AfterPay](https://finance.arvato.com/en/solutions/payment-financing-services/online-payment/buy-now-pay-later2/) an. Eine Rechnungszahlung wird in zwei Schritten abgeschlossen: **Reservierung** und **Belastung**.
+
+Der Reservierungszeitraum für eine Rechnungszahlung beträgt 30 Tage. Um die Mittel der Zahlung zu erhalten, müssen Sie die Belastung innerhalb dieses Zeitraums vornehmen. Sie können nach Ablauf der 30 Tage versuchen, die Zahlung zu belasten, es gibt jedoch keine Garantie, dass die Belastung zu diesem Zeitpunkt akzeptiert wird.
+
+## Digitale Wallets
+
+Vipps basiert auf Kartentransaktionen, bitte lesen Sie die obigen Informationen zu Kartenzahlungen.
+
+Da MobilePay-, Swish- und Vipps-Zahlungen in einer App abgewickelt werden, kehren Verbraucher, die auf einem mobilen Gerät einkaufen, nach der Bestätigung der Zahlung in der App möglicherweise nicht zu Ihrem Webshop und zu Checkout zurück. Um die korrekte Aktualisierung des Zahlungsstatus von Checkout sicherzustellen, empfehlen wir die Verwendung von Webhooks.
+
+Verwenden Sie den Webhook `payment.checkout.completed `, der im [Webhooks-Abschnitt](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#webhooks) dokumentiert ist. Mit diesem Webhook erhalten Sie eine Benachrichtigung von Checkout, sobald der Checkout-Prozess abgeschlossen wurde.
+
+## Land und Währung
+
+Zusätzlich zu den Zahlungsmethoden, die Sie in den Konfigurationen Ihres Checkout-Kontos aktiviert haben, können auch die Land- und Währungseinstellungen bestimmen, welche dieser Zahlungsmethoden für Ihre Kunden verfügbar sind.
+
+Während Karten (Visa, Mastercard, Maestro, Amex) und PayPal weltweit (in allen Ländern und Währungen) unterstützt werden, werden andere Zahlungsmethoden (Vipps, Swish, MobilePay u. a.) nur in bestimmten Ländern unterstützt.
+
+Daher bestimmen sowohl die Eigenschaft [`countryCode `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-countrycode) des __checkout-Objekts__ als auch der Parameter [`currency `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order) des __order-Objekts__, welche der in Ihrem Checkout-Konto aktivierten Zahlungsmethoden auf der Zahlungsauswahlseite (Zahlungsfenster) Ihres Webshops angezeigt werden.
+
+<Info>
+Wenn die Eigenschaft `countryCode ` gesetzt ist, profitieren Ihre Kunden von einem optimierten Checkout-Erlebnis:
+- Es werden nur die länderspezifischen Zahlungsmethoden angezeigt.
+- Bestimmte Formularfelder können entsprechend den Länderformaten vorausgefüllt werden.
+- Länderspezifische Geschäftsbedingungen.
+</Info>
+
+### currency-Eigenschaft
+
+Die [currency-Eigenschaft](https://nets-devs.isotop.sehttps://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-currency) des `order `-Objekts ist beim Aufruf der __Create payment__-Methode immer erforderlich.
+
+### countryCode-Eigenschaft
+
+Der Request-Body des `checkout `-Objekts der __Create payment__-Methode enthält die [countryCode-Eigenschaft](https://nets-devs.isotop.sehttps://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-checkout-countrycode).
+
+Der Parameter `countryCode ` ist optional. Der Standardwert ist `null `. Wenn ein Wert gesetzt ist (zum Beispiel `NOR `), werden auf der Zahlungsauswahlseite nur Zahlungsmethoden angezeigt, die sowohl das Land als auch die Währung unterstützen.
+
+&nbsp;
+&nbsp;
+&nbsp;
+### Beziehung Währung – Zahlungsmethode pro Land
+
+&nbsp; 
+&nbsp; 
+
+#### Norwegen 
+
+| Zahlungsmethode    | NOK    | SEK     | DKK     | EUR    |
+| ---------- | ---------- | ---------- | ---------- | ---------- |
+| AfterPay       | &#9989;       | &#9989; | &#9989;     | &#10060;       |
+| Vipps      |  &#9989;    | &#10060;     | &#10060;      | &#10060;      |
+
+&nbsp;
+&nbsp;
+
+#### Schweden 
+
+| Zahlungsmethode    | NOK    | SEK     | DKK     | EUR    |
+| ---------- | ---------- | ---------- | ---------- | ---------- |
+| AfterPay       | &#9989;       | &#9989; | &#9989;     | &#10060;       |
+| Swish     |  &#10060;    |  &#9989;  | &#10060;      | &#10060;  |    
+
+&nbsp;
+&nbsp;
+
+#### Dänemark 
+
+| Zahlungsmethode    | NOK    | SEK     | DKK     | EUR    |
+| ---------- | ---------- | ---------- | ---------- | ---------- |
+| AfterPay       | &#9989;       | &#9989; | &#9989;     | &#10060;       |
+| Dankort    |  &#10060;    |  &#10060; | &#9989;     | &#10060;      |
+| MobilePay    |  &#10060;    | &#10060;  | &#9989;     | &#10060;       |  
+
+&nbsp;
+&nbsp;
+
+#### Deutschland / Österreich 
+
+| Zahlungsmethode    | NOK    | SEK     | DKK     | EUR    |
+| ---------- | ---------- | ---------- | ---------- | ---------- |
+| RatePay Rechnung       | &#10060;        | &#10060;  |&#10060;      | &#9989;       |
+| RatePay SEPA Lastschrift   |  &#10060;    |  &#10060; | &#10060;      | &#9989;      |
+
+&nbsp;
+&nbsp;

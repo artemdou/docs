@@ -1,0 +1,39 @@
+---
+title: "Auf Ihre Integrationsschlüssel zugreifen"
+description: "Um Texte in Fettdruck testen und verwenden zu können, benötigen Sie eine Reihe von Integrationsschlüsseln (API-Schlüssel), um Ihren Webshop zu identifizieren und die Integration sicher zu gestalten."
+---
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie die Anleitung:
+- Wie Sie ein [Testkonto für Checkout erstellen](/create-a-checkout-portal-account)..
+</Warning>
+
+Voraussetzungen:
+
+- Shopware-Version: Kompatibel mit Shopware 6.6.x und höher.
+
+Hinweis: Für Shopware-Versionen 6.4.x und 6.5.x (z. B. 6.4.1, 6.5.2) verwenden Sie bitte Shopware 1.x.
+
+Wenn Sie Shopware 1.x verwenden, müssen Sie Shopware 2.x parallel betreiben, bis die Bestellungen abgeschlossen sind.
+
+## Integrationsschlüssel
+
+Ihre eindeutigen Integrationsschlüssel machen Ihre Integration mit Checkout sicher. Es gibt zwei Sätze von Integrationsschlüsseln: einen für die **Test**-Umgebung und einen für die **Live**-Umgebung.
+
+Für jede Umgebung werden **zwei Schlüssel** bereitgestellt:
+- Der **Secret API Key**, den Ihr Backend zur Authentifizierung an Checkout sendet. Der private API-Schlüssel sollte geheim gehalten und niemals aus Ihrem Frontend-Code übergeben werden.
+- Der **Checkout Key**, der eine öffentliche Kennung für Ihren Webshop ist. Dieser Schlüssel kann von Ihrem Frontend als öffentliche Kennung an Checkout übergeben werden.
+
+## Schlüssel kopieren
+
+Um auf Ihre Schlüssel zuzugreifen, navigieren Sie im Checkout Portal zu [Company Integration](https://portal.dibspayment.eu/integration). Kopieren Sie je nach verwendeter Umgebung den entsprechenden Satz Integrationsschlüssel, wie im folgenden Screenshot gezeigt:
+
+![Checkout Portal Company Integration](https://images.ctfassets.net/di680may5c0k/2DnKj0AHd6p5efsG9pOxVE/e96e044a4793aa18e3e916f09beb3688/Screenshot_2021-04-14_at_16.44.35.png?w=2470&h=914&q=50&fm=png)
+
+Jeder Schlüssel beginnt mit einem Präfix, das seinen Typ kennzeichnet, zum Beispiel `live-secret-key-`. Das Präfix hilft Ihnen, die Schlüssel zu unterscheiden, kann aber bei der Übergabe der Schlüssel an Checkout weggelassen werden. Alle Checkout-APIs akzeptieren Schlüssel mit oder ohne Präfix.
+
+## Siehe auch
+
+- [Konto erstellen](/create-a-checkout-portal-account)

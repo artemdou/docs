@@ -1,0 +1,380 @@
+---
+title: "Apple Pay"
+description: "This guide outlines the basics of using Apple Pay via Checkout and gives you instructions needed for a fluent implementation."
+---
+
+IntegrationType: HostedPaymentPage, EmbeddedPaymentPage
+
+## Overview
+
+Apple Pay with Nexi Checkout
+
+Fast, secure Apple Pay payments in your checkout, with a setup that scales from hosted to fully embedded experiences.
+
+Apple Pay lets customers complete payments in seconds using their Apple devices, without manually entering card details.
+
+### Key benefits:
+
+- One-tap checkout with Face ID or Touch ID
+- No card numbers exposed or stored on your site
+- Optimized for mobile and desktop
+- Higher conversion on supported devices
+
+### Availability & requirements:
+
+Apple Pay is displayed automatically only when all conditions are met:
+
+- For [embedded checkout](/apple-pay/#build-embedded-payment-page): domain verification
+- Customer uses a supported Apple device
+- Browser supports Apple Pay (Safari recommended)
+- Apple Pay is enabled on your Nexi account
+- At least one supported card brand is active
+- Apple Pay will not appear if any requirement is missing, this is expected behavior.
+- Apple Pay is only supported on iOS (16 or later) operating systems. Supported browsers are: Safari, Firefox, Chrome, and Edge.
+- Apple Pay cannot be activated without Visa/Mastercard/Dankort being present on your account.
+
+## Functionality table
+
+### Apple Pay functions
+
+| Name | Description |
+| --- | --- |
+| Payment type | Wallet |
+| Subscriptions | ✅ |
+| Bin filter | ✅ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ❌ |
+| Cancel payment | ✅ |
+| Reservation & charge | ✅ |
+| CPSP | ✅ |
+| IPSP | ❌ |
+| Supported card schemes | Visa, Mastercard and Dankort |
+| Currencies | All currencies for Visa and Mastercard. Only DKK for Dankort. |
+| Countries | All |
+
+## Activation
+
+To activate Apple Pay as a payment method and to add it to your [**Easy checkout**](/account-portal), you need to complete the onboarding journey.
+
+Login to the [**Easy admin portal**](https://portal.dibspayment.eu/).
+
+Navigate to **ADD-ON** on left-hand side menu and ensure the your account is set to **LIVE** (top-right on screen).
+
+Click on **ENABLE APPLE PAY** to activate the the Apple Pay option.
+
+![2026-02-05 15 16 02-Applepay](https://images.ctfassets.net/di680may5c0k/7kGaoXUCFBRyvRaDvlHWpK/94095d27889e72c0c0924d072b5248f6/2026-02-05_15_16_02-Applepay.png)
+
+## Recurring payment 
+
+Requirements for Apple Pay subscriptions to works is that you have Apple Pay activated on your account as a payment method. If you use embedded checkout you need to do domain verification. Consumers can cancel their subscription via the Apple subscriptions. When this happens Nets will get information, and when you try to chargethe subscription you will get an error. You need to contact the consumer update theircard details or to get information on why they have cancelled the subscription
+
+### Important information
+
+**Embedded checkout** - Domain verification is needed. See more information in the [Embedded checkout section](/apple-pay/#build-embedded-payment-page)
+
+**Hosted checkout** - No further steps are needed. Apple pay is now available in your checkout
+
+## Embedded payment page
+
+### Why is domain registration important?
+
+Apple requires domain verification before you can accept Apple Pay payments on your website. This guide explains the process of registering your domains with Apple Pay and maintaining your domain verification status.
+
+The registration verifies you control the domain and enables the display of the Apple pay button on your checkout.
+
+### Important things to remember
+
+Before you register the domain there are a few things you need to be aware of:
+
+- All pages that include Apple Pay must be served over HTTPS. Your domain must have a valid SSL certificate.
+- If your domain is protected from public access, you need to open this for Apple pay. Domains cannot be behind a proxy or redirect.
+- Apple expects to find the file in a very specific location on your domain. Create a location on your domain with the exact URL with no redirects
+- In general, the apple-developer-merchantid-domain-association file should be in the ".well-known" folder and the public root path, so that it is accessible via the link:
+  _https://\[DOMAIN\_NAME\]/.well-known/apple-developer-merchantid-domain-association._
+- It makes a difference if you save the domain file with ” www” or without “www”. Make sure you use the same consistency of the domain in the placeholder and for the shop.
+- If you have a '/' at the end of your domain, you should place you file on one without it.
+- Use url **without** slash at the end.
+  Example _checkout.dibspayment.eu/.well-known/apple-developer-merchantid-domain-association_
+
+### Error codes
+
+If you experience an error during the verification you can see more below
+
+### How to guide: Apple pay domain verification
+
+- If Apple pay is not activated on your merchant, follow the guide above to [activate](/apple-pay/#build-activation) it.
+- If you already have Apple pay enabled follow the guide below. Make sure to read the "Important to remember" part on domain verification before doing the verification
+
+### How to do domain verification for embedded checkout in Easy portal
+
+1. Write your domain name into the domain name box. Ensure that you write the correct domain name.
+2. Click on **DOWNLOAD** to get your domain-verification file.
+3. Upload the domain-verification file to your website at the URL at step 2 in the screenshot below.
+4. Click on **VERIFY DOMAIN**.
+
+<Check>
+  You have now successfully enabled Apple Pay as Embedded Payment Page in your checkout.
+</Check>
+
+![ApplePay for embeded checkout](https://images.ctfassets.net/di680may5c0k/5pB9VShFP2eldzPKoYg8Tl/5854de5450df2862cb1363e06b1132ed/ApplePay_for_embeded_checkout.png?w=833&h=698&q=50&fm=png)
+
+### Error codes for domain verification
+
+The following error codes with description can help you to understand if you have not successfully enabled the Apple Pay for embedded checkout.
+
+## Error codes
+
+| Error code | Explanation |
+| --- | --- |
+| Not found | We couldn’t find your store URL. The domain may be typed incorrectly, or the verification file is missing. Make sure your verification file is placed exactly here: https://\[domain\]/.well-known/apple-developer-merchantid-domain-association. |
+| FileContentIsEmpty | The verification file is there but completely empty. Upload the correct Apple verification file again and ensure it contains content. |
+| FileContentShouldNotContainHtml | The verification file contains HTML, which Apple does not accept. Upload the file exactly as you downloaded it from Apple — don’t open, edit, or format it before uploading. |
+| FileContentShouldNotContainHtml | The verification file contains HTML, which Apple does not accept. Upload the file exactly as you downloaded it from Apple — don’t open, edit, or format it before uploading. |
+| FileContentIsNotCorrect | The file content doesn’t match what Apple expects. You may have uploaded the wrong file. Download a fresh verification file from Apple and upload it to the .well-known folder. |
+| FileContentTypeIsNotCorrect | The server is returning the file with the wrong content type. It must be served as text/plain. Adjust your server settings so the file is delivered with MIME type text/plain. |
+| ResponseTypeIsNotOk | Your server isn’t responding correctly when accessing the verification file. The URL might be wrong, the file might be inaccessible, or the server may be returning errors like NotFound or BadRequest. Fix those issues and ensure the file contains valid Apple verification content. |
+| BadRequest | The domain exists, but the server returned a “Bad Request” response. Usually this happens when the domain URL is typed incorrectly or the verification file isn’t placed in the correct folder. Verify both and try again. |
+| NoSuchHostIsKnown | TThe domain cannot be reached at all. Confirm the domain name is correct and active. If the domain is new, DNS may still be updating — wait for DNS propagation and try again. |
+
+## Plugins configuration overview
+
+To enable embedded checkout for Apple Pay, you need to prepare your plugin environment and a place for the **domain-verification** file for the transaction.
+
+In general, the **apple-developer-merchantid-domain-association** file should be in the ".well-known" folder and the public root path, so that it is accessible via the link: **https://\[DOMAIN\_NAME\]/.well-known/apple-developer-merchantid-domain-association**.
+
+<Info>
+  Usually, there are **public** folders that contain the root path.
+</Info>
+
+**Nginx** and **Apache** should be structured to read this file without the extension from the "_.well-known_" folder.
+
+Depending on the server and platform, the configuration may differ.
+
+Here are some example configurations for Nginx and Apache servers that we may need to add to the configuration files:
+
+### Nginx
+
+Usually in `/etc/nginx/{shop}.conf `
+
+```text Nginx code example
+# .htaccess, .DS_Store, .htpasswd, etc., but keep .well-known available
+location ~* /\.(?!well-known\/) {
+deny all;
+}
+# files in .well-known should be served as plain text.
+location ~* ^/\.well-known\/ {
+default_type text/plain;
+}
+```
+
+To find out more, please follow this [reference link](https://devdocs.prestashop-project.org/8/scale/webservers/nginx/#allow-usage-of-well-known-directory-lets-encrypt--pki-validation-apple-pay).
+
+### Apache
+
+`.htaccess ` in public folder
+
+```text Apache code example
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule
+```
+
+<Warning>
+  It is important to **remember that these are generic examples**, and everyone can have their configuration so the best way is to customize the solution on the above requirements.
+</Warning>
+
+Below are examples of the given platforms and explanations on how to modify the basic configuration.
+
+## WooCommerce
+
+<Info>
+  Read more about our WooCommerce plugin [here](/checkout-for-woocommerce).
+</Info>
+
+**Step 1:**
+
+Download your **domain-verification** file from the **Checkout portal**.
+
+**Step 2:**
+
+Upload the **domain-verification** file to your website using an FTP or SFTP client:
+
+- Navigate to the WordPress root directory.
+- In this folder, you should find directories “wp-admin”, “wp-content” and “wp-includes” et al.
+- Create a new directory with the following name: “.well-known”.
+- Paste the domain-verification file inside the “.well-known” directory.
+
+**Step 3:**
+
+Make sure your server is configured properly so the file is hosted and available at the following path: **https://\[YOUR\_DOMAIN\]/.well-known/apple-developer-merchantid-domain-association**.
+
+See the example [configuration documented by Nexi](/apple-pay/#build-plugins-configuration-overview).
+
+## Shopware 6.5
+
+<Info>
+  Read more about our Shopware 6.5 plugin [here](/shopware/checkout-for-shopware-2x-shopware-plugin-2x).
+</Info>
+
+**Step 1:**
+
+Download your domain-verification file from the **Checkout portal**.
+
+**Step 2:**
+
+Upload the domain-verification file to your website using an FTP or SFTP client:
+
+- Navigate to the Shopware root directory.
+- Go to the “/public” folder.
+- Create a new directory with the following name: “.well-known”.
+- Paste the domain-verification file inside the “.well-known” directory.
+
+**Step 3:**
+
+Make sure your server is configured properly so the file is hosted and available at the following path: **https://\[YOUR\_DOMAIN\]/.well-known/apple-developer-merchantid-domain-association**.
+
+See the example [configuration documented by Nexi](/apple-pay/#build-plugins-configuration-overview).
+
+## Magento 2
+
+<Info>
+  Read more about our Magento 2 plugin [here](/magento/checkout-for-magento-magento-2).
+</Info>
+
+**Step 1:**
+
+Download your domain-verification file from the **Checkout portal**.
+
+**Step 2:**
+
+Upload the domain-verification file to your website using an FTP or SFTP client:
+
+- Navigate to the Magento 2 root directory.
+- Go to the “/pub” folder.
+- Create a new directory with the following name: “.well-known”.
+- Paste the domain-verification file inside the “.well-known” directory.
+
+**Step 3:**
+
+Make sure your server is configured properly so the file is hosted and available at the following path: **https://\[YOUR\_DOMAIN\]/.well-known/apple-developer-merchantid-domain-association**.
+
+See the example [configuration documented by Nexi](/apple-pay/#build-plugins-configuration-overview).
+
+## PrestaShop 1.7
+
+<Info>
+  Read more about our PrestaShop 1.7 plugin [here](/checkout-for-prestashop-prestashop).
+</Info>
+
+**Step 1:**
+
+Download your domain-verification file from the **Checkout portal**.
+
+**Step 2:**
+
+Upload the domain-verification file to your website using an FTP or SFTP client:
+
+- Navigate to the PrestaShop root directory.
+- Create a new directory with the following name: “.well-known”.
+- Paste the domain-verification file inside the “.well-known” directory.
+
+**Step 3:**
+
+Make sure your server is configured properly so the file is hosted and available at the following path (see PrestaShop documentation [here](https://devdocs.prestashop-project.org/8/scale/webservers/nginx/#allow-usage-of-well-known-directory-lets-encrypt--pki-validation-apple-pay)): **https://\[YOUR\_DOMAIN\]/.well-known/apple-developer-merchantid-domain-association**.
+
+## Opencart 3.0
+
+Upload the domain-verification file to your website using an FTP or SFTP client:
+
+- Navigate to upload directory
+- Create a new directory with the following name: "_.well-known_"
+- Paste the domain-verification file inside the "_.well-known_" directory
+
+Additional steps if you are running Nginx:
+
+- To make access for that directory, make sure that your nginx config approves the directories with a **dot**. There might be a case where you need to approve that in your nginx config file.
+
+<Info>
+  Read more about our OpenCart 3.0 plugin [here](https://developer.nexigroup.com/nexi-checkout/en-EU/docs/checkout-for-opencart/checkout-for-opencart-opencart-30/).
+</Info>
+
+## Oxid 6.5
+
+**Step 1:**
+
+Download your domain-verification file from the **Checkout portal**.
+
+**Step 2:**
+
+Upload the domain-verification file to your website using an FTP or SFTP client:
+
+- Navigate to the Oxid root directory.
+- Go to the “/source” folder.
+- Create a new directory with the following name: “.well-known”.
+- Paste the domain-verification file inside the “.well-known” directory.
+
+**Step 3:**
+
+Make sure your server is configured properly so the file is hosted and available at the following path: **https://\[YOUR\_DOMAIN\]/.well-known/apple-developer-merchantid-domain-association**.
+
+## JTL-Shop 5
+
+<Info>
+  Read more about our JTL-Shop 5 plugin [here](/checkout-for-jtl).
+</Info>
+
+**Step 1:**
+
+Download your **domain-verification** file from the **Checkout portal**.
+
+**Step 2:**
+
+Upload the **domain-verification** file to your website using an FTP or SFTP client:
+
+- Navigate to the JTL-Shop root directory.
+- In this folder, you should find directories “admin”, “plugins”, “templates”, and more.
+- Create a new directory with the following name: “.well-known”.
+- Paste the domain-verification file inside the “.well-known” directory.
+
+**Step 3:**
+
+Make sure your server is configured properly so the file is hosted and available at the following path: **https://\[YOUR\_DOMAIN\]/.well-known/apple-developer-merchantid-domain-association**.
+
+<Info>
+  See an example about [configuration documented by Nexi](/apple-pay/#build-plugins-configuration-overview).
+</Info>
+
+## User journey
+
+This following section will describe the user journey and payment flow for your customer:
+
+1. When your consumer chooses Apple Pay as a payment method in the checkout, they will prompted to Apple Pay window.
+2. Customer can pay with
+
+- "**Pay with Touch ID**" or
+- "**Double click to pay**" depending on what system they are using.
+
+## Payment flow
+
+<Warning>
+  If you use `paymentMethodsConfiguration ` parameter to only show the payment method(s) that are preferred for the specific payment, Apple Pay can also be selected.\
+  Apple Pay is available only on Apple devices.
+</Warning>
+
+Apple Pay is defined as a Wallet and can be displayed alone and together with other payment methods. It is not recommended to show Apple Pay alone if you do not detect the device used in the webshop before you are going  to show the payment options.
+
+If Apple Pay is used alone on devices other than iOS/iPadOS/MacOS, there will be no visible payment methods and it is naturally a poor user experience. Apple Pay can be combined with other Wallet payment methods or together with cards.
+
+Recommended usage of the  `paymentMethodsConfiguration ` parameter for Apple Pay.
+
+If you have more than one wallet configured, you can use:
+
+`paymentMethodsConfiguration:[{"name":"Wallet"}]`
+
+![Checkout Apple pay wallet](https://images.ctfassets.net/di680may5c0k/3A9DFBrjWF6T267ZP5CXDo/77273daedc9eeaab94838ed2d9f4fd1d/Easy_Apple_pay_wallet.png?w=323&h=700&q=50&fm=png)
+
+If Apple Pay is used as the only wallet, you should include card as well:
+
+`paymentMethodsConfiguration:[{"name":"Card"},{"name":"ApplePay"}]`
+
+![Checkout Apple pay wallets](https://images.ctfassets.net/di680may5c0k/3IZftFy9BhPBEtMPpz9xVP/91c590e24ad08247cfb3f98a2ee3be7a/Easy_Apple_pay_wallets.png?w=362&h=700&q=50&fm=png)

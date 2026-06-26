@@ -1,0 +1,175 @@
+---
+title: "Checkout für PrestaShop"
+description: "Diese Anleitung beschreibt, wie Sie das Checkout-Webshop-Modul für PrestaShop installieren, konfigurieren und verwenden."
+---
+
+Kompatibilität: PrestaShop 1.7+ bis 9.0
+
+Aktuellste Version: 1.1.12
+
+Unterstützt ab: 1.7+ bis 9.0
+
+Getestet ab: 1.7+ bis 9.0
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie die Anleitung:
+- So [erstellen Sie ein Testkonto für Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+## Übersicht
+
+Unser PrestaShop-Plugin ist die perfekte Erweiterung, mit der Sie das Potenzial von Checkout für Ihren PrestaShop-Shop voll ausschöpfen können. Checkout unterstützt die meisten gängigen Zahlungsmethoden.
+
+<Info>
+Nachfolgend sehen Sie alle von Checkout angebotenen Zahlungsmethoden. Diese Liste bezieht sich auf alle Märkte.
+
+Je nach Land oder Region kann die Liste variieren. Wenn Sie bei einer bestimmten Zahlungsmethode unsicher sind, ob diese in Ihrem Land oder Ihrer Region verfügbar ist, kontaktieren Sie bitte den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) für weitere Informationen.
+</Info>
+
+![Checkout-Plugin – Prestashop](https://images.ctfassets.net/di680may5c0k/54JCRmRafJI4toB11i3pcJ/7fdb64e3b6dab73bdf3ceac8acdeff58/plugin_prestashop.jpg?w=1576&h=566&fl=progressive&q=50&fm=jpg)
+
+<Warning>
+Die Apple Pay-Konfiguration für das PrestaShop-Plugin wird auf der Seite [Apple Pay Zahlungsmethode](/apple-pay/#build-prestashop-17) beschrieben.
+</Warning>
+
+### Shop-Funktionen
+
+- Der schnelle Checkout mit "Remember me"-Funktion.
+- Eingebetteter Checkout für ein optimiertes Benutzererlebnis. Nutzer werden nicht außerhalb von PrestaShop umgeleitet.
+- Eine intelligente Mischung von Zahlungsmethoden für alle Vorlieben.
+- Mehrere Checkout-Sprachen und Währungen für den Verkauf im In- und Ausland.
+- Vollständig synchronisierte Zahlungsstatus auf der Admin-Bestellseite mit dem Checkout Portal.
+- Intuitive Auftragsverwaltung mit synchronisierten Charges und Refunds direkt aus der Admin-Bestelldetailseite.
+- Eigene Webhook-Events für Zahlungsstatus in Echtzeit.
+- Eigene integrierte Debugging-Funktionen.
+
+Der folgende Screenshot zeigt eine vom Checkout-Modul bereitgestellte Checkout-Seite (Embedded und Nexi Group Payment als eine Zahlungsoption):
+
+![Checkout PrestaShop 1.7](https://images.ctfassets.net/di680may5c0k/echOAETvxTqwCtfdrtPRx/ed9affe808c465d3f5dc902558fde5c2/ps17paymentscreen.JPG?w=563&h=562&fl=progressive&q=50&fm=jpg)
+
+### Funktionen im Administrationsbereich
+
+- Schnelle Einrichtung und flexible Konfiguration.
+- Intuitive Auftragsverwaltung mit synchronisierten Charges und Refunds.
+- Kompatibilität mit Rabatten, Steuer (MwSt.) und Versandoptionen.
+- Kompatibel mit dem [Multistore-Feature von PrestaShop](http://doc.prestashop.com/display/PS17/Managing+Multiple+Shops) zur Verwaltung mehrerer Shops.
+- Benachrichtigung über die neueste Plugin-Version mit Kompatibilitäts-, GitHub- und Tech-Site-Link.
+
+## Installation
+
+### Modul installieren
+
+Folgen Sie dem nachstehenden Schritt, um das Checkout-Modul in PrestaShop zu installieren.
+
+1.	Laden Sie das Plugin über den oben genannten GitHub-Link herunter.
+2.	Entpacken Sie die ZIP-Datei.
+3.	Benennen Sie den entpackten Ordnernamen in __netseasy__ um.
+4.	Erstellen Sie ein ZIP-Archiv des __netseasy__-Ordners.
+5.	Melden Sie sich im __Admin Panel__ an.
+6.	Klicken Sie auf den Reiter __Module > Modulmanager__ und dann auf „__Modul hochladen__".
+7.	Ziehen Sie das ZIP-Archiv Ihres __netseasy__-Ordners hierher oder wählen Sie es von Ihrem Rechner aus.
+8.	Klicken Sie nach Abschluss der Installation auf „__Konfigurieren__".
+9.	Stellen Sie Ihre API-Zugangsdaten und die Konfiguration ein.
+
+## Konfiguration
+
+Nach der Installation des Moduls müssen Sie einige grundlegende Konfigurationen vornehmen:
+
+1. Navigieren Sie in PrestaShop zu **Improve > Module > Modulmanager**.
+2. Wählen Sie als Kategorie „Zahlung" oder suchen Sie __netseasy__ im Suchfeld und klicken Sie auf „Konfigurieren".
+3. Füllen Sie die erforderlichen Felder aus, wie z. B. Testmodus, Integrationsschlüssel (Secret-Keys und Checkout-Keys), Terms-URL und Merchant Terms-URL.
+
+<Info>
+Die **Integrationsschlüssel** finden Sie im [Checkout Portal](https://portal.dibspayment.eu/). Weitere Informationen finden Sie auf den folgenden Seiten:
+
+- [Auf Ihre Integrationsschlüssel zugreifen](/access-your-integration-keys)
+</Info>
+
+Der folgende Screenshot zeigt die Konfigurationsseite im Administrationsbereich des Moduls:
+
+![Checkout PrestaShop Konfiguration 1](https://images.ctfassets.net/di680may5c0k/4pLsor8oS0itgCdeD244Sl/7428eb576a764cfea9528b4d9a770094/Nets_Easy_PrestaShop_configuration_1.png?w=936&h=678&q=50&fm=png)
+
+Der folgende Screenshot zeigt die Benachrichtigung über die neueste Plugin-Version auf der Konfigurationsseite im Administrationsbereich des Moduls:
+
+![Prestashop 1.7 Benachrichtigung über die neueste Plugin-Version](https://images.ctfassets.net/di680may5c0k/7F5ZKPYqNrC86OhrACWWhh/f981e286f0fde38ab09bc76c7a4f457e/p17Notification.jpg?w=1345&h=658&fl=progressive&q=50&fm=jpg)
+
+Die folgende Tabelle listet alle Einstellungen auf, die Sie im Administrationsbereich für das Checkout-Modul konfigurieren können:
+
+| Konfigurationseinstellung | Beschreibung
+| ---------------------------|------------ 
+| Testmodus | Wählen Sie den Testmodus, wenn Sie Testkäufe in der [Testumgebung](/test-environment) durchführen möchten. Es gibt [Beispielkartennummern](/test-card-processing/#build-sample-credit-cards) und [Rechnungsadressen](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) zu Testzwecken. Der Live-Modus erfordert ein genehmigtes Konto.
+| Merchant ID | Ihre Händler-ID aus dem [Checkout Portal](https://portal.dibspayment.eu/integration)
+| Merchant E-Mail-ID | Ihre E-Mail-Adresse als Händler.
+| Name des Zahlungs-Gateways | Zeigt den Namen des Zahlungs-Gateways als Zahlungsoption auf der Checkout-Seite an.
+| Test Checkout Key | Ihr Checkout-Key für Testkäufe aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Secret Key | Ihr Secret-Key für Testkäufe aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Production Checkout Key | Ihr Live-Checkout-Key aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Production Secret Key | Ihr Live-Secret-Key aus dem [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Integrationstyp | **Embedded** oder **Redirect**. Ein eingebetteter Checkout fügt das Zahlungsfenster direkt auf der Checkout-Seite ein. Redirect (Nexi Group Hosted) lädt eine neue Zahlungsseite.
+| Terms-URL | Wählt die Seite mit Ihren AGB aus.
+| Merchant Terms-URL | Wählt die Seite mit den Merchant Terms and Conditions aus.
+| Auto-Capture | Ermöglicht es Ihnen, eine Zahlung sofort nach Aufgabe der Bestellung einzuziehen. Wichtig! Die Einziehung einer Zahlung vor Versand der Bestellung kann je nach Gesetzgebung in Ihrem Land Beschränkungen unterliegen. Missbrauch kann zur Kündigung Ihres Checkout-Kontos führen.
+| Admin-Debug-Modus | Zeigt den Inhalt der API-Anfragen auf der Bestelldetailseite an. Aktivieren Sie diese Funktion optional und kopieren/senden Sie den Debug-Inhalt an unseren Support, falls Sie Probleme mit Ihren Transaktionen haben.
+| Frontend-Debug-Modus | Zeigt den Inhalt der API-Anfragen auf der Checkout-Seite an. Aktivieren Sie diese Funktion optional und kopieren/senden Sie den Debug-Inhalt an unseren Support, falls Sie Probleme mit Ihren Transaktionen haben.
+| Webhook-URL | Dies ist die benutzerdefinierte Webhook-Event-Listener-URL, die Zahlungsstatus für Ihre mit Checkout bezahlten Bestellungen verarbeitet. Webhooks können nur verwendet werden, wenn Sie über ein SSL-Zertifikat verfügen.
+| Webhook Auth | Setzen Sie Ihr eigenes Authentifizierungspasswort für eingehende Webhook-Eventdaten, um die Sicherheit zu erhöhen.
+
+<Check>
+Sie haben nun das Checkout-Webshop-Modul installiert und konfiguriert. Bei weiteren Fragen lesen Sie bitte den Abschnitt zur Fehlerbehebung unten oder wenden Sie sich an unseren [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Auftragsverwaltung
+
+Es ist möglich, Bestellungen direkt im PrestaShop-Administrationsbereich zu verwalten:
+
+1. Navigieren Sie in PrestaShop zu **SELL > Bestellungen**.
+2. Klicken Sie auf eine Bestellzeile, um die Bestelldetails aufzurufen.
+3. Wählen Sie die gewünschte Aktion. Klicken Sie auf **Charge All** oder auf den **Charge**-Button für eine Teileinziehung. Klicken Sie auf **Refund All** oder auf den **Refund**-Button für eine Teilrückerstattung. Klicken Sie auf **Cancel**, um die Zahlung zu stornieren. Das Checkout-Plugin synchronisiert sich automatisch. Der Zahlungsstatus wird auch im [Checkout Portal](https://portal.dibspayment.eu) aktualisiert.
+
+<Info>
+Alle von der Nexi Group durchgeführten Transaktionen sind im [Checkout Portal](https://portal.dibspayment.eu/) zugänglich.
+</Info>
+
+Der folgende Screenshot zeigt die Bestellliste im PrestaShop-Administrationsbereich:
+
+![Bestellaktionen PrestaShop 1.7](https://images.ctfassets.net/di680may5c0k/4lzOT0wMCFRPdcb3w9LLbq/11cc3f656f65a1c5954f38d9934221ab/ps17orderdetail.JPG?w=785&h=514&fl=progressive&q=50&fm=jpg)
+
+## Fehlerbehebung
+
+Nachfolgend finden Sie einige der häufigsten Konfigurationsfehler, deren Ursachen und Schritte zu deren Behebung.
+
+### Checkout-Zahlungs-Plugin ist nicht als Zahlungsmethode sichtbar
+
+- Wechseln Sie vorübergehend zum Standard-Template von PrestaShop. Benutzerdefinierte Templates erfordern möglicherweise zusätzliche Anpassungen für eine korrekte Anzeige. Wenden Sie sich an Ihren Webdesigner oder Entwickler.
+
+### Nexi Group Zahlungsfenster ist leer
+
+- Stellen Sie sicher, dass Ihre Integrationsschlüssel in den Nexi Group App-Einstellungen korrekt sind und keine zusätzlichen Leerzeichen enthalten.
+- Deaktivieren Sie vorübergehend Drittanbieter-Plugins, die die Funktionalität der App beeinträchtigen könnten.
+- Prüfen Sie, ob es vorübergehende technische Inkonsistenzen gibt: https://easy-status.developers.nets.eu/
+
+### Zahlungen im Live-Modus funktionieren nicht
+- Stellen Sie sicher, dass Sie über ein genehmigtes Live-Checkout-Konto für die Produktion verfügen.
+- Stellen Sie sicher, dass Ihr Live-Checkout-Konto für Zahlungen in der gewählten Währung freigegeben ist.
+- Stellen Sie sicher, dass die Zahlungsmethodendaten korrekt sind und durch Ihren Checkout-Vertrag unterstützt werden.
+
+## Go-Live-Checkliste
+
+Weitere Informationen finden Sie im Abschnitt [Go-Live-Checkliste](/go-live-checklist).
+
+<Columns cols={2}>
+  <Card title="Download">
+  </Card>
+  <Card title="Quellcode">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Konto erstellen](/create-a-checkout-portal-account)
+- [Testumgebung](/test-environment)
+- [Testen der Kartenverarbeitung](/test-card-processing)
+- [Testen der Rechnungs- und Ratenzahlungsverarbeitung](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

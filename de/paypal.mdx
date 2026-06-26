@@ -1,0 +1,62 @@
+---
+title: "PayPal"
+description: "Diese Anleitung beschreibt die Grundlagen der Nutzung von PayPal über Checkout und gibt Ihnen die für eine reibungslose Implementierung erforderlichen Anweisungen."
+---
+
+## Bevor Sie beginnen
+
+<Info>
+Für die Annahme von PayPal ist ein zusätzlicher Vertrag erforderlich. Bitte wenden Sie sich an unseren Kundenservice, um diesen Prozess zu starten.
+</Info>
+
+## Übersicht
+
+Checkout verfügt über eine Integration mit PayPal, die es Ihren Kunden ermöglicht, über ihr PayPal-Konto zu bezahlen.
+
+Zahlungen mit PayPal werden mit der ausgewählten Karte abgewickelt, die der Kunde mit seinem PayPal-Konto verknüpft hat. Die Autorisierungszeiträume können Sie dieser Tabelle [hier](/payment-methods/#build-authorization-times-for-charge-cancel-and-refund) entnehmen.
+
+## Funktionalitäten
+
+### Funktionstabelle PayPal
+|  |  |
+| --- | --- |
+| Zahlungsart | Wallet |
+| Abonnements | ❌ |
+| Rückerstattungen | ✅ |
+| Teilrückerstattung | ✅ |
+| Bestellung aktualisieren | ✅ |
+| Zahlung stornieren | ✅ |
+| Reservierung & Belastung | ✅ |
+| IPSP | ✅ |
+| Währungen | Alle |
+| Länder | Alle |
+
+<Info>
+Mehr über die Zahlungsvorgänge erfahren Sie [hier](/order-management/#build-payment-operations).
+</Info>
+
+## Aktivierung
+
+Um PayPal als Zahlungsmethode zu aktivieren und Ihrem Checkout Portal hinzuzufügen, müssen Sie den Onboarding-Prozess abschließen.
+
+<Info>
+Wenn Sie bereits ein bestehendes Checkout Portal-Konto haben, müssen Sie hierfür [den Support kontaktieren](https://www.nets.eu/payments/contact-us).
+</Info>
+
+
+
+## Customer Journey & Zahlungsablauf
+
+Der folgende Abschnitt beschreibt die Customer Journey und den Zahlungsablauf für einen Kunden:
+
+1. Wenn Ihr Kunde PayPal als Zahlungsmethode im Checkout auswählt, wird er aufgefordert:
+   - die allgemeinen Geschäftsbedingungen zu akzeptieren
+2. Auf "Bezahlen" klicken.
+3. Anschließend wird er in einem Pop-up-Fenster zur PayPal-Seite weitergeleitet.
+4. Sich mit seinen Zugangsdaten anmelden.
+6. Die Zahlung im Pop-up-Fenster bestätigen.
+7. Anschließend wird er zurück zum Checkout weitergeleitet.
+
+## Testen
+
+PayPal-Testinformationen finden Sie hier: [Wallet-Verarbeitung testen](https://draft.developers.netsdev.eu/test-wallet-processing "Test wallet processing")

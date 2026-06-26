@@ -1,0 +1,406 @@
+---
+title: "Manage Subscriptions"
+description: "This guide is for developers who want to charge, verify, and update subscription payments programmatically using the Payment API."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Complexity: Medium</Badge>
+  <Badge color="blue">Coding: Yes (Backend)</Badge>
+  <Badge color="blue">Platform: PHP, Node</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+  This guide assumes that you have followed and implemented the guides:
+
+  - [Integrate Checkout on your website](/web-integration)
+  - [Support subscriptions](/support-subscriptions) (on the checkout page)
+</Warning>
+
+## Overview
+
+Once you have a checkout page that can handle subscriptions, it is time to implement functionality on your backend to manage the subscriptions:
+
+- **Charge subscriptions**: You can charge one or multiple subscriptions at once. Charging a subscription is an asynchronous operation. You create a new bulk charge operation and then retrieve the status of the operation at a later stage.
+- **Verify subscriptions**: Subscriptions become invalid over time. For example, payment cards expire or could be reported stolen. You can verify your subscriptions before charging so that your customers have time to update their subscriptions.
+- **Update invalid subscriptions**: Reach out to the customers who have invalid subscriptions so that they can update the subscription with new payment details.
+
+<Warning>
+  It is not permitted to create subscriptions with low amount (like 1.00 EUR) just to register a card with Checkout. Instead, [create a payment with unscheduled subscription object amount=0 to verify the card](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-unscheduledsubscription).
+
+  If the card is valid, you will be able to query for the [token (unscheduled subscription ID) and use it for future charges](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get).
+
+  This is the compliant way to register a card without charging the customer and get a token back. Low-value amount transactions (1.00 EUR / SEK / DKK /etc.) that are not captured or cancelled may be declined or generate fines from Visa or MasterCard.
+</Warning>
+
+### Payment methods supporting subscriptions
+
+| Name | Type | Supported |  |
+| --- | --- | --- | --- |
+| SEPA Direct Debit | A2A | ❌ |  |
+| Swish | A2A | ❌ |  |
+| Trustly | A2A | ❌ |  |
+| American Express | Cards | ✅ |  |
+| VISA & MasterCard | Cards | ✅ |  |
+| Maestro | Cards | ❌ |  |
+| Dankort | Cards | ✅ |  |
+| AfterPay-Riverty | Invoice/Installments/campaigns | ❌ |  |
+| Ratepay | Invoice/Installments | ❌ |  |
+| MobilePay | Wallet | ❌ |  |
+| PayPal | Wallet | ❌ |  |
+| Vipps | Wallet | ❌ |  |
+| [Apple pay](https://app.mintlify.com/nexigroup/nexigroup/editor/main/~/bf9c8e50-7272-426e-8d5f-b7368ea8bad2) | Wallet | Wallet | ✅ |
+
+You can find more in-depth information, including countries, currencies, testing, functionality of payment operations, etc. in the relevant linked sections.
+
+<Steps>
+  <Step title="Retrieve subscriptions details">
+    Before you can charge or verify a subscription, you first need to obtain the identifier of the subscription. You can get the subscription identifier from Checkout Portal or the Payment API. The guide [Support subscriptions](/support-subscriptions) describes how to retrieve subscription details, including the `subscriptionId `, so it will not be repeated here. Please see [Step 5: Retrieve subscription using the Payment API](/support-subscriptions/#build-step-5-retrieve-subscription-using-the-payment-api) for more details.
+  </Step>
+  <Step title="Charge a subscription">
+    When a new subscription payment has been created and you have retrieved the `subscriptionId `, you can initiate new payments associated with the subscription. The only limiting factors are the **time** and **interval** constraints that were specified when creating the subscription. Apart from that, you are free to create arbitrary payments with completely different order items and amounts.
+
+    When charging a subscription, you need to provide a full order that specifies what you are charging your customer for. Use the [Bulk charge subscriptions](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-post) method to charge a subscription.
+
+    > info If you want to get notified for successful subscription charges, you should listen to [_payment.charge.created.v2_](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#charge-created). If you want to get informed about failed subscription charge attempts, you should listen to [_payment.reservation.failed_](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#reservation-failed).
+
+    Here is an example:
+
+    ### Charge subscription
+
+    <CodeGroup>
+
+    ```php charge-subscriptions.php
+    <?php
+    
+    $secretKey = "<YOUR_SECRET_API_KEY>";
+    
+    $payload = file_get_contents('payload.json');
+    assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+    
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/subscriptions/charges');
+    
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: ' . $secretKey));                                                
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    echo("HTTP code: " . $http_code . PHP_EOL);
+    $json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+    echo $json_pretty . PHP_EOL;
+    ```
+
+    ```javascript charge-subscriptions.js
+    const http = require("https");
+    const fs = require('fs');
+    
+    const payload = fs.readFileSync('payload.json'); // Replace payload
+    const secretKey = "<YOUR_SECRET_KEY>";           // Replace key
+    
+    const options = {
+      "method": "POST",
+      "hostname": "test.api.dibspayment.eu",
+      "port": null,
+      "path": "/v1/subscriptions/charges",
+      "headers": {
+        "content-type": "application/json",
+        "Authorization": secretKey
+      }
+    };
+    
+    const req = http.request(options, function (res) {
+      const chunks = [];
+    
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+    
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        console.log(body.toString());
+      });
+    });
+    
+    req.write(payload);
+    req.end();
+    ```
+
+    </CodeGroup>
+
+    <Info>
+      Remember to replace `&lt;YOUR_SECRET_API_KEY&gt;` with your [secret key](/access-your-integration-keys/#build-integration-keys).
+    </Info>
+
+    The payload is typically created dynamically by your backend. But if you just want to try it out, you can use the following hard-coded request body that charges for a single item. Remember to replace `&lt;SUBSCRIPTION_ID&gt;` with a valid subscription identifier.
+
+    ```json payload.json
+    {
+        "externalBulkChargeId": "1001",
+        "subscriptions": [
+            {
+                "subscriptionId": "<SUBSCRIPTION_ID>",
+                "order": {
+                    "items": [
+                        {
+                            "reference": "230-1",
+                            "name": "Silver plan",
+                            "quantity": 1,
+                            "unit": "quantity",
+                            "unitPrice": 30000,
+                            "taxRate": 2500,
+                            "taxAmount": 7500,
+                            "netTotalAmount": 30000,
+                            "grossTotalAmount": 37500
+                        }
+                    ],
+                    "amount": 37500,
+                    "currency": "SEK",
+                    "reference": "Monthly subscription"
+                }
+            }
+        ]
+    }
+    ```
+
+    At the very top of the request body, a property called `externalBulkChargeId ` is specified. This identifier should be specified by you and should be a unique string per bulk charge operation you create. If you for some reason need to send the same bulk charge request again, because of a failing network or other reason, you should provide the same `externalBulkChargeId ` so that your customers are not being charged multiple times. See also the the section [_Using external identifiers to enable retries_](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#using-external-identifiers-to-enable-retries) in the API reference.
+
+    It's common to charge all active subscriptions regularly on specific dates, for example the last day in the month. In those cases, it is convenient to be able to charge multiple subscriptions at once.
+
+    > If you want to get notified for successful subscription charges you should listen to `<payment.charge.created>`. If you want to get informed about failed subscription charge attempts, you should listen to `<payment.reservation.failed>`
+    >
+    > Remember to replace `&lt;YOUR_SECRET_API_KEY&gt;` with your [secret key](/access-your-integration-keys/#build-integration-keys).
+  </Step>
+  <Step title="Charge multiple subscriptions">
+    It is possible to charge multiple subscriptions in bulk. This is useful if you offer your customer a subscription service where all customers are charged at the same time, for example the first day of the month.
+
+    In a single API call, you can charge an arbitrary amount of subscriptions. The subscription identifiers are typically saved on your side so that you can compose charge requests of all your subscriptions.
+
+    > **Important:** Please note that for bulk charges on subscriptions, a request can run a maximum limit of 20.000 without webhooks.
+    >
+    > **Recommendation**: In case a bulk charge has more than 20.000, it is recommended to divide it up and to run the calls with more time in-between such as 5 minutes per call.
+
+    Here is an example of a payload which charges two active subscriptions. Remember to replace `&lt;SUBSCRIPTION_ID_1&gt;` and `&lt;SUBSCIRIPTION_ID_2&gt;` with actual subscription identifiers before posting the request.
+
+    ```json payload.json
+    {
+        "externalBulkChargeId": "1002",
+         "notifications": {
+            "webhooks": [ ]
+         }
+        "subscriptions": [
+            {
+                "subscriptionId": "<SUBSCRIPTION_ID_1>",
+                "order": {
+                    "items": [
+                        {
+                            "reference": "230-1",
+                            "name": "Silver plan",
+                            "quantity": 1,
+                            "unit": "quantity",
+                            "unitPrice": 30000,
+                            "taxRate": 2500,
+                            "taxAmount": 7500,
+                            "netTotalAmount": 30000,
+                            "grossTotalAmount": 37500
+                        }
+                    ],
+                    "amount": 37500,
+                    "currency": "SEK",
+                    "reference": "Monthly subscription 1"
+                }
+            },
+            {
+                "subscriptionId": "<SUBSCRIPTION_ID_2>",
+                "order": {
+                    "items": [
+                        {
+                            "reference": "230-1",
+                            "name": "Silver plan",
+                            "quantity": 1,
+                            "unit": "quantity",
+                            "unitPrice": 30000,
+                            "taxRate": 2500,
+                            "taxAmount": 7500,
+                            "netTotalAmount": 30000,
+                            "grossTotalAmount": 37500
+                        }
+                    ],
+                    "amount": 37500,
+                    "currency": "SEK",
+                    "reference": "Monthly subscription 2"
+                }
+            }
+        ]
+    }
+    ```
+
+    The example also demonstrates that it is possible to add an array of `webhooks ` to the request so that you can track the events triggered by the bulk charge operation. You can find more information about the [`notifications `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-post-body-notifications) property in the API reference.
+
+    > info Each subscription you try to charge will generate a new payment object and therefore also trigger a new sequence of webhook events. For example, if you charge 10 subscriptions in a bulk request, there will also be 10 [`payment.charge.created.v2`](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#charge-created) events triggered.
+
+    If the charge request was sucessful, a 202 HTTP status code is returned with a new bulk identifier:
+
+    ```json Bulk charge subscriptions (response)
+    {
+        "bulkId": "d6c11ab596184414bef9adf20936e583"
+    }
+    ```
+
+    A successful response does not imply that all of the subscriptions have been  charged successfully. However, you can use the `bulkId `, returned in the response body, to retrieve details about a bulk charge operation, as shown in the following step.
+  </Step>
+  <Step title="Retrieve bulk charge details">
+    When you perform a bulk charge operation, subscriptions might fail for various reasons, for example:
+
+    - Not enough funds on the card, which makes the bank reject the reservation. In this case you can inform your customer about the situation and try to do a new charge.
+    - The card has become invalid because it has expired, has been reported stolen, etc. In this case you need to update the subscription.
+
+    To retrieve the status of a bulk charge operation, you can use the method [Retrieve bulk charges](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-bulkid-get).
+
+    The response is paginated since a lot of subscriptions are potentially being processed. You have two options when specifying the range of charges you want to retrieve:
+
+    1. Use `skip ` and `take `.
+    2. Use `pageNumber ` and `pageSize `.
+
+    In the sample code below, `skip ` and `take ` is used to specify that the first 10 subscriptions should be retrieved:
+
+    ### Retrieve bulk charges
+
+    <CodeGroup>
+
+    ```php get-bulk-charges.php
+    <?php
+    
+    $secretKey = "<YOUR_SECRET_API_KEY>";
+    $bulkId = "<BULK_ID>";
+    
+    $skip = 0;
+    $take = 10;
+    
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/subscriptions/charges/' . $bulkId . '?skip=' . $skip . '&take=' . $take);
+    
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+      'Content-Type: application/json',
+      'Accept: application/json',
+      'Authorization: ' . $secretKey
+    ));
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+    echo ("HTTP code: " . $http_code . PHP_EOL);
+    $json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+    echo $json_pretty . PHP_EOL;
+    ```
+
+    ```javascript get-bulk-charges.js
+    const http = require("https");
+    
+    const bulkId = "<BULK_ID>";            // Replace bulk id
+    const secretKey = "<YOUR_SECRET_KEY>"; // Replace key
+    const skip = 0;
+    const take = 10;
+    
+    const options = {
+      "method": "GET",
+      "hostname": "test.api.dibspayment.eu",
+      "port": null,
+      "path": "/v1/subscriptions/charges/" + bulkId + "?skip=" + skip + "&take=" + take,
+      "headers": {
+        "Authorization": secretKey
+      }
+    };
+    
+    const req = http.request(options, function (res) {
+      const chunks = [];
+      console.log('HTTP code:', res.statusCode);
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+    
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        try {
+          console.log(JSON.stringify(JSON.parse(body), null, 2));
+        } catch (e) {
+          console.error("Failed to parse body: " + e);
+          console.error(body.toString());
+        }
+      });
+    });
+    
+    req.end();
+    ```
+
+    </CodeGroup>
+
+    The response from the server indicates that all subscriptions were returned (`"more": false `) and that all charges have completed successfully:
+
+    ```json Retrieve bulk charges (response)
+    {
+        "page": [
+            {
+                "subscriptionId": "6946cde8d7a049dc89145224088b0df9",
+                "paymentId": "0040000060a76916859b391024b1f487",
+                "chargeId": "011f000060a76916859b391024b1f488",
+                "status": "Succeeded"
+            },
+            {
+                "subscriptionId": "a058888d2be048cfb4f1f8e77794ed6f",
+                "paymentId": "00ec000060a76916859b391024b1f485",
+                "chargeId": "0165000060a76916859b391024b1f486",
+                "status": "Succeeded"
+            }
+        ],
+        "more": false,
+        "status": "Done"
+    }
+    ```
+  </Step>
+  <Step title="Verify subscriptions (optional)">
+    Failed charges are common when managing subscriptions. Instead of catching invalid subscriptions after a bulk charge operation, you can instead verify subscriptions one or a few days before you plan to do the charge. If you find any invalid subscriptions, you then have the chance to contact your customer in advance.
+
+    The process of verifying subscriptions is similar to charging subscriptions:
+
+    1. Create a bulk verification using the [Verify subscriptions](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-verifications-post) method (HTTP POST).
+    2. Retrieve the verification details using the [Retrieve verifications](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-verifications-bulkid-get) method (HTTP GET). This method also supports pagination as demonstrated in [Step 4: Retrieve bulk charge details](#build-step-4-retrieve-bulk-charge-details).
+    3. Please note for this step that it involves the account verification with either the soft or hard declines. You can read more about it from [here](/reason-codes/#build-descriptions-of-reason-codes).
+  </Step>
+  <Step title="Update invalid subscription">
+    If you are no longer able to charge a subscription because the payment card has become invalid, you need to **update the subscription**. This requires that your customer supplies new payment details to Nexi Group using your checkout page. Here are the steps required for updating a subscription:
+
+    1. Inform your customer that the subscription needs to be renewed (using email, mobile notification or similar). Provide a link to your site with the subscription identifier appended to the URL. For example, `https://&lt;YOUR_WEBSITE&gt;/update?subscriptionId=62a30d49…`.
+    2. Your customer clicks on the URL that points to your website.
+    3. The backend of your website uses the [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) method and attaches the [`subscriptionId `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-subscription-subscriptionid) to the [`subscription `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-subscription) object of the request body. This request tells Checkout that you want to update a subscription instead of creating a new one.
+    4. Direct your customer to your checkout page (embedded or hosted) in the same way you do when [creating a new subscription](/support-subscriptions). Since you are updating a subscription, Checkout will present a form to update the payment details.
+    5. Your customer provides new payment details to Checkout.
+
+    This entire flow is visualized in the image below:
+
+    ![Update subscription flow](https://images.ctfassets.net/di680may5c0k/3gPOk7spBsLRRYjDxet1YT/97e9d6ffff1a01fb1d524314606e2a22/Update_subscription.png?w=2062&h=790&q=50&fm=png)
+
+    The following screen shot shows a checkout form when it is presented to the customer when updating a subscription.
+
+    ![Update subscription form](https://images.ctfassets.net/di680may5c0k/4y1cO7tI8ss9r7aboQoBmW/536d0602826375c6e03c0b2009e428e1/Update_subscription_form.png?w=3251&h=1998&q=50&fm=png)
+
+    > tada **Congratulations!**
+    >
+    > You now know how to:
+    >
+    > - **Charge** a single subscription or multiple subscriptions in bulk
+    > - **Verify** subscriptions
+    > - **Update** invalid subscriptions
+  </Step>
+</Steps>
+
+## See also
+
+- [Support subscriptions](/support-subscriptions)
+- [Set up direct integration](/web-integration)
+- [Manage subscription retries](/manage-subscription-retries)

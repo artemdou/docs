@@ -1,0 +1,58 @@
+---
+title: "Eine Belastung erstatten"
+description: "Erfahren Sie mehr über die Erstattung einer Belastung für Nexi Checkout."
+---
+
+## Eine Belastung erstatten
+
+Wenn Sie eine Zahlung erstatten müssen, die belastet wurde, können Sie die Methode [Refund charge](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-charges-chargeid-refunds-post) verwenden. Genauer gesagt wird eine bestimmte Belastung erstattet, weshalb Sie für eine Rückerstattung immer eine Belastungs-ID benötigen. Eine Belastung kann **vollständig erstattet** oder **teilweise erstattet** werden.
+
+Eine vollständige Rückerstattung erfordert nur die Angabe des `amount`. Eine Teilrückerstattung erfordert eine vollständige Bestellangabe. Hier folgt ein Beispiel für eine Teilrückerstattung:
+
+```php Refund charge (PHP)
+<?php
+
+$secretKey = "<YOUR_SECRET_API_KEY>";
+$chargeId = "<CHARGE_ID>";
+
+$payload = file_get_contents('payload.json');
+assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/charges/' . $chargeId . '/refunds');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: ' . $secretKey));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+echo("HTTP code: " . $http_code . PHP_EOL);
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty . PHP_EOL;
+```
+
+```json payload.json
+{
+    "amount": 2750,
+    "orderItems": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 1,
+        "unit": "pcs",
+        "unitPrice": 2500,
+        "netTotalAmount": 2500,
+        "grossTotalAmount": 2750
+      }
+    ]
+}
+```
+
+Sie können die Rückerstattungsereignisse über die folgenden Webhook-Ereignisse verfolgen:
+- [`payment.refund.initiated `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#refund-initiated)
+- [`payment.refund.completed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#refund-completed)
+- [`payment.refund.failed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#refund-failed)
+
+Nachdem eine Rückerstattung initiiert, aber noch nicht abgeschlossen oder fehlgeschlagen ist, befindet sie sich in einem **schwebenden Zustand**. Es ist möglich, [eine schwebende Rückerstattung zu stornieren](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-pending-refunds-refundid-cancel-post). Eine Rückerstattung kann aus verschiedenen Gründen schwebend sein. Weitere Informationen finden Sie im Leitfaden [Zahlungen verwalten](/manage-payments/#build-refunds).

@@ -1,0 +1,106 @@
+---
+title: "Payment"
+description: "This guide outline the Payment functionalities within the Settings section of the Checkout demo store."
+---
+
+## Overview
+
+In this section, the __Payment__ section inside of __Settings__ of the Checkout demo store will be outlined.
+
+This includes description for each of the possible payment settings, use case examples and how to set up for these use cases for testing purposes.
+
+The payment section includes the 21 components such as Currency,	BIN filtering	and Unscheduled subscription. Find the complete list of the components below here:
+
+|  |  |  |
+| --- | --- | --- |
+| Currency | BIN filtering | Unscheduled subscription |
+| Webhooks | Payment type filtering | Button texts |
+| Public device | Invoice fee | Display order details |
+| Hosted | Consumer data | MerchantHandlesConsumerData |
+| Consumer type | Reference | Direct charge |
+| Shipping countries | MyReference | Split billing and shipping address |
+| Country code | Subscription | Cancel URL |
+
+![Settings payment view demo store](https://images.ctfassets.net/di680may5c0k/1mDMdb5MZ2urxJSX5jgp8g/a81afd06553c95e9f2fb14899e2cee16/image.png?w=1429&h=862&q=50&fm=png)
+
+Whenever a component has been toggled, in the right-hand side of the __Checkout options__, it will show the updated information in *JSON* format. 
+
+You can generate and load the payment settings you have enabled and toggled into a load settings URL where you can see payment settings in an overview table.
+
+You can also reset all the toggles off by clicking on the __reset payment settings__ button.
+
+![json demo store example](https://images.ctfassets.net/di680may5c0k/6KrnU1bVDLQTQdGjy8jZqD/391eb987664b30750a6b14707928f776/image.png?w=460&h=706&q=50&fm=png)
+
+## Payment settings
+
+Inside of the payment section of the Checkout demo store, it is possible to toggle various functionalities that can be tailored to your business and use case and therefore suitable for your consumers choice of options when navigating the checkout section of Checkout.
+
+Each of the possible functionalities and toggles within the payment section will update the checkout options panel according to your adjustments. From here, you can copy and paste the auto-generated `json ` output.
+
+### Table of the payment section components of the demo store
+| Name | Functionality | Example |
+| --- | --- | --- |
+| Button texts | By default, the text displayed on the checkout button for the consumer to pay is set to " pay" with the total amount. However, with this component, you can change the button's text if needed. | A. If you are selling magazines, it would make sense to name the button subscribe. B. If you are a travel agency, it would make sense to name the button book or reserve. |
+| Cancel URL | If the consumer chooses to cancel a payment, you have the option to specify the URL that the consumer can fall back to. | If the consumer cancels the payment, A. the URL can refer the consumer back to a page about special offers B. go to a new page to ask for feedback about why not completing the checkout process or C. refer back to the homepage. |
+| Consumer data | If you already have the data on the consumer then Nexi Checkout can do a lookup to simplify the checkout experience. This means that the fields will be pre-filled and also potentially payment method details. | If you collect the consumer information in the webshop and passing the information to Checkout will simplify the checkout flow for the consumer. |
+| Consumer type | Sets which consumer type is available in the checkout window. B2C is meant for a private consumer and B2B is meant for a business consumer . |  |
+| Country code | Sets the country code on the payment. | If you are doing business with EUR then you can enable this setting in order to ensure optimal local checkout experience. |
+| Currency | Depending on what payment methods you have enabled for your Checkout account, a varierty of curency options will be displayed. | You always have to set a currency in order to show the right local checkout options. If you are adding EUR, you should also set the country code as seen from above. |
+| Direct charge | Allows for direct charges. | If you are selling some services that you will receive online, you can use this direct charge solution instead of reserve and charge. This will simplify the process. |
+| Display order details | If you are using the hosted solution for your webshop, you can enable this setting in order to display merchant name and order details. |  |
+| Hosted | You can either have the solution as hosted or embedded. The hosted solution will redirect you to a new page for checkout whilst the embedded will keep the consumer in the same checkout page. |  |
+| Invoice fee | If you want to have the consumer be chargeable for the cost of the payment then you can enable this as an administration fee. |  |
+| MerchantHandlesConsumerData | When you have this component toggled on, it allows for you to handle all the consumer's information. This means that Nexi Checkout will only show the payment methods in the checkout. If the consumer data is not passed to Nexi Checkout then we will not show invoices and installment options. | If you have an user profile solution on your webshop to allow consumers to log in then: A. MerchantHandlesConsumerData can toggled on, B. If MerchantHandlesConsumerData is toggled off then it will only show cards and wallets in the checkout. |
+| MyReference | If you would like to have your own reference connected to the payment then you can set this free text field. | This can be used in your own ERP system for accounting purposes. |
+| Payment type filtering | This will enable you to configure the payment methods when loading the checkout. | If you enable this setting, you can for instance add the logic to show only invoices and installments if the consumer is buying something at a higher cost. This will simplify the checkout process for the consumer. |
+| Public device | This can be used if the checkout solution only will be used on a public device. | If you have any public available devices at your physical shop then you can enable this setting. |
+| Reference | This is a free text field that can be used on the order level. | If you would like |
+| Shipping countries | This will allow you to choose which countries that you can ship to. | If you are doing business in one country, you are not allowed to ship the order to other countries |
+| Split billing and shipping address | This enables you to have different billing and shipping address. | If the consumer is buying flowers to their spouse then the consumer can pay for the order but then have it delivered to another address. |
+| Subscription | This will enable you to offer recurring payments in a fixed frequency. | If you sell magazines then you can enable this setting to charge the consumer on a monthly basis. |
+| Unscheduled subscription | This will enable you to offer recurring payments without a fixed amount and frequency. | If you are offering parking, the consumers can store their card data in order to be charged whenever they are using your services. |
+| Webhooks | This will enable you to get notifications for the activities of the payment. | You can check the available webhooks from Webhook section. |
+
+## Use cases
+
+The following will outline a few examples of use cases for the *Payment* section:
+
+### Use case #1
+You have a webshop offering items to be sold in NOK currency.
+
+### Use case #1
+| Use case # | Setup |
+| --- | --- |
+| Use case #1 | Go into the Payment section Find the currency component From the currency drop-down menu, choose NOK. |
+
+![Payment settings use case #1](https://images.ctfassets.net/di680may5c0k/5P0kTcswpft5Fx95fbcI0c/ff727a6331beaf1dfe1788ca556979cc/image.png?w=1434&h=862&q=50&fm=png)
+
+![Payment settings JSON for use case #1](https://images.ctfassets.net/di680may5c0k/3GuHEYHhaA4N7dvFbnKfc5/0764fd8555196e3c2a34cfb2ea5e1012/image.png?w=472&h=765&q=50&fm=png)
+
+### Use case #2
+You have a webshop and you need to enable webhooks of *payment.created, payment.charge.created, and payment.checkout.completed* because you want to receive the notifications about the activities on the payments.
+
+### Use case #2
+| Use case # | Setup |
+| --- | --- |
+| Use case #2 | Go into the Payment section. Find the webhooks component. From the webhooks drop-down menu, choose the necessary webhooks: payment.created, payment.charge.created, and payment.checkout.completed |
+
+![Settings payment use case #2 demo store](https://images.ctfassets.net/di680may5c0k/64YX2U1Sdv14KCdbYjyRMA/ca848135cf3125b1e1e240194a763dd5/image.png?w=1435&h=819&q=50&fm=png)
+
+![Payment settings JSON for use case #2](https://images.ctfassets.net/di680may5c0k/2ki0s9bKEZwhvJlNXjoTA9/d4dd20718148ec02871c8e69dfb2992f/image.png?w=466&h=691&q=50&fm=png)
+
+### Use case #3
+You have a webshop where you want to own the consumer data, to restrict the shipping countries and you only want to do business in EUR currency in some countries.
+
+### Use case #3
+| Use case # | Setup |
+| --- | --- |
+| Use case #3 | Toggle and enable on the shipping countries. Next, toggle and enable on the country code. Finally, toggle and enable on the shipping fee. |
+
+![Payment settings use case #3](https://images.ctfassets.net/di680may5c0k/4O0ECH2CEhdGAlDkebn7DZ/b3e1b76eea2fa3a52b289657b2956567/image.png?w=1426&h=856&q=50&fm=png)
+
+![Payment settings JSON for use case #3](https://images.ctfassets.net/di680may5c0k/6GMqGjVFDJX9fTIPpTDJBq/b1f594dd2774e8570bd95db1038bd059/image.png?w=469&h=850&q=50&fm=png)
+
+## See also
+
+- [Test data](/test-data)

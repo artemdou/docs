@@ -1,0 +1,66 @@
+---
+title: "Manage Subscription Retries"
+description: "This guide is for developers who want to understand and to be compliant with subscription retries."
+---
+
+## Efficient and compliant retry logic on subscriptions
+
+One of the most common reasons for a transaction rejection is insufficient funds. However, there are also other reasons a subscription might not be charged.
+
+By analysing the data from each transaction, you can increase your chances for success and remain compliant with retry policies from payment schemes like Visa and MasterCard.  
+
+For example: 
+
+- If the decline is due to a technical issue, you would like to retry the charge, later or during the next few days. 
+
+- If the decline is due to insufficient funds, you can retry a few days later or even identify main pay day in your market and retry accordingly. 
+
+- Alternatively, if the decline is due to a card tagged as lost or stolen by the issuer, there is no point retrying the payment. 
+
+An optimised retry mechanism is therefore necessary, and for each charge attempt, Checkout provides you with the decline response codes that you need to consider.
+
+## Re-attempt can be forbidden
+
+You should never re-attempt transactions whenever you get the below response code. Retrying charge could lead to fines from Visa or MasterCard.
+
+See the following response codes in the table below:
+
+### Table of response codes and reasons
+| Category | Response code | Reason |
+| --- | --- | --- |
+| Issuer will never approve | 04 | Pick up card (no fraud) |
+| Issuer will never approve | 14 | Invalid account number (no such number) |
+| Issuer will never approve | 15 | No such issuer (first 8 digits of account number do not relate to an issuer identifier) |
+| Issuer will never approve | 41 | Lost card, pick up |
+| Issuer will never approve | 43 | Stolen card, pick up |
+| Issuer will never approve | 46 | Closed account |
+| Issuer will never approve | 54 | Expired card or expiration date missing |
+| Issuer will never approve | 57 | Transaction not permitted to the cardholder |
+
+
+
+You will need to update your subscription agreement with a new card before attempting on any new charge attempt. 
+
+You can read more about it [here](/manage-subscriptions/#build-step-6-update-invalid-subscription) on how to update it.
+
+## Re-attempt limitations
+
+In addition, for all other response codes you should not attempt more than __15 retries for one failed charge within 30 days__. You will have to wait for 30 days before you can retry if the limit of retries have been exceeded.
+
+Checkout may blacklist the card and block all future retry attempts. 
+
+## Where to get the response code?
+
+You can get the decline reason (response code) via either:
+
+- the [Retrieve Bulk Charge call ](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-subscriptions-charges-bulkid-get-responses)
+
+![Retrieve Bulk Charge call](https://images.ctfassets.net/di680may5c0k/7uHraFxQdG0HaiUgqhVL9l/7ceb3ae27192f340675d1f98bf026dab/Retrieve_Bulk_Charge_call.png)
+
+- [the webhook (Reservation.failed)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#reservation-failed)
+
+![Webhook reservation.failed](https://images.ctfassets.net/di680may5c0k/x3Vf2xj17GEb3i3DdeEWm/030370cbf4da1ad7a6ac6028b2623dc5/Webhook_reservation.failed.png)
+
+- looking into the Checkout portal (Declined payments – Decline reason – Action code)
+
+![Checkout portal: Declined payments – Decline reason – Action code](https://images.ctfassets.net/di680may5c0k/4WDsDAdS7WQr6Gy99dLmfK/5508739a71b689af89c308a1b08e2214/portal-declinedPayments.png)

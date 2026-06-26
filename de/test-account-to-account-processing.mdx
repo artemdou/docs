@@ -1,0 +1,52 @@
+---
+title: "Account-to-Account-Verarbeitung testen"
+description: "Dieser Leitfaden beschreibt, wie Sie die Account-to-Account-Verarbeitung (A2A) auf Ihrer Checkout-Seite testen können."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Komplexität: Niedrig</Badge>
+  <Badge color="gray">Coding: Keines</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie eine Checkout-Seite, die die [Checkout-Testumgebung](/test-environment) verwendet.
+</Warning>
+
+## Wie testen und Beispiele
+
+Die Checkout-Seite bietet Ihren Kunden die Möglichkeit, per A2A zu zahlen. Um die A2A-Verarbeitung auf der Checkout-Seite zu testen und die Beispieldaten in der Testumgebung zu verwenden, befolgen Sie die untenstehenden Schritte:
+
+## Swish
+
+Es ist möglich, beliebige Zufallszahlen für die persönliche Identifikationsnummer und die Telefonnummer einzugeben, um die Zahlung zu verarbeiten und zu testen.
+
+Außerdem ist es nicht erforderlich, die Zahlung über die App zu genehmigen, wenn das Genehmigungsfenster angezeigt wird.
+
+1. Navigieren Sie zu Ihrer Checkout-Seite
+2. Wählen Sie SEK als Checkout-Währung
+3. Wählen Sie "Swish"
+4. Geben Sie eine beliebige Telefonnummer ein
+5. Geben Sie eine beliebige E-Mail-Adresse, Postleitzahl, Telefonnummer und persönliche Identifikationsnummer in das Adressformular ein
+6. Klicken Sie auf "Zahlen"
+
+## Trustly
+
+Beim Testen von Trustly-Zahlungen wird die Testumgebung aufgerufen, die automatisch auf die [Sandbox des Zahlungsdienstleisters](https://help.trustpayments.com/hc/en-us/articles/4402897917201-Trustly-for-Webservices-API) zugreift.
+
+Von hier aus wird eine Ansicht direkt in der Benutzeroberfläche angezeigt, in der es möglich ist, eine Bank auszuwählen und die Testanmeldedaten einzugeben.
+
+Es ist möglich, beliebige Zufallszahlen für die Testanmeldedaten einzugeben.
+
+Siehe das folgende Beispiel:
+
+![Trustly Test](https://images.ctfassets.net/di680may5c0k/yqqTCU4RGv7HITJaINMrM/e6be4cfd17652b8c6b82e2a9ebb179b0/trustly_testing.png)
+
+- Bank: Eine beliebige Bank, z. B. Commerzbank vormals Dresdner IBLZ
+- Login: Eine beliebige __8-stellige Nummer__, z. B. 12345678
+- Einmalcode: auf dem Bildschirm angegeben, z. B. 245564
+
+## Siehe auch
+
+- [Testumgebung](/test-environment)

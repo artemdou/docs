@@ -1,0 +1,748 @@
+---
+title: "Änderungsprotokoll"
+description: "Verfolgen Sie aktuelle und zukünftige Updates für Nexi Checkout."
+---
+
+<Tabs>
+  <Tab title="Aktuell">
+    <Update label="2026-04-30 13:29" description="Neue Funktionen und Änderungen jetzt live" tags={["Portal", "Checkout", "easy-checkout", "nexi-checkout", "easy-portal", "nexi-checkout-portal"]} rss={{ title: "2026-04-30 13:29 - Neue Funktionen und Änderungen jetzt live", description: "Neue Funktionen Express-Button für Google Pay und Apple Pay Händler können jetzt einen Google Pay- und Apple Pay-Express-Button direkt auf der Produktseite hinzufügen, sodass Kunden sofort bezahlen können. Weitere Details zu Express-Buttons finden Sie unter /express buttons in" }}>
+      ### Neue Funktionen
+
+      - Express-Button für Google Pay und Apple Pay
+       - Händler können nun einen Express-Button für Google Pay und Apple Pay direkt auf der Produktseite einbinden, sodass Kunden sofort bezahlen können. Weitere Details zu [Express-Buttons](/express-buttons-in-product-page).
+      - Vipps jetzt auch außerhalb Norwegens verfügbar
+       - Händler in Dänemark, Schweden, Deutschland und Österreich können Vipps jetzt anbieten, ohne eine norwegische USt-Registrierung oder eine separate norwegische MID zu benötigen. Weitere Details zu [Vipps](/vipps).
+      - Sichtbarkeit der Payment Account Reference (PAR)
+       - Die Payment Account Reference (PAR) ermöglicht es, mehrere Kartennummern einem einzelnen zugrunde liegenden Kundenkonto zuzuordnen, wodurch Händler einen einheitlichen Überblick über die Kundenaktivitäten erhalten. Dies ermöglicht eine nahtlose Nachverfolgung der gesamten Customer Journey über Online- und stationäre Kanäle hinweg.
+       - Links zu Webhooks: [Get Payment Responses](https://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get-responses) und [Payment Reservation Created (v2)](https://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-webhooks-v1/#paymentreservationcreatedv2).
+       - Händler können nun auf PAR-Daten zugreifen, um mehrere Karten mit einem Kundenkonto zu verknüpfen.
+       - Bitte beachten Sie: PAR ist nur auf Anfrage verfügbar (bitte kontaktieren Sie den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)).
+
+      ### Verbesserungen
+
+      - Verfügbare Zahlungsmethoden basierend auf Ländercode
+       - Verbesserung bei der Anzeige der Zahlungsmethoden im Checkout. Änderungen wurden basierend auf dem Ländercode des Kunden und den vom Händler definierten Ländereinstellungen vorgenommen, was die Erfahrung konsistenter und relevanter macht.
+      - Echte Kartennummer für Wallet-Transaktionen im Easy Portal
+       - Wallet-Transaktionen zeigen nun die tatsächliche Kartennummer an und nicht mehr nur tokenisierte oder virtuelle Nummern. Händler können so anhand der letzten vier Ziffern suchen und Transaktionen leichter auffinden.
+
+      ### Fehlerbehebungen
+
+      - Trustly wird ausgeblendet, wenn obligatorische Verbraucherdaten fehlen
+       - Wenn dem Checkout-Fenster erforderliche Verbraucherdaten wie E-Mail oder Name fehlen, wird Trustly nicht mehr als Option angezeigt. Diese Option vermeidet einen abgebrochenen Zahlungsvorgang und gibt stattdessen eine klare Fehlermeldung aus.
+      - Zuverlässigkeit des Geräte-Fingerprintings für RatePay verbessert
+       - Das Fingerprinting läuft jetzt konsistenter, was die Möglichkeit verbessert, Informationen zu einem Geräte-Token abzurufen und Ausführungsfehler reduziert.
+    </Update>
+
+    <Update label="2025-11-28 11:25" description="Wechsel des Bankpartners am 16. Dezember 2025" tags={["announcement", "Checkout"]} rss={{ title: "2025-11-28 11:25 - Wechsel des Bankpartners am 16. Dezember 2025", description: "Wir möchten Sie darüber informieren, dass Nets Easy / Nexi Checkout seinen Bankpartner ab dem 16. Dezember 2025 von SEB auf Danske Bank umstellt. Was bedeutet das? Das bedeutet, dass ab dem 16. Dezember alle Banküberweisungen auf Ihr Easy /" }}>
+      Wir möchten Sie darüber informieren, dass Nets Easy / Nexi Checkout seinen Bankpartner ab dem 16. Dezember 2025 von SEB auf Danske Bank umstellt.
+
+      ### Was bedeutet das?
+      Das bedeutet, dass ab dem 16. Dezember alle Banküberweisungen auf Ihr Easy / Nexi Checkout-Konto (das Konto, das zur Sicherstellung der Durchführung von eingeleiteten Rückerstattungen verwendet wird) mit den aktualisierten Kontodaten erfolgen müssen, die im Easy / Nexi Checkout-Portal verfügbar sind.
+      - Die Kontonummern der Danske Bank sind im Easy / Nexi Checkout-Portal verfügbar.
+      - Verwenden Sie bei einer Überweisung immer Ihre Referenz-ID.
+      - Sie finden Ihre Referenz-ID im Portal: [https://portal.dibspayment.eu/](https://portal.dibspayment.eu/) im Menü: Auszahlungen → +ADD FUNDS.
+
+      ### Was müssen Sie tun?
+      Wenn Sie die alten SEB-Bankkontodaten intern gespeichert haben, bitten wir Sie, die oben genannten Informationen zum neuen Bankkonto zur Kenntnis zu nehmen und entsprechend zu aktualisieren.
+      Bitte beachten Sie, dass diese Änderung nur für das Bankkonto gilt, das für die Verarbeitung von Rückerstattungen im Rahmen Ihres Easy / Nexi Checkout-Vertrags verwendet wird.
+
+      ### Datum & Uhrzeit
+      Die Änderung wird am 16. Dezember 2025 wirksam.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2025-11-14 08:43" description="Geplante Wartung – Erneuerung des SSL-Zertifikats" tags={["announcement", "Checkout"]} rss={{ title: "2025-11-14 08:43 - Geplante Wartung – Erneuerung des SSL-Zertifikats", description: "Geplante Wartung Erneuerung des SSL-Zertifikats für Nets Easy Handlungsbedarf für einige Händler Geplant für den 10. Dezember 2025 08:00 08:05 MEZ Betrifft Sie das? Die meisten Händler: Es ist keine Aktion erforderlich. Wenn Ihre Integration kein Certificate Pinning verwendet" }}>
+      Geplante Wartung – Erneuerung des SSL-Zertifikats für Nets Easy
+      Handlungsbedarf für einige Händler
+      Geplant für den 10. Dezember 2025, 08:00–08:05 MEZ
+
+      ### Betrifft Sie das?
+      - Die meisten Händler: Es ist keine Aktion erforderlich. Wenn Ihre Integration kein Certificate Pinning verwendet, können Sie diese Nachricht ignorieren.
+      - Händler, die __Certificate Pinning__ verwenden: Eine Aktion ist erforderlich. Wenn Sie Ihre Integration nicht aktualisieren, funktioniert Ihr Checkout nicht mehr und der Zahlungsverkehr wird blockiert.
+
+      ### Was müssen Sie tun?
+      Für Händler, die Certificate Pinning verwenden, finden Sie hier die benötigten Informationen:
+
+      - Neuer Zertifikats-Thumbprint: 82511d922c0077d5d3fe4cd97f233fafd620f0ab
+      - Neue Seriennummer: 0b632adf0c12ab14509f448e543284fc
+
+      Wenn Sie das Zertifikat und die Zertifikatskette benötigen, wenden Sie sich an Ihr lokales Support-Team.
+
+      ### Datum & Uhrzeit
+      10. Dezember 2025 – 08:00 MEZ
+
+      ### Wichtig
+      Es wird keine Ausfallzeit erwartet, aber während des Updates kann es zu vorübergehenden Verlangsamungen im Nets Easy Checkout kommen.
+
+      Um über bevorstehende Wartungen, Service-Änderungen und Vorfälle im Zusammenhang mit Nets Easy auf dem Laufenden zu bleiben, empfehlen wir Ihnen, unsere [Nets Easy Status-Seite](https://easy-status.developers.nets.eu/) zu besuchen und zu abonnieren.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2025-10-20 11:45" description="Freeze-Perioden: Bevorstehender Black Friday und Weihnachten 2025" tags={["announcement", "code-freeze", "Checkout"]} rss={{ title: "2025-10-20 11:45 - Freeze-Perioden: Bevorstehender Black Friday und Weihnachten 2025", description: "Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat der Checkout zwei Freeze-Perioden geplant: eine für Black Friday/Cyber Monday und eine für Weihnachten Was bedeutet das? Während der festgelegten Freeze-Perioden werden keine größeren Systemreleases" }}>
+      Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat der Checkout zwei Freeze-Perioden geplant:
+      - eine für Black Friday/Cyber Monday und
+      - eine für Weihnachten
+
+      ### Was bedeutet das?
+      Während der festgelegten Freeze-Perioden werden keine größeren System-Releases ausgerollt. Nur kleinere Updates zur Behebung kritischer Probleme können implementiert werden. Diese Richtlinie soll einen unterbrechungsfreien und stabilen Service während Zeiten erhöhter Zahlungsaktivität gewährleisten.
+
+      ### Was müssen Sie tun?
+      Für diese Ankündigung müssen Sie keine Änderungen vornehmen.
+
+      ### Datum & Uhrzeit
+      Die Freeze-Periode für Black Friday/Cyber Monday beginnt am Montag, den 24. November 2025 um 8:00 Uhr MEZ und endet am Montag, den 1. Dezember 2025 (beide Tage einschließlich).
+      Die Freeze-Periode für Weihnachten und Neujahr beginnt am Montag, den 1. Dezember 2025 und endet am Sonntag, den 4. Januar 2026.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2025-06-18 08:46" description="Portal – Juni 2025" tags={["Portal"]} rss={{ title: "2025-06-18 08:46 - Portal – Juni 2025", description: "Verbesserungen Letzte Suche beim Wechsel zum Tab Zahlungssuche auslösen Währungsauswahl auf der Auszahlungsseite beibehalten Bestehende Benutzer müssen Einladungen nicht mehr per Link in der E-Mail bestätigen Fehlerbehebungen Behebung des Datensatzanzahlproblems im kombinierten Auszahlungsbericht" }}>
+      ### Verbesserungen
+
+      - Letzte Suche beim Wechsel zum Tab Zahlungssuche auslösen
+      - Währungsauswahl auf der Auszahlungsseite beibehalten
+      - Bestehende Benutzer müssen Einladungen nicht mehr per Link in der E-Mail bestätigen
+
+      ### Fehlerbehebungen
+
+      - Behebung des Problems mit der Datensatzanzahl im kombinierten Auszahlungsbericht für einige Auszahlungen
+      - Behebung des Problems mit dem fehlenden Abonnement-Tag bei Abonnementzahlungen mit fehlgeschlagener Reservierung
+      - Behebung des Problems mit dem Rahmen am Deaktivieren-Button
+      - Behebung von Ausrichtungsproblemen bei Button und Checkbox
+    </Update>
+
+    <Update label="2025-06-04 14:31" description="Portal" tags={["Portal"]} rss={{ title: "2025-06-04 14:31 - Portal", description: "Verbesserungen Geringfügige Styling-Verbesserungen und Änderungen an UI-Komponenten zur Verbesserung der Barrierefreiheit Fehlerbehebungen Behebung des Problems mit der Aktivierung von Benutzern für Händler mit langer Benutzerliste Behebung des Problems mit fehlendem Status beim Händler im Partner-Manager" }}>
+      ### Verbesserungen
+
+      - Geringfügige Styling-Verbesserungen und Änderungen an UI-Komponenten zur Verbesserung der Barrierefreiheit
+
+      ### Fehlerbehebungen
+
+      - Behebung des Problems mit der Aktivierung von Benutzern für Händler mit einer langen Benutzerliste
+      - Behebung des Problems mit fehlendem Status beim Händler in der Partner-Manager-Liste
+      - Behebung des Problems mit dem Sprach-Dropdown auf der Benutzerregistrierungsseite
+    </Update>
+
+    <Update label="2025-06-12 12:13" description="Portal" rss={{ title: "2025-06-12 12:13 - Portal", description: "Verbesserungen Verbesserte Sicherheitskontrolle durch Entfernen der Berechtigung zur Anzeige von API-Schlüsseln aus der Standardrolle" }}>
+      ### Verbesserungen
+
+      - Verbesserte Sicherheitskontrolle durch Entfernen der Berechtigung zur Anzeige von API-Schlüsseln aus der Standardrolle
+    </Update>
+
+    <Update label="2025-06-04 11:24" description="Reporting API" rss={{ title: "2025-06-04 11:24 - Reporting API", description: "Funktionen Neuer Balances-Endpunkt in der Reporting API https://developer.nexigroup.com/nexi checkout/en EU/api/reporting v1/ \"Reporting API\" zum Abrufen von Salden für Währungskonten." }}>
+      ### Funktionen
+
+      - Neuer Balances-Endpunkt in der [Reporting API](https://developer.nexigroup.com/nexi-checkout/en-EU/api/reporting-v1/ "Reporting API") zum Abrufen von Salden für Währungskonten.
+    </Update>
+
+    <Update label="2025-05-07 12:30" description="Checkout" tags={["Checkout"]} rss={{ title: "2025-05-07 12:30 - Checkout", description: "Verbesserungen Unterstützung für Apple Pay in Nicht-Safari-Browsern Fehlerbehebungen Problem mit der Scrollposition der Checkout-Bestätigung behoben Problem bei der Karteneingabe behoben, bei dem der Issuer nicht gesetzt wird, wenn die Kartennummer per Copy-Paste eingefügt wird Klarna-Logo aktualisiert" }}>
+      ### Verbesserungen
+
+      - Unterstützung für Apple Pay in Nicht-Safari-Browsern
+
+      ### Fehlerbehebungen
+
+      - Problem mit der Scrollposition der Checkout-Bestätigung behoben
+      - Problem bei der Karteneingabe behoben, bei dem der Issuer nicht gesetzt wurde, wenn die Kartennummer per Copy-Paste eingefügt wurde
+      - Klarna-Logo aktualisiert
+    </Update>
+
+    <Update label="2024-10-11 07:54" description="Freeze-Perioden: Bevorstehender Black Friday und Weihnachten 2024" tags={["announcement", "code-freeze", "Checkout"]} rss={{ title: "2024-10-11 07:54 - Freeze-Perioden: Bevorstehender Black Friday und Weihnachten 2024", description: "Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat der Checkout zwei Freeze-Perioden geplant: eine für Black Friday/Cyber Monday und eine für Weihnachten Was müssen Sie tun? Für diese Ankündigung müssen Sie keine Änderungen vornehmen. Datum &" }}>
+      Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat der Checkout zwei Freeze-Perioden geplant:
+      - eine für Black Friday/Cyber Monday und;
+      - eine für Weihnachten
+
+      ### Was müssen Sie tun?
+      Für diese Ankündigung müssen Sie keine Änderungen vornehmen.
+
+      ### Datum & Uhrzeit:
+
+      Die Freeze-Periode für Black Friday/Cyber Monday beginnt am Montag, den 25. November 2024 um 8:00 Uhr MEZ und endet am Montag, den 2. Dezember 2024 (beide Tage einschließlich).
+      Die Freeze-Periode für Weihnachten und Neujahr beginnt am Montag, den 2. Dezember 2024 und endet am Montag, den 5. Januar 2025.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2024-04-25 19:03" description="Plugins Release #22" tags={["nexi-checkout", "plugin", "release", "Shopware 6.4, 6.5, v.1.4.4", "Shopware 6.6, v.1.5.0"]} rss={{ title: "2024-04-25 19:03 - Plugins Release #22", description: "Diese Releases für die Shopware-Plugins enthalten Fehlerbehebungen und allgemeine Updates für Shopware 6.4, 6.5, Version 1.4.4. Außerdem ist das Plugin nun mit der neuesten Shopware-Version 6.6.1 in v.1.5.0 kompatibel und unterstützt diese. Mehr über Shopware" }}>
+      Diese Releases für die Shopware-Plugins enthalten Fehlerbehebungen und allgemeine Updates für Shopware 6.4, 6.5, Version 1.4.4. Außerdem ist das Plugin nun mit der neuesten Shopware-Version 6.6.1 in v.1.5.0 kompatibel und unterstützt diese. Mehr über das Shopware 6.6 Release erfahren Sie [hier](https://www.shopware.com/en/news/major-release-shopware-6-6/).
+
+      ### Updates und Fehlerbehebungen: Magento 2, Release Version 1.4.4
+
+      - Update: Sales-Channel-Kontext behandeln
+      - Behoben: Teilweise Auftragsrückerstattung zulassen
+      - Behoben: Initiale Typen aktualisieren
+
+      Version 1.4.4 unseres Shopware 6.4, 6.5 Plugins wurde am 24.04.2024 veröffentlicht – weitere Informationen finden Sie [hier](https://github.com/Nets-eCom/shopware6-easy-checkout/releases) oder im [Shopware Store](https://store.shopware.com/en/nets397526757847f/nexi-checkout/nets-easy.html).
+
+      ### Updates und Fehlerbehebungen: Shopware 6.6 Release Version 1.5.0
+
+      - Update: Sales-Channel-Kontext behandeln
+      - Update: Unterstützung für Version 6.6.1 hinzugefügt
+      - Behoben: Teilweise Auftragsrückerstattung zulassen
+      - Behoben: Initiale Typen aktualisieren
+
+      Version 1.5.0 unseres Shopware 6.6 Plugins wurde am 25.04.2024 veröffentlicht – weitere Informationen finden Sie [hier](https://github.com/Nets-eCom/shopware6-easy-checkout/releases) oder im [Shopware Store](https://store.shopware.com/en/nets397526757847f/nexi-checkout/nets-easy.html).
+
+      Alle Systemanforderungen und technischen Funktionen finden Sie [hier](https://docs.shopware.com/en/shopware-6-en/update-guides/update-guide-shopware-66?category=shopware-6-en/update-guides).
+
+      <Warning>
+      __Wichtiger Hinweis__
+
+      Wenn Ihre Shopware-Version 6.4 ist, führen Sie zuerst ein Update von Version 6.4 auf die neueste Version 6.5 durch, bevor Sie das Update auf Version 6.6 starten.
+
+      Bitte folgen Sie dazu den Shopware-Anleitungen. Von 6.4 auf 6.5 [hier](https://docs.shopware.com/en/shopware-6-en/update-guides/update-guide-64-to-65?category=shopware-6-en/update-guides) und von 6.5 auf 6.6 [hier](https://docs.shopware.com/en/shopware-6-en/update-guides/update-guide-65-to-66?category=shopware-6-en/update-guides).
+      </Warning>
+    </Update>
+
+    <Update label="2024-04-24 21:38" description="Änderungen an der Checkout-Produktionsumgebung im Rahmen einer Migration zu Azure CosmosDB" tags={["announcement", "migration"]} rss={{ title: "2024-04-24 21:38 - Änderungen an der Checkout-Produktionsumgebung im Rahmen einer Migration zu Azure CosmosDB", description: "Um die Zuverlässigkeit, Leistung und Sicherheit unserer Plattform zu erhöhen, werden einige Checkout-Datenbanken von der Nets-On-Premises-MongoDB zu Microsoft Azure CosmosDB migriert. Wir erwarten während des Migrationsprozesses keine Ausfallzeiten und Sie müssen keine Maßnahmen ergreifen." }}>
+      Um die Zuverlässigkeit, Leistung und Sicherheit unserer Plattform zu erhöhen, werden einige Checkout-Datenbanken von der Nets-On-Premises-MongoDB zu Microsoft Azure CosmosDB migriert.
+
+      Wir erwarten während des Migrationsprozesses keine Ausfallzeiten und Sie müssen keine Maßnahmen ergreifen.
+
+      ### Datum & Uhrzeit der Änderung:
+
+      - __Datum der Änderung: 25.04.2024__
+      - __Zeitpunkt der Änderung: 09:00 – 17:00 MESZ__
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2024-03-20 08:44" description="Plugins Release #21" tags={["nexi-checkout", "plugin", "release", "Magento 2, v.1.6.9"]} rss={{ title: "2024-03-20 08:44 - Plugins Release #21", description: "Dieses Plugin-Release ist eine Fehlerbehebung für Magento 2, Version 1.6.9. Fehlerbehebung: Magento 2, Release Version 1.6.9 Fix: Plugin nicht kompatibel mit PHP 7.4. Version 1.6.9 unseres Magento 2-Plugins wurde am 4. März 2024 veröffentlicht weitere Informationen" }}>
+      Dieses Plugin-Release ist eine Fehlerbehebung für Magento 2, Version 1.6.9.
+
+      ### Fehlerbehebung: Magento 2, Release Version 1.6.9
+
+      - Fix: Plugin nicht kompatibel mit PHP 7.4.
+
+      Version 1.6.9 unseres Magento 2-Plugins wurde am 4. März 2024 veröffentlicht – weitere Informationen [hier](https://github.com/Nets-eCom/Magento2_easy/releases/tag/1.6.9).
+    </Update>
+
+    <Update label="2024-03-20 08:40" description="Plugins Release #20" tags={["nexi-checkout", "plugin", "release", "Shopware, v.1.4.2"]} rss={{ title: "2024-03-20 08:40 - Plugins Release #20", description: "Dieses Plugin-Release enthält Fehlerbehebungen und neue Funktionen für Shopware, Versionen 1.4.2 für 6.5 und 1.4.264 für 6.4. Updates: Shopware, Release-Versionen 1.4.2 und 1.4.264 Update: Paketbeschreibung. Update: GitHub-Workflow entfernen. Versionen 1" }}>
+      Dieses Plugin-Release enthält Fehlerbehebungen und neue Funktionen für Shopware, Versionen 1.4.2 (für 6.5) und 1.4.264 (für 6.4).
+
+      ### Updates: Shopware, Release-Versionen 1.4.2 und 1.4.264
+
+      - Update: Paketbeschreibung.
+      - Update: GitHub-Workflow entfernen.
+
+      Die Versionen 1.4.2 und 1.4.264 unseres Shopware-Plugins wurden am 4. März 2024 veröffentlicht – weitere Informationen [hier](https://store.shopware.com/en/nets397526757847f/nexi-checkout/nets-easy.html).
+    </Update>
+
+    <Update label="2024-03-18 10:29" description="Plugins Release #18" tags={["nexi-checkout", "plugin", "release", "WooCommerce, v.2.8.1"]} rss={{ title: "2024-03-18 10:29 - Plugins Release #18", description: "Dieses Plugin-Release ist eine Fehlerbehebung für WooCommerce, Version 2.8.1. Fehlerbehebung: WooCommerce, Release Version 2.8.1. Fix: Behebung des Problems mit ignorierten Dateien beim Veröffentlichen auf WordPress.org https://wordpress.org/. Version 2.8.1 unseres WooCommerce" }}>
+      Dieses Plugin-Release ist eine Fehlerbehebung für WooCommerce, Version 2.8.1.
+
+      ### Fehlerbehebung: WooCommerce, Release Version 2.8.1.
+
+      - Fix: Behebung des Problems mit ignorierten Dateien beim Veröffentlichen auf [WordPress.org](https://wordpress.org/).
+
+      Version 2.8.1 unseres WooCommerce-Plugins wurde am 28. Februar 2024 veröffentlicht.
+    </Update>
+
+    <Update label="2024-03-18 10:40" description="Plugins Release #17" tags={["nexi-checkout", "plugin", "release", "WooCommerce, v.2.8.0"]} rss={{ title: "2024-03-18 10:40 - Plugins Release #17", description: "Dieses Plugin-Release enthält Fehlerbehebungen und neue Funktionen für WooCommerce, Version 2.8.0. Verbesserungen: WooCommerce, Release Version 2.8.0 Feature: Unterstützung für WooCommerce-Blocks-Checkout im Redirect-Flow hinzugefügt. Feature Unterstützung für s" }}>
+      Dieses Plugin-Release enthält Fehlerbehebungen und neue Funktionen für WooCommerce, Version 2.8.0.
+
+      ### Verbesserungen: WooCommerce, Release Version 2.8.0
+
+      - Feature: Unterstützung für WooCommerce-Blocks-Checkout im Redirect-Flow hinzugefügt.
+      - Feature – Unterstützung für den Wechsel zwischen Scheduled- und Unscheduled-Abonnements in den Zahlungsmethoden-Einstellungen hinzugefügt.
+
+      ### Fehlerbehebung: WooCommerce, Release Version 2.8.0
+
+      - Fix: Behebt einen potenziell fatalen Fehler, wenn die WooCommerce-Bestellung beim Aufruf eines Capture nicht gefunden wurde.
+
+      Version 2.8.0 unseres WooCommerce-Plugins wurde am 28. Februar 2024 veröffentlicht.
+    </Update>
+
+    <Update label="2024-02-28 16:45" description="Plugins Release #16" tags={["nexi-checkout", "Magento 2, v.1.6.8.", "plugin", "release"]} rss={{ title: "2024-02-28 16:45 - Plugins Release #16", description: "Dieses Plugin-Release ist eine Fehlerbehebung für Magento 2, Version 1.6.8. Fehlerbehebung: Magento 2, Release Version 1.6.8. Fix: Bestell-ID wurde nach der Reservierung in einigen Fällen nicht aktualisiert. Version 1.6.8 unseres Magento 2-Plugins wurde am 14." }}>
+      Dieses Plugin-Release ist eine Fehlerbehebung für Magento 2, Version 1.6.8.
+
+      ### Fehlerbehebung: Magento 2, Release Version 1.6.8.
+
+      - Fix: Bestell-ID wurde nach der Reservierung in einigen Fällen nicht aktualisiert.
+
+      Version 1.6.8 unseres Magento 2-Plugins wurde am 14. Februar 2024 veröffentlicht – weitere Informationen [hier](https://github.com/Nets-eCom/Magento2_easy/releases/tag/1.6.8).
+    </Update>
+
+    <Update label="2024-02-21 09:59" description="Plugins Release #15" tags={["nexi-checkout", "WooCommerce, v.2.7.1", "plugin", "release"]} rss={{ title: "2024-02-21 09:59 - Plugins Release #15", description: "Dieses Plugin-Release ist eine Fehlerbehebung für WooCommerce, Version 2.7.1. Verbesserung: WooCommerce, Release Version 2.7.1. Tweak: Kunde wird in WooCommerce zum Versandbereich gescrollt, wenn das Address-Changed-Event von Nets ausgelöst wurde und t" }}>
+      Dieses Plugin-Release ist eine Fehlerbehebung für WooCommerce, Version 2.7.1.
+
+      ### Verbesserung: WooCommerce, Release Version 2.7.1.
+
+      - Tweak: Kunde wird in WooCommerce zum Versandbereich gescrollt, wenn das address-changed-Event von Nets ausgelöst wurde und der Benutzer auf Mobilgeräten ist.
+
+      Version 2.7.1 unseres WooCommerce-Plugins wurde am 5. Februar 2024 veröffentlicht – weitere Informationen [hier](https://wordpress.org/plugins/dibs-easy-for-woocommerce/).
+    </Update>
+
+    <Update label="2024-02-05 12:38" description="Plugins Release #14" tags={["nexi-checkout", "release", "checkout-plugins", "Shopware 6.4."]} rss={{ title: "2024-02-05 12:38 - Plugins Release #14", description: "Dieses Release enthält Fehlerbehebungen und Verbesserungen für Shopware, Version 6.4. Verbesserungen: Shopware, Release Version 6.4. Update: Embedded Checkout (richtige Referenz auf Order-ID verwenden) Update: Unterstützte Länder-Präfixe hinzufügen Change: Zahlung als auth" }}>
+      Dieses Release enthält Fehlerbehebungen und Verbesserungen für Shopware, Version 6.4.
+
+      ### Verbesserungen: Shopware, Release Version 6.4.
+
+      - Update: Embedded Checkout (richtige Referenz auf Order-ID verwenden)
+      - Update: Unterstützte Länder-Präfixe hinzufügen
+      - Change: Zahlung nach erfolgreicher Reservierung als autorisiert markieren
+      - Update: Übersetzungs-Updates
+      - Update: Verbesserung der Refund- und Charge-UX im Administrationsbereich
+
+      <Info>
+
+      Die v.1.4.164 dient der Abwärtskompatibilität mit Shopware 6.4.
+      </Info>
+
+      Version 6.4 unseres Shopware-Plugins wurde am 30. Januar 2024 veröffentlicht – weitere Informationen [hier](https://store.shopware.com/en/nets397526757847f/nexi-checkout/nets-easy.html).
+    </Update>
+
+    <Update label="2024-02-05 12:38 - Plugins Release #13" description="Plugins Release #13" tags={["nexi-checkout", "release", "checkout-plugins", "PrestaShop 1.1.7."]} rss={{ title: "2024-02-05 12:38 - Plugins Release #13", description: "Dieses Plugin-Release ist eine Fehlerbehebung für PrestaShop, Version 1.1.7. Fehlerbehebung: PrestaShop, Release Version 1.1.7. Fix: Geschenkverpackung wurde dem Gesamtbetrag hinzugefügt Version 1.1.7 unseres PrestaShop-Plugins wurde am 29. Januar 2 veröffentlicht" }}>
+      Dieses Plugin-Release ist eine Fehlerbehebung für PrestaShop, Version 1.1.7.
+
+      ### Fehlerbehebung: PrestaShop, Release Version 1.1.7.
+
+      - Fix: Geschenkverpackung wurde dem Gesamtbetrag hinzugefügt
+
+      Version 1.1.7 unseres PrestaShop-Plugins wurde am 29. Januar 2024 veröffentlicht – weitere Informationen [hier](https://github.com/Nets-eCom/Prestashop1.7_NetsEasy/releases/tag/1.1.7).
+    </Update>
+
+    <Update label="2024-02-05 11:00" description="Plugins Release #12" tags={["nexi-checkout", "Magento 2, v.1.6.7", "plugin", "release"]} rss={{ title: "2024-02-05 11:00 - Plugins Release #12", description: "Dieses Plugin-Release enthält Fehlerbehebungen für Magento 2, Version 1.6.7. Fehlerbehebungen und Verbesserungen: Magento 2 Release Version 1.6.7 Update: Bestellung beim Klick auf Pay-Button erstellen embedded flow Fix: PHP 8.2 Deprecation. Fix: Falsche Ländercodes gefunden i" }}>
+      Dieses Plugin-Release enthält Fehlerbehebungen für Magento 2, Version 1.6.7.
+
+      ### Fehlerbehebungen und Verbesserungen: Magento 2 Release Version 1.6.7
+
+      - Update: Bestellung bei Klick auf Pay-Button erstellen (Embedded Flow)
+      - Fix: PHP 8.2 Deprecation.
+      - Fix: Falsche Ländercodes im Magento 2-Plugin gefunden
+
+      Version 1.6.7 unseres Magento 2-Plugins wurde am 1. Februar 2024 veröffentlicht – weitere Informationen [hier](https://github.com/Nets-eCom/Magento2_easy/releases/tag/1.6.7).
+    </Update>
+
+    <Update label="2024-02-01 10:53" description="Plugins Release #11" tags={["nexi-checkout", "woocommerce, v2.6.2", "plugin", "release"]} rss={{ title: "2024-02-01 10:53 - Plugins Release #11", description: "Dieses Plugin-Release ist eine Fehlerbehebung für WooCommerce, Version 2.6.2. Fehlerbehebung: WooCommerce, Release Version 2.6.2 Fix: Aktualisiert Hilfsfunktion zum Abrufen der Refund-Order-ID aufgrund von Änderungen in WP query. Behebt potenziellen Fehler in einer Refund-Anfrage" }}>
+      Dieses Plugin-Release ist eine Fehlerbehebung für WooCommerce, Version 2.6.2.
+
+      ### Fehlerbehebung: WooCommerce, Release Version 2.6.2
+
+      - Fix: Aktualisiert die Hilfsfunktion zum Abrufen der Refund-Order-ID aufgrund von Änderungen in WP query. Behebt einen potenziellen Fehler, der in Refund-Anfragen ausgelöst wurde.
+
+      Version 2.6.2 unseres WooCommerce-Plugins wurde am 19. Dezember 2023 veröffentlicht – weitere Informationen [hier](https://docs.krokedil.com/nets-easy-for-woocommerce/changelog/).
+    </Update>
+
+    <Update label="2023-10-19 12:56" description="Plugins Release #10" tags={["nexi-checkout", "release", "checkout-plugins", "WooCommerce 2.6.0.", "Magento 2, v.1.6.4.", "Magento 2, v.1.6.5."]} rss={{ title: "2023-10-19 12:56 - Plugins Release #10", description: "Dieses Plugin-Release gilt für WooCommerce, Version 2.6.0, Magento 2, Version 1.6.4 und Magento 2, Version 1.6.5. Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.6.0. Feature : Karten- und Swish-Zahlung als eigenständige Zahlungsmethoden hinzugefügt" }}>
+      Dieses Plugin-Release gilt für WooCommerce, Version 2.6.0, Magento 2, Version 1.6.4 und Magento 2, Version 1.6.5.
+
+      ### Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.6.0.
+
+      - __Feature__: Karten- und Swish-Zahlung als eigenständige Zahlungsmethoden hinzugefügt. Jede Zahlungsmethode kann über die allgemeinen Plugin-Einstellungen aktiviert werden.
+
+      - __Feature__: Filter `nets_easy_embedded_order_reference` hinzugefügt, sodass die initiale Bestellreferenz im Embedded-Checkout-Flow vom Händler angepasst werden kann.
+
+      - __Tweak__: Einstellung **„Debug"** in **„Logging"** umbenannt.
+
+      - __Fix__: Behebung von **PHP 8.1**-Deprecation-Hinweisen.
+
+      <Info>
+      *WordPress Requires at least: 5.0*
+
+      *WordPress Tested up to: 6.3.1*
+
+      *Requires PHP: 7.3 (tested with 8.1.20)*
+
+      *WooCommerce requires at least: 5.0.0*
+
+      *WooCommerce tested up to: 8.1.1*
+      </Info>
+
+      ### Fehlerbehebungen und Verbesserungen: Magento 2, Release Version 1.6.4.
+
+      - __Update__: Artikel im Warenkorb.
+      - __Fix__: Diskrepanz bei Bestellungen/Beträgen beim Aktualisieren des Warenkorbs nach erstellter Zahlung.
+      - __Update__: Im Embedded-Flow mit Erstellung der Bestellung vor der Zahlung.
+      - __Update__: PHP 8.2 Deprecation.
+
+      ### Fehlerbehebungen und Verbesserungen: Magento 2, Release Version 1.6.5.
+
+      - __Update__: Erlaubt die Konfiguration, wie Bestellartikel an die API gesendet werden.
+
+      - __Fix__: Bestellung bei `payment.charge.created.v2`-Event in Rechnung stellen (Autocharge).
+    </Update>
+
+    <Update label="2023-09-20 07:04" description="Plugins Release #9" tags={["nexi-checkout", "release", "checkout-plugins", "Magento 2, v.1.6.3."]} rss={{ title: "2023-09-20 07:04 - Plugins Release #9", description: "Dieses Magento 2-Plugin-Release betrifft den Redirect-Flow. Verbesserungen: Magento 2, Release Version 1.6.3. Update : Bestellung nach erstellter Zahlung erstellen Redirect-Flow ." }}>
+      Dieses Magento 2-Plugin-Release betrifft den Redirect-Flow.
+
+      ### Verbesserungen: Magento 2, Release Version 1.6.3.
+
+      - Update: **Bestellung nach Erstellung der Zahlung erstellen** (Redirect-Flow).
+    </Update>
+
+    <Update label="2023-08-29 07:12" description="Plugins Release #7" tags={["nets-easy", "release", "easy-plugins", "WooCommerce 2.5.3"]} rss={{ title: "2023-08-29 07:12 - Plugins Release #7", description: "Dieses Plugin-Release enthält Anpassungen und Fehlerbehebungen für WooCommerce, Version 2.5.3. Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.5.3. Tweak: Standard-Request-Timeout auf 10 Sekunden setzen und nets_easy_set_timeout-Filter zu G hinzufügen" }}>
+      Dieses Plugin-Release enthält Anpassungen und Fehlerbehebungen für WooCommerce, Version 2.5.3.
+
+      ### Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.5.3.
+
+      - Tweak: Standard-Request-Timeout auf 10 Sekunden setzen und nets_easy_set_timeout-Filter zu GET- und PUT-Anfragen hinzufügen.
+      - Fix: Behebung von PHP8.1-Deprecation-Hinweisen.
+    </Update>
+
+    <Update label="2023-09-08 07:39" description="Plugins Release #8" tags={["nexi-checkout", "release", "checkout-plugins", "Shopware 6.5, v.1.4.0.", "Shopware 6.5, v.1.4.064."]} rss={{ title: "2023-09-08 07:39 - Plugins Release #8", description: "Dieses neue Release unseres Plugins Version 1.4.0 ist nun mit Shopware 6.5 kompatibel. Verbesserungen: Shopware 6.5, Release Version 1.4.0. Update: Kompatibilität mit Shopware 6.5 Checkout | Shopware Store https://store.shopware.com/en/nets3975267" }}>
+      Dieses neue Release unseres Plugins Version 1.4.0 ist nun mit Shopware 6.5 kompatibel.
+
+      ### Verbesserungen: Shopware 6.5, Release Version 1.4.0.
+
+      - Update: Kompatibilität mit Shopware 6.5 [Checkout | Shopware Store](https://store.shopware.com/en/nets397526757847f/nexi-nets-easy-checkout.html).
+
+      ### Verbesserungen: Shopware 6.5, Release Version 1.4.064.
+
+      - Update: Diese Version enthält Abwärtskompatibilität mit Shopware 6.4.
+    </Update>
+
+    <Update label="2023-06-15 13:00" description="Plugins Release #6" tags={["nets-easy", "release", "easy-plugins", "woocommerce 2.4.0", "woocommerce 2.4.1.", "woocommerce 2.5.0.", "prestashop 1.1.6."]} rss={{ title: "2023-06-15 13:00 - Plugins Release #6", description: "Dieses Plugin-Release enthält Funktionen, Erweiterungen, Anpassungen und Fehlerbehebungen für WooCommerce sowie eine neue Funktionalität zur Aufteilung von Zahlungsmethoden für Prestashop 1.7. Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.4.0. Tweak: end WooCom" }}>
+      Dieses Plugin-Release enthält Funktionen, Erweiterungen, Anpassungen und Fehlerbehebungen für WooCommerce sowie eine neue Funktionalität zur Aufteilung von Zahlungsmethoden für Prestashop 1.7.
+
+      ### Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.4.0.
+
+      - Tweak: WooCommerce-Bestellnummer als Bestellreferenz an Nets zu einem späteren Zeitpunkt im Prozess senden, wenn die Zahlung in WooCommerce bestätigt wird. Dies ist auf Änderungen in der Checkout-API zurückzuführen.
+      - Fix: Verbesserungen in der Logik, um mehrere YITH-Geschenkkarten in derselben Bestellung zu ermöglichen.
+
+      ### Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.4.1.
+
+      - Enhancement – Implementierung eines zusätzlichen Validierungsschritts während des Checkout-Prozesses, um potenzielle Preisabweichungen zwischen WooCommerce und Nets zu vermeiden.
+      - Tweak – Feinabstimmung der Steuersatzberechnung im Redirect-Flow, um Konsistenz mit dem Embedded-Checkout-Flow sicherzustellen.
+
+      ### Verbesserungen: WooCommerce, Release Version 2.5.0.
+
+      - Feature – Unterstützung für Overlay-Checkout-Flow hinzugefügt. Bei Auswahl sehen Kunden, die eine Bestellung vom Desktop aus aufgeben, das Nets-Zahlungsfenster in einem Overlay, anstatt zur Zahlungsseite weitergeleitet zu werden.
+
+      ### Verbesserungen: Prestashop, Release Version 1.1.6.
+      - Neue Funktion *payType* mit Einstellung __payment split__ hinzugefügt.
+    </Update>
+
+    <Update label="2023-04-24 14:50" description="Plugins Release #5" tags={["nets-easy", "release", "easy-plugins", "woocommerce, v.2.3.1", "oxid, v.2.0.0"]} rss={{ title: "2023-04-24 14:50 - Plugins Release #5", description: "Dieses Plugin-Release enthält Anpassungen und Fehlerbehebungen für WooCommerce sowie eine neue Funktionalität zur Aufteilung von Zahlungsmethoden für OXID. Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.3.1. Tweak: maybeChangeToDibsEasy-Logik aus net entfernen" }}>
+      Dieses Plugin-Release enthält Anpassungen und Fehlerbehebungen für WooCommerce sowie eine neue Funktionalität zur Aufteilung von Zahlungsmethoden für OXID.
+
+      ### Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.3.1.
+
+      - Tweak: maybeChangeToDibsEasy-Logik aus nets-easy-for-woocommerce.js entfernen. Diese wurde nach nets-easy-utility.js verschoben.
+      - Fix: Division durch Null vermeiden, wenn die Gebühr 0 ist.
+      - Fix: Verbesserungen in der Logger-Logik. Prüfen, ob das Log-Objekt eine Instanz von WP Hook ist, um potenzielle fatale Fehler zu vermeiden.
+
+      ### Fehlerbehebungen und Verbesserungen: OXID, Release Version 2.0.0.
+      - Split-Payment-Modul hinzugefügt. Mehr dazu, wie Sie es einrichten, lesen Sie [hier](/oxid#build-logos).
+
+      Dies wurde am 20. April 2023 veröffentlicht – mehr dazu finden Sie [hier](https://wordpress.org/plugins/dibs-easy-for-woocommerce/).
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-04-05 12:46" description="Plugins Release #3" tags={["nets-easy", "release", "easy-plugins", "magento-2, v.1.0.1"]} rss={{ title: "2023-04-05 12:46 - Plugins Release #3", description: "Dieses Plugin-Release betrifft die Abonnements-Funktionalität in Magento 2, Version 1.0.1. Fehlerbehebungen und Verbesserungen: Magento 2, Release Version 1.0.1. Nets Subscription-Zahlungsmodul wurde hinzugefügt. Dies wurde am 4. April 2023 veröffentlicht prüfen" }}>
+      Dieses Plugin-Release betrifft die Abonnements-Funktionalität in Magento 2, Version 1.0.1.
+
+      ### Fehlerbehebungen und Verbesserungen: Magento 2, Release Version 1.0.1.
+
+      - Nets Subscription-Zahlungsmodul wurde hinzugefügt.
+
+      Dies wurde am 4. April 2023 veröffentlicht – weitere Informationen finden Sie in unserem Repository [hier](https://github.com/Nets-eCom/magento2_subscriptions).
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-04-13 08:14" description="Plugins Release #4" tags={["nets-easy", "release", "easy-plugins", "woocommerce 2.3.0"]} rss={{ title: "2023-04-13 08:14 - Plugins Release #4", description: "Dieses Plugin-Release enthält neue Funktionen wie neue Einstellungen für Zahlungssymbole und ob Checkout-Zahlungsdaten zur Bestätigungs-E-Mail des Verbrauchers hinzugefügt werden sollen oder nicht, sowie allgemeine Anpassungen und Fehlerbehebungen für WooCommerce, Version 2.3." }}>
+      Dieses Plugin-Release enthält neue Funktionen wie neue Einstellungen für Zahlungssymbole und ob Checkout-Zahlungsdaten zur Bestätigungs-E-Mail des Verbrauchers hinzugefügt werden sollen oder nicht, sowie allgemeine Anpassungen und Fehlerbehebungen für WooCommerce, Version 2.3.0.
+
+      ### Fehlerbehebungen und Verbesserungen: WooCommerce, Release Version 2.3.0.
+
+      - Feature: Einstellungen für ein benutzerdefiniertes Zahlungs-Gateway-Symbol hinzugefügt.
+      - Feature: Einstellung hinzugefügt, um zu steuern, ob Nets-Zahlungsdaten (Zahlungsmethode, paymentId und maskierte Kartennummer) zur Bestätigungs-E-Mail des Verbrauchers hinzugefügt werden sollen.
+      - Feature: Unterstützung für Geschenkkarten über das Smart Coupons-Plugin hinzugefügt.
+      - Feature: Filter *nets_easy_ignored_checkout_fields* hinzugefügt, um anderen zu ermöglichen, zu ändern, welche Felder unter zusätzlichen Feldern angezeigt werden.
+      - Tweak: Checkout-Seite neu laden und versuchen, eine Update-Anfrage erneut an Nets zu senden, wenn der Antwortcode bei einem Update 409 ist.
+      - Tweak: Logik für Auto-Capture geändert. Das bedeutet, dass jetzt *charge = true* in der Create-Anfrage gesendet und in der Zahlungsbestätigung nach einer chargeId gesucht wird, anstatt eine Aktivierungsanfrage in der Zahlungsbestätigungssequenz zu senden.
+      - Tweak: Verbesserte Logik für das Enqueuen von .js-Dateien, um die Erstellung einer Nets-paymentId zu vermeiden, wenn die Checkout-Seite gerendert wird, obwohl Checkout nicht das ausgewählte Zahlungs-Gateway ist.
+      - Tweak: Geänderte SKU für YITH-Geschenkkarte. Es wird nun der Geschenkkarten-Code verwendet, um mehrere Geschenkkarten in einer Bestellung zu ermöglichen.
+      - Tweak: Anpassung des an Nets gesendeten YITH-Geschenkkarten-Namens unter Verwendung des folgenden Formats Gift card: `{gifdcard_code}`.
+      - Tweak: paymentId zum Log für Charge-Order-, Cancel-Order- und Update-Cart-Anfragen hinzugefügt.
+      - Tweak: Anpassung in der als Bestellnotiz protokollierten Refund-Nachricht. Grund nicht erforderlich.
+      - Fix: Behebung eines PHP 8.1-Deprecation-Hinweises.
+      - Fix: Checkout-Seite neu laden, wenn der Warenkorb keine Zahlung für den Embedded-Checkout-Flow benötigt. Das bedeutet, dass stattdessen das reguläre WooCommerce-Checkout-Template verwendet wird.
+
+      Dies wurde am 13. April 2023 veröffentlicht – mehr dazu finden Sie [hier](https://wordpress.org/plugins/dibs-easy-for-woocommerce/).
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-11-10 15:10" description="Freeze-Perioden: Bevorstehender Black Friday und Weihnachten 2023" tags={["announcement", "code-freeze", "Checkout"]} rss={{ title: "2023-11-10 15:10 - Freeze-Perioden: Bevorstehender Black Friday und Weihnachten 2023", description: "Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat der Checkout zwei Freeze-Perioden geplant: eine für Black Friday/Cyber Monday und eine für Weihnachten Was müssen Sie tun? Für diese Ankündigung müssen Sie keine Änderungen vornehmen. Datum &" }}>
+      Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat der Checkout zwei Freeze-Perioden geplant:
+      - eine für Black Friday/Cyber Monday und;
+      - eine für Weihnachten
+
+      ### Was müssen Sie tun?
+      Für diese Ankündigung müssen Sie keine Änderungen vornehmen.
+
+      ### Datum & Uhrzeit:
+
+      Die Freeze-Periode für Black Friday/Cyber Monday beginnt am Montag, den 20. November 2023 um 8:00 Uhr MEZ und endet am Montag, den 27. November 2023 (beide Tage einschließlich).
+
+      Die Freeze-Periode für Weihnachten und Neujahr beginnt am Montag, den 4. Dezember 2023 und endet am Montag, den 1. Januar 2024.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-03-20 15:48" description="Beim Shopify-Plugin können einige Probleme mit Rückerstattungen auftreten" tags={["nets-easy", "incident", "plugin", "Shopify", "easy-connect", "refund"]} rss={{ title: "2023-03-20 15:48 - Beim Shopify-Plugin können einige Probleme mit Rückerstattungen auftreten", description: "Wir verzeichnen einige zeitweise auftretende Probleme mit der Zahlungsoperation zur Rückerstattung von Zahlungen in der Shopify Checkout-App. Wir stehen derzeit mit Shopify in Kontakt, um dies abzustimmen. Sie können auch deren eigene Development-Changelog-Beiträge prüfen" }}>
+      Wir verzeichnen einige zeitweise auftretende Probleme mit der Zahlungsoperation zur Rückerstattung von Zahlungen in der Shopify Checkout-App.
+
+      Wir stehen derzeit mit Shopify in Kontakt, um dies abzustimmen. Sie können auch deren eigene Development-Changelog-Beiträge [hier](https://shopify.dev/changelog) prüfen.
+
+      ## Was bedeutet das für Sie?
+
+      Aus diesen Umständen heraus und bis wir mehr von Shopify wissen, kann es einige Fälle geben, in denen eine Rückerstattung zweimal verarbeitet wird. Wir können dafür leider derzeit keine Workaround-Lösung anbieten.
+
+      Wenn Sie versuchen möchten, eine Rückerstattung im Checkout-Portal vorzunehmen, beachten Sie bitte, dass diese Änderungen nicht in Ihrem Shopify-Dashboard oder auf der Bestellseite reflektiert werden.
+
+      Wir entschuldigen uns, falls Sie eines dieser Refund-Probleme erleben. Wenn Sie Fragen dazu haben, kontaktieren Sie bitte den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+    </Update>
+
+    <Update label="2023-03-19 12:57" description="Plugins Release #2" tags={["nets-easy", "release", "easy-plugins", "prestashop-1.7, v.1.1.5"]} rss={{ title: "2023-03-19 12:57 - Plugins Release #2", description: "Dieses Plugin-Release ist eine Fehlerbehebung für PrestaShop 1.7, Version 1.1.5. Fehlerbehebungen und Verbesserungen: PrestaShop 1.7, Release Version 1.1.5 Ein Update, um die Kompatibilität mit PHP 7 und PHP 8 für PrestaShop 8 v sicherzustellen und zu validieren" }}>
+      Dieses Plugin-Release ist eine Fehlerbehebung für PrestaShop 1.7, Version 1.1.5.
+
+      ### Fehlerbehebungen und Verbesserungen: PrestaShop 1.7, Release Version 1.1.5
+
+      - Ein Update, um sicherzustellen und zu validieren, dass die Kompatibilität mit PHP 7 und PHP 8 für die PrestaShop 8-Version funktioniert.
+
+      Dies wurde am 17. März 2023 veröffentlicht – weitere Informationen finden Sie in unserem Repository [hier](https://github.com/Nets-eCom/Prestashop1.7_NetsEasy).
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-03-03 11:50" description="Plugins Release #1" tags={["nets-easy", "release", "easy-plugins", "magento-2 1.6.1", "woocommerce 2.2.2"]} rss={{ title: "2023-03-03 11:50 - Plugins Release #1", description: "Diese Plugin-Releases sind Fehlerbehebungen für Magento 2, Version 1.6.1 und WooCommerce, Version 2.2.2. Fehlerbehebungen und Verbesserungen: Magento 2, Release Version 1.6.1 Eine Korrektur für die Quote-ID und die Bestellung, die nicht erstellt wurde, sowie korrekte Updates in Ma" }}>
+      Diese Plugin-Releases sind Fehlerbehebungen für Magento 2, Version 1.6.1 und WooCommerce, Version 2.2.2.
+
+      ### Fehlerbehebungen und Verbesserungen: Magento 2, Release Version 1.6.1
+
+      - Eine Korrektur für die nicht erstellte Quote-ID und Bestellung sowie für korrekte Updates in Magento 2 für den Redirect-Payment-Flow.
+      - Eine Korrektur, um die fehlenden Magento 2 Allgemeinen Geschäftsbedingungen im Zahlungs-Checkout anzuzeigen. Dies ist eine Einstellung im Magento 2-Backend, in der Sie die Allgemeinen Geschäftsbedingungen aktivieren, damit sie in jeder Zahlungsoption angezeigt werden.
+
+      Dies wurde am 1. März 2023 veröffentlicht – weitere Informationen finden Sie in unserem Repository [hier](https://github.com/Nets-eCom/Magento2_easy).
+
+      ### Fehlerbehebungen und Verbesserungen: WooCommerce, Release 2.2.2
+
+      - Tweak: Webhook-URL nicht an Checkout senden, wenn die Site über *wp_get_environment_type()* als lokale Umgebung deklariert ist. Zuvor wurde dies über `$_SERVER`['REMOTE_ADDR'] und `$_SERVER`['HTTP_HOST'] geprüft.
+      - Fix: Verbesserte Multi-Currency-Unterstützung. Erstellt eine neue Nets-paymentId, wenn die Währung mitten in der Sitzung geändert wird.
+
+      Dies wurde am 29. Februar 2023 veröffentlicht – mehr dazu finden Sie auch [hier](https://docs.krokedil.com/nets-easy-for-woocommerce/changelog/).
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-02-28 12:41" description="Beim Shopify-Plugin treten einige Probleme mit Massen-Belastungen auf" tags={["nets-easy", "incident", "plugin", "Shopify", "easy-connect"]} rss={{ title: "2023-02-28 12:41 - Beim Shopify-Plugin treten einige Probleme mit Massen-Belastungen auf", description: "Derzeit treten einige Probleme mit der Zahlungsoperation für Massen-Captures im Shopify-Dashboard auf. Shopify hat außerdem kürzlich die Funktionalität entfernt, Bestellungen mit dem Button \"Mark as paid\" im Shopify-Admin-Dashboard zu markieren, wie hier beschrieben" }}>
+      Derzeit treten einige Probleme mit der Zahlungsoperation für Massen-Captures im Shopify-Dashboard auf.
+
+      Shopify hat außerdem kürzlich die Funktionalität entfernt, Bestellungen mit dem Button "Mark as paid" im Shopify-Admin-Dashboard zu markieren, wie [hier](https://help.shopify.com/en/manual/shopify-flow/reference/actions/mark-order-as-paid) beschrieben. Das bedeutet, dass eine manuelle Aktualisierung derzeit nicht mehr möglich ist.
+
+      Wir stehen derzeit mit Shopify in Kontakt, um dies abzustimmen. Sie können auch deren eigene Development-Changelog-Beiträge [hier](https://shopify.dev/changelog) prüfen.
+
+      ## Empfehlung
+
+      Aus diesen Umständen heraus und bis wir mehr von Shopify wissen, empfehlen wir, falls Sie das Shopify-Plugin verwenden, davon abzusehen, 5 oder mehr Transaktionen gleichzeitig einzuziehen. Wenn Sie Massen-Captures in unserem Checkout-Portal durchführen, können wir den Status im Shopify-Dashboard nicht synchronisieren.
+
+      Wenn mehr Belastungen gleichzeitig durchgeführt werden, wird keine Capture-Anfrage an uns gesendet, was uns daran hindert, eine ordnungsgemäße Fehlerbehebung durchzuführen.
+
+      Wir entschuldigen uns, falls Sie Verzögerungen erleben. Wenn Sie Fragen dazu haben, kontaktieren Sie bitte den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+    </Update>
+
+    <Update label="2023-02-05 19:30" description="Im Checkout-Portal kann es zu Verzögerungen bei der Verarbeitung und Abrechnung von Transaktions-Belastungen und -Rückerstattungen kommen" tags={["nets-easy", "easy-portal", "incident"]} rss={{ title: "2023-02-05 19:30 - Im Checkout-Portal kann es zu Verzögerungen bei der Verarbeitung und Abrechnung von Transaktions-Belastungen und -Rückerstattungen kommen", description: "Im Checkout-Portal kann es zeitweise zu Verzögerungen bei der Verarbeitung und Abrechnung von Transaktions-Belastungen und -Rückerstattungen kommen. Sie können den Status von Checkout hier prüfen https://easy status.developers.nets.eu/. Sie können auch su" }}>
+      Im Checkout-Portal kann es zeitweise zu Verzögerungen bei der Verarbeitung und Abrechnung von Transaktions-Belastungen und -Rückerstattungen kommen.
+
+      Sie können den Status von Checkout [hier](https://easy-status.developers.nets.eu/) prüfen. Abonnieren Sie ihn auch gerne, um auf dem Laufenden zu bleiben, wenn Vorfälle auftreten oder gelöst werden.
+
+      Wir entschuldigen uns, falls Sie Verzögerungen erleben. Wenn Sie Fragen dazu haben, kontaktieren Sie bitte den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+    </Update>
+
+    <Update label="2023-01-27 12:26" description="Das Testen der Checkout-APIs über Postman ist jetzt verfügbar" tags={["announcement", "nets-easy", "testing", "new-functionality"]} rss={{ title: "2023-01-27 12:26 - Das Testen der Checkout-APIs über Postman ist jetzt verfügbar", description: "Postman ist ein API application programming interface -Entwicklungs-Tool, das beim Erstellen, Testen und Ändern von APIs hilft. Mit einem Checkout-Postman-Konto https://www.postman.com/netseasy ist es möglich, Tests für die folgenden APIs durchzuführen:" }}>
+      Postman ist ein API-(Application Programming Interface)-Entwicklungs-Tool, das beim Erstellen, Testen und Ändern von APIs hilft.
+
+      Mit einem [Checkout-Postman-Konto](https://www.postman.com/netseasy) ist es möglich, Tests für die folgenden APIs durchzuführen:
+
+      - Checkout
+      - Recurring
+      - Boarding
+      - Reporting
+
+      ### Was müssen Sie tun?
+
+      Sie können mehr über das Postman-Setup und das Testen [hier](/postman) lesen und die Collection [hier](https://www.postman.com/netseasy/workspace/nets-easy-apis/collection/24211773-d754d913-e2ea-4d26-a0cc-9d5a082411b4?action=share&creator=0) ansehen.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-01-24 08:33" description="Checkout Version 1.84.0" tags={["nets-easy", "release", "easy-checkout", "version1.84.0"]} rss={{ title: "2023-01-24 08:33 - Checkout Version 1.84.0", description: "Dieses Release 1.84.0 enthält neue Funktionalitäten zu erneuten Versuchen bei Card Schemes und zum Empfang eines Grundes, warum eine Account-Verifizierung fehlschlägt. Außerdem enthält dieses Release einige Fehlerbehebungen und Verbesserungen für die UI im Checkout" }}>
+      Dieses Release 1.84.0 enthält neue Funktionalitäten zu erneuten Versuchen bei Card Schemes und zum Empfang eines Grundes, warum eine Account-Verifizierung fehlschlägt. Außerdem enthält dieses Release einige Fehlerbehebungen und Verbesserungen für die UI im Checkout.
+
+      ### Highlights des neuen Releases
+
+      - Diese Funktionalität dient dazu, die Anzahl erneuter Versuche zu begrenzen, um soft-deklinierte Transaktionen zu belasten. 15 erneute Versuche in einem rollenden Zeitraum von 30 Tagen ist die von Card Schemes festgelegte Regel. Der 16. Versuch wird auf PSP-Seite blockiert, um Strafgebühren von Card Schemes zu vermeiden. Mehr dazu lesen Sie [hier](/manage-subscription-retries#build-re-attempt-limitations).
+
+      - Bei der Account-Verifizierung sehen Sie nun den Grund und die Beschreibung, warum die Karte im Verifizierungsprozess fehlgeschlagen ist. Dadurch können Sie Maßnahmen gegenüber dem Verbraucher ergreifen, wenn beispielsweise die Karte ungültig, gestohlen oder verloren ist.
+
+      ### Fehlerbehebungen und Verbesserungen
+
+      - Behoben, sodass der Dankort-Teil des hybriden Dankort/Visa in der UI gegenüber Visa priorisiert wird.
+      - Erfassen der korrekten IP-Adresse des Verbrauchers bei einer Bestellung.
+      - Alle erneuten Belastungsversuche bei Visa-Karten, die mit den folgenden Reason Codes abgelehnt wurden, werden auf PSP-Seite blockiert. Dies sind die folgenden Codes: 04, 14, 15, 41, 43, 46, 54, 57.
+      - SetTheme überschreibt das Theme aus dem Checkout-Styler, was die Designlösung des Checkouts logischer und robuster macht.
+      - Behoben, sodass das Karteninhaber-Eingabefeld aus der UI entfernt wurde, um die Eingabe für den Verbraucher zu vereinfachen.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-01-11 19:16" description="Checkout Version 1.83.0" tags={["nets-easy", "release", "easy-checkout", "version 1.83.0"]} rss={{ title: "2023-01-11 19:16 - Checkout Version 1.83.0", description: "Dieses Release 1.83.0 enthält einige spannende neue Funktionalitäten, viele Fehlerbehebungen und UI-Verbesserungen, einschließlich Beispielen von Forbrugsforeningen als neue Zahlungsmethode, unserem neuen kategoriebasierten Checkout, der Behebung der Verfügbarkeit zur Anzeige" }}>
+      Dieses Release __1.83.0__ enthält einige spannende neue Funktionalitäten, viele Fehlerbehebungen und UI-Verbesserungen, einschließlich Beispielen von *Forbrugsforeningen* als neue Zahlungsmethode, unserem neuen *kategoriebasierten* Checkout, der Behebung der Möglichkeit, *mehrere Card Schemes* in der Checkout-Ansicht *anzuzeigen* und dem *Laden eines Skeletts* des Checkouts.
+
+      ## Highlights des neuen Releases
+
+      - Forbrugsforeningen (FBF) ist nun eine unterstützte Zahlungsmethode für Checkout.
+      Außerdem ist es Ihrem Verbraucher möglich, seine FBF-Kartendetails zu speichern, um einen einfacheren Checkout-Journey-Zahlungsfluss zu ermöglichen.
+      Das FBF-Kartenlogo wird auch sichtbar, sobald der Verbraucher seine Daten eingegeben hat, um ihm mitzuteilen, dass die Karte unterstützt wird.
+      Mehr über FBF lesen Sie in dieser Anleitung [hier](https://developers.nets.eu/nets-easy/en-EU/docs/forbrugsforeningen/), wo auch die Aktivierung dieser Zahlungsmethode beschrieben wird.
+      - Unser neuer kategoriebasierter Checkout ist ein verbraucherorientierterer Designansatz. Er zielt darauf ab, die Zahlungsmethoden auf benutzerfreundliche Weise zu präsentieren, indem sie in 3 Alternativen gruppiert werden: *Pay now, Pay later & Split payment*. Bitte beachten Sie, dass sich dies derzeit in der Pilotphase befindet und im Demo-Shop noch nicht zum Testen verfügbar ist.
+
+      ## Fehlerbehebungen und Verbesserungen
+
+      ### Fehlerbehebungen
+      - Eine stärkere Parametervalidierung wurde für die Rückerstattung von Zahlungen mit Riverty (AfterPay) hinzugefügt.
+      - SSN muss sowohl für neue als auch für bestehende Kunden eingegeben werden. Dieser Fix wurde durchgeführt, um falsche Rechnungsstellung zu vermeiden.
+      - Wenn mehr als 3 Card Schemes für Sie konfiguriert sind, wird eine kleine Animation am Karteneingabefeld hinzugefügt, sodass alle verfügbaren Kartenmarken angezeigt werden können. Wir haben in der Zeile nur Platz für 3 Marken.
+      - Partner können nun mit der Zahlung verknüpfte Zahlungsreferenzen aktualisieren.
+      - Bei wiedererkannten Verbrauchern wird die Telefonnummer nun für MobilePay vorausgefüllt.
+      - Ein Sprachindikator wird für die Zahlungsmethode Trustly gesendet, um dieselbe Sprache wie im Checkout zu verwenden.
+      - Übersetzung und Logik der Privacy-URL werden für alle unterstützten Sprachen behoben.
+      - Webhook-Performance-Verbesserungen. Es wird erwartet, dass Webhooks ausgelöst und die Benachrichtigung direkt nach verschiedenen Aktionen gesendet wird.
+      - Bei wiedererkannten Verbrauchern wird die Telefonnummer für Swish vorausgefüllt.
+
+      ### Verbesserungen an der bestehenden Lösung
+
+      - Wenn Sie den Checkout laden, erscheinen die Frames des Checkouts als Skelett. Dies ist wichtig, um dem Kunden anzuzeigen, dass der Checkout lädt und unterwegs ist.
+      - Hinzufügen einer Deckkraftfarbe zu den Zahlungsmethoden, um die ausgewählte Zahlungsoption von den nicht ausgewählten Zahlungsoptionen zu unterscheiden.
+      - Die Checkout-Styler-App im Portal wurde mit Nexi-Farben aktualisiert, um das Rebranding von Nexi vorzubereiten.
+      - Das Nets/Nexi-Logo wurde aus dem Footer-Frame verschoben, um nicht als Zahlungsoption identifiziert zu werden.
+      - "*Save my details*"-Häkchen für Händler ausgeblendet, die die Einstellung *publicDevice=true* verwenden.
+      - Ein Schloss-Symbol zum *Pay*-Button auf der Checkout-Seite hinzugefügt, um anzuzeigen, dass der Betrag an die Sitzung gebunden ist.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-05-05 14:21" description="Checkout Release 1.88.0" tags={["nets-easy", "release", "easy-checkout", "version1.88.0"]} rss={{ title: "2023-05-05 14:21 - Checkout Release 1.88.0", description: "Release 1.88.0 enthält einige Verbesserungen für die UI im Checkout. Verbesserungen Reason Code 7 zu Kategorie 1 hinzufügen, übermäßige Autorisierung. Telefonfeld-Validierung zu restriktiv für die Schweiz. Falsche polnische Postleitzahl-Validierung. Entfernen" }}>
+      Release 1.88.0 enthält einige Verbesserungen für die UI im Checkout.
+
+      ### Verbesserungen
+
+      - Reason Code 7 zu Kategorie 1 hinzufügen, übermäßige Autorisierung.
+      - Telefonfeld-Validierung zu restriktiv für die Schweiz.
+      - Falsche polnische Postleitzahl-Validierung.
+      - Entfernen Sie das `ThreeDSObject` aus dem Reservierungs-Event, wenn ihm der Enrolment-Status oder eci fehlt.
+
+      Wenn Sie Fragen dazu haben, kontaktieren Sie den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+    </Update>
+
+    <Update label="2022-10-23 20:53" description="Performance-Tests" tags={["announcement", "easy-checkout", "nets-easy", "testing"]} rss={{ title: "2022-10-23 20:53 - Performance-Tests", description: "Checkout bereitet sich auf die bevorstehenden großen E-Commerce-Tage wie Black Friday, Cyber Monday und die Weihnachts-Shopping-Saison vor, indem Volumen- und Stresstests durchgeführt werden, um eine gute Leistung und Stabilität sicherzustellen. Die Tests sind geplant für die Durchführung" }}>
+      Checkout bereitet sich auf die bevorstehenden großen E-Commerce-Tage wie Black Friday, Cyber Monday und die Weihnachts-Shopping-Saison vor, indem Volumen- und Stresstests durchgeführt werden, um eine gute Leistung und Stabilität sicherzustellen.
+
+      Die Tests sind für die Wochen 44–45 geplant.
+
+      ### Was müssen Sie tun?
+      Für diese Ankündigung müssen Sie keine Änderungen vornehmen.
+
+      ### Datum & Uhrzeit der Tests:
+
+      - __Test-Datum: 01.11.2022 – 14.11.2022__
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2022-12-09 13:58" description="Tests für Dankort und American Express funktionieren derzeit nicht" tags={["nets-easy", "announcement", "easy-checkout", "testing"]} rss={{ title: "2022-12-09 13:58 - Tests für Dankort und American Express funktionieren derzeit nicht", description: "Checkout hat derzeit Beeinträchtigungen mit Dankort /dankort build testing und American Express /american express build testing für Tests. Das bedeutet, dass alle Tests mit diesen Zahlungsmethoden fehlschlagen, wenn die Testdaten d" }}>
+      Checkout hat derzeit Beeinträchtigungen bei [Dankort](/dankort#build-testing) und [American Express](/american-express#build-testing) für Tests.
+
+      Das bedeutet, dass alle Tests, die mit diesen Zahlungsmethoden durchgeführt werden, fehlschlagen, wenn die Testdaten der Beispiel-Kreditkarten [hier](/test-card-processing#build-sample-credit-cards) verwendet werden.
+
+      ### Zeitrahmen
+      Leider können wir zum jetzigen Zeitpunkt keine Schätzung abgeben, wann Tests für Dankort und American Express wieder verfügbar sein werden.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2022-11-14 09:53" description="Bevorstehende Freeze-Perioden für Black Friday und Weihnachten" tags={["announcement", "easy-checkout", "nets-easy", "code-freeze"]} rss={{ title: "2022-11-14 09:53 - Bevorstehende Freeze-Perioden für Black Friday und Weihnachten", description: "Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat Checkout zwei Freeze-Perioden geplant; eine für Black Friday und eine für Weihnachten. Was müssen Sie tun? Für diese Ankündigung müssen Sie keine Änderungen vornehmen. Datum & Uhrzeit der Tests:" }}>
+      Im Hinblick auf die bevorstehenden großen E-Commerce-Tage hat Checkout zwei Freeze-Perioden geplant; eine für Black Friday und eine für Weihnachten.
+
+      ### Was müssen Sie tun?
+      Für diese Ankündigung müssen Sie keine Änderungen vornehmen.
+
+      ### Datum & Uhrzeit der Tests:
+
+      Die Black Friday-Freeze-Periode beginnt am Montag, den 21. November 2022 um 8:00 Uhr MEZ und endet am Montag, den 28. November 2022 (beide Tage einschließlich).
+
+      Die Weihnachts-Freeze-Periode beginnt am Montag, den 5. Dezember 2022 und endet am Sonntag, den 1. Januar 2023.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2022-09-01 13:50" description="Begrenzung von Transaktionsdaten im Portal" tags={["announcement", "nets-easy", "nets-portal"]} rss={{ title: "2022-09-01 13:50 - Begrenzung von Transaktionsdaten im Portal", description: "Um die Leistung aufrechtzuerhalten und kontinuierlich Zuverlässigkeit, Flexibilität und Effektivität auf unserer Checkout-Portal-Plattform zu erhöhen, wird es zukünftig nur noch möglich sein, Transaktionsdaten der letzten 2 Jahre einzusehen und zu durchsuchen. Was müssen Sie tun" }}>
+      Um die Leistung aufrechtzuerhalten und kontinuierlich Zuverlässigkeit, Flexibilität und Effektivität auf unserer Checkout-Portal-Plattform zu erhöhen, wird es zukünftig nur noch möglich sein, Transaktionsdaten der letzten 2 Jahre einzusehen und zu durchsuchen.
+
+      ### Was müssen Sie tun?
+      Für diese Ankündigung müssen Sie keine Änderungen vornehmen.
+
+      ### Datum & Uhrzeit der Änderung:
+
+      - __Datum der Änderung: 01.10.2022__
+      - __Zeitpunkt der Änderung: 09:00 – 17:00 MESZ__
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2022-07-12 13:43" description="Änderungen an der Checkout-Produktionsumgebung im Rahmen einer Migration zu Azure Cloud" tags={["announcement", "easy-checkout", "nets-easy"]} rss={{ title: "2022-07-12 13:43 - Änderungen an der Checkout-Produktionsumgebung im Rahmen einer Migration zu Azure Cloud", description: "Um die Zuverlässigkeit, Flexibilität und Sicherheit auf unserer Plattform zu erhöhen, werden einige Checkout-Services von Nets-On-Premises zur Microsoft Azure Cloud Environment migriert. Sie müssen nur dann Maßnahmen ergreifen, wenn Sie Webhooks verwenden und whitel haben" }}>
+      Um die Zuverlässigkeit, Flexibilität und Sicherheit auf unserer Plattform zu erhöhen, werden einige Checkout-Services von Nets-On-Premises zur Microsoft Azure Cloud Environment migriert.
+
+      __Sie müssen nur dann Maßnahmen ergreifen, wenn Sie Webhooks verwenden und unsere öffentlichen IPs auf der Whitelist haben.__
+
+      Wir erwarten während des Migrationsprozesses keine Ausfallzeiten.
+
+      ### Was müssen Sie tun?
+      Wenn Sie Webhook-Traffic über unsere öffentlichen IP-Bereiche auf die Whitelist setzen, ist es wichtig, die folgenden IP-Bereiche sowohl für Sandbox (Customer Test) als auch für Production (Live) auf die Whitelist zu setzen, um Probleme beim Empfang von Webhooks vom Checkout zu vermeiden.
+
+      - __Production 20.103.218.104/30__
+      - __Sandbox (Customer Test) 20.31.57.60/30__
+
+      Beachten Sie, dass die aktuellen öffentlichen IP-Bereiche noch für eine kurze Zeit weiter verwendet werden, das Whitelisten der neuen IP-Bereiche jedoch empfohlen wird, um die ordnungsgemäße Funktionalität des Service sicherzustellen.
+
+      ### Datum & Uhrzeit der Änderung:
+
+      Die Migration wurde am __05.09.2022__ abgeschlossen
+
+      Der ursprüngliche untenstehende Zeitplan wurde verlängert. Die Migration soll am __07.09.2022__ abgeschlossen werden.
+
+      - __Datum der Änderung: 01.09.2022__
+      - __Zeitpunkt der Änderung: 09:00 – 17:00 MESZ__
+
+      Sie müssen die Änderungen vor dem oben genannten Datum und Zeitpunkt vornehmen.
+
+      Wenn Sie Fragen dazu haben, können Sie den Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren.
+    </Update>
+
+    <Update label="2023-09-21 11:42" description="Bevorstehende Ausfallzeit für das Shopify-Plugin" rss={{ title: "2023-09-21 11:42 - Bevorstehende Ausfallzeit für das Shopify-Plugin", description: "Diese Benachrichtigung gilt für alle unsere Händler, die unser Shopify-Plugin verwenden. Zur Optimierung unserer Systemstabilität wird es in der Nacht zu Donnerstag, dem 28. September 2023, ein Wartungsfenster mit Ausfallzeit geben. Zeitraum: Vom 28." }}>
+      Diese Benachrichtigung gilt für alle unsere Händler, die unser Shopify-Plugin verwenden.
+
+      Zur Optimierung unserer Systemstabilität wird es in der Nacht zu __Donnerstag, dem 28. September 2023__, ein Wartungsfenster mit Ausfallzeit geben.
+
+      - __Zeitraum:__ Vom 28.09.2023 00:30 MESZ bis 28.09.2023 02:30 MESZ.
+
+      - __Beschreibung:__ Wartungstätigkeit am Checkout (Nets Easy) Shopify-Produktions-Hosting.
+
+      - __Auswirkung:__ Während dieser Tätigkeit erwarten wir Störungen mit bis zu 1 Stunde Ausfallzeit innerhalb des Zeitraums.
+
+      Bei Fragen prüfen Sie bitte entweder die [Status-Seite](https://easy-status.developers.nets.eu/) oder kontaktieren Sie den [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+    </Update>
+
+  </Tab>
+  <Tab title="Zukünftig">
+    <Update label="Future" description="Derzeit sind keine zukünftigen Updates veröffentlicht">
+      Derzeit sind keine zukünftigen Changelog-Einträge veröffentlicht.
+    </Update>
+  </Tab>
+</Tabs>

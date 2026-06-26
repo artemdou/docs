@@ -1,0 +1,70 @@
+---
+title: "Testdaten"
+description: "Dieser Leitfaden beschreibt die Testdaten, die für jede Zahlungsmethode und jeden Zahlungstyp benötigt werden, um Tests für Checkout durchzuführen."
+---
+
+## Überblick
+
+Dieser Leitfaden bietet einen Überblick über die Vorgehensweisen und Möglichkeiten zum Testen der verschiedenen Zahlungsmethoden im Checkout.
+
+In der folgenden Liste finden Sie alle unterstützten Zahlungsmethoden:
+
+
+
+### Übersichtstabelle aller APMs zum Testen von Checkout
+| Typ | Name | Zum Testen unterstützt |
+| --- | --- | --- |
+| Karten | VISA | ✅ |
+| Karten | MasterCard | ✅ |
+| Karten | American Express | ✅ |
+| Karten | Dankort | ✅ |
+| Karten | Maestro | ✅ |
+| A2A | SEPA-Lastschrift | ❌ |
+| A2A | Trustly | ✅ |
+| A2A | Swish | ✅ |
+| Rechnung/Ratenzahlung | AfterPay | ✅ |
+| Rechnung/Ratenzahlung | RatePay | ❌ |
+| Wallet | Vipps | ✅ |
+| Wallet | MobilePay | ✅ |
+| Wallet | PayPal | ✅ |
+| Wallet | Apple Pay | ❌ |
+| Wallet | Klarna | ✅ |
+| Wallet | Google Pay | ✅ |
+
+## Testbarkeit
+
+Folgendes kann für Checkout getestet werden:
+
+### Testbarkeit
+| Name | Typ | Testbar |
+| --- | --- | --- |
+| SEPA-Lastschrift | A2A | ❌ |
+| Swish | A2A | ✅ |
+| Trustly | A2A | ✅ |
+| American Express | Karten | ✅ |
+| Visa & MasterCard | Karten | ✅ |
+| Maestro | Karten | ✅ |
+| Dankort | Karten | ✅ |
+| AfterPay-Riverty | Rechnung/Ratenzahlung | ✅ |
+| Ratepay | Rechnung/Ratenzahlung | ❌ |
+| MobilePay | Wallet | ✅ |
+| PayPal | Wallet | ❌ |
+| Vipps | Wallet | ✅ |
+| Apple Pay | Wallet | ✅ |
+| Klarna | Wallet | ✅ |
+| Google Pay | Wallet | ✅ |
+
+In den verschiedenen Abschnitten erfahren Sie, wie Sie die unterschiedlichen Zahlungsarten testen, einschließlich Testbeispielen für den Demoshop:
+
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Wallet-Verarbeitung testen](/test-wallet-processing)
+- [Account-to-Account-Verarbeitung testen](/test-account-to-account-processing)
+- [Rechnungs- und Ratenzahlungsverarbeitung testen](/test-invoice-installment-processing)
+
+## Siehe auch
+
+- [Testumgebung](/test-environment)
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Account-to-Account-Verarbeitung testen](/test-account-to-account-processing)
+- [Rechnungs- und Ratenzahlungsverarbeitung testen](/test-invoice-installment-processing)
+- [Checkout-Demoshop](https://shop.easy.nets.eu/)

@@ -1,0 +1,144 @@
+---
+title: "Riverty"
+description: "Learn about Riverty for Nexi Checkout."
+---
+
+## Before you start
+
+<Info>
+Before you can enable this payment method in your Checkout portal, you must accept the terms & conditions. Please contact our Customer Service Team to initiate the process.
+</Info>
+
+## Overview
+
+Checkout has an integration to [Riverty](https://www.riverty.com/ "Riverty homepage") which enables your consumers to pay  by splitting the payments into installments.
+
+## Functionalities
+
+### Functionality Table Riverty
+|  |  |
+| --- | --- |
+| Payment type | Installment, invoice, campaign |
+| Subscriptions | ❌ |
+| Refunds | ✅ |
+| Partial refund | ✅ |
+| Update order | ✅ |
+| Cancel payment | ✅ |
+| Reservation & charge | ✅ |
+| IPSP | ✅ |
+
+| Type | Currencies | Countries |
+| --- | --- | --- |
+| Installment | EUR | DE, AT |
+| Invoice | SEK, EUR | SE, DE, AT |
+| Campaign | SEK | SE |
+
+<Info>
+You can learn more about the payment operations from [here](/order-management/#build-payment-operations).
+</Info>
+
+## Activation
+
+To activate Riverty as a payment method and to add it to your Checkout portal, you need to complete the onboarding journey.
+
+<Info>
+If you already have an existing Checkout portal account, you need to [contact Support](https://www.nets.eu/payments/contact-us) for this.
+</Info>
+
+
+
+## User Journey
+
+This following section will describe the user journey and payment flow for a consumer:
+
+<Info>
+Depending from what country the consumer is based in, the personal identification number can correspond to different IDs eg. social security number, NemID, bankID etc. This is used for a background credit check.
+</Info>
+
+1. When your consumer chooses Riverty as a payment method in the checkout, they will be prompted to choose between two choices:
+   - Pay later
+   - Split payment
+2. Next, they will need to enter their personal identification number.
+3. Accept the Terms and Conditions.
+4. Click on Pay.
+5. From here, they will be redirected to the strong authentication page in a pop-up window.
+6. As mentioned earlier in the info box, the following authentication is depended on what country the consumer is from.
+7. After the confirmation and validation of identity, the consumer is redirected back to the checkout and the payment will be approved.
+8. Lastly, the charge amount will be reserved.
+
+## Payment Flow
+
+After your consumers have confirmed their payment during the checkout process, the money will be sent to your Checkout Portal.
+
+<Warning>
+For Riverty with invoices, it is important to note that the order request has to be specified correctly with all the proper parameters. This includes the parameters such as:
+- unitPrice
+- taxRate
+- taxAmount
+- grossTotalAmount
+- netTotalAmount
+- quantity
+
+Some of the parameters are as optional but for __Riverty__, these parameters are required as invalid order items will make the payment fail otherwise. You can check all of the parameters from the Payment API for create payment [here](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items) and charge payment [here](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-charges-post-body-orderitems).
+
+The following example shows a correctly filled order item:
+</Warning>
+
+```json Order item example for Riverty
+{
+	"grossTotalAmount": 11900,
+	"name": "Item",
+	"netTotalAmount": 9520,
+	"quantity": 1,
+	"reference": "490",
+	"taxRate": 2500,
+	"taxTotalAmount": 2380,
+	"unit": "pcs",
+	"unitNetPrice": 9520
+}
+```
+
+## Integration
+
+In order for consumers to be able to use Riverty payments in the checkout, we need to receive the consumer's information and address. 
+
+This can be allowed by you if you either:
+
+- Enable the address fields in the checkout, e.g. setting the *checkout.merchantHandlesConsumerData* to false or left out from the create payment request which will let the consumer enter their information in the checkout
+- Or by including the consumer's data in the create payment request directly.
+
+If you include the information in the create payment request, you will need to make sure that the following information is included in the checkout object:
+
+```text Including the consumer's data in the create payment request for the checkout object
+{
+    ...
+    "checkout": {
+        ...
+        "merchantHandlesConsumerData": true,
+        ...
+        "consumer": {
+            "email": "email@domain.com",
+            "shippingAddress": {
+                "addressLine1": "Address 1",
+                "addressLine2": "",
+                "postalCode": "12345",
+                "city": "City",
+                "Country": "ABC"
+            },
+            "phoneNumber": {
+                "number": "701234567",
+                "prefix": "+46"
+            },
+            "privatePerson": {
+                "firstName": "Firstname",
+                "lastName": "Lastname"
+            }
+        }
+    }
+    ...
+}
+```
+
+## Testing
+
+Checkout provides the possibility to test for Riverty. You can test Riverty payments in the [Nexi Group testing environment](/test-environment).

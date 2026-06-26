@@ -1,0 +1,411 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "sequoia",
+  "name": "Nexi Group Documentation",
+  "description": "Documentation for integrating and managing Nexi Checkout payments.",
+  "favicon": "/favicons/favicon.ico",
+  "appearance": {
+    "default": "light"
+  },
+  "colors": {
+    "primary": "#2D32A9",
+    "light": "#27BFC2",
+    "dark": "#2D32A9"
+  },
+  "background": {
+    "color": {
+      "dark": "#090A22"
+    }
+  },
+  "logo": {
+    "dark": "/dark.png",
+    "light": "/light.png"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Ubuntu",
+      "weight": 500
+    },
+    "body": {
+      "family": "Ubuntu",
+      "weight": 400
+    }
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "assistant",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "grok",
+      "aistudio",
+      "devin",
+      "windsurf",
+      "mcp",
+      "cursor",
+      "vscode",
+      "devin-mcp",
+      "download-spec",
+      "download-pdf"
+    ]
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "tabs": [
+          {
+            "tab": "Home",
+            "pages": ["index"]
+          },
+          {
+            "tab": "Documentation",
+            "groups": [
+              {
+                "group": "Integration options",
+                "pages": [
+                  "web-integration/index",
+                  {
+                    "group": "Use a webshop plugin",
+                    "pages": [
+                      "checkout-for-woocommerce",
+                      "checkout-for-shopify",
+                      "checkout-for-prestashop-prestashop",
+                      "magento/index",
+                      "shopware/index",
+                      "oxid/index",
+                      "checkout-for-jtl"
+                    ]
+                  },
+                  "integrate-mobile-sdks",
+                  "integrate-php-sdk"
+                ]
+              },
+              {
+                "group": "Account & Portal",
+                "pages": [
+                  "create-a-checkout-portal-account",
+                  "access-your-integration-keys",
+                  {
+                    "group": "Checkout Portal",
+                    "pages": ["manage-payments"]
+                  }
+                ]
+              },
+              {
+                "group": "Checkout Demo Store",
+                "pages": [
+                  "homepage",
+                  {
+                    "group": "Settings",
+                    "pages": ["payment", "checkout-merchant", "links"]
+                  }
+                ]
+              },
+              {
+                "group": "Checkout",
+                "pages": [
+                  "surcharge",
+                  "optimize-the-checkout-flow",
+                  "support-private-and-business-customers",
+                  "express-buttons-in-product-page",
+                  "customize-content/index",
+                  "styling-and-accessibility",
+                  "add-shipping-cost",
+                  "support-subscriptions",
+                  "unscheduled-subscriptions-ucof"
+                ]
+              },
+              {
+                "group": "Order Management",
+                "pages": [
+                  "track-events-using-webhooks",
+                  "confirm-order",
+                  {
+                    "group": "Managing payments with Payment API",
+                    "pages": [
+                      "charge-payments",
+                      "cancel-payments",
+                      "refund-a-charge"
+                    ]
+                  },
+                  "processing-of-virtual-cards",
+                  "manage-subscriptions",
+                  "manage-unscheduled-subscriptions",
+                  "manage-subscription-retries"
+                ]
+              },
+              {
+                "group": "Payment methods",
+                "pages": [
+                  {
+                    "group": "Credit Cards",
+                    "pages": [
+                      "american-express",
+                      "visa-mastercard",
+                      "maestro",
+                      "dankort"
+                    ]
+                  },
+                  {
+                    "group": "Account to Account",
+                    "pages": ["sepa-direct-debit", "swish", "trustly"]
+                  },
+                  {
+                    "group": "Wallets",
+                    "pages": [
+                      "mobilepay",
+                      "vipps",
+                      "apple-pay",
+                      "google-pay",
+                      "klarna",
+                      "paypal"
+                    ]
+                  },
+                  {
+                    "group": "Invoice and Installments",
+                    "pages": ["riverty", "ratepay-invoice"]
+                  },
+                  "reason-codes"
+                ]
+              },
+              {
+                "group": "Test and Deploy",
+                "pages": [
+                  "test-environment",
+                  {
+                    "group": "Test data",
+                    "pages": [
+                      "test-card-processing",
+                      "test-wallet-processing",
+                      "test-account-to-account-processing",
+                      "test-invoice-installment-processing"
+                    ]
+                  },
+                  "postman",
+                  "go-live-checklist"
+                ]
+              },
+              {
+                "group": "Paylink/One-Page-Shop",
+                "pages": [
+                  "before-you-start",
+                  "create-your-first-paylink",
+                  {
+                    "group": "One-Page-Shop Integration Options",
+                    "pages": ["website-iframe", "website-modal-window"]
+                  },
+                  {
+                    "group": "API",
+                    "pages": [
+                      "complete-example-for-sending-a-checkout-paylink-request"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "API Reference",
+                "openapi": "openapi/checkout.openapi.json"
+              }
+            ]
+          },
+          {
+            "tab": "Changelog",
+            "groups": [
+              {
+                "group": "Changelog",
+                "pages": ["changelog"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "de",
+        "tabs": [
+          {
+            "tab": "Startseite",
+            "pages": ["de/index"]
+          },
+          {
+            "tab": "Dokumentation",
+            "groups": [
+              {
+                "group": "Integrationsoptionen",
+                "pages": [
+                  "de/web-integration/index",
+                  {
+                    "group": "Webshop-Plugin verwenden",
+                    "pages": [
+                      "de/checkout-for-woocommerce",
+                      "de/checkout-for-shopify",
+                      "de/checkout-for-prestashop-prestashop",
+                      "de/magento/index",
+                      "de/shopware/index",
+                      "de/oxid/index",
+                      "de/checkout-for-jtl"
+                    ]
+                  },
+                  "de/integrate-mobile-sdks",
+                  "de/integrate-php-sdk"
+                ]
+              },
+              {
+                "group": "Konto & Portal",
+                "pages": [
+                  "de/create-a-checkout-portal-account",
+                  "de/access-your-integration-keys",
+                  {
+                    "group": "Checkout-Portal",
+                    "pages": ["de/manage-payments"]
+                  }
+                ]
+              },
+              {
+                "group": "Checkout-Demoshop",
+                "pages": [
+                  "de/homepage",
+                  {
+                    "group": "Einstellungen",
+                    "pages": ["de/payment", "de/checkout-merchant", "de/links"]
+                  }
+                ]
+              },
+              {
+                "group": "Checkout",
+                "pages": [
+                  "de/surcharge",
+                  "de/optimize-the-checkout-flow",
+                  "de/support-private-and-business-customers",
+                  "de/express-buttons-in-product-page",
+                  "de/customize-content/index",
+                  "de/styling-and-accessibility",
+                  "de/add-shipping-cost",
+                  "de/support-subscriptions",
+                  "de/unscheduled-subscriptions-ucof"
+                ]
+              },
+              {
+                "group": "Auftragsverwaltung",
+                "pages": [
+                  "de/track-events-using-webhooks",
+                  "de/confirm-order",
+                  {
+                    "group": "Zahlungen mit der Payment-API verwalten",
+                    "pages": [
+                      "de/charge-payments",
+                      "de/cancel-payments",
+                      "de/refund-a-charge"
+                    ]
+                  },
+                  "de/processing-of-virtual-cards",
+                  "de/manage-subscriptions",
+                  "de/manage-unscheduled-subscriptions",
+                  "de/manage-subscription-retries"
+                ]
+              },
+              {
+                "group": "Zahlungsmethoden",
+                "pages": [
+                  {
+                    "group": "Kreditkarten",
+                    "pages": [
+                      "de/american-express",
+                      "de/visa-mastercard",
+                      "de/maestro",
+                      "de/dankort"
+                    ]
+                  },
+                  {
+                    "group": "Account-to-Account",
+                    "pages": ["de/sepa-direct-debit", "de/swish", "de/trustly"]
+                  },
+                  {
+                    "group": "Wallets",
+                    "pages": [
+                      "de/mobilepay",
+                      "de/vipps",
+                      "de/apple-pay",
+                      "de/google-pay",
+                      "de/klarna",
+                      "de/paypal"
+                    ]
+                  },
+                  {
+                    "group": "Rechnung und Ratenzahlung",
+                    "pages": ["de/riverty", "de/ratepay-invoice"]
+                  },
+                  "de/reason-codes"
+                ]
+              },
+              {
+                "group": "Testen und Bereitstellen",
+                "pages": [
+                  "de/test-environment",
+                  {
+                    "group": "Testdaten",
+                    "pages": [
+                      "de/test-card-processing",
+                      "de/test-wallet-processing",
+                      "de/test-account-to-account-processing",
+                      "de/test-invoice-installment-processing"
+                    ]
+                  },
+                  "de/postman",
+                  "de/go-live-checklist"
+                ]
+              },
+              {
+                "group": "Paylink/One-Page-Shop",
+                "pages": [
+                  "de/before-you-start",
+                  "de/create-your-first-paylink",
+                  {
+                    "group": "Integrationsoptionen für One-Page-Shop",
+                    "pages": ["de/website-iframe", "de/website-modal-window"]
+                  },
+                  {
+                    "group": "API",
+                    "pages": [
+                      "de/complete-example-for-sending-a-checkout-paylink-request"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API-Referenz",
+            "groups": [
+              {
+                "group": "API-Referenz",
+                "openapi": "openapi/checkout.openapi.json"
+              }
+            ]
+          },
+          {
+            "tab": "Änderungsprotokoll",
+            "groups": [
+              {
+                "group": "Änderungsprotokoll",
+                "pages": ["de/changelog"]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "seo": {
+    "metatags": {
+      "robots": "noindex"
+    }
+  }
+}

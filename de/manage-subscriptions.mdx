@@ -1,0 +1,411 @@
+---
+title: "Abonnements verwalten"
+description: "Dieser Leitfaden richtet sich an Entwickler, die Abonnementzahlungen programmatisch mit der Payment API einziehen, verifizieren und aktualisieren möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="blue">Coding: Ja (Backend)</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Dieser Leitfaden setzt voraus, dass Sie die folgenden Leitfäden befolgt und implementiert haben:
+- [Checkout auf Ihrer Website integrieren](/web-integration)
+- [Abonnements unterstützen](/support-subscriptions) (auf der Checkout-Seite)
+</Warning>
+
+## Übersicht
+
+Sobald Sie eine Checkout-Seite haben, die Abonnements verarbeiten kann, ist es an der Zeit, die Funktionalität in Ihrem Backend zu implementieren, um die Abonnements zu verwalten:
+
+- **Abonnements einziehen**: Sie können ein oder mehrere Abonnements gleichzeitig belasten. Die Belastung eines Abonnements ist eine asynchrone Operation. Sie erstellen eine neue Bulk-Charge-Operation und rufen den Status der Operation zu einem späteren Zeitpunkt ab.
+
+- **Abonnements verifizieren**: Abonnements werden im Laufe der Zeit ungültig. Beispielsweise laufen Zahlungskarten ab oder können als gestohlen gemeldet werden. Sie können Ihre Abonnements vor der Belastung verifizieren, sodass Ihre Kunden Zeit haben, ihre Abonnements zu aktualisieren.
+
+- **Ungültige Abonnements aktualisieren**: Wenden Sie sich an Kunden mit ungültigen Abonnements, damit sie das Abonnement mit neuen Zahlungsdaten aktualisieren können.
+
+<Warning>
+Es ist nicht zulässig, Abonnements mit niedrigen Beträgen (wie 1,00 EUR) anzulegen, nur um eine Karte bei Checkout zu registrieren. Erstellen Sie stattdessen [eine Zahlung mit einem unscheduled subscription-Objekt mit amount=0, um die Karte zu verifizieren](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-unscheduledsubscription).
+
+Wenn die Karte gültig ist, können Sie das [Token (Unscheduled Subscription ID) abfragen und es für zukünftige Belastungen verwenden](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-get).
+
+Dies ist die konforme Methode, um eine Karte zu registrieren, ohne den Kunden zu belasten, und ein Token zurückzubekommen.
+Transaktionen mit niedrigen Beträgen (1,00 EUR / SEK / DKK / etc.), die nicht eingezogen oder storniert werden, können abgelehnt werden oder Strafen von Visa oder MasterCard nach sich ziehen.
+</Warning>
+
+### Zahlungsmethoden, die Abonnements unterstützen
+| Name | Typ | Unterstützt |
+| --- | --- | --- |
+| SEPA Direct Debit | A2A | ❌ |
+| Swish | A2A | ❌ |
+| Trustly | A2A | ❌ |
+| American Express | Karten | ✅ |
+| VISA & MasterCard | Karten | ✅ |
+| Maestro | Karten | ❌ |
+| Dankort | Karten | ✅ |
+| AfterPay-Riverty | Rechnung/Ratenzahlung/Kampagnen | ❌ |
+| Ratepay | Rechnung/Ratenzahlung | ❌ |
+| MobilePay | Wallet | ❌ |
+| PayPal | Wallet | ❌ |
+| Vipps | Wallet | ❌ |
+
+Weitere ausführliche Informationen, einschließlich Länder, Währungen, Tests, Funktionalität von Zahlungsoperationen usw., finden Sie in den jeweiligen verlinkten Abschnitten.
+
+<Steps>
+  <Step title="Abonnementdetails abrufen">
+    Bevor Sie ein Abonnement belasten oder verifizieren können, müssen Sie zunächst die Kennung des Abonnements ermitteln. Sie können die Abonnementkennung aus dem Checkout Portal oder über die Payment API abrufen. Der Leitfaden [Abonnements unterstützen](/support-subscriptions) beschreibt, wie Sie Abonnementdetails einschließlich der `subscriptionId ` abrufen können, daher wird dies hier nicht wiederholt. Weitere Details finden Sie unter [Schritt 5: Abonnement mit der Payment API abrufen](/support-subscriptions/#build-step-5-retrieve-subscription-using-the-payment-api).
+  </Step>
+  <Step title="Ein Abonnement belasten">
+    Wenn eine neue Abonnementzahlung erstellt und Sie die `subscriptionId ` abgerufen haben, können Sie neue Zahlungen im Zusammenhang mit dem Abonnement initiieren. Die einzigen einschränkenden Faktoren sind die **zeitlichen** und **Intervall**-Einschränkungen, die beim Erstellen des Abonnements festgelegt wurden. Davon abgesehen können Sie beliebige Zahlungen mit völlig unterschiedlichen Bestellpositionen und Beträgen erstellen.
+
+    Beim Belasten eines Abonnements müssen Sie eine vollständige Bestellung angeben, die spezifiziert, wofür Sie Ihren Kunden belasten. Verwenden Sie die Methode [Bulk charge subscriptions](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-post), um ein Abonnement zu belasten.
+
+    > info
+    > Wenn Sie über erfolgreiche Abonnement-Belastungen benachrichtigt werden möchten, sollten Sie [*payment.charge.created.v2*](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#charge-created) abonnieren. Wenn Sie über fehlgeschlagene Abonnement-Belastungsversuche informiert werden möchten, sollten Sie [*payment.reservation.failed*](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#reservation-failed) abonnieren.
+
+    Hier ist ein Beispiel:
+
+    ### Abonnement belasten
+
+    <CodeGroup>
+
+    ```php charge-subscriptions.php
+    <?php
+
+    $secretKey = "<YOUR_SECRET_API_KEY>";
+
+    $payload = file_get_contents('payload.json');
+    assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/subscriptions/charges');
+
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'Authorization: ' . $secretKey));                                                
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    echo("HTTP code: " . $http_code . PHP_EOL);
+    $json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+    echo $json_pretty . PHP_EOL;
+    ```
+
+    ```javascript charge-subscriptions.js
+    const http = require("https");
+    const fs = require('fs');
+
+    const payload = fs.readFileSync('payload.json'); // Replace payload
+    const secretKey = "<YOUR_SECRET_KEY>";           // Replace key
+
+    const options = {
+      "method": "POST",
+      "hostname": "test.api.dibspayment.eu",
+      "port": null,
+      "path": "/v1/subscriptions/charges",
+      "headers": {
+        "content-type": "application/json",
+        "Authorization": secretKey
+      }
+    };
+
+    const req = http.request(options, function (res) {
+      const chunks = [];
+
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        console.log(body.toString());
+      });
+    });
+
+    req.write(payload);
+    req.end();
+    ```
+
+    </CodeGroup>
+
+    <Info>
+    Denken Sie daran, `&lt;YOUR_SECRET_API_KEY&gt;` durch Ihren [Secret Key](/access-your-integration-keys/#build-integration-keys) zu ersetzen.
+    </Info>
+
+    Die Payload wird typischerweise dynamisch von Ihrem Backend erstellt. Wenn Sie es jedoch nur ausprobieren möchten, können Sie den folgenden hartcodierten Request-Body verwenden, der einen einzelnen Artikel belastet. Denken Sie daran, `&lt;SUBSCRIPTION_ID&gt;` durch eine gültige Abonnementkennung zu ersetzen.
+
+    ```json payload.json
+    {
+        "externalBulkChargeId": "1001",
+        "subscriptions": [
+            {
+                "subscriptionId": "<SUBSCRIPTION_ID>",
+                "order": {
+                    "items": [
+                        {
+                            "reference": "230-1",
+                            "name": "Silver plan",
+                            "quantity": 1,
+                            "unit": "quantity",
+                            "unitPrice": 30000,
+                            "taxRate": 2500,
+                            "taxAmount": 7500,
+                            "netTotalAmount": 30000,
+                            "grossTotalAmount": 37500
+                        }
+                    ],
+                    "amount": 37500,
+                    "currency": "SEK",
+                    "reference": "Monthly subscription"
+                }
+            }
+        ]
+    }
+    ```
+
+    Ganz oben im Request-Body wird eine Eigenschaft namens `externalBulkChargeId ` angegeben. Diese Kennung sollte von Ihnen festgelegt werden und muss eine eindeutige Zeichenfolge pro Bulk-Charge-Operation sein, die Sie erstellen. Wenn Sie aus irgendeinem Grund dieselbe Bulk-Charge-Anfrage erneut senden müssen, z. B. aufgrund eines Netzwerkausfalls oder eines anderen Grundes, sollten Sie dieselbe `externalBulkChargeId ` angeben, damit Ihre Kunden nicht mehrfach belastet werden. Siehe auch den Abschnitt [*Using external identifiers to enable retries*](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#using-external-identifiers-to-enable-retries) in der API-Referenz.
+
+    Es ist üblich, alle aktiven Abonnements regelmäßig an bestimmten Daten zu belasten, beispielsweise am letzten Tag des Monats. In solchen Fällen ist es praktisch, mehrere Abonnements gleichzeitig belasten zu können.
+
+    > Wenn Sie über erfolgreiche Abonnement-Belastungen benachrichtigt werden möchten, sollten Sie `<payment.charge.created>` abonnieren. Wenn Sie über fehlgeschlagene Abonnement-Belastungsversuche informiert werden möchten, sollten Sie `<payment.reservation.failed>` abonnieren.
+    > 
+    > 
+    > Denken Sie daran, `&lt;YOUR_SECRET_API_KEY&gt;` durch Ihren [Secret Key](/access-your-integration-keys/#build-integration-keys) zu ersetzen.
+  </Step>
+  <Step title="Mehrere Abonnements belasten">
+    Es ist möglich, mehrere Abonnements im Bulk zu belasten. Dies ist nützlich, wenn Sie Ihren Kunden einen Abonnementdienst anbieten, bei dem alle Kunden gleichzeitig belastet werden, z. B. am ersten Tag des Monats.
+
+    In einem einzigen API-Aufruf können Sie eine beliebige Anzahl von Abonnements belasten. Die Abonnementkennungen werden typischerweise auf Ihrer Seite gespeichert, sodass Sie Belastungsanfragen für alle Ihre Abonnements zusammenstellen können.
+
+    > __Wichtig:__
+    > Bitte beachten Sie, dass für Bulk-Belastungen von Abonnements eine Anfrage maximal 20.000 ohne Webhooks ausführen kann.
+    > 
+    > __Empfehlung__: Falls eine Bulk-Belastung mehr als 20.000 umfasst, wird empfohlen, sie aufzuteilen und die Aufrufe mit mehr Zeit dazwischen, wie z. B. 5 Minuten pro Aufruf, auszuführen.
+
+    Hier ist ein Beispiel für eine Payload, die zwei aktive Abonnements belastet. Denken Sie daran, `&lt;SUBSCRIPTION_ID_1&gt;` und `&lt;SUBSCIRIPTION_ID_2&gt;` durch tatsächliche Abonnementkennungen zu ersetzen, bevor Sie die Anfrage senden.
+
+    ```json payload.json
+    {
+        "externalBulkChargeId": "1002",
+         "notifications": {
+            "webhooks": [ ]
+         }
+        "subscriptions": [
+            {
+                "subscriptionId": "<SUBSCRIPTION_ID_1>",
+                "order": {
+                    "items": [
+                        {
+                            "reference": "230-1",
+                            "name": "Silver plan",
+                            "quantity": 1,
+                            "unit": "quantity",
+                            "unitPrice": 30000,
+                            "taxRate": 2500,
+                            "taxAmount": 7500,
+                            "netTotalAmount": 30000,
+                            "grossTotalAmount": 37500
+                        }
+                    ],
+                    "amount": 37500,
+                    "currency": "SEK",
+                    "reference": "Monthly subscription 1"
+                }
+            },
+            {
+                "subscriptionId": "<SUBSCRIPTION_ID_2>",
+                "order": {
+                    "items": [
+                        {
+                            "reference": "230-1",
+                            "name": "Silver plan",
+                            "quantity": 1,
+                            "unit": "quantity",
+                            "unitPrice": 30000,
+                            "taxRate": 2500,
+                            "taxAmount": 7500,
+                            "netTotalAmount": 30000,
+                            "grossTotalAmount": 37500
+                        }
+                    ],
+                    "amount": 37500,
+                    "currency": "SEK",
+                    "reference": "Monthly subscription 2"
+                }
+            }
+        ]
+    }
+    ```
+
+    Das Beispiel zeigt auch, dass es möglich ist, der Anfrage ein Array von `webhooks ` hinzuzufügen, sodass Sie die durch die Bulk-Charge-Operation ausgelösten Ereignisse verfolgen können. Weitere Informationen zur Eigenschaft [`notifications `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-post-body-notifications) finden Sie in der API-Referenz.
+
+    > info
+    > Jedes Abonnement, das Sie zu belasten versuchen, erzeugt ein neues Zahlungsobjekt und löst somit auch eine neue Sequenz von Webhook-Ereignissen aus. Wenn Sie beispielsweise 10 Abonnements in einer Bulk-Anfrage belasten, werden auch 10 [`payment.charge.created.v2`](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#charge-created)-Ereignisse ausgelöst.
+
+    Wenn die Belastungsanfrage erfolgreich war, wird ein HTTP-Statuscode 202 mit einer neuen Bulk-Kennung zurückgegeben:
+
+    ```json Bulk charge subscriptions (response)
+    {
+        "bulkId": "d6c11ab596184414bef9adf20936e583"
+    }
+    ```
+
+    Eine erfolgreiche Antwort bedeutet nicht, dass alle Abonnements erfolgreich belastet wurden. Sie können jedoch die im Antwort-Body zurückgegebene `bulkId ` verwenden, um Details zu einer Bulk-Charge-Operation abzurufen, wie im folgenden Schritt gezeigt.
+  </Step>
+  <Step title="Bulk-Charge-Details abrufen">
+    Wenn Sie eine Bulk-Charge-Operation durchführen, können Abonnements aus verschiedenen Gründen fehlschlagen, zum Beispiel:
+
+    - Nicht genügend Guthaben auf der Karte, was dazu führt, dass die Bank die Reservierung ablehnt. In diesem Fall können Sie Ihren Kunden über die Situation informieren und eine neue Belastung versuchen.
+
+    - Die Karte ist ungültig geworden, weil sie abgelaufen ist, als gestohlen gemeldet wurde usw. In diesem Fall müssen Sie das Abonnement aktualisieren.
+
+    Um den Status einer Bulk-Charge-Operation abzurufen, können Sie die Methode [Retrieve bulk charges](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-charges-bulkid-get) verwenden.
+
+    Die Antwort ist paginiert, da potenziell viele Abonnements verarbeitet werden. Sie haben zwei Optionen, um den Bereich der abzurufenden Belastungen anzugeben:
+
+    1. `skip ` und `take ` verwenden.
+    2. `pageNumber ` und `pageSize ` verwenden.
+
+    Im folgenden Beispielcode werden `skip ` und `take ` verwendet, um anzugeben, dass die ersten 10 Abonnements abgerufen werden sollen:
+
+    ### Bulk-Charges abrufen
+
+    <CodeGroup>
+
+    ```php get-bulk-charges.php
+    <?php
+
+    $secretKey = "<YOUR_SECRET_API_KEY>";
+    $bulkId = "<BULK_ID>";
+
+    $skip = 0;
+    $take = 10;
+
+    $ch = curl_init('https://test.api.dibspayment.eu/v1/subscriptions/charges/' . $bulkId . '?skip=' . $skip . '&take=' . $take);
+
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+      'Content-Type: application/json',
+      'Accept: application/json',
+      'Authorization: ' . $secretKey
+    ));
+    $result = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    echo ("HTTP code: " . $http_code . PHP_EOL);
+    $json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+    echo $json_pretty . PHP_EOL;
+    ```
+
+    ```javascript get-bulk-charges.js
+    const http = require("https");
+
+    const bulkId = "<BULK_ID>";            // Replace bulk id
+    const secretKey = "<YOUR_SECRET_KEY>"; // Replace key
+    const skip = 0;
+    const take = 10;
+
+    const options = {
+      "method": "GET",
+      "hostname": "test.api.dibspayment.eu",
+      "port": null,
+      "path": "/v1/subscriptions/charges/" + bulkId + "?skip=" + skip + "&take=" + take,
+      "headers": {
+        "Authorization": secretKey
+      }
+    };
+
+    const req = http.request(options, function (res) {
+      const chunks = [];
+      console.log('HTTP code:', res.statusCode);
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        try {
+          console.log(JSON.stringify(JSON.parse(body), null, 2));
+        } catch (e) {
+          console.error("Failed to parse body: " + e);
+          console.error(body.toString());
+        }
+      });
+    });
+
+    req.end();
+    ```
+
+    </CodeGroup>
+
+    Die Antwort des Servers gibt an, dass alle Abonnements zurückgegeben wurden (`"more": false `) und dass alle Belastungen erfolgreich abgeschlossen wurden:
+
+    ```json Retrieve bulk charges (response)
+    {
+        "page": [
+            {
+                "subscriptionId": "6946cde8d7a049dc89145224088b0df9",
+                "paymentId": "0040000060a76916859b391024b1f487",
+                "chargeId": "011f000060a76916859b391024b1f488",
+                "status": "Succeeded"
+            },
+            {
+                "subscriptionId": "a058888d2be048cfb4f1f8e77794ed6f",
+                "paymentId": "00ec000060a76916859b391024b1f485",
+                "chargeId": "0165000060a76916859b391024b1f486",
+                "status": "Succeeded"
+            }
+        ],
+        "more": false,
+        "status": "Done"
+    }
+    ```
+  </Step>
+  <Step title="Abonnements verifizieren (optional)">
+    Fehlgeschlagene Belastungen sind bei der Verwaltung von Abonnements üblich. Anstatt ungültige Abonnements nach einer Bulk-Charge-Operation zu erkennen, können Sie Abonnements ein paar Tage vor der geplanten Belastung verifizieren. Wenn Sie ungültige Abonnements finden, haben Sie die Möglichkeit, Ihren Kunden im Voraus zu kontaktieren.
+
+    Der Prozess der Verifizierung von Abonnements ähnelt dem Belasten von Abonnements:
+
+    1. Erstellen Sie eine Bulk-Verifizierung mit der Methode [Verify subscriptions](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-verifications-post) (HTTP POST).
+    2. Rufen Sie die Verifizierungsdetails mit der Methode [Retrieve verifications](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-subscriptions-verifications-bulkid-get) (HTTP GET) ab. Diese Methode unterstützt ebenfalls Paginierung, wie in [Schritt 4: Bulk-Charge-Details abrufen](#build-step-4-retrieve-bulk-charge-details) gezeigt.
+    3. Bitte beachten Sie für diesen Schritt, dass er die Kontoverifizierung mit Soft- oder Hard-Declines beinhaltet. Mehr darüber können Sie [hier](/reason-codes/#build-descriptions-of-reason-codes) lesen.
+  </Step>
+  <Step title="Ungültiges Abonnement aktualisieren">
+    Wenn Sie ein Abonnement nicht mehr belasten können, weil die Zahlungskarte ungültig geworden ist, müssen Sie das **Abonnement aktualisieren**. Dies setzt voraus, dass Ihr Kunde Nexi Group neue Zahlungsdaten über Ihre Checkout-Seite bereitstellt. Hier sind die Schritte, die zum Aktualisieren eines Abonnements erforderlich sind:
+
+    1. Informieren Sie Ihren Kunden, dass das Abonnement erneuert werden muss (per E-Mail, mobiler Benachrichtigung oder ähnlichem). Stellen Sie einen Link zu Ihrer Website mit der an die URL angehängten Abonnementkennung bereit. Beispiel: `https://&lt;YOUR_WEBSITE&gt;/update?subscriptionId=62a30d49…`.
+    2. Ihr Kunde klickt auf die URL, die auf Ihre Website verweist.
+    3. Das Backend Ihrer Website verwendet die Methode [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) und hängt die [`subscriptionId `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-subscription-subscriptionid) an das [`subscription `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-subscription)-Objekt des Request-Bodys an. Diese Anfrage teilt Checkout mit, dass Sie ein Abonnement aktualisieren möchten, anstatt ein neues zu erstellen.
+    4. Leiten Sie Ihren Kunden auf die gleiche Weise wie beim [Erstellen eines neuen Abonnements](/support-subscriptions) zu Ihrer Checkout-Seite (eingebettet oder gehostet). Da Sie ein Abonnement aktualisieren, präsentiert Checkout ein Formular zum Aktualisieren der Zahlungsdetails.
+    5. Ihr Kunde stellt Checkout neue Zahlungsdaten zur Verfügung.
+
+    Der gesamte Ablauf ist im Bild unten visualisiert:
+
+    ![Update Subscription Flow](https://images.ctfassets.net/di680may5c0k/3gPOk7spBsLRRYjDxet1YT/97e9d6ffff1a01fb1d524314606e2a22/Update_subscription.png?w=2062&h=790&q=50&fm=png)
+
+    Der folgende Screenshot zeigt ein Checkout-Formular, das dem Kunden beim Aktualisieren eines Abonnements präsentiert wird.
+
+    ![Update Subscription Form](https://images.ctfassets.net/di680may5c0k/4y1cO7tI8ss9r7aboQoBmW/536d0602826375c6e03c0b2009e428e1/Update_subscription_form.png?w=3251&h=1998&q=50&fm=png)
+
+    > tada
+    > **Herzlichen Glückwunsch!**
+    > 
+    > Sie wissen jetzt, wie Sie:
+    > - Ein einzelnes Abonnement oder mehrere Abonnements im Bulk **belasten**
+    > - Abonnements **verifizieren**
+    > - Ungültige Abonnements **aktualisieren**
+  </Step>
+</Steps>
+
+## Siehe auch
+
+- [Abonnements unterstützen](/support-subscriptions)
+- [Direktintegration einrichten](/web-integration)
+- [Wiederholungen für Abonnements verwalten](/manage-subscription-retries)

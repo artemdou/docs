@@ -1,0 +1,114 @@
+---
+title: "Zahlungen mit der Payment API verwalten"
+description: "Dieser Leitfaden richtet sich an Entwickler, die Zahlungen programmatisch mit der Payment API einziehen und verwalten möchten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="blue">Coding: Ja (Backend)</Badge>
+  <Badge color="blue">Plattform: PHP, Node</Badge>
+</div>
+
+## Übersicht
+
+Wenn Ihr Kunde etwas auf Ihrer Website kauft, wird in Nexi Checkout eine neue Zahlung erstellt. Neue Zahlungen erfordern Ihre Aktion:
+- Wenn Sie die Bestellung versenden, stellen Sie sicher, dass Sie die Zahlung **einziehen**, um die Mittel von Nexi Group zu erhalten.
+- Wenn die Bestellung vom Kunden **storniert** wird, stellen Sie sicher, dass Sie die Zahlung stornieren, um die Reservierung auf der Zahlungskarte des Kunden aufzuheben.
+- Wenn Sie Ihren Kunden bereits belastet haben und ihn für eine zurückgegebene Bestellung usw. entschädigen müssen, können Sie die Belastung **erstatten**.
+- Wenn Ihr Kunde eine Bestellung mit mehreren Artikeln aufgegeben hat, wird der Betrag reserviert. Wenn jedoch einige der Artikel aus der Bestellung nicht vorrätig sind, können Sie **den reservierten Betrag mit Split-Capture freigeben**.
+
+Zahlungen können im [Checkout Portal](https://portal.dibspayment.eu) oder programmatisch über die [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1) verwaltet werden. Der Leitfaden [Zahlungen verwalten](/manage-payments) beschreibt die Verwendung des Checkout Portal zur Verwaltung von Zahlungen, während dieser Leitfaden zeigt, wie die Payment API verwendet wird.
+
+## Zahlungsdetails abrufen
+
+Mit der Payment API können Sie Details zu einer in Nexi Checkout registrierten Zahlung abrufen.
+
+Laden Sie zunächst Ihre Checkout-Seite und durchlaufen Sie den Checkout-Flow, sodass eine neue Zahlung in Nexi Checkout erstellt wird. Sie benötigen die Zahlungskennung in nachfolgenden Anfragen, achten Sie also darauf, die `paymentId ` zu speichern, die von der Methode [Create payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) zurückgegeben wird, oder erfassen Sie die neue Zahlungskennung mithilfe von [Webhooks](/track-events-using-webhooks) mit dem [`payment.created `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#created)-Ereignis.
+
+<Info>
+Weitere Informationen zum Erstellen eines neuen Zahlungsobjekts finden Sie im [Integrationsleitfaden](/web-integration).
+</Info>
+
+Sobald Sie die neue `paymentId ` haben, können Sie die Payment API nach den Zahlungsdetails der neuen Zahlung abfragen:
+
+### Zahlungsdetails abrufen
+
+<CodeGroup>
+
+```php Retrieve payment details (PHP)
+<?php
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+  CURLOPT_URL => "https://test.api.dibspayment.eu/v1/payments/<PAYMENT_ID>",
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "GET",
+  CURLOPT_HTTPHEADER => [
+    "Authorization: <YOUR_SECRET_API_KEY>"
+  ],
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+  echo "cURL Error #:" . $err;
+} else {
+  echo $response;
+}
+```
+
+```javascript Retrieve payment details (Node)
+const http = require("https");
+
+const paymentId = "<PAYMENT_ID>";
+const secretKey = "<YOUR_SECRET_KEY>";
+
+const options = {
+  "method": "GET",
+  "hostname": "test.api.dibspayment.eu",
+  "port": null,
+  "path": "/v1/payments/" + paymentId,
+  "headers": {
+    "Authorization": secretKey
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+  console.log('HTTP code:', res.statusCode);
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    try {
+      console.log(JSON.stringify(JSON.parse(body), null, 2));
+    } catch (e) {
+      console.error("Failed to parse body: " + e);
+      console.error(body.toString());
+    }
+  });
+});
+
+req.end();
+```
+
+</CodeGroup>
+
+<Warning>
+Denken Sie wie immer daran, den Text `&lt;YOUR_SECRET_API_KEY&gt;` und alle anderen Parameter in `<...>` zu ersetzen. Sie können [Ihre Integrationsschlüssel finden](/access-your-integration-keys) im [Checkout Portal](https://portal.dibspayment.eu/integration).
+</Warning>
+
+## Siehe auch
+
+- [Zahlungen verwalten](/manage-payments)
+- [Ereignisse mit Webhooks verfolgen](/track-events-using-webhooks)

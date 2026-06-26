@@ -1,0 +1,104 @@
+---
+title: "Website (modal Window)"
+description: "The modal window allows you to display a Checkout Paylink payment page within a white modal window."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Coding: Some</Badge>
+</div>
+
+## Necessary Ressources
+
+There are two files which need to be included into your existing html code:
+
+- jQuery: (e.g. from CDN):\
+https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js
+- Checkout Paylink Modal JS:\
+https://media.nets-pay.link/modal/v1/modal.min.js
+
+```text Code Snippet
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous">\</script>
+<script type="text/javascript" src="https://media.nets-pay.link/modal/v1/modal.min.js"></script>
+```
+
+## Link Parameters
+
+You can pass GET parameters as part of the URL to predefine the field values.  
+Example: 
+https://demo.nets-pay.link/invoice_number=987654321&invoice_amount=450.00&invoice_currency=1]
+
+| Fieldname     | Parameter     |
+| ---------- | ---------- |
+| Purpose     | invoice_number     |
+| Amount    | invoice_amount       |
+| Currency       | invoice_currency       |
+| Salutation       | contact_title       |
+| First name       | contact_forename       |
+| Surname       | contact_surname       |
+| Company       | contact_company       |
+| Street       | contact_street       |
+| Postcode       | contact_postcode       |
+| Place       | contact_place       |
+| Country       | contact_country       |
+| Telephone       | contact_phone       |
+| Email       | contact_email       |
+
+Your Checkout Paylink instance is able to generate all the GET parameters for you. This option can be found on the edit form on the payment page within your Checkout Paylink administration.
+
+## Example Code
+
+```text sample.html
+<a class="nets-modal-window" href="#"
+    data-href="https://example.nets-pay.link/pay?tid=PAYMENT-TEMPLATE-ID">
+    Open modal window
+</a>
+<script type="text/javascript">
+    jQuery(".nets-modal-window").netsModal();
+</script>
+```
+
+<Warning>
+- Replace __example.nets-pay.link__ with the URL of your Checkout Paylink installation
+- Replace __PAYMENT-TEMPLATE-ID__ with the ID of the payment template that you would like to display
+</Warning>
+
+## Advanced Options
+
+| Parameter     | Type     | Default |
+| ---------- | ---------- | ---------- |
+| hideObjects      | Array       | \[] |
+| show       | Function       | function\(e\) \{\}
+| shown       | Function       | function\(e\) \{}
+| hide       | Function       | function\(transaction\) \{\}
+| hidden       | Function       | function\(transaction\) \{\}
+
+You can add the `hideObjects ` parameter, if you want to hide the entire contact details section of the payment template.
+
+```javascript Code Snippet
+jQuery(".nets-modal-window").netsModal({
+    hideObjects: ['#contact-details', '.contact']
+});
+```
+
+If you want to display a new page after a successful transaction, for example a "Thank you" message, you can add your own custom __hidden__-function.
+
+```javascript Code Snippet
+jQuery(".nets-modal-window").netsModal({
+    hidden: function(transaction) {
+        location.href = "http://mywebsite.com/thank-you-for-your-payment";
+    }
+});
+```
+
+If you need to validate a form before opening the Checkout Paylink modal and you have it set to be initialized by the Checkout Paylink modal on the submit button, you can add a custom __show__-function.
+
+```javascript Code Snippet
+jQuery(".nets-modal-window").netsModal({
+    show: function(e) {
+        if (validateMyForm()) {
+            return true;
+        }
+        return e.preventDefault();
+    }
+});
+```

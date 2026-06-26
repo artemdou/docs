@@ -1,0 +1,193 @@
+---
+title: "Zahlungen"
+description: "Dieser Leitfaden beschreibt, wie Sie Ihre Zahlungen im Checkout-Portal verwalten."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Komplexität: Mittel</Badge>
+  <Badge color="gray">Programmierung: Keine</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie den Leitfaden:
+- Wie Sie ein [Testkonto für Checkout erstellen](/create-a-checkout-portal-account),
+</Warning>
+
+## Überblick
+
+Der Bereich __Zahlungen__ des Checkout-Portals gibt Ihnen einen Überblick über alle Ihre Zahlungen, unterteilt in eine der folgenden Kategorien und Status:
+
+- Neu
+- Belastet
+- Rückerstattet
+- Storniert
+- Abgelehnt
+
+Diese Zahlungseinblicke können umgeschaltet werden, um Daten innerhalb eines bestimmten Zeitraums basierend auf der Ansicht entweder rückblickend für eine Woche oder einen Monat ein- oder auszuschließen. Ebenso ist es möglich, eine Ansicht für die aktuelle Woche oder den aktuellen Monat umzuschalten.
+
+Es ist auch möglich, den Suchbereich zu nutzen, um mit bestimmten Parametern zu suchen und nach der Kategorieart der Zahlung zu filtern.
+
+Wann immer Ihr Verbraucher etwas auf Ihrer Website kauft, wird in Checkout eine neue **Zahlung** erstellt. Zahlungen können direkt im [Checkout-Portal](https://portal.dibspayment.eu/payments) oder programmatisch über die [Checkout-APIs](https://developer.nexigroup.com/nexi-checkout/en-EU/api) verwaltet werden.
+
+__Neue Zahlungen erfordern Ihre Aktion:__
+
+- Wenn Sie die Bestellung versenden, stellen Sie sicher, dass Sie die Zahlung **belasten**, um die Gelder von Nets zu erhalten.
+- Wenn die Bestellung vom Kunden storniert wird, stellen Sie sicher, dass Sie die Zahlung **stornieren**, um die Reservierung auf der Zahlungskarte des Kunden freizugeben.
+
+## Zahlungsdetails
+
+Auf der Seite mit den Zahlungsdetails können Sie die Details zu den mit der ausgewählten Zahlung verknüpften Belastungen und Rückerstattungen einsehen. Es ist auch möglich, Aktionen direkt von der Zahlungsdetailseite aus durchzuführen.
+
+Um die Details einer Zahlung anzuzeigen, klicken Sie auf die Bestellzeile oder wählen Sie **Details anzeigen** aus dem Dropdown-Menü **SCHNELLAKTIONEN** auf der [Zahlungsübersichtsseite](https://portal.dibspayment.eu/payments).
+
+Die Seite mit den Zahlungsdetails enthält drei Registerkarten:
+
+- Die Registerkarte **Bestelldetails** zeigt den **Namen des Kunden** und den **Zahlungsstatus** der Bestellzeilen. Dies zeigt Ihnen, wer die Bestellung aufgegeben hat und welchen spezifischen Status die Bestellzeilen haben.
+
+- Die Registerkarte **Transaktionsdetails** zeigt Informationen, die im Kontakt mit unserem Support-Team nützlich sein können.
+
+- Die Registerkarte **Verlauf** zeigt alle Ereignisse im Zusammenhang mit einer bestimmten Zahlung, einschließlich der Information, welcher Benutzer eine bestimmte Aktion durchgeführt hat.
+
+## Neu
+
+Die Registerkarte __Neu__ zeigt alle neuen Zahlungen in der Übersicht.
+
+Alle __neuen__ Zahlungen können mit vier verschiedenen Zahlungsoperationen behandelt werden:
+
+- Belasten
+- Rückerstatten
+- Stornieren
+- Ablehnen
+
+Wann immer Ihr Verbraucher etwas auf Ihrer Website kauft, wird in Checkout eine neue **Zahlung** erstellt. Zahlungen können direkt im [Checkout-Portal](https://portal.dibspayment.eu/payments) oder programmatisch über die [Checkout-APIs](https://developer.nexigroup.com/nexi-checkout/en-EU/api) verwaltet werden.
+
+Neue Zahlungen erfordern Ihre Aktion:
+
+- Wenn Sie die Bestellung versenden, stellen Sie sicher, dass Sie die Zahlung **belasten**, um die Gelder von Nets zu erhalten.
+
+Mehr zur Belastung erfahren Sie [hier](/manage-payments/#build-charge-payments).
+
+## Belastet
+
+Die Registerkarte __Belastet__ zeigt alle belasteten Zahlungen in der Übersicht.
+
+Belasten Sie eine Zahlung am selben Tag, an dem Sie die entsprechende Bestellung versenden.
+
+Eine Kartenzahlung muss **innerhalb von 30 Tagen belastet werden**, sonst wird die Zahlung automatisch storniert. Es ist dann eine neue Bestellung von Ihrem Kunden erforderlich, wenn Sie nach den 30 Tagen belasten möchten.
+
+Eine Zahlung kann vollständig belastet (Standard) oder teilweise belastet werden.
+
+## Eine Belastung aufteilen
+
+Bestellungen können teilweise belastet werden. Um eine Teilbelastung für eine Bestellung vorzunehmen, kreuzen Sie das Kästchen für die Produkte an, die Sie belasten möchten.
+Die Gesamtsumme der Belastung wird basierend auf den ausgewählten Bestellzeilen berechnet. Überprüfen Sie den Betrag und wählen Sie *Belasten*.
+
+## Anwendungsfall
+Sie haben eine Bestellung über 100 rote T-Shirts erhalten. Sie haben jedoch nur 80 auf Lager, und der Verbraucher möchte, dass Sie das versenden, was Sie haben, so schnell wie möglich. Dazu können Sie "80" in das Mengenfeld eingeben. Das System aktualisiert die Gesamtsumme automatisch, und Sie können *Belasten* wählen, um die Bestellung abzuschließen.
+
+Sie können die verbleibenden 20 T-Shirts zu einem späteren Zeitpunkt belasten (solange dies innerhalb von 30 Tagen geschieht).
+
+### Szenario 1: Belastung für ein bestimmtes Produkt
+
+Um für ein oder mehrere Produkte zu belasten, aktivieren Sie die Auswahlkästchen. Die Gesamtsumme der Rückerstattung wird basierend auf den ausgewählten Bestellzeilen berechnet. Überprüfen Sie den Betrag und wählen Sie **Belasten**.
+
+**Beispiel:** Sie haben eine Bestellung über 1 rotes T-Shirt und 1 gelbes T-Shirt erhalten, aber es stellt sich heraus, dass Sie nur das rote T-Shirt auf Lager haben. Sie möchten das rote T-Shirt jetzt liefern und das gelbe, sobald es von Ihrem Lieferanten eintrifft. Aktivieren Sie die Bestellzeile für das rote T-Shirt und wählen Sie **Belasten**. Sie können das gelbe T-Shirt zu einem späteren Zeitpunkt belasten (solange dies innerhalb von 30 Tagen geschieht).
+
+### Szenario 2: Menge vor der Belastung ändern
+
+Sie können die Menge in einer Bestellzeile bearbeiten, indem Sie einen neuen Wert in das Mengenfeld eingeben. Die Gesamtsumme wird entsprechend Ihren Änderungen aktualisiert. Überprüfen Sie den Betrag und wählen Sie **Belasten**.
+
+**Beispiel:** Sie haben eine Bestellung über 100 rote T-Shirts erhalten. Sie haben nur 80 auf Lager, und der Kunde möchte, dass Sie das versenden, was Sie haben, so schnell wie möglich. Dazu geben Sie "80" in das Mengenfeld ein. Das System aktualisiert die Gesamtsumme automatisch, und Sie können **Belasten** wählen, um die Bestellung abzuschließen. Sie können die verbleibenden 20 T-Shirts zu einem späteren Zeitpunkt belasten (solange dies innerhalb von 30 Tagen geschieht).
+
+### Szenario 3: Den Betrag vor der Belastung ändern
+
+Sie können den Betrag in einer Bestellzeile ändern, indem Sie einen neuen Wert in das Preisfeld eingeben. Die Gesamtsumme wird entsprechend Ihren Änderungen aktualisiert. Überprüfen Sie den Betrag und wählen Sie **Belasten**.
+
+**Beispiel:** Ihr Kunde hat angerufen, um die Bestellung zu stornieren. Sie sind jedoch ein großartiger Verkäufer und haben es geschafft, den Kunden zu überzeugen, mit dem Kauf fortzufahren – mit einem Rabatt von 20 SEK. Senken Sie den Betrag im Eingabefeld auf den vereinbarten Preis. Das System berechnet die Gesamtsumme entsprechend Ihren Änderungen.
+
+Beim Senken des Preises wird eine neue Bestellzeile erstellt, die den verbleibenden Teil des reservierten Betrags enthält. Beachten Sie auch, dass es nicht möglich ist, einen Betrag zu belasten, der die ursprüngliche Bestellung übersteigt. Das System informiert Sie, wenn Sie das Limit überschreiten.
+
+### Zurücksetzen, wenn Sie die Übersicht über Änderungen verlieren
+
+Alle oben genannten Änderungen können auch in Kombination vorgenommen werden. Wenn Sie Änderungen vornehmen und den Überblick verlieren, haben Sie immer die Möglichkeit, die Änderungen zurückzusetzen, um zum Ausgangspunkt zurückzukehren, an dem Sie das Modal-Fenster geöffnet haben.
+
+## Vollständige Belastung
+
+Um eine einzelne Zahlung vollständig zu belasten, wählen Sie die Bestellung in der Zahlungsübersicht aus und wählen Sie **Belasten** aus dem Dropdown-Menü **SCHNELLAKTIONEN**. Um mehrere Zahlungen gleichzeitig zu belasten, wählen Sie die Zahlungen aus, die Sie belasten möchten, und wählen Sie **BELASTEN**.
+
+Die Belastungsaktion belastet den vollen Betrag der Bestellung. Es ist auch möglich, Teile einer Bestellung zu belasten, indem Sie die Bestellung vor der Belastung bearbeiten.
+
+## Rückerstattet
+
+Die Registerkarte __Rückerstattet__ zeigt alle rückerstatteten Zahlungen in der Übersicht.
+
+Erstatten Sie den Gesamtbetrag oder Teile einer Zahlung zurück.
+
+## Vollständige Rückerstattung
+Um den Gesamtbetrag zurückzuerstatten, wählen Sie einfach *Rückerstatten* aus dem Dropdown-Menü **SCHNELLAKTIONEN**.
+
+<Warning>
+Wenn die Zahlung teilweise belastet wurde und Sie die volle Zahlung zurückerstatten möchten, müssen Sie eine Rückerstattung pro Belastung vornehmen.
+Die vollständige Liste aller Belastungen, die mit derselben ursprünglichen Zahlung verbunden sind, finden Sie, indem Sie [die Zahlungsdetails einsehen](#view-payment-details).
+Um alle Belastungen zu finden, die mit derselben ursprünglichen Zahlung verbunden sind, wählen Sie Details anzeigen in einer Zeile, die mit der Bestellung in den Zahlungslisten verbunden ist.
+</Warning>
+
+## Bearbeiten und Rückerstatten
+
+Alle belasteten Zahlungen, einschließlich einzelner oder mehrerer Bestellzeilen, können teilweise zurückerstattet werden.
+
+Um eine Zahlung teilweise zurückzuerstatten, wählen Sie **Bearbeiten und rückerstatten** aus dem Dropdown-Menü **SCHNELLAKTIONEN**, wählen Sie die gewünschten Bestellzeilen aus und/oder bearbeiten Sie die Felder, bevor Sie **RÜCKERSTATTEN** wählen. Sie können je nach Bedarf mehrere Aktionen verwenden. Wir haben unten drei Beispiele aufgeführt.
+
+## Nicht genug Geld für eine Rückerstattung?
+
+Wenn nicht genügend Mittel auf Ihrem Konto vorhanden sind, wenn Sie eine Rückerstattung initiiert haben, erscheint die Transaktion als „in Rückerstattung", bis das Guthaben dem Betrag entspricht oder ihn übersteigt, den Sie zurückerstatten möchten, zuzüglich der Transaktionsgebühr.
+
+Eine Rückerstattung kann auf zwei Arten abgeschlossen werden:
+
+1. Neue Zahlungen belasten
+2. Eine Banküberweisung tätigen
+
+Wenn Sie keine Zahlungen zu belasten haben, können Sie eine Einzahlung auf Ihr Konto über eine reguläre Banküberweisung vornehmen.
+
+Die Einzahlung muss nicht exakt dem Betrag der Rückerstattung und der Transaktionsgebühr entsprechen. Der überschüssige Betrag wird als Einzahlung verbucht und in Ihrer nächsten Auszahlung berücksichtigt.
+
+Die eingezahlten Mittel sind einige Tage nach der Banküberweisung auf der Auszahlungsseite Ihres Easy-Kontos sichtbar.
+
+### Wo finde ich es?
+
+Weitere Informationen, wie Sie eine *Einzahlung* vornehmen, einschließlich Kontodetails und Referenznummer, finden Sie in Ihrem Checkout-Admin-Konto unter "*Unternehmen*" und "*Kontoinformationen*". Klicken Sie unter "*Vereinbarungen und Bankkonto*" auf "*Einzahlung*".
+
+<Warning>
+- Es dauert in der Regel einige Tage, bis die Mittel auf das Konto Ihres Kunden überwiesen werden, abhängig von den Routinen des Kartenausstellers (normalerweise die Bank Ihres Kunden).
+- Ihr Guthaben muss größer sein als der Betrag, den Sie zurückerstatten möchten, einschließlich Transaktionsgebühren. Tätigen Sie eine Einzahlung oder belasten Sie neue Zahlungen, wenn Ihr Guthaben zu niedrig ist.
+</Warning>
+
+##  Storniert
+
+Die Registerkarte __Storniert__ zeigt alle stornierten Zahlungen in der Übersicht.
+
+Reservierte Beträge bei Kartenzahlungen freigeben
+
+Wenn ein Verbraucher eine Bestellung storniert, bevor die Ware versendet wird, können Sie die Zahlung stornieren. Durch das Stornieren einer Zahlung wird das reservierte Geld an die Zahlungskarte des Kunden freigegeben, und **Nets erhebt keine Gebühr für die Zahlung.**
+
+## Eine Zahlung stornieren
+
+Um eine Zahlung zu stornieren, wählen Sie einfach die Zahlung in der Zahlungsübersicht aus und wählen Sie **Stornieren** aus dem Dropdown-Menü **SCHNELLAKTIONEN**. Um mehrere Zahlungen gleichzeitig zu stornieren, wählen Sie die gewünschten aus und wählen Sie **Stornieren**.
+
+<Note>
+Beachten Sie, dass es nicht möglich ist, den Status einer Zahlung zu ändern, sobald sie storniert wurde.
+</Note>
+
+## Abgelehnt
+
+Die Registerkarte __Abgelehnt__ zeigt alle neuen Zahlungen in der Übersicht.
+
+Sie können die Ablehnungsgründe und Antwortcodes einsehen, wenn eine Zahlung abgelehnt wurde. In einigen wenigen Fällen haben wir keine Informationen vom Kartenaussteller zur Ablehnung erhalten. In diesen Fällen sind die Felder leer.
+
+Sie können unseren Support [hier](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) kontaktieren, um weitere Informationen zur Zahlung zu erhalten.
+
+Sie können in dieser Tabelle hier einige der häufigsten Fehlercodes einsehen.
+
+Sie können auch eine Übersicht über einige der häufigsten Fehlercodes [hier](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#error-codes) in der API-Referenz und Antwortcodes für erneute Versuche bei Abonnements [hier](/manage-subscription-retries/#build-re-attempt-can-be-forbidden) einsehen.

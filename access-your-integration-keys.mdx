@@ -1,0 +1,39 @@
+---
+title: "Access Your Integration Keys"
+description: "To be able to test and use text in bold, you need a set of integration keys API keys to identify your webshop and to make the integration secure."
+---
+
+## Before you start
+
+<Warning>
+Before you start, you need an [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide:
+- How to [create a test account for Checkout](/create-a-checkout-portal-account)..
+</Warning>
+
+Requirements:
+
+- Shopware Version: Compatible with Shopware 6.6.x and above.
+
+Note: For Shopware versions 6.4.x and 6.5.x (e.g., 6.4.1, 6.5.2), please use Shopware 1.x
+
+If you are using Shopware 1.x, you will need to run Shopware 2.x in parallel until the orders are completed.
+
+## Integration keys
+
+Your unique integration keys make your integration with Checkout secure. There are two sets of integration keys: one for the **test** environment and one for the **live** environment. 
+
+For each environment, **two keys** are provided:
+- The **Secret API key** which your backend sends to Checkout for authentication. The private API key should be kept secret and should never be passed from your frontend code. 
+- The **Checkout key** which is a public identifier for your webshop. This key can be passed from your frontend to Checkout as a public identifier.
+
+## Copy your keys
+
+To access your keys, navigate to [Company Integration](https://portal.dibspayment.eu/integration) in Checkout portal. Depending on what environment you are using, copy the relevant set of integration keys as demonstrated in the screenshot below:
+
+![Checkout Portal company integration](https://images.ctfassets.net/di680may5c0k/2DnKj0AHd6p5efsG9pOxVE/e96e044a4793aa18e3e916f09beb3688/Screenshot_2021-04-14_at_16.44.35.png?w=2470&h=914&q=50&fm=png)
+
+Each key is prefixed with a string that identifies their type, for example `live-secret-key-`. The prefix help you distinguish between the keys but can be omitted when passing the keys to Checkout. All Checkout APIs accept keys with or without the prefix.
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)

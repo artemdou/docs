@@ -1,0 +1,49 @@
+---
+title: "Testen und Bereitstellen"
+description: "Diese Seite bietet eine Gesamtbeschreibung und einen Überblick über die verschiedenen Möglichkeiten zum Testen der Checkout-Zahlungsmethoden im Checkout-Prozess."
+---
+
+## Überblick
+
+Dieser Abschnitt beschreibt die Testoptionen für Checkout mit den verschiedenen Zahlungsmethoden.
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie eine Checkout-Seite, die die Checkout-Testumgebung verwendet.
+</Warning>
+
+Die folgende Tabelle zeigt einen Überblick über die aktuellen Testbarkeiten der Zahlungsmethoden:
+
+## Tabelle der Testbarkeit
+
+### Überblick zur Testbarkeit
+| Name | Typ | Testbar |
+| --- | --- | --- |
+| SEPA-Lastschrift | A2A | ❌ |
+| Swish | A2A | ✅ |
+| Trustly | A2A | ✅ |
+| American Express | Karten | ✅ |
+| Visa & MasterCard | Karten | ✅ |
+| Maestro | Karten | ✅ |
+| AfterPay-Riverty | Rechnung/Ratenzahlung | ✅ |
+| Ratepay | Rechnung/Ratenzahlung | ❌ |
+| MobilePay | Wallet | ✅ |
+| PayPal | Wallet | ✅ |
+| Vipps | Wallet | ✅ |
+| Klarna | Wallet | ✅ |
+| Apple Pay | Wallet | ❌ |
+| Google Pay | Wallet | ✅ |
+
+<Columns cols={2}>
+  <Card title="Checkout-Demoshop">
+  </Card>
+  <Card title="Anleitung zum Demoshop" href="/test-the-demo-store">
+  </Card>
+</Columns>
+
+## Nächste Schritte
+
+- [Testumgebung](/test-environment)
+- [Testdaten](/test-data)
+- [Kartenverarbeitung testen](/test-card-processing)
+- [Account-to-Account-Verarbeitung testen](/test-account-to-account-processing)
+- [Rechnungs- und Ratenzahlungsverarbeitung testen](/test-invoice-installment-processing)

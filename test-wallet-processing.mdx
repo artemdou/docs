@@ -1,0 +1,216 @@
+---
+title: "Test Wallet Processing"
+description: "This article describes how to test wallet processing on your checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="gray">Coding: None</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+Before you start, you need a checkout page that uses the [Checkout test environment](/test-environment).
+</Warning>
+
+## How to test
+
+The Checkout page provides your customers with the option to pay by wallets. To test wallet processing on the checkout page, follow the steps below:
+
+## Vipps
+
+__1.__ Contact us to __activate Vipps__ on your test Merchant ID.
+
+__2.__ __Download the Vipps MT app.__ If you require more information about this step, please refer to the [Vipps/Mobilepay test environment](https://developer.vippsmobilepay.com/docs/test-environment/#install-vipps-mt-on-ios) page.
+
+__3.__ __Sign up__ in the Vipps test App by using dummy test credentials: telephone number and PIN. For example:
+
+__Vipps__
+-  __Phone number:__ +47 99767804
+- __PIN:__ 1236
+- __NIN__ 43099599376
+
+__4.__ Your test account should now be set up so you should be able to __initiate payments__ in the test environment.
+
+__5.__ __Use the dummy phone number__ in our checkout.
+
+__6.__ __Verify__ the payment in the Vipps testing App.
+
+__7. You have successfully completed the process!__ You may refer to the screenshots below for a better understanding of the flow.
+
+|    |     |
+| ---------- | ---------- |
+| __1__  ![Vipps1](https://images.ctfassets.net/di680may5c0k/4CkNdmxq2ctjaWvEgxQVOe/44f40c4c023187d042b91fa63b8ffe6a/Vipps1.PNG)      | __2__ ![Vipps2](https://images.ctfassets.net/di680may5c0k/3VnVSDJjKftFw3pLkURdFw/09b545d67d2453d56efcae6a244260f9/Vipps2.PNG) |
+| __3__ ![Vipps3](https://images.ctfassets.net/di680may5c0k/6gQCel7U2wjniMudmdtXbq/54bd1bbf8b73fdf0a4c9d0d04b6bea0f/Vipps3.PNG)       | __4__ ![Vipps5](https://images.ctfassets.net/di680may5c0k/3VyBdjwoECfGtOWIta8SfC/07c9fcda67a5998552287383ecdc5178/Vipps5.png) |
+| __5__ ![Vipps6](https://images.ctfassets.net/di680may5c0k/vTxJLPBZdg7sUvbvWMfK0/e8354c62e0b9cab4df969bd82fd13f46/Vipps6.png) | __6__ ![Vipps7](https://images.ctfassets.net/di680may5c0k/4TfJXffYQL3bsx48CgWw7e/abc70b4795f4537e39c6d2843c2687f2/Vipps7.PNG) |
+
+## Klarna
+
+In order to test Klarna use the following test data per depending on the country
+
+__Norway__
+
+| Flow       | E-mail adress     | Phone number     |
+| ---------- | ---------- | ---------- |
+| Approved   | customer@email.no      | +4740123456  |
+| Denied      | customer+denied@email.no       | +4740123457   |
+
+Customer data Norway
+
+| Field    | Approved  | Denied   |
+| ---------- | ---------- | ---------- |
+| First name       | Jane      | Test       |
+| Last name      | Test      | Person-no       | 
+| Address      | Edvard Munchs Plass 1     | Sæffleberggate 56     |
+| Zip code      | 0194       | 0563       |
+| Country      | NO       |     NO   |
+| Date of birth (DD-MM-YYYY)    | 01-08-1970     | 01-08-1970     |
+| Personal number     | NO01087000571      | NO01087000148      |
+
+__Sweden__
+
+| Flow     | E-mail address     | Phone number    |
+| ---------- | ---------- | ---------- |
+| Approved      | customer@email.se      | +46701740615      |
+| Denied      | customer+denied@email.se      |   +46701740620    |
+
+Customer data Sweden
+
+| Field    | Approved     | Denied    |
+| ---------- | ---------- | ---------- |
+| First name      | Alice      | Test      |
+| Last name       | Test      | Person-se    |
+| Address    | Södra Blasieholmshamnen 2    | Karlaplan 3       |
+| Zipcode       | 11 148       | 11 460       |
+| City       | Stockholm       | Stockholm       |
+| Country       | SE       | SE      |
+| Date of birth (DD-MM-YYYY)      | 21-03-1941       | 28-10-1941       |
+| Personal number       | SE194103219202       | SE194110288083       |
+
+__Denmark__
+
+| Flow     | E-mail address    | Phonenumber     |
+| ---------- | ---------- | ---------- |
+| Approved       | customer@email.dk      | 4542555628       |
+| Denied       | customer+denied@email.dk       | 4552555348       |
+
+Customer data Denmark
+
+| Field     | Approved     | Denied     |
+| ---------- | ---------- | ---------- |
+| First name       | Test       | Test      |
+| Last name       | Person-dk       | Person-dk       |
+| Address       | Dantes Plads 7       | Nygårdsvej 65       |
+| Zip code       | 1556       | 2100       |
+| City       | København Ø       | København Ø       |
+| Country       | DK       | DK       |
+| Date of birth (DD-MM-YYYY)      | 01-01-1980       | 10-07-1970       |
+
+__Germany__
+
+| Flow     | E-mail address    | Phone number     |
+| ---------- | ---------- | ---------- |
+| Approved      | customer@email.de       | +49017614284340       |
+| Denied       | customer+denied@email.de       | +49017610927312       |
+
+Customer data Germany
+
+| Field     | Approved   | Denied    |
+| ---------- | ---------- | ---------- | 
+| First name       | Mock       | Test     | 
+| Last name       | Mock       | Person-de       |
+| Address      | Neue Schönhauser Str. 2      | Neue Schönhauser Str. 2       | 
+| Zip code       | 10178       | 10178       | 
+| City      | Berlin    | Berlin       | 
+| Country       | DE      | DE       | 
+| Date of birth (DD-MM-YYYY)       | 	10-07-1970      | 	10-07-1970       |
+
+__Austria__
+
+| Flow     | E-mail address     | Phone number     |
+| ---------- | ---------- | ---------- |
+| Approved       | customer@email.at      | +4306762600456       |
+| Denied     | customer+denied@email.at       | +4306762600745       |
+
+Customer data Austria
+
+| Field     | Approved    | Denied   |
+| ---------- | ---------- | ---------- |
+| First name      | Test      | Test       |
+| Last name       | 	Person-at      | 	Person-at       |
+| Address       | Mariahilfer Straße 47       | Mariahilfer Straße 47       |
+| Zip code       | 1060       | 1060       |
+| City       | Wien       | Wien       |
+| Country       | AT       | AT      |
+| Date of birth (DD-MM-YYYY)      | 10-07-1970       | 10-07-1970       |
+
+__Finland__
+
+| Flow     | E-mail address     | Phone number     |
+| ---------- | ---------- | ---------- |
+| Approved      | customer@email.fi       | +358401234567     |
+| Denied      | customer+denied@email.fi       | +358401234567      |
+
+Customer data Finland
+
+|Field     | Approved    | Denied     |
+| ---------- | ---------- | ---------- |
+| First name       | Test       | Person FI       |
+| Last name       | Person-fi      | Test       |
+| Address       | Mannerheimintie 34       | Mannerheimintie 34      |
+| Zip code       | 00100       | 00100       |
+| City      | Helsinki       | Helsinki       |
+| Country       | FI       | FI       |
+| Date of birth (DD-MM-YYYY)      | 01-01-1999       | 01-01-1999       |
+| Personal number     | 190122-829F      |        |
+
+## Mobilepay
+
+1. Contact us to __activate Mobilepay__ on your test Merchant ID.
+
+2. __Download the Vipps MT app.__ If you require more information about this step, please refer to the [Mobilepay test environment page](https://developer.vippsmobilepay.com/docs/knowledge-base/test-environment/).
+
+3. __Sign up__ in the Mobilepay test App by using dummy test credentials: telephone number and PIN. For example:
+
+  -   Phone number: + 45 70 44 91 98
+
+  -   PIN: 1236
+
+4. Your test account should now be set up so you should be able to __initiate payments__ in the test environment.
+
+5. __Use the dummy phone number__ in our checkout.
+
+6. __Verify__ the payment in the Mobilepay testing App.
+
+7. __You have successfully completed the process!__ You may refer to the screenshots below for a better understanding of the flow.
+
+|    |     |
+| ---------- | ---------- |
+| __1__  ![Mobilepay test1](https://images.ctfassets.net/di680may5c0k/5MXzKpD9xe7ERxWjX6jQia/1d1bc53a140292bdd6c9396f8eda3a51/Mobilepay_test1.png)| __2__ ![Skærmbillede 2025-09-18 104126](https://images.ctfassets.net/di680may5c0k/6V67KalBEwZfQ0XrKJMJND/469daa5d85b7a6ec991e5e8809bc79aa/SkÃ_rmbillede_2025-09-18_104126.png)|
+| __3__ ![Skærmbillede 2025-09-18 104411](https://images.ctfassets.net/di680may5c0k/3nhw3vhkKKnxi11DyjYJL5/ef5972037a6e0ea55b951ed7b2ed3524/SkÃ_rmbillede_2025-09-18_104411.png)
+
+## Googlepay
+
+In order to test GooglePay you need to have a Google account
+
+1. Contact us to activate GooglePay on your test merchant ID
+2. If you do not have a Google account you can create one here: [gmail.com](https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&dsh=S1312044340%3A1760519556147499&emr=1&followup=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F0%2F&ifkv=AfYwgwWhTkhYuP6pMZsZaIJbrtCyn7gKzkc5JJ-MaolWRgwV_vovLF_C2R9ceJurJJltyAMhy_ou&osid=1&passive=1209600&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin "gmail.com")
+3. When you login to your Google account in the payment process the Google test card number will automatically be displayed
+
+__Payment flow test__ 
+
+1. Select Googlepay in checkout window
+![2025-10-15 11 24 48-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/7hb0JR0jSfeb1qut0orFhp/849238957d46c3e567f9558593fe6155/2025-10-15_11_24_48-GP_sandbox_-_Word.png)
+2. Sign-in to your Google account
+![2025-10-15 11 26 20-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/3XXo9S2fFHhtrdHXAfBgDU/e496800ea903a85b8ef9480b4989407b/2025-10-15_11_26_20-GP_sandbox_-_Word.png)
+3. Click __Pay__
+![2025-10-15 11 31 05-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/7HFysis7Kfh7eOqviw9naD/2bb24eca22db348e4dfc5a94408aedc6/2025-10-15_11_31_05-GP_sandbox_-_Word.png)
+4. Payment being processed
+![2025-10-15 11 32 27-GP sandbox - Word](https://images.ctfassets.net/di680may5c0k/407taB76GyKwodYFzkNFir/6d00170cd5ca17ec2689f4d2deed5538/2025-10-15_11_32_27-GP_sandbox_-_Word.png)
+5. Payment completed
+![Googlepay successful](https://images.ctfassets.net/di680may5c0k/2TrkerPF67hF2OmQldKBKM/bde0208281da4585e4a92bcde0a6a40b/Googlepay_successful.png)
+
+## See also
+
+- [Test environment](/test-environment)

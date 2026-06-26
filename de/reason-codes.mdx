@@ -1,0 +1,135 @@
+---
+title: "Reason Codes"
+description: "Dieser Leitfaden beschreibt die verschiedenen Reason Codes, die bei Kartensystem-Transaktionen auftreten können, sowie die verschiedenen Arten von Ablehnungen."
+---
+
+## Überblick
+
+Reason Codes werden vom Kartenherausgeber verwendet, um anzugeben, wofür und warum eine Zahlungstransaktion möglicherweise nicht durchgeführt werden konnte. Dies kann Ihnen helfen zu verstehen, wie und was Sie Ihrem Verbraucher empfehlen können.
+
+Diese Codes werden angezeigt, wenn Sie in Ihrem Portal-Konto angemeldet sind, und sind in der Übersicht *Abgelehnt* der Zahlungen sichtbar.
+
+<Info>
+Leider werden die meisten Ablehnungen vom Kartenherausgeber als „generisch" kategorisiert. Das bedeutet, dass es für Checkout nicht immer möglich ist, genau zu wissen, warum eine Zahlung abgelehnt wurde.
+Wenn alle Karteninformationen korrekt erscheinen, ist es am besten, wenn Ihr Verbraucher seinen Kartenherausgeber kontaktiert und um weitere Informationen bittet.
+
+Aus Datenschutz- und Sicherheitsgründen können Kartenherausgeber die Einzelheiten einer abgelehnten Zahlung nur mit ihren Karteninhabern besprechen. Das bedeutet, dass Checkout hierbei nicht helfen kann.
+</Info>
+
+![Portal](https://images.ctfassets.net/di680may5c0k/1LSHmdoLEgDVLb8BiXnXRx/5b1a5c11e48c5162eacd6a5c6f4aa2dd/responseCode.png?w=1436&h=282&q=50&fm=png)
+
+## Arten von Ablehnungen
+
+Es gibt zwei Arten von Ablehnungen, die bei Kartenzahlungen auftreten können: *Soft Declines* und *Hard Declines*.
+
+Dieser Abschnitt beschreibt die Unterschiede zwischen den beiden, wie Sie vorgehen sollen und was sie in Verbindung mit den Reason Codes bedeuten.
+
+## Soft Decline
+
+Ein Soft Decline tritt auf, wenn die ausgebende Bank die Zahlung genehmigt, die Transaktion jedoch an einer anderen Stelle im Prozess fehlschlägt.
+
+Beispiele dafür, wann ein Soft Decline auftreten kann:
+
+- Unzureichendes Guthaben
+- Limit für Kartenaktivität überschritten
+- Fehler aufgrund von System-, technischen oder Infrastrukturproblemen
+- Abgelaufene Karten
+
+Sie können alle Soft Declines in der Reason-Codes-Tabelle [hier](/reason-codes/#build-descriptions-of-reason-codes) einsehen.
+
+## Hard Decline
+
+Ein Hard Decline liegt vor, wenn die ausgebende Bank die Zahlung nicht genehmigt. Mit anderen Worten: Hard Declines sind __dauerhafte__ Autorisierungsfehler und sollten nicht erneut versucht werden.
+
+Beispiele dafür, wann ein Hard Decline auftreten kann:
+
+- Möglicher Betrug
+- Unzureichende verfügbare Kreditlinie
+- Verlorene oder gestohlene Karte
+
+Sie können alle Hard Declines in der Reason-Codes-Tabelle [hier](/reason-codes/#build-descriptions-of-reason-codes) einsehen.
+
+## Account Verification
+
+Wenn Sie ein Abonnement-Händler sind und Karten mit Account Verification überprüfen und diese mit einem __Hard__-Decline-Reason-Code fehlschlägt, muss der Verbraucher kontaktiert werden, damit er seine Kartendaten aktualisiert.
+
+Wenn Sie ein Abonnement-Händler sind und Karten mit Account Verification überprüfen und diese mit einem __Soft__-Decline-Reason-Code fehlschlägt, dürfen Sie eine Belastung versuchen.
+
+Weitere Informationen zu Abonnements finden Sie [hier](/manage-subscriptions/#build-step-5-verify-subscriptions-optional).
+
+## Beschreibungen der Reason Codes
+
+Die folgende Tabelle führt alle Reason Codes für jedes Kartensystem auf, einschließlich des Decline-Typs, einer Beschreibung der Bedeutung und der nächsten Schritte, die entweder Sie oder der Verbraucher unternehmen können, um mit einer Zahlung fortzufahren:
+
+<Warning>
+Bitte beachten Sie, dass die folgenden Reason Codes derzeit nicht für American Express gelten.
+</Warning>
+
+<Info>
+In der Spalte *Typ* werden Soft Declines als __SD__ und Hard Declines als __HD__ gekennzeichnet. In der Spalte *Nächste Schritte* finden Sie Vorschläge dazu, wie der Verbraucher mit der Transaktion fortfahren kann.
+</Info>
+
+### Tabelle der Reason Codes
+| Code | Schema | Typ | Beschreibung | Zusätzliche Info | Nächste Schritte |
+| --- | --- | --- | --- | --- | --- |
+| 00 | Visa, Mastercard | - | Die Transaktion ist genehmigt und wurde erfolgreich abgeschlossen |  |  |
+| 01 | Visa, Mastercard | SD | Der Bankherausgeber hat die Transaktion abgelehnt |  | Der Verbraucher sollte seine ausgebende Bank kontaktieren, um die Situation zu klären |
+| 03 | Visa, Mastercard | SD | An den Kartenherausgeber verweisen |  | Der Verbraucher muss seinen Kartenherausgeber für weitere Informationen kontaktieren |
+| 04 | Visa, Mastercard | HD | Karte einziehen (kein Betrug) |  | Der Verbraucher muss seinen Kartenherausgeber für weitere Informationen kontaktieren |
+| 05 | Visa, Mastercard | SD | Do not honor | Die ausgebende Bank ist nicht bereit, die Transaktion zu akzeptieren | Bitten Sie den Verbraucher um eine andere Karte, um die Transaktion abzuschließen, oder bitten Sie ihn, seine Bank für weitere Details zu kontaktieren |
+| 06 | Visa, Mastercard | HD | Fehler | Wenn der Code bei einer einmaligen Transaktion auftritt, führen Sie die Karte nicht erneut aus und stellen Sie dem Karteninhaber keine weiteren Waren oder Dienstleistungen zur Verfügung. Bei wiederkehrenden oder geplanten Transaktionen stellen Sie sicher, dass die Karte nicht versehentlich als betrügerisch markiert wurde | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren |
+| 07 | Visa, Mastercard | HD | Karte einziehen, besondere Bedingung | Der Kartenherausgeber bittet darum, die Karte einzubehalten, was auf einen Verdacht auf Fälschung oder eine gestohlene Karte hindeuten kann. | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren |
+| 12 | Visa, Mastercard | HD | Ungültige Transaktion | Der Herausgeber lässt diese Art von Transaktion auf dieser Karte/diesem Konto nicht zu. Stellen Sie sicher, dass Zahlungen korrekt konfiguriert sind. | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren |
+| 13 | Visa, Mastercard | SD | Ungültiger Betrag | Der Kartenherausgeber hat die Transaktion aufgrund eines ungültigen Formats oder Felds abgelehnt | Der Verbraucher sollte es erneut versuchen oder eine andere Zahlungsmethode verwenden |
+| 14 | Visa, Mastercard | HD | Ungültige Kontonummer (keine solche Nummer) |  | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren |
+| 15 | Visa, Mastercard | HD | Kein solcher Herausgeber (die ersten 8 Ziffern der Kontonummer beziehen sich auf keine Herausgeberkennung) |  | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren |
+| 19 | Visa, Mastercard | SD | Transaktion erneut eingeben | Die Transaktion kann vorübergehend nicht verarbeitet werden |  |
+| 22 | Mastercard | SD | Vermutete Fehlfunktion | Die ausgebende Bank antwortet während der Transaktion nicht | Der Karteninhaber sollte die Karteninformationen überprüfen und die Verarbeitung erneut versuchen |
+| 30 | Mastercard | SD | Formatfehler | Dies könnte an der Kartenkonfiguration liegen | Überprüfen Sie die Einrichtung Ihres Händlerkontos im Portal, da diese möglicherweise falsch ist |
+| 31 | Mastercard | SD | Bank nicht von Switch unterstützt | Die Bank des Verbrauchers hat die Transaktion abgelehnt, da die Verwendung der Karte für Bestellungen per Post/Telefon, Fax, E-Mail oder Internet nicht erlaubt ist. Der Fehler tritt normalerweise bei Discover-Karten auf, daher sollte der Kunde eine andere Karte verwenden. Wenn der Karteninhaber keine Discover-Karte verwendet hat, bitten Sie ihn, seine Bank zu kontaktieren. | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren |
+| 34 | Mastercard | SD | Vermuteter Betrug, Karte einbehalten | Die ausgebende Bank hat die Transaktion abgelehnt, da Betrugsverdacht für diese Kreditkartennummer besteht | Überwachen Sie nachfolgende Transaktionen, um auf betrügerische Transaktionen mit alternativen Karten zu prüfen.
+Wenn es mehrere betrügerische Transaktionen gibt, kontaktieren Sie uns bitte. |
+| 41 | Visa, Mastercard | HD | Verlorene Karte, einziehen |  | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren. |
+| 42 | Mastercard | SD | Kein Universal Account | Die ausgebende Bank hat die Transaktion abgelehnt, da der Kontotyp für diese Kartennummer nicht gültig ist | Bitten Sie den Verbraucher, eine andere Karte zu verwenden oder seine Bank zu kontaktieren. |
+| 43 | Visa, Mastercard | HD | Gestohlene Karte, einziehen | Die Bank hat die Zahlung abgelehnt, da die Karte als gestohlen gemeldet wurde. Dies lehnt sowohl einmalige als auch wiederkehrende Transaktionen ab | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren. |
+| 46 | Visa | HD | Geschlossenes Konto | Der Herausgeber wird niemals genehmigen |  |
+| 51 | Visa, Mastercard | SD | Unzureichendes Guthaben | Die Transaktion wird von der ausgebenden Bank abgelehnt, da nicht genügend Guthaben auf dem zugehörigen Bankkonto vorhanden ist oder die Transaktion das Limit der Kreditkarte des Verbrauchers überschreiten würde | Bitten Sie um eine andere Karte vom Verbraucher oder bitten Sie ihn, seine ausgebende Bank zu kontaktieren. |
+| 54 | Visa, Mastercard | HD | Karte abgelaufen oder Ablaufdatum fehlt |  | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren. |
+| 55 | Visa, Mastercard | SD | Ungültige PIN | Der Verbraucher hat eine falsche PIN eingegeben | Der Verbraucher sollte seine PIN erneut eingeben oder eine andere Zahlungsmethode verwenden. |
+| 56 | Visa, Mastercard | HD | Kein Karteneintrag | Der Herausgeber hat die Transaktion abgelehnt, da die Kreditkartennummer nicht existiert | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren. |
+| 57 | Visa, Mastercard | HD | Transaktion für den Karteninhaber nicht erlaubt |  | Der Verbraucher muss seinen Kartenherausgeber für weitere Informationen kontaktieren. |
+| 58 | Visa, Mastercard | SD | Funktion am Terminal nicht erlaubt | Der Code erscheint, wenn die Karte nicht für diese Art von Transaktion verwendet werden kann oder wenn das Händlerverarbeitungskonto nicht ordnungsgemäß konfiguriert ist |  |
+| 59 | Visa, Mastercard | SD | Vermuteter Betrug | Der Herausgeber hat die Transaktion abgelehnt, da sie betrügerisch erschien. | Überwachen Sie alle Transaktionen, die nach dem Auftreten des Fehlers verarbeitet werden. |
+| 61 | Visa, Mastercard | SD | Abhebungslimit überschritten | Der Herausgeber hat die Transaktion abgelehnt, da sie das Kartenlimit des Kunden überschreiten würde. | Bitten Sie den Verbraucher, eine andere Karte zu verwenden. |
+| 62 | Visa, Mastercard | SD | Eingeschränkte Karte | Die Karte ist in einer bestimmten Region oder einem bestimmten Land ungültig, oder der Verbraucher hat versucht, online mit einer Karte zu bezahlen, die Ihre Online-Zahlungen nicht unterstützt |  |
+| 63 | Visa, Mastercard | SD | Sicherheitsverletzung | Der Kartenherausgeber hat ein Sicherheitsproblem mit dieser Karte angezeigt | Bitten Sie den Verbraucher, eine andere Zahlungsmethode zu verwenden. Alternativ kann der Verbraucher es erneut versuchen, nachdem er das Problem mit seiner Bank gelöst hat. |
+| 65 | Visa, Mastercard | SD | Häufigkeitslimit für Abhebungen überschritten / Häufigkeitslimit überschritten | Der Verbraucher hat sein Häufigkeitslimit für die Kartennutzung überschritten | Der Verbraucher kann eine andere Zahlungsmethode verwenden oder es erneut mit derselben Karte versuchen, nachdem das Limit-Problem gelöst wurde. |
+| 75 | Visa, Mastercard | SD | Zulässige Anzahl von PIN-Versuchen überschritten | Der Verbraucher hat öfter eine falsche PIN eingegeben, als von der ausgebenden Bank erlaubt | Der Verbraucher sollte es erneut versuchen oder eine andere Zahlungsmethode verwenden |
+| 78 | Visa, Mastercard | SD | Ungültiges/nicht existierendes Konto angegeben (allgemein) | Die Transaktion stammt von einem neuen Karteninhaber, und die Karte wurde nicht ordnungsgemäß entsperrt |  |
+| 79 | Visa, Mastercard | HD | Lebenszyklus | Die Transaktion wird aufgrund ungültiger Kartendaten abgelehnt | Bitten Sie den Verbraucher, seine Bank zu kontaktieren oder seine Zahlungsdaten mit einer neuen Karte zu aktualisieren. |
+| 80 | Visa, Mastercard | SD | Kreditherausgeber nicht verfügbar | Die ausgebende Bank kann nicht kontaktiert werden | Der Verbraucher sollte es erneut versuchen oder eine andere Zahlungsmethode verwenden. |
+| 82 | Visa, Mastercard | SD | Richtlinie | Die Transaktion wird aus Richtliniengründen abgelehnt |  |
+| 82 | Visa | SD | Negative Online-CAM-, dCVV-, iCVV-, CVV- oder CAVV-Ergebnisse oder Offline-PIN-Authentifizierung unterbrochen | Die Karteninhaber-Verifizierungsmethode für CAM, dCVV, iCVV, CVV oder einen Servicecode bei kartengebundenen Transaktionen ist fehlgeschlagen |  |
+| 83 | Mastercard | SD | Betrug/Sicherheit | Die Transaktion wird abgelehnt, da der Kartenherausgeber diese Zahlung als betrügerisch verdächtigt |  |
+| 85 | Visa, Mastercard | SD | Kein Grund zur Ablehnung | Die ausgebende Bank kann kein bestimmtes Problem identifizieren, aber die Transaktion ist trotzdem nicht durchgegangen. | Der Verbraucher kann die Transaktion von Grund auf neu beginnen, und wenn das Problem weiterhin besteht, kann der Verbraucher entweder seine ausgebende Bank für weitere Informationen kontaktieren oder es mit einer anderen Kreditkarte versuchen |
+| 86 | Visa, Mastercard | SD | PIN kann nicht überprüft werden | Die PIN kann nicht validiert werden | Falls zutreffend, kann die Transaktion als Nicht-PIN-Transaktion erneut versucht werden |
+| 91 | Visa, Mastercard | SD | Kartenherausgeber nicht verfügbar | Es gab ein Problem beim Kontaktieren der ausgebenden Bank zur Autorisierung der Transaktion | Der Verbraucher sollte versuchen, diese Transaktion erneut zu verarbeiten. Wenn das Problem weiterhin besteht, sollte der Verbraucher seine Bank kontaktieren |
+| 92 | Visa, Mastercard | SD | Transaktion kann nicht weitergeleitet werden | Die Karte des Verbrauchers kann zur Weiterleitung nicht gefunden werden, und der Code wird hauptsächlich für eine Test-Kreditkartennummer verwendet | Der Karteninhaber sollte versuchen, eine Transaktion erneut abzuschließen |
+| 93 | Visa, Mastercard | SD | Transaktion kann nicht abgeschlossen werden; Gesetzesverstoß | Die ausgebende Bank lässt diese Transaktion nicht zu | Der Verbraucher sollte eine andere Zahlungsmethode verwenden |
+| 96 | Mastercard | SD | Systemstörung | Die ausgebende Bank kann nicht kontaktiert werden | Der Verbraucher sollte es erneut versuchen oder eine andere Zahlungsmethode verwenden. |
+
+## Checkout-Fenster
+
+Bitte beachten Sie, dass es für Checkout nicht möglich ist, anzuzeigen, welcher spezifische Fehlercode und welche Beschreibung im Checkout-Fenster auftreten.
+
+Dies dient dazu, Betrug zu vermeiden und zu verhindern. Aus diesem Grund werden Fehlermeldungen wie folgt angezeigt:
+
+![Fehlermeldung im Checkout-Fenster](https://images.ctfassets.net/di680may5c0k/12TnzOasuLGAs0pTXFfdKD/aaa9cac43eb818a9a2dc784ec748319e/errorMsg.png?w=1066&h=273&q=50&fm=png)
+
+## Testen
+
+Wenn Sie verschiedene Abläufe und Szenarien mit den Kartensystemen im Checkout-[Demoshop](https://shop.easy.nets.eu/) im Zusammenhang mit diesen Reason Codes testen möchten, können Sie unten mehr darüber lesen:
+
+- [Beträge mit besonderer Bedeutung](/test-card-processing/#build-amounts-with-special-meaning)
+- [3D Secure](/test-card-processing/#build-3d-secure)
+- [Rabatte](/test-card-processing/#build-discounts)

@@ -1,0 +1,79 @@
+---
+title: "API (Checkout Paylink Gateway)"
+description: "Erfahren Sie mehr über die API Checkout Paylink Gateway für Nexi Checkout."
+---
+
+## Wann verwende ich Checkout Paylink Gateway?
+
+Ein Checkout Paylink Gateway muss generiert werden, wenn Sie den Paylink in eine Anwendung (z. B. Webshop-Software) integrieren möchten.
+Im Allgemeinen handelt es sich um eine Rechnung mit einem Betrag, einer Währung und den Backend-Kundendaten.
+
+Der Status eines Gateways kann mithilfe von Webhooks und der API verfolgt werden.
+
+##  Zahlungsarten
+
+Wir unterstützen verschiedene Zahlungsarten:
+
+- __Einmalzahlungen__: Sofortige Belastung eines bestimmten Betrags.
+- __Wiederkehrende Zahlungen__: Ein Abonnement, das von Checkout Paylink verwaltet wird.
+- __Tokenisierung__: Checkout Paylink speichert die Kreditkarteninformationen für weitere Belastungen. Zahlungen können auf Grundlage dieser Tokenisierung über das Händler-Backend oder die API erfolgen.
+- __Reservierung__: Ein bestimmter Betrag wird auf der Kreditkarte gesperrt. Eine Belastung ist innerhalb von 7 Tagen möglich.
+
+Für die __Tokenisierung__ müssen Sie __preAuthorization=1__ zusammen mit Ihrer Gateway-Erstellungsanforderung übergeben. Es ist möglich, direkt nach der Autorisierung mit __chargeOnAuthorization=1__ die erste Belastung vorzunehmen.
+
+Für eine __Reservierung__ müssen Sie __reservation=1__ übergeben.
+
+Für __wiederkehrende Zahlungen__ können Sie die folgenden Parameter übergeben:
+
+- __subscriptionState=1__ (Abonnement für das Gateway aktivieren)
+- __subscriptionInterval=P1M__ (z. B. für ein Zahlungsintervall von einem Monat)
+- __subscriptionPeriod=P1M__ (Abonnements werden für den angegebenen Zeitraum automatisch erneuert)
+- __subscriptionCancellationInterval=P1M__ (z. B. Kündigungsfrist eines Abonnements)
+
+## Integrationstypen
+
+Checkout Paylink Gateway kann auf zwei Arten implementiert werden:
+
+- Weiterleitung
+- Modal-Fenster
+
+## Verwendung
+
+Zuerst müssen Sie die Bestellung über unseren Endpunkt `/Gateway ` aufgeben.
+Siehe [Gateway für weitere Informationen zur Anforderung](https://nets-pay.readme.io/reference/create-a-gateway).
+
+Sie erhalten eine URL, an die Sie Ihren Kunden für den Checkout-Vorgang weiterleiten können.
+Wenn Sie ein Modal-Fenster implementieren möchten, verwenden Sie diesen Link für das Attribut __data-href__. Weitere Informationen finden Sie im nächsten Abschnitt.
+
+## Modal-Fenster
+
+Dies sind die erforderlichen Skripte, die Sie in den Head-Bereich Ihrer HTML-Datei einbinden müssen.
+
+jQuery (z. B. von CDN):\
+[https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js](https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js)
+Checkout Paylink Gateway JS:\
+[https://media.nets-pay.link/modal/v1/gateway.min.js](https://media.nets-pay.link/modal/v1/gateway.min.js)
+
+```javascript Code snippet
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://media.nets-pay.link/modal/v1/gateway.min.js"></script>
+```
+
+Verwenden Sie das folgende Codebeispiel, um den generierten Gateway-Link im __Modal-Fenster__ zu öffnen.
+
+```text Code snippet
+<a class="nets-modal-window" href="#"
+    data-href="https://example.nets-pay.link/?payment=GATEWAY-HASH">
+    Open modal window
+</a>
+<script type="text/javascript">
+    jQuery(".nets-modal-window").netsModal();
+</script>
+```
+
+<Note>
+- Ersetzen Sie __example.nets-pay.link__ durch die URL Ihrer Checkout Paylink-Installation
+- Ersetzen Sie __GATEWAY-HASH__ durch den Hash, der von unserer Gateway-API zurückgegeben wird
+</Note>
+
+Weitere Informationen zum [Modal-Fenster finden Sie hier](/website-modal-window).

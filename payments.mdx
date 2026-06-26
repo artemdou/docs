@@ -1,0 +1,193 @@
+---
+title: "Payments"
+description: "This guide describes how to manage your payments in Checkout Portal."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="yellow">Complexity: Medium</Badge>
+  <Badge color="gray">Coding: None</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+Before you start, you need a [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide:
+- How to [create a test account for Checkout](/create-a-checkout-portal-account),
+</Warning>
+
+## Overview
+
+The Checkout Portal __payments__ section gives you an overview of all your payments divided into either of these categories and statuses:
+
+- New
+- Charged
+- Refunded
+- Canceled
+- Declined
+
+These payment insights can be toggled to include or exclude data within a given timeframe based on the view of either going back in time for a week or a month. It is likewise possible to toggle for a view looking into the current week or month.
+
+It is also possible to use the search section to search with some parameters and filter for the category type of payment.
+
+Whenever your consumer buys something on your site, a new **payment** is created in Checkout. Payments can be managed directly in [Checkout Portal](https://portal.dibspayment.eu/payments) or programmatically through the [Checkout APIs](https://developer.nexigroup.com/nexi-checkout/en-EU/api). 
+
+__New payments require your action:__
+
+- When you ship the order, make sure to **charge** the payment in order to receive the funds from Nets. 
+- If the order is canceled by the customer, make sure to **cancel** the payment in order to release the reservation on the customer's payment card.
+
+## Payment details 
+
+The payment details page allows you to inspect the details about the charges and refunds associated with the selected payment. It is also possible to perform actions directly from the payment details page.
+
+To view the details for a payment, click the order row or choose **View details** from the **QUICK ACTIONS** drop-down menu from the [payment overview page](https://portal.dibspayment.eu/payments). 
+
+The payment details page contains three tabs:
+
+- The **Order details** tab shows the **name of the customer** and the **payment status** of the order lines. This shows you who placed the order and what specific status the order lines have. 
+
+- The **Transaction details** tab shows information that can be useful when in contact with our support team.
+
+- The **History** tab shows all events related to a specific payment, including which user performed a particular action.
+
+## New
+
+The __new__ tab outlines all new payments in the overview.
+
+All __new__ payments can be handled with four different payment operations:
+
+- Charge
+- Refund
+- Cancel
+- Decline
+
+Whenever your consumer buys something on your site, a new **payment** is created in Checkout. Payments can be managed directly in [Checkout Portal](https://portal.dibspayment.eu/payments) or programmatically through the [Checkout APIs](https://developer.nexigroup.com/nexi-checkout/en-EU/api). 
+
+New payments require your action: 
+
+- When you ship the order, make sure to **charge** the payment in order to receive the funds from Nets.
+
+You can read more about charging from [here](/manage-payments/#build-charge-payments).
+
+## Charged
+
+The __charged__ tab outlines all charged payments in the overview.
+
+Charge a payment on the same day as you ship the corresponding order. 
+
+A card payment needs to be **charged within 30 days**, or else the payment will be canceled automatically. It will then require a new order from your customer if you want to charge after the 30 days. 
+
+A payment can be fully charged (default) or partially charged.
+
+## Split a charge
+
+Orders can be partially charged. To charge make a partial charge for an order, you tick the box for the products you want to charge in the order. 
+The total sum of the charge will be calculated based on the selected order lines. Verify the amount and choose *Charge*. 
+
+## Use case
+You have received an order for 100 red T-shirts. However, you only have 80 in stock and the consumer wants you to send what you have as soon as possible. To do this, you can type "80" in the quantity field. The system will update the total automatically and you can choose *Charge* to complete the order. 
+
+You can charge for the remaining 20 T-shirts at a later stage (as long as it is within 30 days).
+
+### Scenario 1: Charge for a specific product
+
+To charge for one or several products, you check the select boxes. The total sum of the refund will be calculated based on the selected order lines. Verify the amount and choose **Charge**. 
+
+**Example:** You have received an order for 1 red T-shirt and 1 yellow T-shirt, but it turns out you only have the red T-shirt in stock. You want to deliver the red T-shirt now and the yellow as soon as it arrives from your supplier. Check the order line for the red T-shirt and choose **Charge**. You can charge for the yellow T-shirt at a later stage (as long as it is within 30 days).
+
+### Scenario 2: Change quantity before charging
+
+You can edit the quantity on an order line by entering a new value in the quantity field. The total will be updated according to your changes. Verfiy the amount and choose **Charge**. 
+
+**Example:** You have received an order for 100 red T-shirts. You only have 80 in stock and the customer wants you to send what you have as soon as possible. To do this you type "80" in the quantity field. The system will update the total automatically and you can choose **Charge** to complete the order. You can charge for the the remaining 20 T-shirts at a later stage (as long as it is within 30 days).
+
+### Scenario 3: Change the amount before charging 
+
+You can change the amount on an order line by entering a new value in the price field. The total will be updated according to your changes. Verify the amount and choose **Charge**.
+
+**Example:** Your customer has called to cancel the order. You, however, are a great salesperson and have managed to persuade the customer to go through with the purchase - with a 20 SEK discount. Lower the amount to the agreed price in the input field. The system will calculate the total according to your changes.
+
+When lowering the price, a new order line will be created containing the remaining part of the reserved amount. Also, note that it is not possible to charge an amount that exceeds the original order. The system will inform you when you exceed the limit.
+
+### Reset if you lose track of changes
+
+All of the changes above can also be made in combination. If you make changes and get lost, you always have the option to reset the changes to get back to the starting point when you opened the modal window.
+
+## Full charge
+
+To fully charge a single payment, select the order in the payment overview and choose **Charge** from the **QUICK ACTIONS** drop-down menu. To charge several payments at once, select the payments you want to charge and choose **CHARGE**. 
+
+The charge action will charge the full amount of the order. It's also possible to charge parts of an order by editing the order before charging.
+
+## Refunded
+
+The __refunded__ tab outlines all refunded payments in the overview.
+
+Refund the total or parts of a payment.
+
+## Full refund
+To refund the total amount, you simply choose *Refund* from the **QUICK ACTIONS** drop-down menu. 
+
+<Warning>
+If the payment has been partially charged and you want to refund the full payment, you need to make one refund per charge.
+The complete list of all charges related to the same original payment can be found by [viewing the payment details](#view-payment-details).
+To find all charges that are related to the same original payment you choose View details on any line related to the order in the payments lists.
+</Warning>
+
+## Edit and refund 
+
+All charged payments, including single or multiple order lines, may be partially refunded. 
+
+To partially refund a payment, choose **Edit and refund** from the **QUICK ACTIONS** drop-down menu, select the desired order lines and/or edit the fields before choosing **REFUND**.  You can use several actions depending on your needs. We have listed three examples below.
+
+## Not enough money to make a refund?
+
+If there are not enough funds in your account when you have initiated a refund, the transaction will appear as “refunding” until the balance equals or exceeds the amount you want to refund plus the transaction fee. 
+
+A refund can be completed in two ways:
+
+1. Charge new payments
+2. Make a bank deposit
+
+If you don’t have any payments to charge, you can make a deposit to your account through a regular bank transfer.
+
+The deposit does not need to match the exact amount of the refund and transaction fee. The excess amount will be booked as a deposit and included in your next payout.
+
+The deposited funds will be visible on the payout page of your Easy account a couple of days after the bank transfer.
+
+### Where to find it?
+
+You can find more information on how to make a *deposit*, including account details and reference number, within in your Checkout admin account and under "*Company*" and "*Account information*". Click on "*Deposit*" under "*Agreements and Bank account*". 
+
+<Warning>
+- It normally takes a few days before the funds are transferred to your customer's account depending on the card issuer's (normally your customer's bank) routines.
+- Your balance needs to be larger than the amount you want to refund including transaction fees. Make a deposit or charge new payments if your balance is too low.
+</Warning>
+
+##  Canceled
+
+The __canceled__ tab outlines all canceled payments in the overview.
+
+Release reserved amounts on card payments
+
+If a consumer cancels an order before the goods are shipped, you can cancel the payment. By canceling a payment, the reserved money will be released to the customer's payment card and **Nets will not charge a fee for the payment.**
+
+## Cancel a payment
+
+To cancel one payment, simply select the payment in the payment overview and choose **Cancel** from the **QUICK ACTIONS** drop-down menu. To cancel several payments at once, select the ones you want and choose **Cancel**.
+
+<Note>
+Note that it is not possible to change the status of a payment once it has been canceled.
+</Note>
+
+## Declined
+
+The __declined__ tab outlines all new payments in the overview.
+
+You can see the decline reasons and response codes if a payment has been rejected. In a few cases, we have not received information from the card issuer for the decline. In those cases, the fields will be blank. 
+
+You can contact our Support [here](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) to get more information on the payment. 
+
+You can check this table here to see some of the common error codes.
+
+Also, you can check an overview of some of the most common error codes [here](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/#error-codes) in the API Ref and response codes for re-attempts for subscriptions [here](/manage-subscription-retries/#build-re-attempt-can-be-forbidden).

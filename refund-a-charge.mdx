@@ -1,0 +1,58 @@
+---
+title: "Refund a Charge"
+description: "Learn about Refund a Charge for Nexi Checkout."
+---
+
+## Refund a charge
+
+If you need to refund a payment that has been charged, you can use the method [Refund charge](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-charges-chargeid-refunds-post). It would be more correct to say that it is a specific charge that is being refunded, and therefore you always need a charge identifier when doing a refund. A charge can be **fully refunded** or **partially refunded**. 
+
+A full refund only requires the `amount ` to be specified. A partial refund requires a complete order specification. Here follows an example of a partial refund:
+
+```php Refund charge (PHP)
+<?php
+
+$secretKey = "<YOUR_SECRET_API_KEY>";
+$chargeId = "<CHARGE_ID>";
+
+$payload = file_get_contents('payload.json');
+assert(json_decode($payload) && json_last_error() == JSON_ERROR_NONE);
+
+$ch = curl_init('https://test.api.dibspayment.eu/v1/charges/' . $chargeId . '/refunds');
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'Authorization: ' . $secretKey));                                                
+$result = curl_exec($ch);
+$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+echo("HTTP code: " . $http_code . PHP_EOL);
+$json_pretty = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+echo $json_pretty . PHP_EOL;
+```
+
+```json payload.json
+{
+    "amount": 2750,
+    "orderItems": [
+      {
+        "reference": "Sneaky NE2816-82",
+        "name": "Sneaky",
+        "quantity": 1,
+        "unit": "pcs",
+        "unitPrice": 2500,
+        "netTotalAmount": 2500,
+        "grossTotalAmount": 2750
+      }
+    ]
+}
+```
+
+You can track the refund events using the webhook events named: 
+- [`payment.refund.initiated `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#refund-initiated)
+- [`payment.refund.completed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#refund-completed)
+- [`payment.refund.failed `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks#refund-failed)
+
+After a refund has been initiated but still not completed or failed, the refund is in a **pending state**. It is possible to [cancel a pending refund](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-pending-refunds-refundid-cancel-post). A refund can be pending for a number of reasons, see the [Manage payments](/manage-payments/#build-refunds) guide for more information.

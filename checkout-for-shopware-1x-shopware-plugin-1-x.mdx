@@ -1,0 +1,188 @@
+---
+title: "Checkout for Shopware 1.x"
+description: "This guide describes how to install, configure, and use Checkout webshop module for Shopware 6.5."
+---
+
+## Before you start
+
+<Warning>
+Before you start, you need a [Checkout Portal account](https://portal.dibspayment.eu). Please refer to the guide
+- How to [create a test account for Checkout](/create-a-checkout-portal-account).
+</Warning>
+
+Compatible with Shopware 6.4 and 6.5
+
+Note: For Shopware 6.6.x and above, please use Shopware 2.x
+
+__Please be aware that there is no upgrade path from Shopware 1.x to Shopware 2.x.__
+
+## Overview
+
+Our Shopware plugin is the perfect extension to enable the Nexi checkout to its full potential for your Shopware store. Checkout supports most popular payment methods.
+
+<Info>
+You can see below all the payment methods offered by Checkout. This list refers to all markets. 
+
+Depending on your country or region, the list may vary. If you are uncertain about a specific payment method and whether it is available in your country or region, please contact [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/) for more information.
+</Info>
+
+![Checkout plugin - Shopware6](https://images.ctfassets.net/di680may5c0k/5EUrIEwPjU1uAibS1pFMkr/fdac5b6c11c2e75f81e08b1c4d7778de/plugin_shopware6.jpg?w=1576&h=601&fl=progressive&q=50&fm=jpg)
+
+<Warning>
+Apple Pay configuration for Shopware plugin is described on the [Apple Pay payment method](/apple-pay/#build-shopware-65) page.
+</Warning>
+
+![Shopware module](https://images.ctfassets.net/di680may5c0k/6Be4WxnhzvAo8bkwFtmBQ3/2b01d5acf457077a735d1ba3f755492e/image006.png?w=1038&h=736&q=50&fm=png)
+
+![Shopware 6 admin config](https://images.ctfassets.net/di680may5c0k/3u3DXM5SceBC62kMJuvaJs/6c3ef30bd2ab89642b726c15c5f3f0e9/sw_6_admin_config.png?w=1180&h=609&q=50&fm=png)
+
+## Installation
+
+__Installation__
+
+How to install the Checkout module for Shopware 6 from github:
+
+- Connect with an SSH client and navigate to the root directory of your Shopware 6 installation.
+
+- Clone the repository by running the command: git clone git@github.com:Nets-eCom/shopware6-easy-checkout.git --branch main-1.5 --single-branch custom/plugins/NexiCheckout
+
+After cloning run these commands:
+
+- bin/console plugin:refresh
+- bin/console plugin:install NexiCheckout
+- bin/console plugin:activate NexiCheckout
+- bin/build-js.sh
+
+The module is now installed and ready to be configured for your Checkout account.
+
+## Configuration
+
+After installing the module, you need to do some basic configuration of the module in Shopware Admin:
+
+1. Navigate to **Extensions > My Extensions** inside the Shopware backend/admin panel.
+2. Locate the Nexi Group payment plugin and press the button with three dots (...) to access the configuration.
+3. Fill out the required fields, such as merchant ID and integration keys (secret keys and checkout keys). 
+4. (Optional) Customize the module according to your needs using the additional settings on the configuration page.
+
+<Info>
+Both the **merchant ID** and the **integration keys** can be found in [Checkout Portal](https://portal.dibspayment.eu/). See the following pages for more help:
+
+- [Where can I find my merchant number (merchant ID)?](https://developer.nexigroup.com/nexi-checkout/en-EU/support/where-can-i-find-my-merchant-number-merchant-id/)
+- [Access your integration keys](/access-your-integration-keys)
+</Info>
+
+The screenshot below shows the configuration page for the module:
+
+![Shopware 6 admin config](https://images.ctfassets.net/di680may5c0k/3u3DXM5SceBC62kMJuvaJs/6c3ef30bd2ab89642b726c15c5f3f0e9/sw_6_admin_config.png?w=1180&h=609&q=50&fm=png)
+
+The following table lists all the settings you can configure in the administration area for the Checkout module:
+
+| Configuration&#160;setting | Description
+| ---------------------------|------------ 
+| Payment Environment | Toggles between **live mode** and **test mode**. Choose test mode if you want to make test purchases using the [test environment](/test-environment). There are [sample card numbers](/test-card-processing/#build-sample-credit-cards) and [invoice addresses](/test-invoice-installment-processing/#build-sample-invoice-nordic-addresses) for testing purposes. Live mode requires an approved account.
+| Live Secret key | Your live secret key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Live Checkout key | Your live checkout key from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Secret key | Your secret key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Test Checkout key | Your checkout key for test purchases from [Checkout Portal](https://portal.dibspayment.eu/integration).
+| Terms Url | The URL to the terms and conditions of your webshop.
+| Merchant Terms Url | The URL to the privacy and cookie settings of your webshop.
+| Checkout Flow | Select between **Hosted** and **Embedded**. Hosted loads a new payment page whereas embedded inserts the payment window directly on the checkout page.
+| Enable Auto-capture | 	Allows you to instantly charge a payment straight after the order is placed. **Important!** Capturing a payment before shipment of the order might be liable to restrictions based upon legislations set in your country. Misuse can result in your Checkout account being forfeit.
+
+<Check>
+You've now installed and configured the Checkout webshop module. If you have further questions, please see the troubleshooting section below or reach out to our [support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/).
+</Check>
+
+## Order management
+
+It's possible to manage orders directly in the Shopware administration:
+
+Navigate to Admin > Orders > Overview.
+Press on an order line to access order details.
+Go to the Details section, with the new Nexi order management component.
+
+![order-details](https://images.ctfassets.net/di680may5c0k/2PEOw9hNRzHWIHflneFDye/6bf820ae2748185345a357e33c8872f6/order-details.png)
+
+Now all the actions (Charge, Refund, Cancel) can be done via the new modal component.
+
+![charge-modal](https://images.ctfassets.net/di680may5c0k/5puVzKOdX3O9sLIabFNLF3/b1cc621230e5f00b2f73f8d1b02feebb/charge-modal.png)
+
+Clicking on Max. amount will automatically pass the maximum value to the amount field.
+
+__Partials Charge & Refund__
+
+The biggest change from the currently used component is that partial charge and refund will be able to be made by selecting the item from the order list rather than manually typing out the value into the field. The list can be accessed by the checkbox field.
+
+![nexi-partials](https://images.ctfassets.net/di680may5c0k/7M46h7zMlr3BEX7NdMhKX5/c1d66351ef5d43f9ac8327eb0277c1ac/nexi-partials.png)
+
+All transactions performed by Nexi Group are accessible in Checkout Portal.
+
+<Info>
+All transactions performed by Nexi Group are accessible in [Checkout Portal](https://portal.dibspayment.eu/).
+</Info>
+
+## Klarna
+
+The payment method Klarna requires a phone number to function properly. To ensure that Klarna will appear as a payment option in the Nexi Group payment window, it is essential to configure the phone number field correctly. For more information, please refer to the [Klarna guide](/klarna/#build-integration).
+
+To add the phone number field in Shopware 6, follow these steps: 
+- Navigate to Settings > Shop > Log-in & Sign-up.
+- Check the box for Show phone number. 
+- Check the box for Phone number field required. 
+
+To learn more, visit [Shopware 6's documentation](https://docs.shopware.com/en/shopware-en/settings/login-registration).
+
+![shopware klarna contentful](https://images.ctfassets.net/di680may5c0k/7f1JSaWMEGxuUPPi5EVRaR/272c8bc26efb45188bf031d3171c8842/shopware_klarna_contentful.png?w=1273&h=638&q=50&fm=png)
+
+<Info>
+We do not support third-party plugins that provide phone number functionality, and we cannot guarantee that their solution will be compatible with the Klarna payment method.
+</Info>
+
+## Payment method logos
+
+Depending on your setup with this plugin and in case that you have multiple integrations in your checkout besides Checkout, we highly recommend you to toggle the payment method logos.
+
+You can either:
+- Download the logos separately
+- Get individuals logos in HTML
+- Get predefined logo bars
+
+You can check from [here](/go-live-checklist/#build-include-payment-method-logos-on-your-website) to get the logos.
+
+## Troubleshooting
+
+Below are some of the most common configuration errors, their cause and steps that you can follow to solve them.
+
+### Nexi Group payment app is not visible as a payment method
+
+- Ensure the Nexi Group app is available in the right **Sales Channel** in the app configuration.
+- Under the **Sales Channel** section, select your **Shop Name** under **General** settings. Add desired payment methods from the Nexi app.
+- Temporarily switch to the Shopware 6 standard template. Custom templates might need additional changes to ensure correct display. Consult with your web designer or developer.
+
+### Nexi Group payment window is blank
+
+- Ensure your integration keys in the Nexi Group app settings are correct and do not contain additional blank spaces.
+- Temporarily deactivate third party plugins that might affect the functionality of the app.
+- Check if there are any temporary technical inconsistencies: https://easy-status.developers.nets.eu/
+
+### Payments in live mode don't work
+- Ensure you have an approved Live Checkout account for production.
+- Ensure your Live Checkout account is approved for payments with the selected currency.
+- Ensure payment method data is correct and supported by your Checkout agreement.
+
+<Columns cols={2}>
+  <Card title="Source">
+  </Card>
+  <Card title="Download">
+  </Card>
+  <Card title="Source" href="https://github.com/Nets-eCom/shopware6-easy-checkout/tree/6.5.x GitHub - Nets-eCom/shopware6-easy-checkout at 6.5.x Shopware 6 plugin for the Nexi | Nets Checkout solution. - GitHub - Nets-eCom/shopware6-easy-checkout at 6.5.x">
+  </Card>
+</Columns>
+
+## See also
+
+- [Create account](/create-a-checkout-portal-account)
+- [Test environment](/test-environment)
+- [Test card processing](/test-card-processing)
+- [Test invoice & installment processing](/test-invoice-installment-processing)
+- [Support](https://developer.nexigroup.com/nexi-checkout/en-EU/support/)

@@ -1,0 +1,66 @@
+---
+title: "Abonnement-Wiederholungen verwalten"
+description: "Diese Anleitung richtet sich an Entwickler, die Abonnement-Wiederholungen verstehen und konform umsetzen möchten."
+---
+
+## Effiziente und konforme Wiederholungslogik bei Abonnements
+
+Einer der häufigsten Gründe für eine Transaktionsablehnung sind unzureichende Mittel. Es gibt jedoch auch andere Gründe, warum ein Abonnement möglicherweise nicht belastet wird.
+
+Durch die Analyse der Daten jeder Transaktion können Sie Ihre Erfolgschancen erhöhen und gleichzeitig die Wiederholungsrichtlinien von Zahlungssystemen wie Visa und Mastercard einhalten.
+
+Zum Beispiel:
+
+- Wenn die Ablehnung auf ein technisches Problem zurückzuführen ist, möchten Sie die Belastung später oder in den nächsten Tagen wiederholen.
+
+- Wenn die Ablehnung auf unzureichende Mittel zurückzuführen ist, können Sie die Wiederholung einige Tage später durchführen oder sogar den Haupt-Zahltag in Ihrem Markt identifizieren und entsprechend wiederholen.
+
+- Wenn die Ablehnung jedoch auf eine vom Aussteller als verloren oder gestohlen markierte Karte zurückzuführen ist, ist es sinnlos, die Zahlung erneut zu versuchen.
+
+Ein optimierter Wiederholungsmechanismus ist daher notwendig, und für jeden Belastungsversuch stellt Checkout Ihnen die Ablehnungs-Antwortcodes zur Verfügung, die Sie berücksichtigen müssen.
+
+## Erneute Versuche können verboten sein
+
+Sie sollten Transaktionen niemals wiederholen, wenn Sie den unten stehenden Antwortcode erhalten. Die Wiederholung einer Belastung könnte zu Strafen von Visa oder Mastercard führen.
+
+Die folgenden Antwortcodes finden Sie in der untenstehenden Tabelle:
+
+### Tabelle der Antwortcodes und Gründe
+| Kategorie | Antwortcode | Grund |
+| --- | --- | --- |
+| Aussteller wird niemals genehmigen | 04 | Karte einbehalten (kein Betrug) |
+| Aussteller wird niemals genehmigen | 14 | Ungültige Kontonummer (keine solche Nummer) |
+| Aussteller wird niemals genehmigen | 15 | Kein solcher Aussteller (die ersten 8 Ziffern der Kontonummer entsprechen keinem Aussteller-Identifikator) |
+| Aussteller wird niemals genehmigen | 41 | Verlorene Karte, einbehalten |
+| Aussteller wird niemals genehmigen | 43 | Gestohlene Karte, einbehalten |
+| Aussteller wird niemals genehmigen | 46 | Geschlossenes Konto |
+| Aussteller wird niemals genehmigen | 54 | Karte abgelaufen oder Ablaufdatum fehlt |
+| Aussteller wird niemals genehmigen | 57 | Transaktion für den Karteninhaber nicht zulässig |
+
+
+
+Sie müssen Ihren Abonnementvertrag mit einer neuen Karte aktualisieren, bevor Sie einen neuen Belastungsversuch unternehmen.
+
+Mehr darüber, wie Sie ihn aktualisieren, können Sie [hier](/manage-subscriptions/#build-step-6-update-invalid-subscription) lesen.
+
+## Einschränkungen für erneute Versuche
+
+Zudem sollten Sie für alle anderen Antwortcodes nicht mehr als __15 Wiederholungen für eine fehlgeschlagene Belastung innerhalb von 30 Tagen__ versuchen. Sie müssen 30 Tage warten, bevor Sie es erneut versuchen können, falls die Wiederholungsgrenze überschritten wurde.
+
+Checkout kann die Karte auf eine Sperrliste setzen und alle künftigen Wiederholungsversuche blockieren.
+
+## Wo erhalten Sie den Antwortcode?
+
+Sie können den Ablehnungsgrund (Antwortcode) auf folgende Weise erhalten:
+
+- den [Retrieve Bulk Charge-Aufruf](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-subscriptions-charges-bulkid-get-responses)
+
+![Retrieve Bulk Charge-Aufruf](https://images.ctfassets.net/di680may5c0k/7uHraFxQdG0HaiUgqhVL9l/7ceb3ae27192f340675d1f98bf026dab/Retrieve_Bulk_Charge_call.png)
+
+- [den Webhook (Reservation.failed)](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/webhooks/#reservation-failed)
+
+![Webhook reservation.failed](https://images.ctfassets.net/di680may5c0k/x3Vf2xj17GEb3i3DdeEWm/030370cbf4da1ad7a6ac6028b2623dc5/Webhook_reservation.failed.png)
+
+- Im Checkout-Portal nachschlagen (Abgelehnte Zahlungen – Ablehnungsgrund – Aktionscode)
+
+![Checkout-Portal: Abgelehnte Zahlungen – Ablehnungsgrund – Aktionscode](https://images.ctfassets.net/di680may5c0k/4WDsDAdS7WQr6Gy99dLmfK/5508739a71b689af89c308a1b08e2214/portal-declinedPayments.png)

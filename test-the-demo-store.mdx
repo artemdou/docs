@@ -1,0 +1,86 @@
+---
+title: "Test the Demo Store"
+description: "This guide outlines the Checkout demo store with of how to utilize the store, toggle the necessary settings for your use case, test the checkout and general best practices."
+---
+
+## Overview
+
+The Nexi Group [Checkout demo store](https://shop.easy.nets.eu/) is a demo and testing tool operating as a small dummy store where it is possible to:
+
+- Try out how the Checkout __checkout__ looks with a purchase of products depending on country and currency settings
+- Toggle to enable and disable various use case related __settings__
+- Manage and copy the auto-generated __`JSON `__ from the adjusted settings
+- Test the different payment methods in the checkout with the __test data__ and completing the whole payment flow, also known as the __user journey__ as described [in the payment methods respective guides.](/payment-methods/#build-user-journeys)
+
+Each of the toggling functionalities can be tailored to your distinctive use case and needs.
+
+<Warning>
+When testing out the demoshop you should always use it in test mode. You can see more [here](https://draft.developers.netsdev.eu/homepage) on how to change the settings in the demo shop.
+</Warning>
+
+<Warning>
+You can check [here](/test-data) about the test data and which payment methods currently is supported for testing.
+</Warning>
+
+<Info>
+Inside your Checkout Portal account, you can design and style the checkout to fit into your branding.
+You can read more about that from here.
+</Info>
+
+## Checkout
+
+For a more in-depth and elaborated description of the checkout, please refer to this section [here](/checkout).
+
+It is possible to add product(s) into the cart which can then be seen inside the of the checkout.
+
+Inside the cart of the checkout, you will see an overview of the product(s) added in an overview including product name, price, quantity, and the total amount. From here, you can click on the *Proceed to checkout* button to continue the payment flow.
+
+In this new checkout view, you can fill in all necessary information. After the completion of entering in all necessary information as well as accepting the terms and conditions when prompted, it is possible to proceed by clicking on the *Pay* button.
+
+![Demo store checkout pay button example](https://images.ctfassets.net/di680may5c0k/3OC5dzocTeO287iGGAIqC5/d818d1b82d5c5f5f12453fe9f8d82ad9/dd30894b-6f8d-4e18-ab70-dd5340d7c8fb.png?w=1000&h=400&q=50&fm=png)
+
+## Privacy and cookie settings
+
+By default, the privacy and cookie settings are enabled which means that it will remember any previous entries inside of the fields eg. name, e-mail, country etc. This will enhance and speedily process payments. However, if you wish to disable these settings then you can toggle it off.
+
+You can also read the Nexi Group Privacy Notice [here](https://cdn.dibspayment.com/terms/Privacy%20Notice%20DIBS.pdf).
+
+![Cookies and privacy demo store](https://images.ctfassets.net/di680may5c0k/1egEEHEjM0jx1n6D2t72ez/eefddf974a3b90781d5f771a9c65beef/cookies_privacy.png?w=1000&h=400&q=50&fm=png)
+
+## Table of all user journeys for APMs
+
+The following table outlines the different user journeys for each of the payment methods:
+
+### Overview of all user journeys for APMs
+| User Journey | Type |
+| --- | --- |
+| SEPA Direct Debit | A2A |
+| Swish | A2A |
+| Trustly | A2A |
+| American Express | Cards |
+| Visa & MasterCard | Cards |
+| Maestro | Cards |
+| Dankort | Cards |
+| AfterPay-Riverty | Invoice/Installments |
+| Ratepay | Invoice/Installments |
+| MobilePay | Wallet |
+| PayPal | Wallet |
+| Vipps | Wallet |
+
+## Testing the checkout in the demo store 
+
+To utilize the Checkout demo store, you can find the testdata from [here](/test-data).
+
+You can also see a corresponding table of which payment methods that has the possibility for testing [here](/test-and-deploy).
+
+<Columns cols={2}>
+  <Card title="Checkout Demo store">
+  </Card>
+</Columns>
+
+## See also
+
+- [Test data](/test-data)
+- [Checkout](/checkout)
+- [Homepage](/homepage/)
+- [Settings](/settings/)

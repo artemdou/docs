@@ -1,0 +1,329 @@
+---
+title: "Checkout für Shopware App"
+description: "Dieser Leitfaden beschreibt, wie Sie das Checkout-Webshop-Modul für die Shopware-App installieren, konfigurieren und verwenden."
+---
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie ein [Checkout-Portal-Konto](https://portal.dibspayment.eu). Bitte beachten Sie den Leitfaden
+- Wie Sie ein [Testkonto für Checkout erstellen](/create-a-checkout-portal-account).
+</Warning>
+
+Anforderungen:
+
+Shopware-Version: Kompatibel mit Shopware 6.5x und höher.
+
+## Neue Funktionen für die Shopware App
+
+### __Shop-Funktionen__
+
+- Nahtloses Checkout-Erlebnis mit mehreren Zahlungsoptionen
+- Aufteilung der Zahlungsmethoden
+- Nexi Nets Easy Schnell-Checkout mit "Remember me"-Funktion.
+- Eingebetteter Checkout für ein optimiertes Benutzererlebnis. Benutzer werden nicht außerhalb des Shopware-Shops umgeleitet.
+- Kompatibilität mit Rabatten, Steuern (MwSt.) und Versandoptionen.
+- Kompatibel mit Multi-Store-Setups.
+- Intelligente Mischung von Zahlungsmethoden, die allen Vorlieben entspricht.
+- Mehrere Checkout-Sprachen und Währungen für den Verkauf in Ihrem Heimatmarkt und im Ausland.
+- Unsere App unterstützt auch Abonnements über die Shopware Commercial Extension:
+
+[https://docs.shopware.com/en/shopware-6-en/extensions/shopware-commercial]
+
+### __Verwaltungsfunktionen__
+
+- Schnelle Einrichtung und flexible Konfiguration
+- Intuitive Bestellverwaltung mit synchronisiertem Zahlungsstatus über Webhooks
+- Rückerstattungs- und Belastungsfunktionen mit Kontrolle auf Artikelebene
+- Flow Builder-Integration für automatisierte Zahlungsprozesse
+
+## Installation
+
+1. Installieren Sie die Nexi Checkout-App über den Shopware Extension Store.
+2. Nach erfolgreicher Installation:
+
+![Shopware-App-Installation](https://images.ctfassets.net/di680may5c0k/23hP5sRFz9CRxGtIeEakve/019e5da2edfceb4ef354be5fb3df4e6d/app-installation.png)
+
+- Navigieren Sie zu __Meine Erweiterungen__, um die App anzuzeigen.
+- Verwenden Sie den Schalter, um die App zu __aktivieren/deaktivieren__.
+- Klicken Sie auf die Schaltfläche __Konfiguration__, um die App einzurichten.
+
+## Konfiguration
+
+Greifen Sie auf die Konfigurationsseite zu, um die Nexi Checkout-Integration einzurichten:
+
+![App-Installation](https://images.ctfassets.net/di680may5c0k/2xAZU3FDaQyVAcPgztUWdA/19d7e4130677258246364ce32540d162/app_installation.png)
+
+__Wichtige Einstellungen:__
+
+- __Live-/Test-Schlüssel:__ Geben Sie Ihre Nexi-Integrationsschlüssel ein.
+- __Live-Modus:__ Schalten Sie EIN, um die Produktionsumgebung zu aktivieren.
+- __Checkout-Flow:__
+  - __Hosted__: Öffnet die Zahlung auf einer separaten Seite.
+  - __Embedded:__ Die Zahlung erfolgt innerhalb Ihrer Checkout-Seite.
+- __Auto-Charge:__ Belastet den Kunden automatisch bei erfolgreicher Zahlung (nur für konforme Produkte/Dienstleistungen).
+- __Zahlungsmethode aufteilen:__
+  - __EIN__: Benutzer wählen spezifische Zahlungsmethoden aus (z. B. Klarna, PayPal).
+  - __AUS__: Nur "Nexi Checkout" wird angezeigt.
+- __URL für Allgemeine Geschäftsbedingungen__: Geben Sie einen vollständigen Link zu Ihrer Richtlinienseite an
+  Klicken Sie auf __Speichern__, um die Einstellungen auf den ausgewählten Vertriebskanal anzuwenden.
+
+## Vertriebskanal-Einstellungen
+
+Weisen Sie Nexi Checkout dem gewünschten Vertriebskanal zu:
+
+![Vertriebskanal-Einstellung](https://images.ctfassets.net/di680may5c0k/6P9GqZfdv2eCS7xjkKHxPX/5285a85577f3e0c6df789f9512a532de/sales_channel_setting.png)
+
+- Gehen Sie zu den Einstellungen __Vertriebskanal__.
+- Scrollen Sie zu __Zahlung und Versand.__
+- Weisen Sie __Nexi Checkout__ dem Feld __Zahlungsmethoden__ zu.
+- Legen Sie es als __Standard__-Zahlungsmethode fest.
+
+## Einstellungen für Zahlungsmethoden
+
+Greifen Sie auf alle von Nexi unterstützten Zahlungsmethoden zu:
+
+1. Gehen Sie zu __Einstellungen → Zahlungsmethoden__.
+2. Ändern Sie die unterstützten Methoden oder schalten Sie sie EIN/AUS:
+
+-  Sofort
+-  Klarna	
+-  Google Pay
+-  Applepay
+-  Vipps
+-  Paypal
+-  Mobilepay
+-  Trustly
+-  Swish
+-  SEPA Direct Debit
+-  Installment	
+-  Invoice	
+-  Nexi Checkout - Cards
+-  Nexi Checkout	Wird angezeigt, wenn die Aufteilung der Zahlung AUS ist
+
+__Verfügbarkeitsregel__
+
+Die Standardverfügbarkeitsregel jeder Zahlungsmethode folgt der globalen Regel unter Nexi - Zahlungsmethoden.
+
+Jede zusätzliche Regel muss im Abschnitt __Verfügbarkeitsregel__ für jede Zahlungsmethode eingerichtet werden.
+
+__Beispiel__: Um PayPal nur für schwedische Kunden verfügbar zu machen:
+
+1. Klicken Sie auf __Details bearbeiten__ unter PayPal
+2. Scrollen Sie zu __Verfügbarkeitsregel__
+3. Erstellen/wählen Sie eine Regel für Rechnungsadressen mit Sitz in Schweden aus
+4. Speichern Sie die Änderungen
+
+![paypal-availability-rule](https://images.ctfassets.net/di680may5c0k/6hMakcO6mVvpiAoRbqnwix/fc98d3eee55c068ce41fc66379786a3b/paypal-availability-rule.png)
+
+### Aufteilung der Zahlung
+Die Aufteilung der Zahlung beeinflusst, wie Zahlungsmethoden dem Benutzer im Checkout angezeigt werden.
+
+__Einrichtung__:
+
+Gehen Sie zu __Konfiguration__ → Schalten Sie __Aufteilung der Zahlung__ EIN oder AUS → Klicken Sie auf__ Speichern.__
+
+__Aufteilung der Zahlung AUS__
+
+- Eine einzelne Option, Nexi Checkout, wird angezeigt
+- Der Kunde wählt seine bevorzugte Methode innerhalb der Nexi-Oberfläche aus
+
+__Aufteilung der Zahlung EIN__
+- Benutzer sehen einzelne von Nexi unterstützte Zahlungsmethoden (z. B. Klarna, PayPal, Swish)
+- Jede Methode kann direkt auf der Shopware-Checkout-Seite ausgewählt werden.
+
+![Aufteilung der Zahlung](https://images.ctfassets.net/di680may5c0k/2psPZmYore8y7ZYwX1lR1U/6a9bcd089da0bc9f723ab74634d28790/split_payment.png)
+
+Die Aufteilung der Zahlungsmethode beeinflusst, wie Zahlungsmethoden dem Benutzer im Checkout angezeigt werden.
+
+__Einrichtung:__
+
+Gehen Sie zu Konfiguration → Schalten Sie die Aufteilung der Zahlungsmethode EIN oder AUS → Klicken Sie auf Speichern.
+
+__Aufteilung der Zahlungsmethode AUS__
+
+Eine einzelne Option, Nexi Checkout, wird angezeigt.
+Der Kunde wählt seine bevorzugte Methode innerhalb der Nexi-Oberfläche aus.
+
+![Einzelne Zahlung](https://images.ctfassets.net/di680may5c0k/4hT8WIIcQPdKEWiQXdc7uz/3f4fe167b6bf18e78631bacc0f847dfc/single-payment.png)
+
+__Aufteilung der Zahlungsmethode EIN__
+
+Benutzer sehen einzelne von Nexi unterstützte Zahlungsmethoden (z. B. Klarna, PayPal, Swish).
+Jede Methode kann direkt auf der Shopware-Checkout-Seite ausgewählt werden.
+
+![Aufteilung der Zahlung](https://images.ctfassets.net/di680may5c0k/12cCEgThbRaOwg3l4qy4Nb/36db45403e10835ee8f705cea2a8afa1/split-payment.png)
+
+## Checkout-Flow: Hosted & Embedded
+
+__Einrichtung:__
+
+Gehen Sie zu Konfiguration → Wählen Sie unter Checkout-Flow Hosted oder Embedded → Klicken Sie auf Speichern.
+
+![Nexi Checkout für Shopware 6 hosted](https://images.ctfassets.net/di680may5c0k/7bl2eslVqk21YlZ0y9z76l/5a10dcd27774f2c43cfa6ce16a0bb383/hosted.png)
+
+__Hosted Checkout__
+
+Benutzer werden nach dem Klicken auf "Bestellung absenden" zu einer separaten Nexi-Seite weitergeleitet.
+
+![Hosted Checkout](https://images.ctfassets.net/di680may5c0k/2hrSYcAu2X8zNYurskyV0N/48e649be576787b505a09bb82f54fb4b/hosted-page.png)
+
+Nach Abschluss der Zahlung werden sie zur Danksagungsseite mit Nets-ID weitergeleitet.
+
+![thank-you-page](https://images.ctfassets.net/di680may5c0k/2rYDdxa59sw6aCChZ9BHQm/c1da8fd6291f2e6c127d57da32dd260a/thank-you-page.png)
+
+__Embedded Checkout__
+
+Das Zahlungs-iframe erscheint nach dem Klicken auf "Bestellung absenden" direkt auf Ihrer Checkout-Seite
+
+![Embedded Checkout Shopware-App](https://images.ctfassets.net/di680may5c0k/2jBtE6Z9U33KDAWKX9pEuB/900244bec6ba6b40ff9f2e2b4a66cad1/embedded-checkout.png)
+
+Nach Abschluss der Zahlung werden sie zur Danksagungsseite mit Nets-ID weitergeleitet.
+
+![thank-you-page](https://images.ctfassets.net/di680may5c0k/2rYDdxa59sw6aCChZ9BHQm/c1da8fd6291f2e6c127d57da32dd260a/thank-you-page.png)
+
+## Bestellverwaltung
+
+__Bestelldetails anzeigen__
+  1. Gehen Sie zu Bestellungen → Wählen Sie eine Bestellung aus.
+  2. Auf der Registerkarte Details scrollen Sie nach unten, um Nexi-bezogene Informationen anzuzeigen.
+
+![Bestelldetails](https://images.ctfassets.net/di680may5c0k/6YItJFWdXowTIU0SJCO8iy/7dd5c12a81fdf00c56c5a4840e9f7383/order-details__1_.png)
+
+__Zahlung stornieren__
+- Klicken Sie auf __Zahlung stornieren__ (verfügbar, wenn die Zahlung nicht belastet wurde).
+- Bestätigen Sie die Aktion über das Popup.
+
+![Bestätigungs-Popup für Zahlungsstornierung](https://images.ctfassets.net/di680may5c0k/3CBDW2o7USqDKalHx3NbxR/7b8e2068d9f9393cd2041872ba681e6e/cancel-confirmation-popup.png)
+
+- Der Bestellstatus ändert sich auf Storniert.
+
+![Status der stornierten Zahlung](https://images.ctfassets.net/di680may5c0k/63WqSRXrmZVCk7XPhOIHn4/ce6d89bb7d8cfdf184acc3c17a3798df/cancelled-status.png)
+
+- Die Belastung ist nach der Stornierung deaktiviert.
+
+![disable-button](https://images.ctfassets.net/di680may5c0k/2uObfnEPx5ubcgcQJuJrNT/cd581f85836e0971f739371fd06c06a8/disable-button.png)
+
+<Info>
+Alle von Nexi Group durchgeführten Transaktionen sind im [Checkout-Portal](https://portal.dibspayment.eu/) zugänglich.
+</Info>
+
+Der folgende Screenshot zeigt die Liste der Bestellungen in der Shopware-Verwaltung:
+
+![Bestellverwaltung Shopware 6.7](https://images.ctfassets.net/di680may5c0k/3cKKBXwB2JfZbsGK9tdn8R/1955658b2dbdaa6dfc548e7c988f42c5/order_details.png?w=2880&h=1560&q=50&fm=png)
+
+## Manuelle und automatische Belastung
+
+__Auto-Belastung__
+- Belastet den Kunden automatisch nach erfolgreicher Zahlung
+- Der Admin kann nicht stornieren oder manuell belasten
+
+![Schaltfläche deaktivieren](https://images.ctfassets.net/di680may5c0k/1PLxT2Fk1fodzd0oZYkxQz/9c0625a73cdbb36572ee132cdcb63a67/disable_button.png)
+
+__Manuelle Belastung (Auto-Belastung AUS)__
+Der Admin kann manuell belasten.
+- Die Belasten-Schaltfläche ist aktiviert und der Admin muss die Bestellung manuell belasten
+
+![Bestellung manuell belasten](https://images.ctfassets.net/di680may5c0k/6E531VzBlVZtLPqEdr8Z4x/8eb2336242f66d587d0a23a558fb40f4/manual_charge_order.png)
+
+__Belastung nach Betrag__
+- Klicken Sie auf Belasten → Deaktivieren Sie das Kontrollkästchen __Zu belastende Artikel auswählen__ → Geben Sie den vollen oder teilweisen Betrag ein → Klicken Sie auf Belasten.
+
+![Belastung nach Betrag](https://images.ctfassets.net/di680may5c0k/3AJiPOMmzSjfgv8xjg5aVf/07f78000d816d74779998b40fb62623d/charge_by_amount.png)
+
+** Hinweis: Der Betrag muss größer als 0 sein.
+
+__Belastung nach Artikeln__
+- Wählen Sie die Anzahl der Artikel aus der Liste aus
+- Klicken Sie auf Belasten, um die ausgewählten Artikel zu verarbeiten
+
+![Belastung nach Artikeln](https://images.ctfassets.net/di680may5c0k/1FWx8e8Uc1Wc036PseucRV/08ccd03d67c11655ec159101cb5bb390/charge_by_items.png)
+
+__Transaktionsdetails__
+Die Transaktionsdetails sind standardmäßig erweitert. Blenden Sie die Transaktionsprotokolle aus, indem Sie auf __Transaktionsprotokolle ausblenden__ klicken.
+
+![Transaktionsprotokolle](https://images.ctfassets.net/di680may5c0k/3hEZJXrqPEtVroxCW9JKYQ/48b094971d4da834e8c7e5fb03059bb1/transaction_logs.png)
+
+## Rückerstattung
+
+- Klicken Sie im Belastungsprotokoll auf Rückerstattung
+
+__Rückerstattung nach Betrag__
+- Deaktivieren Sie das Kontrollkästchen __Zu erstattende Artikel auswählen__ → Geben Sie den vollen oder teilweisen Betrag ein → Klicken Sie auf Rückerstattung
+
+![Rückerstattung nach Betrag](https://images.ctfassets.net/di680may5c0k/76HQeSiGEzIIWCkU7XezRr/940127f8d1a0578c3553276f655eb6f3/refund_by_amount.png)
+
+__Hinweis: Der Betrag muss größer als 0 sein__
+
+__Rückerstattung nach Artikeln__
+- Wählen Sie die Anzahl der Artikel aus → Klicken Sie auf Rückerstattung, um die Anfrage zu senden
+
+![Rückerstattung nach Artikeln](https://images.ctfassets.net/di680may5c0k/38u5N3X85J7BMGydvHycP4/99c1fd5ba0c12126174f700d9bb54d68/refund_by_items.png)
+
+## Abonnements
+
+__Abonnementbestellung__
+Händler können den Richtlinien von Shopware folgen, um Abonnements einzurichten: Shopware 6 - Einstellungen - Abonnements und die von Shopware bereitgestellte Erweiterung installieren.
+
+[https://docs.shopware.com/en/shopware-6-en/extensions/shopware-commercial]
+
+Nur __Nexi Checkout - Cards__ (wenn die Aufteilung der Zahlung EIN ist) oder __Nexi Checkout__ (wenn die Aufteilung der Zahlung AUS ist) ist für Abonnementbestellungen verfügbar.
+
+__Verhalten der Abonnementbestellung__
+Ein Abonnement wird immer erstellt und in der __Abonnementliste__ mit dem Status __Aktiv__ angezeigt, unabhängig davon, ob die Erstzahlung erfolgreich ist oder nicht.
+
+![Abonnementliste](https://images.ctfassets.net/di680may5c0k/1ARLXJ0hZNYgpMZlq9987d/24c07048f29efd16e3930e9cbcbad59a/subscription_list.png)
+
+So verarbeitet das System Zahlungen:
+
+- ✅ Wenn die Zahlung erfolgreich ist:
+Eine Unterbestellung wird basierend auf dem definierten Intervall des Abonnements generiert. Die Zahlung für diese Unterbestellung wird automatisch belastet.
+
+- ❌ Wenn die Zahlung fehlschlägt:
+Eine Bestellung wird trotzdem erstellt, aber ihre Inhalte (z. B. Downloads, Inhalte usw.) sind für den Käufer nicht zugänglich. Der Abonnementstatus ändert sich je nach nächster geplanter Zahlung:
+
+- __Erste fehlgeschlagene Zahlung:__
+    Das Abonnement bleibt aktiv, und das System versucht es am nächsten geplanten Zahlungstermin erneut.
+
+- __Zweite (oder nachfolgende) fehlgeschlagene Zahlung__:
+Der Abonnementstatus ändert sich auf Zahlung fehlgeschlagen, und es werden keine weiteren Unterbestellungen mehr erstellt
+
+![E-Mail über fehlgeschlagenes Abonnement](https://images.ctfassets.net/di680may5c0k/6GIgz1t9XsfiiBE93pwjaR/5586e1e1fa0f490ea38c27cb8f3e9624/subscription-failed-email.png)
+
+## Fehlerbehebung
+
+Im Folgenden finden Sie einige der häufigsten Konfigurationsfehler, ihre Ursache und Schritte, die Sie zur Behebung befolgen können.
+
+### Nexi Group-Zahlungs-App ist nicht als Zahlungsmethode sichtbar
+
+- Stellen Sie sicher, dass die Nexi Group-App im richtigen **Vertriebskanal** in der App-Konfiguration verfügbar ist.
+- Wählen Sie unter dem Abschnitt **Vertriebskanal** Ihren **Shop-Namen** unter **Allgemein**-Einstellungen aus. Fügen Sie die gewünschten Zahlungsmethoden aus der Nexi-App hinzu.
+- Wechseln Sie vorübergehend zum Standard-Template von Shopware 6. Benutzerdefinierte Templates erfordern möglicherweise zusätzliche Änderungen, um eine korrekte Anzeige zu gewährleisten. Wenden Sie sich an Ihren Webdesigner oder Entwickler.
+
+### Nexi Group-Zahlungsfenster ist leer
+
+- Stellen Sie sicher, dass Ihre Integrationsschlüssel in den Nexi Group-App-Einstellungen korrekt sind und keine zusätzlichen Leerzeichen enthalten.
+- Deaktivieren Sie vorübergehend Plugins von Drittanbietern, die die Funktionalität der App beeinträchtigen könnten.
+- Überprüfen Sie, ob es vorübergehende technische Inkonsistenzen gibt: https://easy-status.developers.nets.eu/
+
+### Zahlungen im Live-Modus funktionieren nicht
+- Stellen Sie sicher, dass Sie ein genehmigtes Live-Checkout-Konto für die Produktion haben.
+- Stellen Sie sicher, dass Ihr Live-Checkout-Konto für Zahlungen mit der ausgewählten Währung genehmigt ist.
+- Stellen Sie sicher, dass die Zahlungsmethodendaten korrekt sind und von Ihrer Checkout-Vereinbarung unterstützt werden.
+
+## Klarna
+
+Die Zahlungsmethode Klarna erfordert eine Telefonnummer, um ordnungsgemäß zu funktionieren. Um sicherzustellen, dass Klarna als Zahlungsoption im Nexi Group-Zahlungsfenster erscheint, ist es wichtig, das Telefonnummerfeld korrekt zu konfigurieren. Weitere Informationen finden Sie im [Klarna-Leitfaden](/klarna/#build-integration).
+
+Um das Telefonnummerfeld in Shopware 6 hinzuzufügen, gehen Sie wie folgt vor:
+- Navigieren Sie zu Einstellungen > Shop > Anmeldung & Registrierung.
+- Aktivieren Sie das Kontrollkästchen für Telefonnummer anzeigen.
+- Aktivieren Sie das Kontrollkästchen für Telefonnummerfeld erforderlich.
+
+Weitere Informationen finden Sie in der [Dokumentation von Shopware 6](https://docs.shopware.com/en/shopware-en/settings/login-registration).
+
+![Shopware 6.7 Telefonkonfiguration](https://images.ctfassets.net/di680may5c0k/6PisHjptg841oq05CYnbpJ/ebb1c78b152a328744306bb088bbc94b/image.png?w=1223&h=794&q=50&fm=png)
+
+<Info>
+Wir unterstützen keine Drittanbieter-Plugins, die Telefonnummernfunktionalität bieten, und können nicht garantieren, dass deren Lösung mit der Klarna-Zahlungsmethode kompatibel ist.
+</Info>

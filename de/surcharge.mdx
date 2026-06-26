@@ -1,0 +1,51 @@
+---
+title: "Aufschlag"
+description: "Erfahren Sie mehr über Aufschläge bei Nexi Checkout."
+---
+
+## Was ist ein Aufschlag?
+
+Ein **Aufschlag** ist eine zusätzliche Gebühr, die auf die Gesamtbestellsumme des Endkunden angewendet wird.\
+Er wird unter bestimmten Bedingungen erhoben, um zusätzliche Kosten im Zusammenhang mit bestimmten Arten von Zahlungen zu decken.
+
+Der vom Kunden gezahlte Aufschlagsbetrag entspricht der für die jeweilige Zahlungsbelastung anfallenden Gebühr.
+
+Aufschläge sind **standardmäßig nicht aktiviert** für Händler und können nur in Ländern konfiguriert werden, in denen dies gesetzlich zulässig ist.
+
+Aufschläge sind in den folgenden Ländern gesetzlich zulässig:
+
+- Dänemark,
+- Norwegen
+
+## Unterstützte Zahlungsmethoden
+
+**Karten**
+
+Aufschläge werden für Kartenzahlungen **bei nicht gespeicherten Karten** unterstützt.\
+Sie werden angewendet, wenn die verwendete Karte **eines** der folgenden Kriterien erfüllt:
+
+- Es handelt sich um eine **Firmenkarte**
+- Sie wurde **außerhalb des EWR** ausgestellt
+
+Es wird nur für VISA, Mastercard und Maestro unterstützt.
+
+## Arbeiten mit Aufschlägen
+
+Der Aufschlagsbetrag ist in allen Zahlungsvorgängen enthalten: **Reservierung, Belastung und Rückerstattung**.\
+Das System verarbeitet automatisch die entsprechenden Aufschlagsbeträge, einschließlich **proportionaler Beträge für Teilvorgänge**, was zu einer anteiligen Gebühr führt.
+
+Das bedeutet, dass es **keinen Unterschied bei der Ausführung von Vorgängen** im Vergleich zu regulären Zahlungen gibt.
+
+Es **muss kein Aufschlagsbetrag manuell angegeben werden** — er wird berechnet und zusammen mit den Bestellbeträgen zurückgegeben.\
+Weitere Details finden Sie in der API-Dokumentation.
+
+Dies macht die Handhabung von Aufschlägen aus Integrationsperspektive **vollständig transparent**:
+
+- Sie können **Aufschlagswerte ignorieren** und die Integration so durchführen, als ob sie nicht existieren würden.
+- Oder Sie können sie in Ihrer Anwendung **verwenden**, falls sie für Ihren Anwendungsfall relevant sind.
+
+## So aktivieren Sie es
+
+**Aktivierung** Aufschläge müssen von Nets aktiviert werden. Bitte kontaktieren Sie unser Sales- und Aktivierungsteam unter: [ecom-salessupport@nets.eu](mailto:ecom-salessupport@nets.eu)
+
+Sobald die Aktivierung erfolgt ist, müssen Sie die erforderlichen Webhooks integrieren, die Sie hier finden: [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#payments)

@@ -1,0 +1,103 @@
+---
+title: "Kartenverarbeitung testen"
+description: "Dieser Leitfaden beschreibt, wie Sie die Kartenverarbeitung auf Ihrer Checkout-Seite testen."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Komplexität: Niedrig</Badge>
+  <Badge color="gray">Programmierung: Keine</Badge>
+</div>
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie eine Checkout-Seite, die die [Checkout-Testumgebung](/test-environment) verwendet.
+</Warning>
+
+## So testen Sie
+
+Die Checkout-Seite bietet Ihren Kunden die Möglichkeit, mit Karte zu bezahlen. Um Kartenzahlungen auf der Checkout-Seite zu testen, gehen Sie wie folgt vor:
+
+1. Navigieren Sie zu Ihrer Checkout-Seite.
+2. Wählen Sie "Mit Karte bezahlen".
+3. Fügen Sie eine der Beispielkartennummern aus der Spalte **Nummer** in der unten stehenden Tabelle hinzu.
+4. Geben Sie ein zukünftiges Ablaufdatum ein.
+5. Geben Sie 3 beliebige Ziffern in das CVC-Feld ein.
+6. Geben Sie einen beliebigen Namen, eine Adresse und eine Telefonnummer in das Adressformular ein.
+
+![Kartenverarbeitung testen](https://images.ctfassets.net/di680may5c0k/5l8yIooGbWH44h9PO533Od/91649112157f5a51a0d29035b1a8d9e7/Screenshot_2021-03-30_at_21.37.59.png?w=1676&h=1168&q=50&fm=png)
+
+<Warning>
+Bei der Verwendung der Beispielkarten in der Testumgebung haben einige Beträge eine besondere Bedeutung und erzeugen Fehlercodes oder erhöhen die API-Antwortzeiten. Dies ist kein Fehler, sondern ein Feature der Testumgebung, damit Sie Ihr System gegen Fehlercodes und verzögerte Antworten testen können. Weitere Informationen finden Sie im folgenden Abschnitt.
+</Warning>
+
+### Begründungscodes
+
+Die Begründungscodes für die in diesem Leitfaden beschriebenen Kartensysteme finden Sie [hier](/reason-codes).
+
+## 3D Secure
+
+Beim Testen von Kartenzahlungen im Checkout können Sie zur 3D-Secure-Simulator-Seite weitergeleitet werden, wie [hier](/payment-methods/#build-3d-secure) beschrieben.
+
+Von dort aus können Sie testen, ob Sie erfolgreiche oder fehlgeschlagene Zahlungsabläufe mit den Testdaten von [hier](/test-card-processing/#build-sample-credit-cards) testen möchten.
+
+## Beträge mit besonderer Bedeutung
+
+Es ist möglich zu testen, wie sich Ihre Website verhält, wenn Checkout verschiedene **Fehlercodes** zurückgibt oder der Checkout-Prozess **verzögert** wird. Die folgenden Beträge haben eine besondere Bedeutung und ändern das Checkout-Verhalten beim Erstellen einer neuen Zahlung in der Testumgebung:
+
+- Der Betrag **0.XX** und **1.XX** löst den **Fehlercode XX** aus. Wenn beispielsweise die Eigenschaft [`order.amount `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-order-amount) auf `133` gesetzt ist, wird der Fehlercode `33` ausgelöst.
+
+- Der Betrag **3.XX** **verzögert** die API-Antwort um **XX Sekunden**. Wenn beispielsweise die Eigenschaft [`order.amount `](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post-body-order-amount) auf `310` gesetzt ist, wird die Antwort aus dem Checkout-Ablauf um 10 Sekunden verzögert.
+
+<Info>
+Beachten Sie, dass die Beträge in der [niedrigsten Währungseinheit für die jeweilige Währung, ohne Satzzeichen](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api#data-types-and-formats), angegeben werden.
+</Info>
+
+Mehr über Begründungscodes erfahren Sie [hier](/reason-codes).
+
+## Rabatte
+
+Es ist möglich, in den Zahlungsanfragen Rabatte anzugeben. Dies geschieht durch Hinzufügen einer Bestellzeile mit einem negativen Betrag.
+
+Ein Beispiel hierfür finden Sie im Payload-Beispiel [hier](/web-integration/integrate-checkout-on-your-website-embedded/#build-step-2-create-a-payment-object-backend).
+
+<Warning>
+Bitte beachten Sie, dass der Gesamtbetrag bei den folgenden Anfragen niemals 0 oder kleiner sein darf:
+- [unit price](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-unitprice)
+- [gross total amount](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-grosstotalamount)
+- [net total amount](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-post-body-order-items-nettotalamount)
+- [orderItems](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-payments-paymentid-charges-post-body-orderitems)
+- [charge orderItems  ](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/#v1-charges-chargeid-refunds-post-body-orderitems)
+</Warning>
+
+## Beispiel-Kreditkarten
+
+Die folgenden Beispielkarten können in der Testumgebung beim Testen von Kartenzahlungen verwendet werden:
+
+### Beispiel-Kreditkarten
+| Kartentyp | Nummer | Ablaufdatum | CVV | Zusätzliche Informationen |
+| --- | --- | --- | --- | --- |
+| Visa | 4268270087374847 | > today | Beliebige 3 Ziffern | Erfolg |
+| Visa | 4925000000000087 | > today | Beliebige 3 Ziffern | Reservierung schlägt fehl |
+| Visa | 4925000000000079 | > today | Beliebige 3 Ziffern | Nicht wiederkehrende Belastung schlägt fehl |
+| Visa | 4925000000000061 | > today | Beliebige 3 Ziffern | Direkte Belastung schlägt fehl. Code: 99 |
+| Visa | 4761731000000027 | > 12/31 | Beliebige 3 Ziffern | Aufschlag, Erfolg |
+| MasterCard | 5213199803453465 | > today | Beliebige 3 Ziffern | Erfolg |
+| MasterCard | 5544330000000235 | > today | Beliebige 3 Ziffern | Aufschlag, Erfolg |
+| Mastercard | 5544330000000011 | > today | Beliebige 3 Ziffern | Aufschlag, Erfolg |
+| Maestro | 6761638084569584 | > today | Beliebige 3 Ziffern | Erfolg |
+| Dankort | 5019397000156065 | 12/27 | 604 | Erfolg |
+| Dankort | 4571530112345142 | 01/28 | 564 | Erfolg |
+| American Express | 376206000000009 | > today | Beliebige 4 Ziffern | Aufschlag, Erfolg |
+
+Das **Ablaufdatum** kann ein beliebiges Datum ab heute und in der Zukunft sein. Für den **CVC** (Card Verification Code) können Sie drei beliebige Ziffern verwenden (z. B. 123).
+
+<Warning>
+Wenn die [Create-Payment-Anfrage](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) `"charge":true ` enthält, schlägt die Belastung mit der Testkarte 4925000000000079 nicht fehl.
+</Warning>
+
+## Siehe auch
+
+- [Testumgebung](/test-environment)
+- [Rechnung & Ratenzahlung testen](/test-invoice-installment-processing)
+- [Begründungscodes](/reason-codes)

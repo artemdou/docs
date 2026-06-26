@@ -1,0 +1,115 @@
+---
+title: "Support Private and Business Customers"
+description: "This guide is for developers who want to add support for different types of customers on their checkout page."
+---
+
+<div className="flex flex-wrap gap-2">
+  <Badge color="green">Complexity: Low</Badge>
+  <Badge color="yellow">Coding: Some</Badge>
+</div>
+
+## Before you start
+
+<Warning>
+This guide assumes that you have:
+- Created a [Checkout Portal account](https://portal.dibspayment.eu).
+- [Integrated Checkout on your website](/web-integration).
+- [Optimize the checkout flow](/optimize-the-checkout-flow). 
+
+This guide is only relevant if you are [collecting consumer data on the checkout page](/optimize-the-checkout-flow/#build-collect-consumer-data-on-the-checkout-page).
+</Warning>
+
+## What you are building
+
+This guide shows you how to support different types of customers on you checkout page. The form input fields on the checkout page are adapted for the type of customer you have. Checkout supports two types of customers:
+
+- **Private** customers, known as **B2C** (Business-to-Consumer)
+- **Business** customers, known as **B2B** (Business-to-Business)
+
+You have three options when configuring customer type support with Checkout:
+
+- **B2C** - only allow private customers
+- **B2B** - only allow business customers
+- **B2C** and **B2B** - a switch is added to the checkout page so that your customer can choose between B2B and B2C.
+
+The following image shows the switch on the checkout page that enables the customer to choose between a business checkout and a private checkout:
+
+![Support B2B and B2C](https://images.ctfassets.net/di680may5c0k/74Pt2VDbU36I6YY5sSLiI2/fb77ccc648abccb32b0182c8ac70825d/b2b.png?w=2000&h=1436&q=50&fm=png)
+
+You can also specify which type should be loaded by default when presenting the payment form. For direct integrations, the customer type behavior needs to be specified using the [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1).
+
+<Info>
+If you are using a webshop module or partner integration with built-in support for B2B, you can specify the customer type options in their respective portal.
+</Info>
+
+## Select customer types using the Payment API
+
+By default, Checkout assumes that your customer is a private customer. If you want to provide support for business customers on your site (as shown in the image above), you need to specify this using the [Payment API](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1) when [creating the payment object](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1#v1-payments-post) from the backend of your site. See the [direct integration guide](/web-integration) for a complete example.
+
+The JSON request object to be posted with the create payment method should define the object `checkout.consumerType `. In the example below, the `consumerType ` object states that both B2B and B2C customers should be supported on the checkout page:
+
+```json Support B2B and B2C
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl",
+    "consumerType": {
+        "supportedTypes": [ "B2B", "B2C" ]
+    }
+  },
+  "order": {
+    ...
+```
+
+If you only want to support business customers, you would instead specify B2B as the only supported customer type:
+
+```json Support B2B only
+{
+  "checkout": {
+    ...
+    "consumerType": {
+        "supportedTypes": [ "B2B" ]
+    }
+    ...
+```
+
+<Info>
+Although we use the `EmbeddedCheckout ` in this example, you could also use this for a hosted version by providing the integration type value `HostedPaymentPage `.
+</Info>
+
+## Specify the default customer type
+
+When using multiple customer types, it is possible to specify which customer type to use by default on the checkout page. This is defined using the `checkout.consumerType.default' parameter when creating a new payment object. The following JSON request object specifies that the checkout page should support both B2B and B2C but use B2B as default:
+
+```json Use B2B by default
+{
+  "checkout": {
+    "integrationType": "EmbeddedCheckout",
+    "url": "https://<YOUR_SERVER>/checkout.html",
+    "termsUrl": "https://<YOUR_SERVER>/terms.htmtl"
+    "consumerType": {
+        "supportedTypes": [ "B2B", "B2C" ],
+        "default": "B2B"
+    }
+  },
+  "order": {
+    ...
+```
+
+## Differences between B2C and B2B
+
+The checkout flow for B2C and B2B are very similar and all your customers have the option to be remembered on one or more devices. B2B and B2C customer profiles are always stored separately in Checkout. Customer data stored for a private customer will never be used for pre-filling a checkout form for a business customer and vice versa.
+
+### Private customers
+
+Private customers register with: **email address**, **postal code**, **personal security number**, and **phone number**.
+Checkout does a lookup and retrieves the **first name**, **last name** and the **civil registration address**.
+
+### Business customers
+
+The flow for registering as a business is very similar to that of B2C. For Norway and Denmark, the form includes **company name** in addition to the information collected from a private consumer. For the Swedish flow, business customers are provided the option to do a lookup on **organization number** and retrieve the address automatically.
+
+B2B customers can use the same payment methods as B2C customers except **installments** and **invoice campaigns**, which are only available for private customers.
+
+A B2B invoice has some limitations because checkout security is based on shipping only to officially registered addresses, and B2B companies can only pay by invoice when shipping to their place of business. A key difference from B2C is that the due date is set to 30 days, not 14.

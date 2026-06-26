@@ -1,0 +1,140 @@
+---
+title: "Postman"
+description: "Postman, eine API-Plattform, ermöglicht es Ihnen, die Checkout-REST-APIs zu erkunden und API-Tests durchzuführen."
+---
+
+## Bevor Sie beginnen
+
+<Warning>
+Bevor Sie beginnen, benötigen Sie:
+1. Ein [Postman-Konto](https://www.postman.com/postman-account/), damit Sie die Collection von [hier](https://www.postman.com/nexicheckout/workspace/nexi-checkout-apis/collection/24211773-6e0f6550-03ee-4162-a260-d0dd7254aa4c) testen und forken können.
+2. Außerdem setzt dieser Leitfaden voraus, dass Sie bereits ein [Checkout Portal-Konto](https://portal.dibspayment.eu/) haben.
+3. Eine [auf Ihrer Website integrierte Checkout-Lösung](/web-integration/integrate-checkout-on-your-website-embedded).
+4. Finden Sie Ihre [Integrationsschlüssel](/access-your-integration-keys) für die Autorisierung.
+</Warning>
+
+## Übersicht
+
+Sie können HTTP-Anfragen für die folgenden APIs konfigurieren und testen sowie Antworten erhalten:
+
+- [Reporting](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/reporting-v1/)
+- [Payment](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/payment-v1/)
+- [Boarding](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/boarding-v1/)
+- [Paylink](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/paylink-v1/)
+
+Allgemeinere Informationen zu den Checkout-APIs finden Sie [hier](https://developer.nexigroup.comhttps://developer.nexigroup.com/nexi-checkout/en-EU/api/).
+
+## Erste Schritte
+
+Um mit Postman zu beginnen, müssen Sie:
+
+1. Die Collection forken
+2. Ihre Integrationsschlüssel finden, damit Sie die korrekte Autorisierung über den API-Schlüssel vornehmen können
+3. Ihre erste Anfrage senden, um Antworten zu sehen
+
+Sie können mit dem Testen von Checkout Postman beginnen, indem Sie z. B. eine Anfrage zum Abrufen einer Liste von Auszahlungen senden, eine Anfrage zum Erstellen einer neuen Zahlung oder eine Anfrage zum Stornieren einer ausstehenden Rückerstattung.
+
+## Forken der Collection
+
+Sie können die Collection forken, was bedeutet, dass Sie eine neue Instanz der Collection lokal in Ihrem eigenen Workspace erstellen. Auf diese Weise können Sie Tests durchführen und Änderungen mit Ihren eigenen Schlüsseln vornehmen, die die Basis-Collection nicht beeinflussen.
+
+1. Melden Sie sich in Ihrem Postman-Konto an.
+2. Gehen Sie zur Checkout-API-Collection unter [hier](https://www.postman.com/nexicheckout/workspace/nexi-checkout-apis/collection/24211773-6e0f6550-03ee-4162-a260-d0dd7254aa4c).
+3. Wählen Sie die Schaltfläche __Run in Postman__.
+4. Wählen Sie die Schaltfläche __Fork collection__.
+5. Benennen Sie Ihre Arbeit und wählen Sie einen Workspace aus.
+
+## Autorisierung
+
+### Ihren Schlüssel finden
+
+Sie können Ihre Integrationsschlüssel in Ihrem Portal-Konto finden, indem Sie diesem Leitfaden [hier](/access-your-integration-keys) folgen.
+
+### Checkout & Recurring
+
+Für die Autorisierung der Ordner Checkout und Recurring muss der API-Schlüssel mit folgenden Schritten autorisiert werden:
+
+Beim Autorisierungstyp können Sie aus dem Dropdown-Menü __API Key__ auswählen.
+
+Sie müssen Ihren __geheimen API-Schlüssel__ aus der __TEST__-Umgebung in das Feld *value* eingeben, das dem Header hinzugefügt wird.
+
+- Der Schlüssel hat den Namen *Authorization*
+- Das Feld *value* muss der geheime Schlüssel sein
+
+<Warning>
+Stellen Sie sicher, dass beim Kopieren und Einfügen des geheimen Schlüssels in das Wertefeld nicht "*test-secret-key-*" mit eingefügt wird.
+</Warning>
+
+### Onboarding
+
+Für die Autorisierung der Boarding-Ordner muss der API-Schlüssel mit folgenden Schritten autorisiert werden:
+
+Beim Autorisierungstyp können Sie aus dem Dropdown-Menü __API Key__ auswählen.
+
+Sie müssen Ihren __geheimen API-Schlüssel__ aus der __LIVE__-Umgebung in das Feld *value* eingeben, das dem Header hinzugefügt wird.
+
+<Warning>
+Bitte beachten Sie, dass es möglich ist, den __geheimen API-Schlüssel__ sowohl aus der __TEST__- als auch aus der __LIVE__-Umgebung zu verwenden.
+Wir empfehlen jedoch, nur mit dem Schlüssel aus der __LIVE__-Umgebung zu testen.
+</Warning>
+
+
+
+- Der Schlüssel hat den Namen *Authorization*
+- Das Feld *value* muss der geheime Schlüssel sein
+
+<Warning>
+Stellen Sie sicher, dass beim Kopieren und Einfügen des geheimen Schlüssels in das Wertefeld nicht "*test-secret-key-*" mit eingefügt wird.
+</Warning>
+
+### Reporting
+
+Für die Autorisierung des Reporting-Ordners muss der API-Schlüssel mit folgenden Schritten autorisiert werden:
+
+Beim Autorisierungstyp können Sie aus dem Dropdown-Menü __API Key__ auswählen.
+
+Sie müssen Ihren __geheimen API-Schlüssel__ aus der __TEST__-Umgebung in das Feld *value* eingeben, das dem Header hinzugefügt wird.
+
+<Warning>
+Für die Reporting API ist es möglich, sowohl die __TEST__- als auch die __LIVE__-Schlüssel für die jeweilige Umgebung zu verwenden. Wir empfehlen jedoch, in der __TEST__-Umgebung den __TEST__-Schlüssel zu verwenden.
+</Warning>
+
+- Der Schlüssel hat den Namen *Authorization*
+- Das Feld *value* muss der geheime Schlüssel sein
+
+<Warning>
+Stellen Sie sicher, dass beim Kopieren und Einfügen des geheimen Schlüssels in das Wertefeld nicht "*test-secret-key-*" mit eingefügt wird.
+</Warning>
+
+Wenn die Autorisierung abgeschlossen ist, können Sie jede API in der Collection aufrufen, um mit den Anfragen zu beginnen.
+
+## Testen
+
+Als Beispiel zeigen die folgenden Schritte dieser Anfrage, wie eine neue Zahlung erstellt wird.
+
+Es wird die Payment API verwendet, um eine Bestellung mit einem Paar Sneakern zu erstellen, die dann mit Ihren Integrationsschlüsseln eingezogen werden.
+
+### Eine Anfrage senden – Erstellen der Bestellung
+
+1. Öffnen Sie aus der rechten Seitenleiste den Ordner *__Payment__*.
+2. Klicken Sie in den Ordner *__Checkout__*.
+3. Wählen Sie als Nächstes *__Create payment__*.
+4. Standardmäßig ist die Methode auf POST gesetzt.
+5. Klicken Sie auf die Schaltfläche *__Send__* für die Anfrage.
+6. Schließlich können Sie die Antwort der Anfrage sehen.
+7. Diese neu erstellte Zahlung ist auch in Ihrem Portal unter dem Abschnitt __Payments__ sichtbar.
+
+Daraus können Sie die folgende Antwort der Anfrage sehen:
+
+![Antwort des Create-payment-Aufrufs](https://images.ctfassets.net/di680may5c0k/4MYZsHHGfMVk1E1c1pXnzX/b94c227bd5f7d3aa3162adcfdcdf76f9/image.png?w=1739&h=898&q=50&fm=png)
+
+<Columns cols={2}>
+  <Card title="Checkout Postman Collection">
+  </Card>
+  <Card title="Erste Schritte mit Postman">
+  </Card>
+</Columns>
+
+## Siehe auch
+
+- [Go-live-Checkliste](/go-live-checklist)
